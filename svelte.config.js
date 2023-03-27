@@ -1,11 +1,19 @@
 import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/kit/vite';
+import { mdsvex } from 'mdsvex';
+import toc from '@jsdevtools/rehype-toc';
+import rehypeSlug from 'rehype-slug';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess: vitePreprocess(),
+	extensions: ['.svelte', '.md', '.svx', '.svelte.md'],
+
+	preprocess: [
+		vitePreprocess(),
+		mdsvex({ extensions: ['.md', '.svx', '.svelte.md'] /*rehypePlugins: [rehypeSlug, toc]*/ })
+	],
 
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
