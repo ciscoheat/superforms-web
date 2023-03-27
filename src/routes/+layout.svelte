@@ -1,6 +1,6 @@
 <script lang="ts">
 	// The ordering of these imports is critical to your app working properly
-	import '@skeletonlabs/skeleton/themes/theme-crimson.css';
+	import '../theme.postcss';
 	// If you have source.organizeImports set to true in VSCode, then it will auto change this ordering
 	import '@skeletonlabs/skeleton/styles/all.css';
 	// Most of your app wide CSS should be put in this file
@@ -10,6 +10,7 @@
 	import Navigation from '$lib/navigation/Navigation.svelte';
 	import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
+	import '$lib/assets/prism-gruvbox-dark.css';
 
 	function drawerOpen(): void {
 		drawerStore.open({});
@@ -80,6 +81,7 @@
 
 <style lang="scss">
 	svg {
+		color: #b7a73f;
 		width: 24px;
 		height: 24px;
 	}
