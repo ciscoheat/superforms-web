@@ -27,15 +27,15 @@ pnpm i -D sveltekit-superforms zod
 
 The easiest way is to open [the Stackblitz project](https://stackblitz.com/edit/sveltekit-superforms-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) for this tutorial.
 
-Otherwise, you can create a new SvelteKit project with `npm create svelte@latest` and copy/paste the code as you go along.
+Otherwise, you can create a new SvelteKit project with `npm create svelte@latest` and copy/paste the code as you go along, or add it to an existing project.
 
 ## Creating a Superform
 
-Let's gradually build up a Superform, containing a name and an email address.
-
-The only thing required to create a Superform is a Zod validation schema. It has a quite simple syntax:
+Let's gradually build up a Superform containing a name and an email address.
 
 ### Creating a validation schema
+
+The main thing required to create a Superform is a Zod validation schema. It has a quite simple syntax:
 
 ```ts
 // Name has a default value just to show something.
@@ -114,8 +114,6 @@ This is what the form should look like now:
 
 <Form {data} bind:this={formComponent} />
 
-You can try to submit this form, it's interactive!
-
 ### Debugging
 
 Now we can see that the form is populated. But to get deeper insight, let's add the Superform Debugging Svelte Component called `SuperDebug`:
@@ -134,7 +132,7 @@ This should be displayed:
 
 <SuperDebug data={$form} />
 
-Edit the fields above and see how the data is automatically updated. The component also displays the current page status in the right corner.
+Edit the form fields and see how the data is automatically updated. The component also displays the current page status in the right corner.
 
 ### Posting data
 
@@ -192,14 +190,6 @@ This is the validation object returned from `superValidate`, containing all you 
 - `message` - A property that can be set as a general information message.
 - `constraints` - An object with [html validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation) than can be spread on input fields.
 
-As you see in the example above, the logic for checking validation status is as simple as it gets:
-
-```ts
-if (!form.valid) {
-  return fail(400, { form });
-}
-```
-
 Now we know that validation has failed, and there are some errors being sent to the client. So how do we display them?
 
 We do that by adding properties to the destructuring assignment of `superForm`:
@@ -243,14 +233,16 @@ We do that by adding properties to the destructuring assignment of `superForm`:
 </style>
 ```
 
-This concludes the tutorial. We now have a fully working form, no JavaScript needed, with convenient handling of data and validation on both client and server!
+As you see, by including `errors` we can display errors anywhere it's appropriate, and through `constraints` we get browser validation even without javascript enabled.
+
+We now have a fully working form with convenient handling of data and validation both on client and server!
 
 There are no hidden DOM manipulations or other secrets, it's just html attributes and Svelte stores.
 
 ## What's next?
 
-You'd probably want to enable client-side functionality, to take full advantage of the enhancements that Superforms bring. Take a look under "Concepts" in the navigation, they can be read in order.
+This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the enhancements that Superforms bring. Take a look under "Concepts" in the navigation, they can be read in order.
 
-Also, check the [API reference](/api) for a full list of properties returned from `superForm`, and options that you can use.
+Also, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
 
 If you want to take a more advanced tutorial, check out the Designing a CRUD app.

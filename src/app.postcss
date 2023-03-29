@@ -1,6 +1,6 @@
 html,
 body {
-	@apply h-full overflow-hidden;
+  @apply h-full overflow-hidden;
 }
 
 h1,
@@ -8,12 +8,12 @@ h2,
 h3,
 h4,
 h5 {
-	display: flex;
-	a {
-		margin-left: 4px;
-		font-size: 1.3rem;
-		display: none;
-	}
+  display: flex;
+  a {
+    margin-left: 4px;
+    font-size: 1.3rem;
+    display: none;
+  }
 }
 
 h1,
@@ -21,13 +21,21 @@ h2,
 h3,
 h4,
 h5 {
-	&:hover {
-		a {
-			display: block;
-		}
-	}
+  &:hover {
+    a {
+      display: block;
+    }
+  }
 }
 
 code {
-	font-size: 95% !important;
+  font-size: 95% !important;
+}
+
+.md-list {
+  a,
+  code {
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+  }
 }
