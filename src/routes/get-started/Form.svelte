@@ -7,9 +7,12 @@
 	const { form, errors, enhance } = superForm(data.form);
 </script>
 
-<h1>sveltekit-superforms</h1>
-
-<form method="POST" action="/get-started" class="space-y-4" use:enhance>
+<form
+	method="POST"
+	action="/get-started"
+	class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
+	use:enhance
+>
 	<label class="label">
 		<span>Name</span>
 		<input class="input" type="text" name="name" bind:value={$form.name} />
