@@ -4,4 +4,12 @@
 	export { ul, li };
 </script>
 
-<slot />
+<script lang="ts">
+	export let fullWidth = false;
+</script>
+
+<div class="lg:flex lg:justify-center">
+	<div class="p-6 md:p-10 space-y-4 {fullWidth ? '' : 'max-w-4xl'}">
+		<slot />
+	</div>
+</div>

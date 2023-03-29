@@ -11,10 +11,13 @@
 	import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
 	import '$lib/assets/prism-gruvbox-dark.css';
+	import { initToC } from '$lib/toc';
 
 	function drawerOpen(): void {
 		drawerStore.open({});
 	}
+
+	const ToC = initToC();
 </script>
 
 <Drawer width="w-80">
@@ -35,7 +38,7 @@
 						</span>
 					</button>
 					<img class="logo mr-3 hidden lg:block" src={logo} alt="Superforms logo" />
-					<strong class="text-xl">sveltekit-superforms</strong>
+					<strong class="text-xl">Superforms</strong>
 				</div>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
@@ -69,12 +72,10 @@
 		<Navigation />
 	</svelte:fragment>
 	<!-- Page Route Content -->
-	<div class="p-6 md:p-10 space-y-4">
-		<slot />
-	</div>
+	<slot />
 	<svelte:fragment slot="sidebarRight">
 		{#key $page.url}
-			<TableOfContents class="hidden md:block p-4" target="#page" />
+			<TableOfContents class="hidden {$ToC ? 'md:block' : ''} p-4" target="#page" />
 		{/key}
 	</svelte:fragment>
 </AppShell>

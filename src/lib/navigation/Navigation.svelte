@@ -21,8 +21,8 @@
 
 <nav class="list-nav p-4" bind:this={nav}>
 	<ul>
-		<li><A href="/">Start</A></li>
-		<li><A href="/tutorial">Tutorial</A></li>
+		<li><A href="/">Home</A></li>
+		<li><A href="/get-started">Get started</A></li>
 
 		<div id="title" class="pt-4 text-primary-700 dark:text-primary-500 font-bold uppercase px-4">
 			Title
