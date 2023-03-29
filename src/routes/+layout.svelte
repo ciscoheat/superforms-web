@@ -26,7 +26,7 @@
   <Navigation />
 </Drawer>
 <!-- App Shell -->
-<AppShell slotSidebarLeft="bg-surface-500/5 w-0 lg:w-48">
+<AppShell regionPage="shrink-0" slotSidebarLeft="bg-surface-500/5 w-0 lg:w-48">
   <svelte:fragment slot="header">
     <!-- App Bar -->
     <AppBar>
@@ -89,6 +89,7 @@
   <svelte:fragment slot="sidebarRight">
     {#key $page.url.pathname}
       <TableOfContents
+        width="w-56"
         class="{ToC ? 'hidden md:block' : 'hidden'} p-4"
         target="#page"
       />

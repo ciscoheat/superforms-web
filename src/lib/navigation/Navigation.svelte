@@ -3,6 +3,8 @@
   import { drawerStore } from '@skeletonlabs/skeleton';
   import A from './A.svelte';
   import Title from './Title.svelte';
+  import { page } from '$app/stores';
+  import { concepts } from './sections';
 
   function drawerClose(): void {
     drawerStore.close();
@@ -18,6 +20,8 @@
       }
     });
   });
+
+  $: active = $page.url.pathname;
 </script>
 
 <nav class="list-nav p-4" bind:this={nav}>
@@ -27,6 +31,12 @@
     <li><A href="/api">API</A></li>
 
     <Title id="concepts">Concepts</Title>
+
+    {#each concepts as concept}
+      <li><A href={concept[0]}>{concept[1]}</A></li>
+    {/each}
+
+    <Title id="concepts">Other</Title>
 
     <li><A href="/again">Discussions</A></li>
     <li><A href="/faq">FAQ</A></li>

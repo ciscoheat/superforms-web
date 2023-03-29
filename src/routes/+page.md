@@ -3,6 +3,10 @@
 	import Youtube from '$lib/Youtube.svelte'
 </script>
 
+<svelte:head>
+<title>Superforms for SvelteKit</title>
+</svelte:head>
+
 <Header />
 
 Superforms is a SvelteKit library that helps you with **server-side validation** and **client-side display** of forms.

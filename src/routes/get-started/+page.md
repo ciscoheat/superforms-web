@@ -1,15 +1,17 @@
 <script lang="ts">
 	import Form from './Form.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
-	import { writable } from 'svelte/store';
-	import { setContext, getContext } from 'svelte';
-	import { onMount } from 'svelte';
 
 	export let data;
 	
 	let formComponent
-	$: form = formComponent && formComponent.fd()
+	$: form = formComponent && formComponent.formData()
 </script>
+
+<svelte:head>
+
+<title>Get started - Tutorial for Superforms</title>
+</svelte:head>
 
 ## Installation
 
@@ -233,7 +235,7 @@ We do that by adding properties to the destructuring assignment of `superForm`:
 </style>
 ```
 
-As you see, by including `errors` we can display errors anywhere it's appropriate, and through `constraints` we get browser validation even without javascript enabled.
+As you see, by including `errors` we can display errors where it's appropriate, and through `constraints` we get browser validation even without javascript enabled.
 
 We now have a fully working form with convenient handling of data and validation both on client and server!
 
