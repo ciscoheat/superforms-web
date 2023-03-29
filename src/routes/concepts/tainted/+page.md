@@ -19,7 +19,7 @@ Try to modify the form below, then close the tab or hit the back button. A confi
 
 <Form {data} />
 
-When the page status changes to something between 200-299, the form is automatically marked as untainted.
+When the page status changes to something between `200-299`, the form is automatically marked as untainted.
 
 Try that by posting the form with valid values. The tainted message should not appear when browsing away from the page.
 

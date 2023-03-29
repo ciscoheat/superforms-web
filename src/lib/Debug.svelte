@@ -4,12 +4,13 @@
   import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
   export let data: any;
+  export let open = false;
 </script>
 
 {#if data}
-  <div class="card p-4">
+  <div class="card p-2">
     <Accordion hover="hover:bg-secondary-900">
-      <AccordionItem>
+      <AccordionItem {open}>
         <svelte:fragment slot="lead">{@html debug}</svelte:fragment>
         <svelte:fragment slot="summary">Toggle SuperDebug</svelte:fragment>
         <svelte:fragment slot="content"><SuperDebug {data} /></svelte:fragment>
