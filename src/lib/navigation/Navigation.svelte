@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { drawerStore } from '@skeletonlabs/skeleton';
 	import A from './A.svelte';
+	import Title from './Title.svelte';
 
 	function drawerClose(): void {
 		drawerStore.close();
@@ -23,12 +24,10 @@
 	<ul>
 		<li><A href="/">Home</A></li>
 		<li><A href="/get-started">Get started</A></li>
-
-		<div id="title" class="pt-4 text-primary-700 dark:text-primary-500 font-bold uppercase px-4">
-			Title
-		</div>
-
 		<li><A href="/api">API</A></li>
+
+		<Title id="concepts">Concepts</Title>
+
 		<li><A href="/again">Discussions</A></li>
 		<li><A href="/faq">FAQ</A></li>
 	</ul>

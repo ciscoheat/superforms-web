@@ -1,12 +1,14 @@
-import { getContext, setContext } from 'svelte';
+import { getContext, hasContext, setContext } from 'svelte';
 import { writable, type Writable } from 'svelte/store';
 
-export function initToC(display = true) {
-	const store = writable(display);
-	setContext('ToC', store);
+const store = writable(true);
+const id = 'ToC';
+
+export function initToC() {
+	if (!hasContext(id)) setContext(id, store);
 	return store;
 }
 
 export function displayToC(display: boolean) {
-	(getContext('ToC') as Writable<boolean>).set(display);
+	(getContext(id) as Writable<boolean>).set(display);
 }

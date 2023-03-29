@@ -75,7 +75,7 @@
 	<slot />
 	<svelte:fragment slot="sidebarRight">
 		{#key $page.url}
-			<TableOfContents class="hidden {$ToC ? 'md:block' : ''} p-4" target="#page" />
+			<TableOfContents class="{$ToC ? 'hidden md:block' : 'hidden'} p-4" target="#page" />
 		{/key}
 	</svelte:fragment>
 </AppShell>
