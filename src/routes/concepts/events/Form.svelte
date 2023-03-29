@@ -9,12 +9,10 @@
   }
 
   export let data: PageData;
-  const { form, errors, enhance, tainted, message, constraints } = superForm(
-    data.form
-  );
+  const { form, errors, enhance, message, constraints } = superForm(data.form);
 </script>
 
-<Debug label="$tainted store" status={false} open={true} data={$tainted} />
+<Debug data={$form} />
 
 <form
   method="POST"

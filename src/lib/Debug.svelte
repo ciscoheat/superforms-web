@@ -5,16 +5,18 @@
 
   export let data: any;
   export let open = false;
+  export let label = 'Toggle SuperDebug';
+  export let status = true;
 </script>
 
-{#if data}
-  <div class="card p-2">
-    <Accordion hover="hover:bg-secondary-900">
-      <AccordionItem {open}>
-        <svelte:fragment slot="lead">{@html debug}</svelte:fragment>
-        <svelte:fragment slot="summary">Toggle SuperDebug</svelte:fragment>
-        <svelte:fragment slot="content"><SuperDebug {data} /></svelte:fragment>
-      </AccordionItem>
-    </Accordion>
-  </div>
-{/if}
+<div class="card p-2">
+  <Accordion hover="hover:bg-secondary-900">
+    <AccordionItem {open}>
+      <svelte:fragment slot="lead">{@html debug}</svelte:fragment>
+      <svelte:fragment slot="summary">{label}</svelte:fragment>
+      <svelte:fragment slot="content"
+        ><SuperDebug {status} {data} /></svelte:fragment
+      >
+    </AccordionItem>
+  </Accordion>
+</div>
