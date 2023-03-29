@@ -6,11 +6,19 @@
   import Timers from '$lib/Timers.svelte';
   import spinner from '$lib/assets/spinner.svg?raw';
   import dots from '$lib/assets/three-dots-loading.svg?raw';
+  import { get } from 'svelte/store';
 
   export let data: PageData;
 
+  let prevented = 0;
+
   const { form, enhance, message, submitting, delayed, timeout } = superForm(
-    data.form
+    data.form,
+    {
+      onSubmit() {
+        prevented = 0;
+      }
+    }
   );
 </script>
 
@@ -29,13 +37,22 @@
   </label>
 
   <div class="flex items-center gap-x-3">
-    <button type="submit" class="btn variant-filled">Submit</button>
+    <button
+      type="submit"
+      on:click={() => ++prevented}
+      class="btn variant-filled">Submit</button
+    >
     <div class="spinner">
       {#if $message}<div class="rounded p-2 text-green-600">{$message}</div>
       {:else if $timeout}{@html dots}
       {:else if $delayed}{@html spinner}
       {/if}
     </div>
+    {#if $submitting && prevented > 0}
+      <div>
+        Prevented submit {prevented} time{prevented > 1 ? 's' : ''}
+      </div>
+    {/if}
   </div>
 </form>
 

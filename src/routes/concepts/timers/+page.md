@@ -50,7 +50,7 @@ The reason for not using `submitting` is based on the article [Response Times: T
 
 ## Visualizing the timers
 
-Try submitting this form and see how different delay times affect the timers. Loading spinners are set to display when `delayed` and `timeout` are true.
+Try submitting this form and see how different delay times affect the timers. Loading spinners are set to display when `delayed` and `timeout` are true. Click multiple times to see the effect of `multipleSubmits = 'prevent'` as well.
 
 <Form {data} />
 
