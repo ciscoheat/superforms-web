@@ -1,36 +1,36 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import { superForm } from 'sveltekit-superforms/client';
+  import type { PageData } from './$types';
+  import { superForm } from 'sveltekit-superforms/client';
 
-	export function fd() {
-		return form;
-	}
+  export function fd() {
+    return form;
+  }
 
-	export let data: PageData;
-	const { form, errors, enhance } = superForm(data.form);
+  export let data: PageData;
+  const { form, errors, enhance } = superForm(data.form);
 </script>
 
 <form
-	method="POST"
-	action="/get-started"
-	class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
-	use:enhance
+  method="POST"
+  action="/get-started"
+  class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
+  use:enhance
 >
-	<label class="label">
-		<span>Name</span>
-		<input class="input" type="text" name="name" bind:value={$form.name} />
-		{#if $errors.name}
-			<span class="ml-1 text-red-500">{$errors.name}</span>
-		{/if}
-	</label>
+  <label class="label">
+    <span>Name</span>
+    <input class="input" type="text" name="name" bind:value={$form.name} />
+    {#if $errors.name}
+      <span class="ml-1 text-red-500">{$errors.name}</span>
+    {/if}
+  </label>
 
-	<label class="label">
-		<span>E-mail</span>
-		<input class="input" type="text" name="email" bind:value={$form.email} />
-		{#if $errors.email}
-			<span class="ml-1 text-red-500">{$errors.email}</span>
-		{/if}
-	</label>
+  <label class="label">
+    <span>E-mail</span>
+    <input class="input" type="text" name="email" bind:value={$form.email} />
+    {#if $errors.email}
+      <span class="ml-1 text-red-500">{$errors.email}</span>
+    {/if}
+  </label>
 
-	<button type="submit" class="btn variant-filled">Submit</button>
+  <button type="submit" class="btn variant-filled">Submit</button>
 </form>

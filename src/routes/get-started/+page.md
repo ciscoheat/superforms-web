@@ -40,8 +40,8 @@ The only thing required to create a Superform is a Zod validation schema. It has
 ```ts
 // Name has a default value just to show something.
 const schema = z.object({
-	name: z.string().default('Hello world!'),
-	email: z.string().email()
+  name: z.string().default('Hello world!'),
+  email: z.string().email()
 });
 ```
 
@@ -59,16 +59,16 @@ import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 
 const schema = z.object({
-	name: z.string().default('Hello world!'),
-	email: z.string().email()
+  name: z.string().default('Hello world!'),
+  email: z.string().email()
 });
 
 export const load = (async (event) => {
-	// Server API:
-	const form = await superValidate(event, schema);
+  // Server API:
+  const form = await superValidate(event, schema);
 
-	// Always return { form } in load and form actions.
-	return { form };
+  // Always return { form } in load and form actions.
+  return { form };
 }) satisfies PageServerLoad;
 ```
 
@@ -88,23 +88,23 @@ Now when we have sent the validation data to the client, we will use it with the
 
 ```svelte
 <script lang="ts">
-	import type { PageData } from './$types';
-	import { superForm } from 'sveltekit-superforms/client';
+  import type { PageData } from './$types';
+  import { superForm } from 'sveltekit-superforms/client';
 
-	export let data: PageData;
+  export let data: PageData;
 
-	// Client API:
-	const { form } = superForm(data.form);
+  // Client API:
+  const { form } = superForm(data.form);
 </script>
 
 <form method="POST">
-	<label for="name">Name</label>
-	<input type="text" name="name" bind:value={$form.name} />
+  <label for="name">Name</label>
+  <input type="text" name="name" bind:value={$form.name} />
 
-	<label for="email">E-mail</label>
-	<input type="email" name="email" bind:value={$form.email} />
+  <label for="email">E-mail</label>
+  <input type="email" name="email" bind:value={$form.email} />
 
-	<div><button>Submit</button></div>
+  <div><button>Submit</button></div>
 </form>
 ```
 
@@ -124,7 +124,7 @@ Now we can see that the form is populated. But to get deeper insight, let's add 
 
 ```svelte
 <script lang="ts">
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 </script>
 
 <SuperDebug data={$form} />
@@ -148,22 +148,22 @@ import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 
 export const actions = {
-	default: async (event) => {
-		// Same syntax as in the load function
-		const form = await superValidate(event, schema);
-		console.log('POST', form);
+  default: async (event) => {
+    // Same syntax as in the load function
+    const form = await superValidate(event, schema);
+    console.log('POST', form);
 
-		// Convenient validation check:
-		if (!form.valid) {
-			// Again, always return { form } and things will just work.
-			return fail(400, { form });
-		}
+    // Convenient validation check:
+    if (!form.valid) {
+      // Again, always return { form } and things will just work.
+      return fail(400, { form });
+    }
 
-		// TODO: Do something with the validated data
+    // TODO: Do something with the validated data
 
-		// Yep, return { form } here too
-		return { form };
-	}
+    // Yep, return { form } here too
+    return { form };
+  }
 } satisfies Actions;
 ```
 
@@ -196,7 +196,7 @@ As you see in the example above, the logic for checking validation status is as 
 
 ```ts
 if (!form.valid) {
-	return fail(400, { form });
+  return fail(400, { form });
 }
 ```
 
@@ -208,38 +208,38 @@ We do that by adding properties to the destructuring assignment of `superForm`:
 
 ```svelte
 <script lang="ts">
-	const { form, errors, constraints } = superForm(data.form);
-	//            ^^^^^^  ^^^^^^^^^^^
+  const { form, errors, constraints } = superForm(data.form);
+  //            ^^^^^^  ^^^^^^^^^^^
 </script>
 
 <form method="POST">
-	<label for="name">Name</label>
-	<input
-		type="text"
-		name="name"
-		data-invalid={$errors.name}
-		bind:value={$form.name}
-		{...$constraints.name}
-	/>
-	{#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
+  <label for="name">Name</label>
+  <input
+    type="text"
+    name="name"
+    data-invalid={$errors.name}
+    bind:value={$form.name}
+    {...$constraints.name}
+  />
+  {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
 
-	<label for="email">E-mail</label>
-	<input
-		type="email"
-		name="email"
-		data-invalid={$errors.email}
-		bind:value={$form.email}
-		{...$constraints.email}
-	/>
-	{#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
+  <label for="email">E-mail</label>
+  <input
+    type="email"
+    name="email"
+    data-invalid={$errors.email}
+    bind:value={$form.email}
+    {...$constraints.email}
+  />
+  {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
 
-	<div><button>Submit</button></div>
+  <div><button>Submit</button></div>
 </form>
 
 <style>
-	.invalid {
-		color: red;
-	}
+  .invalid {
+    color: red;
+  }
 </style>
 ```
 

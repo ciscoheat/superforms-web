@@ -4,15 +4,15 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { echo } from '$lib/echo';
 
 export const _schema = z.object({
-	name: z.string().default('Hello world!'),
-	email: z.string().email()
+  name: z.string().default('Hello world!'),
+  email: z.string().email()
 });
 
 export const load = (async (event) => {
-	const form = await superValidate(event, _schema);
-	return { form };
+  const form = await superValidate(event, _schema);
+  return { form };
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: echo(_schema)
+  default: echo(_schema)
 } satisfies Actions;
