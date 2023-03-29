@@ -34,7 +34,7 @@
 <style lang="scss">
 	pre {
 		span {
-			color: rgb(213, 48, 48);
+			color: rgb(227, 56, 56);
 			&.green {
 				color: rgb(55, 200, 55);
 			}
