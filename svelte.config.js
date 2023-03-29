@@ -14,7 +14,7 @@ const config = {
 		vitePreprocess(),
 		mdsvex({
 			extensions: ['.md', '.svx', '.svelte.md'],
-			layout: './src/routes/MarkdownLayout.svelte'
+			layout: './src/lib/mdsvex/MarkdownLayout.svelte'
 			/*rehypePlugins: [
 				addClasses({
 					ul: 'list'
