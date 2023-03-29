@@ -2,8 +2,11 @@
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 
-	export let data: PageData;
+	export function fd() {
+		return form;
+	}
 
+	export let data: PageData;
 	const { form, errors, enhance } = superForm(data.form);
 </script>
 
