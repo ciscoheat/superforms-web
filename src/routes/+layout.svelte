@@ -11,13 +11,13 @@
 	import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
 	import '$lib/assets/prism-gruvbox-dark.css';
-	import { initToC } from '$lib/toc';
 
 	function drawerOpen(): void {
 		drawerStore.open({});
 	}
 
-	const ToC = initToC();
+	const noToC = ['/'];
+	$: ToC = !noToC.includes($page.url.pathname);
 </script>
 
 <Drawer width="w-80">
@@ -74,8 +74,8 @@
 	<!-- Page Route Content -->
 	<slot />
 	<svelte:fragment slot="sidebarRight">
-		{#key $page.url}
-			<TableOfContents class="{$ToC ? 'hidden md:block' : 'hidden'} p-4" target="#page" />
+		{#key $page.url.pathname}
+			<TableOfContents class="{ToC ? 'hidden md:block' : 'hidden'} p-4" target="#page" />
 		{/key}
 	</svelte:fragment>
 </AppShell>

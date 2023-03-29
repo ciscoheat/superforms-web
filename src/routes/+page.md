@@ -1,9 +1,6 @@
 <script lang="ts">
 	import Header from './Header.svelte'
 	import Youtube from '$lib/Youtube.svelte'
-	import { displayToC } from '$lib/toc.js';
-
-	displayToC(false)
 </script>
 
 <Header />
