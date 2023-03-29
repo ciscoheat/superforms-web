@@ -1,5 +1,5 @@
 import { fail, type RequestEvent, type ServerLoadEvent } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
+import { message, superValidate } from 'sveltekit-superforms/server';
 import type { ZodEffects, AnyZodObject } from 'zod';
 
 type ZodValidation<T extends AnyZodObject> =
@@ -19,7 +19,7 @@ export function echo<
       return fail(400, { form });
     }
 
-    return { form };
+    return message(form, 'Form posted!');
   };
 }
 
@@ -36,7 +36,7 @@ export function echoActions<T extends AnyZodObject, S extends ZodValidation<T>>(
   schema: S
 ) {
   return {
-    actions: { default: echo(schema) }
+    default: echo(schema)
   };
 }
 

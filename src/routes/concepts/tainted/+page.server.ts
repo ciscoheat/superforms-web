@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { echoLoad, echoActions } from '$lib/echo';
 
-export const _schema = z.object({
-  name: z.string().default('Hello world!'),
+const _schema = z.object({
+  name: z.string().min(2),
   email: z.string().email()
 });
 

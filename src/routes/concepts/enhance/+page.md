@@ -1,7 +1,5 @@
 <script lang="ts">
-	import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
 
 	export let data;
@@ -20,7 +18,7 @@ By retrieving a variable called `enhance` from `superForm` and applying it as an
 <form method="POST" use:enhance>
 ```
 
-The rest of the concepts section list all the options for `superForm`, which can be added as a second parameter:
+The rest of the concepts section lists all the options for `superForm`, which can be added as a second parameter:
 
 ```ts
 const { form, errors, enhance } = superForm(data.form, { lotsOfOptions });

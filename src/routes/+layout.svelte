@@ -20,6 +20,10 @@
   $: ToC = !noToC.includes($page.url.pathname);
 </script>
 
+<svelte:head>
+  <title>Superforms for SvelteKit</title>
+</svelte:head>
+
 <Drawer width="w-80">
   <h3 class="p-4">Navigation</h3>
   <hr />
