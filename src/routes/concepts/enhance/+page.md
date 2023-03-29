@@ -7,7 +7,7 @@
 
 # Progressive enhancement
 
-By retrieving a variable called `enhance` from `superForm` and applying it as an action on the form, we'll get the client-side enhancement expected from a modern webpage:
+By deconstructing `enhance` from `superForm` and applying it as an action on the form, we'll get the client-side enhancement expected from a modern webpage:
 
 ```svelte
 <script lang="ts">
@@ -17,6 +17,8 @@ By retrieving a variable called `enhance` from `superForm` and applying it as an
 
 <form method="POST" use:enhance>
 ```
+
+Now all form submissions will happen 100% on the client.
 
 The rest of the concepts section lists all the options for `superForm`, which can be added as a second parameter:
 
