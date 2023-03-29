@@ -5,6 +5,8 @@ export const concepts = [
   ['/concepts/error-handling', 'Error handling'],
   ['/concepts/submit-behavior', 'Submit behavior'],
   ['/concepts/timers', 'Timers'],
-  ['/concepts/client-validation', 'Client validation'],
+  ['/concepts/client-validation', 'Client-side validation'],
+  ['/concepts/nested-data', 'Nested data'],
+  ['/concepts/multiple-forms', 'Multiple forms'],
   ['/concepts/proxies', 'Proxies']
 ];
