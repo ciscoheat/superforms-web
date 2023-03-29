@@ -14,7 +14,7 @@ When a form field is modified, that field, and in turn the form, is considered _
 ## Options
 
 ```ts
-const { form, tainted } = superForm(data.form, {
+const { form, enhance, tainted } = superForm(data.form, {
   taintedMessage: string | null = 'Do you want to leave this page? Changes you made may not be saved.'
 })
 ```
