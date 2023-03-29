@@ -1,8 +1,8 @@
 import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
-import toc from '@jsdevtools/rehype-toc';
-import rehypeSlug from 'rehype-slug';
+//import rehypeSlug from 'rehype-slug';
+//import addClasses from 'rehype-add-classes';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -12,7 +12,15 @@ const config = {
 
 	preprocess: [
 		vitePreprocess(),
-		mdsvex({ extensions: ['.md', '.svx', '.svelte.md'] /*rehypePlugins: [rehypeSlug, toc]*/ })
+		mdsvex({
+			extensions: ['.md', '.svx', '.svelte.md'],
+			layout: './src/routes/MarkdownLayout.svelte'
+			/*rehypePlugins: [
+				addClasses({
+					ul: 'list'
+				})
+			]*/
+		})
 	],
 
 	kit: {

@@ -21,20 +21,16 @@
 
 <nav class="list-nav p-4" bind:this={nav}>
 	<ul>
-		<li>
-			<A href="/">Start</A>
-			<ul>
-				<li><A href="/test">Test</A></li>
-			</ul>
-		</li>
-		<li><A href="/about">About</A></li>
+		<li><A href="/">Start</A></li>
+		<li><A href="/tutorial">Tutorial</A></li>
 
 		<div id="title" class="pt-4 text-primary-700 dark:text-primary-500 font-bold uppercase px-4">
 			Title
 		</div>
 
-		<li><A href="/test">Test</A></li>
-		<li><A href="/again">Again</A></li>
+		<li><A href="/api">API</A></li>
+		<li><A href="/again">Discussions</A></li>
+		<li><A href="/faq">FAQ</A></li>
 	</ul>
 </nav>
 

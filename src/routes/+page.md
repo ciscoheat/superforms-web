@@ -1,6 +1,20 @@
-## Get started
+<script lang="ts">
+	import Header from './Header.svelte'
+</script>
 
-Let's gradually build up a Superform, with the data for a name and an email address.
+<Header />
+
+Superforms is a SvelteKit library that helps you with **server-side validation** and **client-side display** of forms.
+
+It enables you to use a Zod validation schema as a **single source of truth**, for consistent handling of data and errors.
+
+The API is minimal, basically just one method on the server and another on the client, but still flexible for handling every possible case of:
+
+- Nested data
+- Multiple forms on the same page
+- Tainted form checks
+- Client-side validation
+- And much more
 
 **src/routes/+page.server.ts**
 
