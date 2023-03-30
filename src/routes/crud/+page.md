@@ -11,7 +11,7 @@ An excellent use case for sveltekit-superforms is a backend interface, commonly 
 1. Update the entity with the data **(Update)**
 1. Delete the entity **(Delete)**
 1. ???
-1. `GOTO 1`
+1. Profit!
 
 Because you can send the data model directly to the `superValidate` function and have the form populated directly, it becomes quite easy to implement the above steps.
 
@@ -88,9 +88,9 @@ This user database in the shape of an array will be helpful for testing our CRUD
 
 ## Form vs. database schemas
 
-When starting on the server page, we'll encounter a thing about validation schemas. The `userSchema` is for the **database integrity**, so an `id` must exist there. But we want to create an entity, and must therefore allow `id` not to exist when creating users.
+When starting on the server page, we'll encounter a thing about validation schemas. The `userSchema` is for the **database integrity**, so an `id` **must** exist there. But we want to create an entity, and must therefore allow `id` not to exist when creating users.
 
-This is done by extending the `userSchema`:
+This can be done by extending the `userSchema`:
 
 **src/routes/+page.server.ts**
 
