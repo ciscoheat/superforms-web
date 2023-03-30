@@ -44,6 +44,16 @@ module.exports = {
             },
             h3: {
               marginTop: '2rem'
+            },
+            'a:is(.card)': {
+              textDecoration: 'none'
+            },
+            'a:not(.card)': {
+              color: 'rgb(var(--color-primary-500))',
+              textDecoration: 'underline',
+              '&:hover': {
+                filter: 'brightness(110%)'
+              }
             }
           }
         }
