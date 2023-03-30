@@ -39,6 +39,7 @@
     <Title id="concepts">Other</Title>
 
     <li><A href="/default-values">Default values</A></li>
+    <li><A href="/crud">CRUD tutorial</A></li>
     <li><A href="/faq">FAQ</A></li>
   </ul>
 </nav>
