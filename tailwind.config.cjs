@@ -19,7 +19,36 @@ module.exports = {
       lg: '1024px'
       // => @media (min-width: 1440px) { ... }
     },
-    extend: {}
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif']
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            'code::before': {
+              content: 'none'
+            },
+            'code::after': {
+              content: 'none'
+            },
+            ul: {
+              listStyle: 'none'
+            },
+            'ul li::before': {
+              content: "'💥 '"
+            },
+            'ul li': {
+              marginTop: '1rem',
+              marginBottom: '1rem'
+            },
+            h3: {
+              marginTop: '2rem'
+            }
+          }
+        }
+      }
+    }
   },
   plugins: [
     require('@tailwindcss/forms'),

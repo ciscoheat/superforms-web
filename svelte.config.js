@@ -21,9 +21,7 @@ const config = {
           rehypeExternalLinks,
           {
             target: (el) => {
-              return el.properties &&
-                el.properties.href &&
-                el.properties.href.startsWith('http')
+              return el.properties?.href?.startsWith('http')
                 ? '_blank'
                 : undefined;
             }
