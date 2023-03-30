@@ -12,6 +12,9 @@
   import { page } from '$app/stores';
   import '$lib/assets/prism-gruvbox-dark.css';
   import { afterNavigate } from '$app/navigation';
+  import { fade } from 'svelte/transition';
+
+  let hideSponsor = true;
 
   function drawerOpen(): void {
     drawerStore.open({});
@@ -31,7 +34,7 @@
   <title>Superforms for SvelteKit</title>
 </svelte:head>
 
-<Drawer width="w-80">
+<Drawer width="w-70">
   <h3 class="p-4">Navigation</h3>
   <hr />
   <Navigation />
@@ -42,7 +45,7 @@
     <!-- App Bar -->
     <AppBar>
       <svelte:fragment slot="lead">
-        <div class="flex items-center">
+        <div class="flex shrink-0 items-center">
           <button class="lg:hidden btn btn-sm mr-4" on:click={drawerOpen}>
             <span>
               <img class="logo" src={logo} alt="Superforms logo" />
@@ -53,7 +56,7 @@
             src={logo}
             alt="Superforms logo"
           />
-          <strong class="text-xl">Superforms</strong>
+          <strong class="text-lg md:text-xl truncate">Superforms</strong>
         </div>
       </svelte:fragment>
       <svelte:fragment slot="trail">
@@ -78,7 +81,7 @@
         </a>
         <a
           href="https://github.com/ciscoheat/sveltekit-superforms"
-          class="pr-2"
+          class="md:pr-2"
           target="_blank"
           rel="noreferrer"
         >
@@ -89,8 +92,73 @@
             /></svg
           >
         </a>
+        <button
+          type="button"
+          class="sponsor btn btn-sm variant-ghost relative"
+          on:click={() => (hideSponsor = !hideSponsor)}
+        >
+          <span
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              ><path
+                fill="currentColor"
+                d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35Z"
+              /></svg
+            ></span
+          >
+          <span class="hidden md:inline">Sponsor</span>
+        </button>
       </svelte:fragment>
     </AppBar>
+    {#if !hideSponsor}
+      <div
+        transition:fade={{ duration: 150 }}
+        class="sponsor card absolute p-4 flex flex-col justify-end gap-3 h-48 md:h-40"
+      >
+        <div class="sm:block md:hidden text-center">Sponsor</div>
+        <a
+          href="https://github.com/sponsors/ciscoheat"
+          target="_blank"
+          class="btn btn-sm variant-ghost"
+        >
+          <span
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              ><path
+                fill="currentColor"
+                d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"
+              /></svg
+            ></span
+          >
+          <span>Github</span>
+        </a>
+        <a
+          href="https://ko-fi.com/ciscoheat"
+          target="_blank"
+          class="btn btn-sm variant-ghost"
+        >
+          <span
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              ><path
+                fill="currentColor"
+                d="M5 2h2v3H5zm4 0h2v3H9zm4 0h2v3h-2zm6 7h-2V7H3v11c0 1.654 1.346 3 3 3h8c1.654 0 3-1.346 3-3h2c1.103 0 2-.897 2-2v-5c0-1.103-.897-2-2-2zm-4 9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V9h10v9zm2-2v-5h2l.002 5H17z"
+              /></svg
+            ></span
+          >
+          <span>Ko-fi</span>
+        </a>
+      </div>
+    {/if}
   </svelte:fragment>
   <svelte:fragment slot="sidebarLeft">
     <Navigation />
@@ -118,5 +186,14 @@
   img.logo {
     width: 36px;
     height: 36px;
+  }
+
+  .sponsor.btn {
+    z-index: 4;
+  }
+
+  .sponsor.card {
+    top: 10px;
+    right: 5px;
   }
 </style>
