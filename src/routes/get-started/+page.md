@@ -40,7 +40,9 @@ Let's gradually build up a Superform containing a name and an email address.
 The main thing required to create a Superform is a Zod validation schema. It has a quite simple syntax:
 
 ```ts
-// Name has a default value just to show something.
+import { z } from 'zod';
+
+// Name has a default value just to display something in the form.
 const schema = z.object({
   name: z.string().default('Hello world!'),
   email: z.string().email()
@@ -49,16 +51,16 @@ const schema = z.object({
 
 The [Zod documentation](https://zod.dev/?id=primitives) has all the details for creating schemas, but this is all you need to know for now.
 
-### Adding a load function
+### Initializing the form in the load function
 
 Let's use this schema with Superforms on the start page of the site:
 
 **src/routes/+page.server.ts**
 
 ```ts
-import type { PageServerLoad } from './$types';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
+import type { PageServerLoad } from './$types';
 
 const schema = z.object({
   name: z.string().default('Hello world!'),
@@ -74,17 +76,19 @@ export const load = (async (event) => {
 }) satisfies PageServerLoad;
 ```
 
-The Superform server API is called `superValidate`. Its first parameter is the data that should be sent to the form. It can come from `FormData` in a POST request, from a database (using route parameters in the load function), or be empty.
+The Superform server API is called `superValidate`. Its first parameter is the data that should be sent to the form. It can come from:
 
-If empty, any required fields will be filled with default values based on the schema. `z.string()` results in an empty string, for example.
+- `FormData` in a POST request
+- From a database call in the load function, so the form will be populated directly (very useful for backend interfaces)
+- Or it can be empty, in which case it will be filled with default values based on the schema. `z.string()` results in an empty string, for example.
 
-In our case, the form should be empty as default, so we can use the `RequestEvent`, which then looks for `FormData`, but as this is a `GET` request, it won't find any and will return the default values for the schema.
+In our case, the form should be initially empty, so we can use the `RequestEvent`, which then looks for `FormData`, but as the load function is a `GET` request, it won't find any and will return the default values for the schema.
 
-Also note that in the end of the load function we return `{ form }`. As a rule, you should always return the validation object to the client in this manner.
+Note that at the end of the load function we return `{ form }`. As a rule, you should always return the validation object to the client in this manner.
 
 ### Displaying the form
 
-Now when we have sent the validation data to the client, we will use it with the client part of the API:
+Now when we have sent the validation data to the client, we will retrieve it with the client part of the API:
 
 **src/routes/+page.svelte**
 
