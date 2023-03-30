@@ -79,6 +79,9 @@ module.exports = {
             'div.card': {
               marginBottom: '1.25rem!important',
               marginTop: '1.25rem!important'
+            },
+            '.super-debug--pre': {
+              marginTop: '1.25rem!important'
             }
           }
         }
