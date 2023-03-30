@@ -13,7 +13,7 @@ In general, using the `$errors` store gives you high flexibility, since you can 
 
 On larger forms it's nice showing the user where the first error is. There are a couple of options for that:
 
-## Options
+## Usage
 
 ```ts
 const { form, enhance, errors, allErrors } = superForm(data.form, {

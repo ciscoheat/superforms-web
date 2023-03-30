@@ -12,7 +12,7 @@
 
 As said in the previous section, the user should understand that things are happening when they submit the form. Timers gives us a way of providing feedback at the right time, based upon human perception research.
 
-## Options
+## Usage
 
 ```ts
 const { form, enhance, submitting, delayed, timeout } = superForm(data.form, {

@@ -13,7 +13,7 @@ So far, almost every feature has been on the client! That's where the action is,
 
 The validation object contains a `message` property that is used for this.
 
-## Options
+## Usage
 
 ```ts
 const { form, message } = superForm(data.form);

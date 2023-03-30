@@ -11,9 +11,11 @@ export function echo<
   T extends AnyZodObject,
   S extends ZodValidation<T>,
   E extends RequestEvent
->(schema: S) {
+>(schema: S, debug = false) {
   return async (event: E) => {
     const form = await superValidate(event, schema);
+
+    if (debug) console.log('POST', form);
 
     if (!form.valid) {
       return fail(400, { form });
@@ -33,10 +35,11 @@ export function echoLoad<T extends AnyZodObject, S extends ZodValidation<T>>(
 }
 
 export function echoActions<T extends AnyZodObject, S extends ZodValidation<T>>(
-  schema: S
+  schema: S,
+  debug = false
 ) {
   return {
-    default: echo(schema)
+    default: echo(schema, debug)
   };
 }
 

@@ -11,7 +11,7 @@
 
 There is already a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which is virtually effortless to use with Superforms. For more advanced cases, you can use either a Zod schema or the built-in validation object for an exhaustive client-side validation.
 
-## Options
+## Usage
 
 ```ts
 const { form, enhance, constraints } = superForm(data.form, {

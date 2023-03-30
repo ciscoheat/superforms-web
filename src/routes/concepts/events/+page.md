@@ -18,7 +18,7 @@ Click on the event you want to know more about!
 
 <Flowchart />
 
-## Options
+## Usage
 
 ```ts
 const { form } = superForm(data.form, {
