@@ -9,6 +9,6 @@
   export let fullWidth = false;
 </script>
 
-<div class="p-6 md:p-10 space-y-5 {fullWidth ? '' : 'max-w-4xl'} mx-auto prose prose-invert">
+<div class="p-6 md:p-10 space-y-5 {fullWidth ? '' : 'max-w-4xl'} mx-auto">
   <slot />
 </div>

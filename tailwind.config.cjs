@@ -19,17 +19,7 @@ module.exports = {
 			lg: "1024px",
 			// => @media (min-width: 1440px) { ... }
 		},
-		extend: {
-			typography: {
-				DEFAULT: {
-					css: {
-						h1: {
-							fontWeight: "bold",
-						},
-					},
-				},
-			},
-		},
+		extend: {},
 	},
 	plugins: [
 		require("@tailwindcss/forms"),
