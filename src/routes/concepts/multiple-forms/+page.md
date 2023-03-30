@@ -13,7 +13,7 @@ Since SvelteKit has only one `$page.form`, having multiple forms on the same pag
 
 Fortunately Superforms has a solution for this! Multiple forms on the same page are possible by setting `options.id` for each form (one can have the default id, `undefined`). This prevents them from interfering with with each other, which can happen since they all update the same `$page.status` and `$page.form`.
 
-## Options
+## Usage
 
 ```ts
 // Server-side

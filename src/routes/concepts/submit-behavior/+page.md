@@ -7,7 +7,7 @@
 
 Making the user understand that things are happening when they submit the form is imperative for the best possible user experience. Superforms provides you with timers (see next section) and the following option for handling this:
 
-## Options
+## Usage
 
 ```ts
 const { form, enhance } = superForm(data.form, {

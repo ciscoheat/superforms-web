@@ -20,7 +20,7 @@ By using `enhance` returned from `superForm` on a form, we'll get the client-sid
 
 Now all form submissions will happen on the client, and we unlock a ton of extra features, that will be explained here and in the rest of this section.
 
-## Options
+## Usage
 
 ```ts
 const { form, enhance, reset } = superForm(data.form, {

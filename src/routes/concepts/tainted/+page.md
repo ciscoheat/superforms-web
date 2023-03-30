@@ -11,7 +11,7 @@
 
 When a form field is modified, that field, and in turn the form, is considered _tainted_. A Superforms feature is to prevent the user from losing data, by accidentaly navigating away from a tainted form.
 
-## Options
+## Usage
 
 ```ts
 const { form, enhance, tainted } = superForm(data.form, {

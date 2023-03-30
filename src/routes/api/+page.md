@@ -342,7 +342,7 @@ FormField<S, Prop extends keyof S> = {
 };
 ```
 
-## Proxies
+## Proxy objects
 
 ### intProxy(form, fieldName)
 

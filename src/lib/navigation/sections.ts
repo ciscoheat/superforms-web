@@ -9,6 +9,6 @@ export const concepts = [
   ['/concepts/nested-data', 'Nested data'],
   ['/concepts/multiple-forms', 'Multiple forms'],
   ['/concepts/messages', 'Status messages'],
-  ['/concepts/proxies', 'Proxies'],
+  ['/concepts/proxy-objects', 'Proxy objects'],
   ['/concepts/snapshots', 'Snapshots']
 ];
