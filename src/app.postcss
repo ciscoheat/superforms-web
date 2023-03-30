@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 html,
 body {
@@ -11,11 +11,12 @@ h3,
 h4,
 h5 {
   display: flex;
-  font-family: "Inter", sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
   a {
     margin-left: 4px;
     font-size: 1.3rem;
     display: none;
+    text-decoration: none;
   }
 }
 
@@ -27,6 +28,7 @@ h5 {
   &:hover {
     a {
       display: block;
+      text-decoration: none;
     }
   }
 }
@@ -36,11 +38,10 @@ code {
 }
 
 code:not(.unstyled):is(:not(pre *)) {
-    @apply font-mono text-xs text-primary-700 dark:text-primary-400 whitespace-nowrap;
-    @apply bg-primary-500/30 dark:bg-primary-500/20;
-    @apply py-0.5 px-1 rounded;
+  @apply font-mono text-xs text-primary-700 dark:text-primary-400 whitespace-nowrap;
+  @apply bg-primary-500/30 dark:bg-primary-500/20;
+  @apply py-0.5 px-1 rounded;
 }
-
 
 .md-list {
   a,
