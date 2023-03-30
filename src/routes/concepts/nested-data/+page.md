@@ -11,7 +11,7 @@
 
 Html forms are inherently one-dimensional, in the sense that the input fields can only handle string values. There is no easy way to represent a nested data structure or more complex values like dates... until now!
 
-## Options
+## Usage
 
 ```ts
 const { form, errors, constraints } = superForm(data.form, {
