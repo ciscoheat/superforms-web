@@ -38,7 +38,7 @@
 
     <Title id="concepts">Other</Title>
 
-    <li><A href="/again">Discussions</A></li>
+    <li><A href="/default-values">Default values</A></li>
     <li><A href="/faq">FAQ</A></li>
   </ul>
 </nav>
