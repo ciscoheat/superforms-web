@@ -13,7 +13,7 @@ An excellent use case for sveltekit-superforms is a backend interface, commonly 
 1. ???
 1. `GOTO 1`
 
-Because you can send the data model directly to the `superValidate` function and thereby use it in a form, it becomes quite easy to implement the above steps.
+Because you can send the data model directly to the `superValidate` function and have the form populated directly, it becomes quite easy to implement the above steps.
 
 ## Getting started
 
@@ -25,9 +25,17 @@ Open the [Stackblitz repo](https://stackblitz.com/edit/sveltekit-superforms-crud
 
 ### 2. The slightly harder way
 
-Start from scratch in a new SvelteKit project, by following the simple instructions at https://kit.svelte.dev/ to create a TypeScript skeleton project. Then add this to `<head>` for a much nicer visual experience:
+Start from scratch in a new SvelteKit project, by executing one of the following commands in your project directory:
 
-**src/app.html**
+```
+npm create svelte@latest
+```
+
+```
+pnpm create svelte@latest
+```
+
+Select **Skeleton project** and **Typescript syntax** at the prompts, the rest is up to you. Then add this to `<head>` in **src/app.html** for a much nicer visual experience:
 
 ```html
 <link
@@ -78,7 +86,9 @@ export const users: UserDB = (g.users = g.users || [
 
 This user database in the shape of an array will be helpful for testing our CRUD operations.
 
-When starting on the server page, we'll encounter a thing about validation schemas. The `userSchema` is for the database integrity, so an `id` must exist there. But we want to create an entity, and must therefore allow `id` not to exist when creating users.
+## Form vs. database schemas
+
+When starting on the server page, we'll encounter a thing about validation schemas. The `userSchema` is for the **database integrity**, so an `id` must exist there. But we want to create an entity, and must therefore allow `id` not to exist when creating users.
 
 This is done by extending the `userSchema`:
 
@@ -96,9 +106,11 @@ const schema = userSchema.extend({
 });
 ```
 
-The advantage is that **Create** and **Update** can now use the same schema, which means that they can share the same user interface. This is a fundamental idea in sveltekit-superforms, so you can pass either `null/undefined` or an entity to `superValidate`, and it will generate default values if the value passed to it if empty.
+The advantage is that **Create** and **Update** can now use the same schema, which means that they can share the same user interface. This is a fundamental idea in sveltekit-superforms, you can pass either empty data or an entity partially matching the schema to `superValidate`, and it will generate default values for any empty fields.
 
-Let's add a load function to the page:
+## Reading a user from the database
+
+Let's add a load function to the page, using a query parameter to look up the requested user:
 
 **src/routes/+page.server.ts**
 
@@ -116,9 +128,9 @@ export const load = (async ({ url }) => {
 }) satisfies PageServerLoad;
 ```
 
-Some simple logic is used to find the user, and detect if a 404 should be displayed. Then we're returning both `form`, as usual, and `users`, so they can be displayed as a list. (Sometimes, CRUDL is used as an acronym, since listing is also quite fundamental to data management.)
+Some simple logic is used to find the user, and detect if a 404 should be displayed. Then we're returning `form` as usual, but also `users`, so they can be displayed as a list. (Sometimes, CRUDL is used as an acronym, since listing is also fundamental to data management.)
 
-Now when we've loaded the data, let's display it, starting with the script part of the page component:
+Now when we've loaded the data, let's display it in a page component:
 
 **src/routes/+page.svelte**
 
@@ -141,9 +153,11 @@ Now when we've loaded the data, let's display it, starting with the script part 
 <h2>{$empty ? 'Create' : 'Update'} user</h2>
 ```
 
-There are plenty of variables extracted from `superForm`, refer to the [API reference](https://github.com/ciscoheat/sveltekit-superforms/wiki/API-reference#superformform-options) to know more about them.
+There are plenty of variables extracted from `superForm`, refer to the [API reference](/api#superform-return-type) for a complete list.
 
 Apart from getting the data ready to be displayed, we've prepared a status message, using `$page.status` to test for success or failure, and we're using the `$empty` store to display a "Create user" or "Update user" title. Now lets add the form itself:
+
+**src/routes/+page.svelte**
 
 ```svelte
 <form method="POST" use:enhance>
@@ -182,7 +196,11 @@ Apart from getting the data ready to be displayed, we've prepared a status messa
 </style>
 ```
 
+## Creating and Updating a user
+
 With this, the form should be ready for creating a user. Let's add the form action for that:
+
+**src/routes/+page.server.ts**
 
 ```ts
 export const actions = {
@@ -192,8 +210,17 @@ export const actions = {
 
     if (!form.data.id) {
       // CREATE user
+      const user = { ...form.data, id: userId() };
+      users.push(user);
+
+      return message(form, 'User created!');
     } else {
       // UPDATE user
+      const user = users.find((u) => u.id == form.data.id);
+      if (!user) throw error(404, 'User not found.');
+
+      users[users.indexOf(user)] = { ...form.data, id: user.id };
+      return message(form, 'User updated!');
     }
 
     return { form };
@@ -201,26 +228,11 @@ export const actions = {
 } satisfies Actions;
 ```
 
-This is where you should access your database API. Since we're using an array, the create and update logic is simple:
-
-```ts
-if (!form.data.id) {
-  // CREATE user
-  const user = { ...form.data, id: userId() };
-  users.push(user);
-
-  return message(form, 'User created!');
-} else {
-  // UPDATE user
-  const user = users.find((u) => u.id == form.data.id);
-  if (!user) throw error(404, 'User not found.');
-
-  users[users.indexOf(user)] = { ...form.data, id: user.id };
-  return message(form, 'User updated!');
-}
-```
+This is where you should access your database API. In our case, we're only doing some array manipulations.
 
 With this, we have 3 out of 4 letters of CRUD in about 150 lines of code, half of it html!
+
+## Deleting a user
 
 To delete a user, we can make use of the html `button` element, which can have a name and a value that will be passed only if that specific button was used to post the form. Add this at the end of the form:
 
@@ -251,14 +263,14 @@ export const actions = {
     if (!form.valid) return fail(400, { form });
 
     if (!form.data.id) {
-      // No change in here
+      // Nothing changes in here
     } else {
       const user = users.find((u) => u.id == form.data.id);
       if (!user) throw error(404, 'User not found.');
 
       const index = users.indexOf(user);
 
-      // Check if deleting
+      // Are we deleting?
       if (data.has('delete')) {
         // DELETE user
         users.splice(index, 1);
@@ -273,9 +285,13 @@ export const actions = {
 };
 ```
 
-Now we have all four CRUD operations! An issue however is that we have to redirect after deleting to avoid a 404, which prevents `form.message` to be used, since the validation data won't exist after redirecting. Redirecting with a message is a general problem, for example maybe we'd like to redirect to the newly created user after it's been created.
+Now we have all four CRUD operations! An issue however is that we have to redirect after deleting to avoid a 404, so we cannot use `form.message` to show "User deleted", since the validation data won't exist after redirecting.
 
-Things _could_ be solved client-side, but it takes some extra logic and won't work with SSR. Fortunately there is a solution, the sister library to `sveltekit-superforms` is called [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message) and makes this quite easy. Check it out!
+Redirecting with a message is a general problem, for example maybe we'd like to redirect to the newly created user after it's been created.
+
+Things _could_ be solved client-side, but it takes some extra logic and won't work with SSR. Fortunately there is a solution, the sister library to Superforms handles this. [Read more about it here](/flash-messages).
+
+## Listing the users
 
 The last loose thread is to display a list of the users. It'll be quite trivial, add this to the top of `+page.svelte`:
 

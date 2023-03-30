@@ -25,7 +25,7 @@ npm i -D sveltekit-superforms zod
 pnpm i -D sveltekit-superforms zod
 ```
 
-## Following along the tutorial
+## Following along
 
 The easiest way is to open [the Stackblitz project](https://stackblitz.com/edit/sveltekit-superforms-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) for this tutorial.
 
@@ -48,6 +48,8 @@ const schema = z.object({
   email: z.string().email()
 });
 ```
+
+This schema represents the data in the form.
 
 The [Zod documentation](https://zod.dev/?id=primitives) has all the details for creating schemas, but this is all you need to know for now.
 
@@ -191,10 +193,12 @@ This is the validation object returned from `superValidate`, containing all you 
 
 - `valid` - Tells you whether the validation succeeded or not.
 - `errors` - An object with all validation errors.
-- `data` - The posted data, in this case not valid, so it should be returned to the client as a `failure`.
+- `data` - The posted data, in this case not valid, so it should be returned to the client using `fail`.
 - `empty` - Tells you if the data passed to `superValidate` was empty, as it was in the load function.
 - `message` - A property that can be set as a general information message.
-- `constraints` - An object with [html validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation) than can be spread on input fields.
+- `constraints` - An object with [html validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation) that can be spread on input fields.
+
+### Displaying errors
 
 Now we know that validation has failed, and there are some errors being sent to the client. So how do we display them?
 
@@ -245,10 +249,10 @@ We now have a fully working form with convenient handling of data and validation
 
 There are no hidden DOM manipulations or other secrets, it's just html attributes and Svelte stores.
 
-## What's next?
+## Next steps
 
-This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the enhancements that Superforms bring. Take a look under "Concepts" in the navigation, they can be read in order.
+This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring. Take a look under "Concepts" in the navigation, they can be read in order.
 
 Also, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
 
-If you want to take a more advanced tutorial, check out the Designing a CRUD app.
+If you want to take a more advanced tutorial, check out the [Designing a CRUD app](/crud).
