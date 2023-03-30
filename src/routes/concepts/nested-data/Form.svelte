@@ -8,7 +8,8 @@
 
   const { form, errors, message, enhance } = superForm(data.form, {
     dataType: 'json',
-    errorSelector: '.input-error'
+    errorSelector: '.input-error',
+    defaultValidator: 'clear'
   });
 </script>
 
