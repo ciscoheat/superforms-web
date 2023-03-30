@@ -1,9 +1,7 @@
 <script lang="ts" context="module">
-  import ul from './ul.svelte';
   import ol from './ol.svelte';
-  import li from './li.svelte';
   import table from './table.svelte';
-  export { ul, li, ol, table };
+  export { ol, table };
 </script>
 
 <script lang="ts">
