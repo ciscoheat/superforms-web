@@ -26,6 +26,10 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
+            p: {
+              marginBottom: '1.25rem',
+              marginTop: 0
+            },
             'code::before': {
               content: 'none'
             },
@@ -42,8 +46,15 @@ module.exports = {
               marginTop: '1rem',
               marginBottom: '1rem'
             },
+            h1: {
+              marginBottom: '1.5rem'
+            },
+            h2: {
+              marginTop: '2.5rem',
+              marginBottom: '1.25rem'
+            },
             h3: {
-              marginTop: '2rem'
+              marginTop: '1.5rem'
             },
             'a:is(.card)': {
               textDecoration: 'none'
@@ -54,6 +65,20 @@ module.exports = {
               '&:hover': {
                 filter: 'brightness(110%)'
               }
+            },
+            'div pre': {
+              marginBottom: '1.25rem!important'
+            },
+            'table td': {
+              padding: '1rem!important',
+              whiteSpace: 'normal!important'
+            },
+            'table th': {
+              whiteSpace: 'nowrap!important'
+            },
+            'div.card': {
+              marginBottom: '1.25rem!important',
+              marginTop: '1.25rem!important'
             }
           }
         }
