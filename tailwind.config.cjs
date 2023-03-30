@@ -54,7 +54,7 @@ module.exports = {
               marginBottom: '1.25rem'
             },
             h3: {
-              marginTop: '1.5rem'
+              marginTop: '1.75rem'
             },
             'a:is(.card)': {
               textDecoration: 'none'
