@@ -49,7 +49,7 @@ const schema = z.object({
 });
 ```
 
-This schema represents the data in the form.
+This schema represents the form data. It should always start with `z.object({ ... })`, encapsulating a single form.
 
 The [Zod documentation](https://zod.dev/?id=primitives) has all the details for creating schemas, but this is all you need to know for now.
 
@@ -90,7 +90,7 @@ Note that at the end of the load function we return `{ form }`. As a rule, you s
 
 ### Displaying the form
 
-Now when we have sent the validation data to the client, we will retrieve it with the client part of the API:
+Now when we have sent the validation data to the client, we will retrieve it using the client part of the API:
 
 **src/routes/+page.svelte**
 
