@@ -11,6 +11,7 @@
   import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
   import { page } from '$app/stores';
   import '$lib/assets/prism-gruvbox-dark.css';
+  import { afterNavigate } from '$app/navigation';
 
   function drawerOpen(): void {
     drawerStore.open({});
@@ -18,6 +19,12 @@
 
   const noToC = ['/'];
   $: ToC = !noToC.includes($page.url.pathname);
+
+  afterNavigate((nav) => {
+    if (nav.type == 'link') {
+      document.getElementById('page')?.scrollTo(0, 0);
+    }
+  });
 </script>
 
 <svelte:head>
