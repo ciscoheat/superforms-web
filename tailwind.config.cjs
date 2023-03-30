@@ -67,8 +67,3 @@ module.exports = {
     ...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')()
   ]
 };
-// // a:not(.unstyled):not(.permalink):is(:not(.prose *)):not(.btn):not(.btn-icon):not(.app-bar a):not(.logo-item):not(a.card):not(
-//     .list-nav a
-//     ) {
-//     @apply text-primary-700 dark:text-primary-500 hover:brightness-110 underline;
-// }
