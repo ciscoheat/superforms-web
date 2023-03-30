@@ -44,6 +44,9 @@ module.exports = {
             },
             h3: {
               marginTop: '2rem'
+            },
+            a: {
+              textDecoration: 'none'
             }
           }
         }
