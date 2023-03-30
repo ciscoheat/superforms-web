@@ -37,7 +37,7 @@ When your schema contains arrays or objects, you can access them through the `$f
 
 ## Example
 
-Given the following schema that describes a set of tag objects:
+Given the following schema, that describes an array of tag objects:
 
 ```ts
 import { z } from 'zod';
@@ -50,6 +50,13 @@ export const schema = z.object({
     })
     .array()
 });
+
+const tags = [{ id: 1, name: 'test' }];
+
+export const load = async () => {
+  const form = await superValidate({ tags }, schema);
+  return { form };
+};
 ```
 
 You can build up a html form for these tags using an `{#each}` loop:
@@ -57,7 +64,7 @@ You can build up a html form for these tags using an `{#each}` loop:
 ```svelte
 <script lang="ts">
   const { form, enhance } = superForm(data.form, {
-    // This is a requirement when the schema contains nested objects.
+    // This is a requirement when the schema contains nested objects:
     dataType: 'json'
   });
 </script>
@@ -96,6 +103,6 @@ Note that we're using the index of the loop, so the value can be bound directly 
 
 ## An exception: Primitive arrays
 
-Since you can post multiple html elements with the same name, you don't have to use `dataType = 'json'` for arrays of primitive values like numbers and strings. Superforms will handle the type coercion automatically.
+Since you can post multiple html elements with the same name, you don't have to use `dataType = 'json'` for arrays of primitive values like numbers and strings. Just add the input fields, Superforms will handle the type coercion to array automatically.
 
 <Next section={concepts} />

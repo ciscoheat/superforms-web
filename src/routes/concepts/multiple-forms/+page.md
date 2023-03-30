@@ -9,7 +9,7 @@
 
 # Multiple forms
 
-Since SvelteKit has only one `$page.form`, having multiple forms on the same page, for example a login form always present in the navigation, can cause trouble since any form update with the built-in `use:enhance` will overwrite the other.
+Since there is only one `$page.form` per page, having multiple forms, for example a register and login form on the same page, can cause trouble since an update with the built-in `use:enhance` will affect both forms.
 
 Fortunately Superforms has a solution for this! Multiple forms on the same page are possible by setting `options.id` for each form (one can have the default id, `undefined`). This prevents them from interfering with with each other, which can happen since they all update the same `$page.status` and `$page.form`.
 
@@ -44,9 +44,9 @@ export const actions = {
 
 This is only the **server-to-client** part however. You can still post to this form action from anywhere, and the server knows nothing about who sent the form.
 
-This may work well like the example above, a login form that is the only form that posts to its form action or endpoint. But for more dynamic scenarios you want to communicate to the server which form id was sent.
+This may work with the example above, a login form that probably is the only form that posts to its form action or endpoint. But for more dynamic scenarios, let's say a database table where rows can be editable, you want to communicate to the server which form id was sent.
 
-It could be as simple as using [named form actions](https://kit.svelte.dev/docs/form-actions#named-actions), or in a more dynamic fashion, using a hidden form field or a query parameter, to let the server know what `id` was posting.
+This could be as simple as using [named form actions](https://kit.svelte.dev/docs/form-actions#named-actions), or in a more dynamic fashion, using a hidden form field or a query parameter, to let the server know what `id` was posting.
 
 ### Setting id on the client
 
