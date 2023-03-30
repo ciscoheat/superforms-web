@@ -8,6 +8,7 @@ export const concepts = [
   ['/concepts/client-validation', 'Client-side validation'],
   ['/concepts/nested-data', 'Nested data'],
   ['/concepts/multiple-forms', 'Multiple forms'],
+  ['/concepts/proxies', 'Status messages'],
   ['/concepts/proxies', 'Proxies'],
   ['/concepts/snapshots', 'Snapshots']
 ];
