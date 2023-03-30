@@ -14,6 +14,8 @@ With `use:enhance` enabled, you get full control over the form submit process th
 
 ## Event flowchart
 
+Click on the event you want to know more about!
+
 <Flowchart />
 
 ## Options
@@ -34,7 +36,7 @@ const { form } = superForm(data.form, {
 onSubmit: ({ action, data, form, controller, cancel }) => void;
 ```
 
-The `onSubmit` event is the first one triggerd, that hooks you in to SvelteKit's `use:enhance` function. See SvelteKit docs for the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature.
+The `onSubmit` event is the first one triggered, that hooks you in to SvelteKit's `use:enhance` function. See SvelteKit docs for the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature.
 
 ### onResult
 
