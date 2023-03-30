@@ -70,6 +70,21 @@ A string can be a bit limiting though, more realistically there should be a stat
 type Message = { status: 'error' | 'success'; text: string };
 ```
 
+Though if you want to keep it simple with a string, you can use `$page.status` to style the message appropriately:
+
+```svelte
+<script lang="ts">
+  import { page } from '$app/stores';
+  const { form, message } = superForm(data.form);
+</script>
+
+{#if $message}
+  <div class:success={$page.status == 200} class:error={$page.status >= 400}>
+    {$message}
+  </div>
+{/if}
+```
+
 ## Event handling in non-JS settings
 
 Events aren't available unless JavaScript and `use:enhance` is enabled. But you can use the message as a simple event handler in non-JS scenarios. Its existence means that the form was submitted, and you can decorate it with extra metadata.
@@ -78,6 +93,6 @@ Events aren't available unless JavaScript and `use:enhance` is enabled. But you 
 
 Naturally, redirects will cause the message to be lost. Since it's common to redirect after a successful post, the `message` property isn't a general solution for displaying status messages.
 
-The library [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message#readme) is a complete solution that works with redirects however. It can be directly integrated into superforms, [documented here](https://github.com/ciscoheat/sveltekit-superforms#sveltekit-flash-message-support).
+The library [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message#readme) is a complete solution that works with redirects however. It can be directly integrated into superforms, [documented here](/flash-messages).
 
 <Next section={concepts} />
