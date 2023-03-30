@@ -37,7 +37,7 @@
   <Navigation />
 </Drawer>
 <!-- App Shell -->
-<AppShell regionPage="shrink-0" slotSidebarLeft="bg-surface-500/5 w-0 lg:w-52">
+<AppShell regionPage="shrink-0" slotSidebarLeft="bg-surface-500/5 w-0 lg:w-56">
   <svelte:fragment slot="header">
     <!-- App Bar -->
     <AppBar>
