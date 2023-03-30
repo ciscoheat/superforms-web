@@ -45,8 +45,15 @@ module.exports = {
             h3: {
               marginTop: '2rem'
             },
-            a: {
+            'a:is(.card)': {
               textDecoration: 'none'
+            },
+            'a:not(.card)': {
+              color: 'rgb(var(--color-primary-500))',
+              textDecoration: 'underline',
+              '&:hover': {
+                filter: 'brightness(110%)'
+              }
             }
           }
         }
@@ -60,3 +67,8 @@ module.exports = {
     ...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')()
   ]
 };
+// // a:not(.unstyled):not(.permalink):is(:not(.prose *)):not(.btn):not(.btn-icon):not(.app-bar a):not(.logo-item):not(a.card):not(
+//     .list-nav a
+//     ) {
+//     @apply text-primary-700 dark:text-primary-500 hover:brightness-110 underline;
+// }
