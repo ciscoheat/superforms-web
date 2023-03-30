@@ -1,8 +1,14 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+  import { page } from '$app/stores';
 
-	export let href: string;
-	$: current = $page.url.pathname == href;
+  export let href: string;
+  $: current = $page.url.pathname == href;
 </script>
 
-<a class:bg-primary-active-token={current} {href} {...$$props}><slot /></a>
+<a
+  class:bg-primary-active-token={current}
+  class="font-medium"
+  {href}
+  {...$$props}>
+  <slot />
+</a>
