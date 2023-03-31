@@ -1,6 +1,6 @@
 # Designing a CRUD interface
 
-An excellent use case for sveltekit-superforms is a backend interface, commonly used as in the acronym **CRUD** (Create, Read, Update, Delete):
+An excellent use case for Superforms is a backend interface, commonly used as in the acronym **CRUD** (Create, Read, Update, Delete):
 
 1. Display an empty form
 1. POST the form, validate the data
@@ -13,7 +13,7 @@ An excellent use case for sveltekit-superforms is a backend interface, commonly 
 1. ???
 1. Profit!
 
-Because you can send the data model directly to the `superValidate` function and have the form populated directly, it becomes quite easy to implement the above steps.
+Because you can send the data model to the `superValidate` function and have the form directly populated, it becomes quite easy to implement the above steps.
 
 ## Getting started
 
@@ -40,8 +40,7 @@ Select **Skeleton project** and **Typescript syntax** at the prompts, the rest i
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/normalize.css@8.0.1/normalize.css"
-/>
+  href="https://unpkg.com/normalize.css@8.0.1/normalize.css" />
 <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" />
 ```
 
@@ -90,7 +89,7 @@ This user database in the shape of an array will be helpful for testing our CRUD
 
 When starting on the server page, we'll encounter a thing about validation schemas. The `userSchema` is for the **database integrity**, so an `id` **must** exist there. But we want to create an entity, and must therefore allow `id` not to exist when creating users.
 
-This can be done by extending the `userSchema`:
+This can be done by extending the `userSchema` like so:
 
 **src/routes/+page.server.ts**
 
@@ -106,7 +105,9 @@ const schema = userSchema.extend({
 });
 ```
 
-The advantage is that **Create** and **Update** can now use the same schema, which means that they can share the same user interface. This is a fundamental idea in sveltekit-superforms, you can pass either empty data or an entity partially matching the schema to `superValidate`, and it will generate default values for any empty fields.
+Zod makes it quite easy to append a modifier to a field, without duplicating the whole schema! (Of course, the original `userSchema` is kept intact.)
+
+With this, **Create** and **Update** can now use the same schema, which means that they can share the same user interface. This is a basic feature in Superforms, you can pass either empty data or an entity partially matching the schema to `superValidate`, and it will generate default values for any empty fields, ensuring the type safety.
 
 ## Reading a user from the database
 
@@ -127,6 +128,8 @@ export const load = (async ({ url }) => {
   return { form, users };
 }) satisfies PageServerLoad;
 ```
+
+In a real application, we would have used SvelteKit [route parameters](https://kit.svelte.dev/docs/routing) instead, like `/users/[id]`.
 
 Some simple logic is used to find the user, and detect if a 404 should be displayed. Then we're returning `form` as usual, but also `users`, so they can be displayed as a list. (Sometimes, CRUDL is used as an acronym, since listing is also fundamental to data management.)
 
@@ -169,8 +172,7 @@ Apart from getting the data ready to be displayed, we've prepared a status messa
       name="name"
       data-invalid={$errors.name}
       bind:value={$form.name}
-      {...$constraints.name}
-    />
+      {...$constraints.name} />
     {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
   </label>
 
@@ -180,8 +182,7 @@ Apart from getting the data ready to be displayed, we've prepared a status messa
       name="email"
       data-invalid={$errors.email}
       bind:value={$form.email}
-      {...$constraints.email}
-    />
+      {...$constraints.email} />
     {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
   </label>
 
@@ -244,8 +245,7 @@ To delete a user, we can make use of the html `button` element, which can have a
     name="delete"
     value="delete"
     on:click={(e) => !confirm('Are you sure?') && e.preventDefault()}
-    class="danger">Delete user</button
-  >
+    class="danger">Delete user</button>
 {/if}
 ```
 
