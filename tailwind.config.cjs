@@ -63,7 +63,7 @@ module.exports = {
             },
             h2: {
               marginTop: '2.5rem',
-              marginBottom: '1.25rem'
+              marginBottom: '1rem'
             },
             h3: {
               marginTop: '1.75rem'
