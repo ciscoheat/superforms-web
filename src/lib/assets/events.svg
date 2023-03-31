@@ -2,10 +2,10 @@
 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 642 750">
   <defs>
     <style>
-    	path {
+    	.cls-1 {
     	  opacity: 0;
     	}
-      path:hover {
+      .cls-1:hover {
         fill: #fff;
         opacity: .4;
       }
