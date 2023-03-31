@@ -36,12 +36,13 @@
       <li><A href={concept[0]}>{concept[1]}</A></li>
     {/each}
 
-    <Title id="concepts">Other</Title>
+    <Title id="concepts">Other topics</Title>
 
-    <li><A href="/default-values">Default values</A></li>
     <li><A href="/crud">CRUD tutorial</A></li>
-    <li><A href="/flash-messages">Flash messages</A></li>
+    <li><A href="/default-values">Default values</A></li>
     <li><A href="/faq">FAQ</A></li>
+    <li><A href="/flash-messages">Flash messages</A></li>
+    <li><A href="/playground">Playground</A></li>
   </ul>
 </nav>
 
