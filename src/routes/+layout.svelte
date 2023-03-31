@@ -13,6 +13,7 @@
   import '$lib/assets/prism-gruvbox-dark.css';
   import { afterNavigate } from '$app/navigation';
   import { fade } from 'svelte/transition';
+  import { clickOutside } from '$lib/clickOutside';
 
   let hideSponsor = true;
 
@@ -117,6 +118,10 @@
       <div
         transition:fade={{ duration: 150 }}
         class="sponsor card absolute p-4 flex flex-col justify-end gap-3 h-48 md:h-40"
+        use:clickOutside={{
+          event: () => (hideSponsor = !hideSponsor),
+          ignore: '.sponsor.btn'
+        }}
       >
         <div class="sm:block md:hidden text-center">Sponsor</div>
         <a
