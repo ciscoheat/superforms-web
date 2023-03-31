@@ -27,13 +27,11 @@
 </script>
 
 <pre><span class:green={!$submitting}>Idle</span> → <span
-    class:green={$submitting}>submitting</span
-  > → <span class:green={$delayed}>delayed</span> → <span class:green={$timeout}
-    >timeout</span
-  >
+    class:green={$submitting}>submitting</span> → <span class:green={$delayed}
+    >delayed</span> → <span class:green={$timeout}>timeout</span>
 {$time} <span class:green={$submitting}>0 ms</span>         <span
-    class:green={$delayed}>{delayMs} ms</span
-  >    <span class:green={$timeout}>{timeoutMs} ms</span>
+    class:green={$delayed}>{delayMs} ms</span>    <span class:green={$timeout}
+    >{timeoutMs} ms</span>
 </pre>
 
 <style lang="scss">
@@ -45,6 +43,5 @@
       }
     }
     font-size: 130%;
-    margin: 40px 0;
   }
 </style>
