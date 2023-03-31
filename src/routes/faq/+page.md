@@ -50,4 +50,69 @@ export const actions = {
 
 ### Can I use endpoints instead of form actions?
 
-Yes, there is a helper function for constructing an `ActionResult` that can be returned from endpoints. See [the API reference](/api#actionresulttype-data-status) for more information!
+Yes, there is a helper function for constructing an `ActionResult` that can be returned from [endpoints](https://kit.svelte.dev/docs/routing#server). See [the API reference](/api#actionresulttype-data-status) for more information!
+
+---
+
+### I have multiple forms on the same page, can they be factored out into separate components?
+
+Having more than a couple of forms on the same page can be messy, since you have to deconstruct a lot of properties for each one:
+
+```ts
+const {
+  form: loginForm,
+  delayed: loginDelayed,
+  enhance: loginEnhance
+} = superForm(data.loginForm);
+
+const {
+  form: registrationForm,
+  delayed: registrationDelayed,
+  enhance: registrationEnhance
+} = superForm(data.registrationForm);
+
+// And so on...
+```
+
+Instead you could create a separate component for each form. To do that, you need the type of the schema, which can be defined as such:
+
+```ts
+export const loginSchema = z.object({
+  email: ...
+})
+
+export type LoginSchema = typeof loginSchema
+```
+
+Now you can import and use this in the form component:
+
+**LoginForm.svelte**
+
+```svelte
+<script lang="ts">
+  import type { Validation } from 'sveltekit-superforms';
+  import type { UserSchema } from '$lib/schemas';
+  import { superForm } from 'sveltekit-superforms/client'
+
+  export let data: Validation<LoginSchema>;
+
+  const { form, errors, enhance, ... } = superForm(data);
+</script>
+
+<form method="POST" use:enhance>
+  <!-- Business as usual -->
+</form>
+```
+
+The `+page.svelte` now becomes uncluttered:
+
+```svelte
+<script lang="ts">
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+</script>
+
+<LoginForm data={data.loginForm} />
+<RegistrationForm data={data.registrationForm} />
+```

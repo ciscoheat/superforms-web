@@ -63,7 +63,19 @@ If you don't care about the specifics of the `ActionResult`, `onUpdate`, is trig
 onUpdated: ({ form }) => void
 ```
 
-If you just want the default behaviour and act on the validation success or its data, `onUpdated` is the easiest way. `form` is the validation result, and should be considered read-only here.
+If you just want the default behaviour and check the validation success, `onUpdated` is the easiest way. `form` is the validation result, and should be considered read-only here, since all the stores have already updated at this point.
+
+**Example:**
+
+```ts
+const { form } = superForm(data.form, {
+  onUpdated({ form }) {
+    if (form.valid) {
+      // Successful post! Do some more client-side stuff.
+    }
+  }
+});
+```
 
 ### onError
 
