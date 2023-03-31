@@ -251,8 +251,10 @@ There are no hidden DOM manipulations or other secrets, it's just html attribute
 
 ## Next steps
 
-This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring. Take a look under "Concepts" in the navigation, they can be read in order.
+This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring. 
 
-Also, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
+To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. All pages here contain interactive examples that helps you use the library to its fullest.
 
-If you want to take a more advanced tutorial, check out the [Designing a CRUD app](/crud).
+When you've gone over all the concepts, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
+
+If you're ready for a more advanced tutorial, check out the [Designing a CRUD app](/crud), which shows how to make a fully working backend in about 150 lines of code.
