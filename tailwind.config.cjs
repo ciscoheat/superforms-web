@@ -23,7 +23,7 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'sans-serif']
       },
-      typography: {
+      typography: (them) => ({
         DEFAULT: {
           css: {
             p: {
@@ -35,6 +35,18 @@ module.exports = {
             },
             'code::after': {
               content: 'none'
+            },
+            'code:is(:not(pre *))': {
+              fontFamily:
+                'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+              fontSize: '0.875rem',
+              lineHeight: '1.25rem',
+              whiteSpace: 'nowrap',
+              backgroundColor: 'rgb(var(--color-primary-500) / 0.2)',
+              color: 'rgb(var(--color-primary-400) / 1)',
+              opacity: '1',
+              borderRadius: '0.25rem',
+              padding: '0.125rem 0.25rem'
             },
             ul: {
               listStyle: 'none'
@@ -85,7 +97,7 @@ module.exports = {
             }
           }
         }
-      }
+      })
     }
   },
   plugins: [
