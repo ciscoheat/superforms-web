@@ -5,6 +5,7 @@
   import Title from './Title.svelte';
   import { page } from '$app/stores';
   import { concepts } from './sections';
+  import skeleton from '$lib/assets/skeleton.svg?raw';
 
   function drawerClose(): void {
     drawerStore.close();
@@ -44,6 +45,16 @@
     <li><A href="/flash-messages">Flash messages</A></li>
     <li><A href="/playground">Playground</A></li>
   </ul>
+
+  <div class="p-4 text-gray-600">
+    <hr class="mt-5 mb-2" />
+    Made with<br />
+    <a
+      href="https://www.skeleton.dev/"
+      target="_blank"
+      style="padding:0 !important"
+      class="mt-1 m-3 text-gray-400">{@html skeleton}</a>
+  </div>
 </nav>
 
 <style lang="scss">
