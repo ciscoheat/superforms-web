@@ -68,6 +68,9 @@ module.exports = {
             h3: {
               marginTop: '1.75rem'
             },
+            h4: {
+              fontSize: '1.125rem'
+            },
             'a:is(.card)': {
               textDecoration: 'none'
             },
@@ -80,6 +83,9 @@ module.exports = {
             },
             'div pre': {
               marginBottom: '1.25rem!important'
+            },
+            table: {
+              marginTop: 0
             },
             'table td': {
               padding: '1rem!important',
