@@ -257,4 +257,4 @@ To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts s
 
 When you've gone over all the concepts, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
 
-If you're ready for a more advanced tutorial, check out the [Designing a CRUD app](/crud), which shows how to make a fully working backend in about 150 lines of code.
+If you're ready for a more advanced tutorial, check out [Designing a CRUD interface](/crud), which shows how to make a fully working backend in about 150 lines of code.
