@@ -15,6 +15,7 @@
 		"@jsdevtools/rehype-toc": "^3.0.2",
 		"@skeletonlabs/skeleton": "^1.0.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-vercel": "^2.4.1",
 		"@sveltejs/kit": "^1.5.0",
 		"@tailwindcss/forms": "^0.5.3",
 		"@tailwindcss/line-clamp": "^0.4.2",

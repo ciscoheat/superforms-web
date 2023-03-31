@@ -42,6 +42,11 @@
         color: rgb(55, 200, 55);
       }
     }
-    font-size: 130%;
+    
+    width: min-content;
+    font-size: 100%;
+    @media screen and (max-width: 600px) {
+      font-size: 85%;
+    }
   }
 </style>

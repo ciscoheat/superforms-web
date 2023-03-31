@@ -4,6 +4,7 @@
 </script>
 
 <svelte:head>
+
 <title>Superforms for SvelteKit</title>
 </svelte:head>
 
@@ -23,6 +24,6 @@ The API is minimal, basically a single method on the server and client, but is v
 
 ## Get started
 
-Click <a href="/get-started">here to get started</a> right away, or watch this short video for an introduction to what's possible:
+Click <a href="/get-started">here to get started</a> right away, or watch this video for an introduction to what's possible with Superforms:
 
 <Youtube id="MiKzH3kcVfs" />

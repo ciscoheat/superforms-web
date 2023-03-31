@@ -46,11 +46,13 @@ A perfect use for these timers is to show a loading indicator while the form is 
 </div>
 ```
 
-The reason for not using `submitting` is based on the article [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/), which states that for short waiting periods, no feedback is required except to display the result. Therefore, `delayed` is instead used to show a loading indicator after a little while.
+The reason for using `delayed` instead of `submitting` is based on the article [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/), which states that for short waiting periods, no feedback is required except to display the result. Therefore, `delayed` is used to show a loading indicator after a little while.
 
 ## Visualizing the timers
 
-Try submitting this form and see how different delay times affect the timers. Loading spinners are set to display when `delayed` and `timeout` are true. Click multiple times to see the effect of `multipleSubmits = 'prevent'` as well.
+Try submitting this form and see how different delay times affect the timers. Loading spinners are set to display when `delayed` and `timeout` are true. The request itself is set to timeout with an error after 10 seconds.
+
+Click multiple times to see the effect of `multipleSubmits = 'prevent'` as well.
 
 <Form {data} />
 

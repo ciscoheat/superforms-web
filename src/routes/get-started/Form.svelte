@@ -7,7 +7,9 @@
   }
 
   export let data: PageData;
-  const { form, errors, enhance } = superForm(data.form);
+  const { form, errors, enhance } = superForm(data.form, {
+    taintedMessage: null
+  });
 </script>
 
 <form

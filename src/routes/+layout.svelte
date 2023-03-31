@@ -13,6 +13,7 @@
   import '$lib/assets/prism-gruvbox-dark.css';
   import { afterNavigate } from '$app/navigation';
   import { fade } from 'svelte/transition';
+  import { clickOutside } from '$lib/clickOutside';
 
   let hideSponsor = true;
 
@@ -48,7 +49,11 @@
         <div class="flex shrink-0 items-center">
           <button class="lg:hidden btn btn-sm mr-4" on:click={drawerOpen}>
             <span>
-              <img class="logo" src={logo} alt="Superforms logo" />
+                <svg viewBox="0 0 100 80" class="hamburger w-4 h-4">
+                    <rect width="100" height="20" />
+                    <rect y="30" width="100" height="20" />
+                    <rect y="60" width="100" height="20" />
+                </svg>
             </span>
           </button>
           <img
@@ -117,6 +122,10 @@
       <div
         transition:fade={{ duration: 150 }}
         class="sponsor card absolute p-4 flex flex-col justify-end gap-3 h-48 md:h-40"
+        use:clickOutside={{
+          event: () => (hideSponsor = !hideSponsor),
+          ignore: '.sponsor.btn'
+        }}
       >
         <div class="sm:block md:hidden text-center">Sponsor</div>
         <a
@@ -177,6 +186,10 @@
 </AppShell>
 
 <style lang="scss">
+  .hamburger {
+    fill: #b7a73f;
+  }
+
   svg {
     color: #b7a73f;
     width: 24px;

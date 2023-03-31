@@ -49,7 +49,7 @@ const schema = z.object({
 });
 ```
 
-This schema represents the data in the form.
+This schema represents the form data. It should always start with `z.object({ ... })`, encapsulating a single form.
 
 The [Zod documentation](https://zod.dev/?id=primitives) has all the details for creating schemas, but this is all you need to know for now.
 
@@ -90,7 +90,7 @@ Note that at the end of the load function we return `{ form }`. As a rule, you s
 
 ### Displaying the form
 
-Now when we have sent the validation data to the client, we will retrieve it with the client part of the API:
+Now when we have sent the validation data to the client, we will retrieve it using the client part of the API:
 
 **src/routes/+page.svelte**
 
@@ -251,8 +251,10 @@ There are no hidden DOM manipulations or other secrets, it's just html attribute
 
 ## Next steps
 
-This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring. Take a look under "Concepts" in the navigation, they can be read in order.
+This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring. 
 
-Also, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
+To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. All pages here contain interactive examples that helps you use the library to its fullest.
 
-If you want to take a more advanced tutorial, check out the [Designing a CRUD app](/crud).
+When you've gone over all the concepts, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
+
+If you're ready for a more advanced tutorial, check out [Designing a CRUD interface](/crud), which shows how to make a fully working backend in about 150 lines of code.
