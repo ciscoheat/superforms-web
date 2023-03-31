@@ -82,7 +82,11 @@ module.exports = {
               }
             },
             'div pre': {
-              marginBottom: '1.25rem!important'
+              marginBottom: '1.25rem!important',
+              marginTop: '0.5rem!important'
+            },
+            form: {
+              marginBottom: '1.25rem'
             },
             table: {
               marginTop: 0
