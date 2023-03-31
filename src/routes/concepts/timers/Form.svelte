@@ -17,6 +17,9 @@
     {
       onSubmit() {
         prevented = 0;
+      },
+      onError({ message, result }) {
+        message.set(result.error.message);
       }
     }
   );
@@ -27,23 +30,25 @@
 <form
   method="POST"
   action={$page.url.pathname}
-  class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
-  use:enhance
->
+  class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4 mb-3"
+  use:enhance>
   <label for="delay" class="label">
     <RangeSlider name="delay" bind:value={$form.delay} max={15000} step={100}
-      >Response delay: {$form.delay} ms</RangeSlider
-    >
+      >Response delay: {$form.delay} ms</RangeSlider>
   </label>
 
   <div class="flex items-center gap-x-3">
     <button
       type="submit"
       on:click={() => ++prevented}
-      class="btn variant-filled">Submit</button
-    >
+      class="btn variant-filled">Submit</button>
     <div class="spinner">
-      {#if $message}<div class="rounded p-2 text-green-600">{$message}</div>
+      {#if $message}<div
+          class="rounded p-2 {$page.status == 200
+            ? 'text-green-600'
+            : 'text-red-500'}">
+          {$message}
+        </div>
       {:else if $timeout}{@html dots}
       {:else if $delayed}{@html spinner}
       {/if}
