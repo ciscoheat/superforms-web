@@ -9,7 +9,6 @@
 </script>
 
 <div
-  class="p-6 md:p-10 {fullWidth ? '' : 'max-w-4xl'} mx-auto prose prose-invert"
->
+  class="{fullWidth ? '' : 'max-w-4xl'} prose prose-invert mx-auto p-6 md:p-10">
   <slot />
 </div>
