@@ -25,16 +25,16 @@ Try to modify the form below, then close the tab or hit the back button. A confi
 
 ## Tainted store
 
-You can access the exact fields that are tainted through the `$tainted` store, returned from `superForm`. Try modifying the form fields and see how the `$tainted` store reacts:
+You can access the exact fields that are tainted through the `$tainted` store, returned from `superForm`. When you modify the form fields above you'll see how the `$tainted` store reacts.
 
 ## Untainting the form
 
-When the page status changes to something between `200-299`, the form is automatically marked as untainted.
+When a validation result is returned for the form with a status between `200-299`, the form is automatically marked as untainted by setting the `$tainted` store to `undefined`.
 
 Try that by posting the form with valid values. The tainted message should not appear when browsing away from the page.
 
 ## Disabling the check
 
-By setting `taintedMessage = null`, the form won't be checked for modifications.
+By setting `taintedMessage = null` in the options, the form won't be checked for modifications.
 
 <Next section={concepts} />

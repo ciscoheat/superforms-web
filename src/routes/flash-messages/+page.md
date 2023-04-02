@@ -1,6 +1,6 @@
 # Flash messages
 
-[Status messages](/concepts/messages) are useful, but redirects will cause it to be lost, since it's usually a response from a POST request that generates it.
+[Status messages](/concepts/messages) are useful, but redirects will cause them to be lost, because they need to be returned in `{ form }`, usually as a response from a POST request.
 
 Since it's common to redirect after a successful post, especially in backend interfaces, the `form.message` property isn't a general solution for displaying status messages.
 

@@ -56,6 +56,6 @@ Click multiple times to see the effect of `multipleSubmits = 'prevent'` as well.
 
 <Form {data} />
 
-Experimenting with these three timers and the delays between them, is certainly possible to prevent the feeling of unresponsiveness in many cases. Please [share your results](https://github.com/ciscoheat/sveltekit-superforms/discussions), if you do!
+Experimenting with these three timers and the delay between them, it's certainly possible to prevent the feeling of unresponsiveness in many cases. Please share your results on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms/discussions), if you do!
 
 <Next section={concepts} />

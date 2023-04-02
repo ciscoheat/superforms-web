@@ -9,11 +9,44 @@
 
 # Error handling
 
-In general, using the `$errors` store gives you high flexibility, since you can place error messages anywhere on the page. But there are more to errors than just displaying them.
+Most errors will be set automatically through the validation schema, but you may want to add errors after determining that the data is valid. This is easily done with the `setError` helper function.
 
-On larger forms it's nice showing the user where the first error is. There are a couple of options for that:
+## Usage (server)
 
-## Usage
+```ts
+import { setError, superValidate } from 'sveltekit-superforms/server';
+
+export const actions = {
+  default: async (event) => {
+    const form = await superValidate(event, schema);
+
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+
+    if (db.users.find({ where: { email: form.data.email } })) {
+      return setError(form, 'email', 'E-mail already exists.');
+    }
+
+    return { form };
+  }
+} satisfies Actions;
+```
+
+`setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. See [the API](http://localhost:5173/api#seterrorform-field-error-options) for more options.
+
+If you have nested data, you'll use an array to specify where in the data structure the error is:
+
+```ts
+// Error in post.tags[3]
+setError(form, ['post', 'tags', 3], 'Invalid tag name.');
+```
+
+## Usage (client)
+
+On the client, errors are available in the `$errors` store. It gives you a high flexibility, since you can place error messages anywhere on the page. But there are more to errors than just displaying them.
+
+On larger forms the submit button may be far away from the error. Then it's nice showing the user where the first error is. There are a couple of options for that:
 
 ```ts
 const { form, enhance, errors, allErrors } = superForm(data.form, {
@@ -41,8 +74,7 @@ This is the selector used to find the invalid input fields. The default is `[dat
   type="email"
   name="email"
   bind:value={$form.email}
-  data-invalid={$errors.email}
-/>
+  data-invalid={$errors.email} />
 ```
 
 ### stickyNavbar

@@ -34,7 +34,9 @@ These three options are the most boring ones, we'll get to the fun stuff soon!
 
 ### applyAction
 
-When `applyAction` is `true` the form will have the default SvelteKit behavior of updating and reacting on `$page.form` and `$page.status`. Turning this behavior off can be useful when other sources are invalidating the page.
+When `applyAction` is `true` the form will have the default SvelteKit behavior of updating and reacting on `$page.form` and `$page.status`, and also redirecting automatically.
+
+Turning this behavior off can be useful when you want to isolate the form from other sources updating the page, for example Supabase events. Read more about what happens when `applyAction` is applied [in the SvelteKit docs](https://kit.svelte.dev/docs/form-actions#progressive-enhancement-applyaction).
 
 ### invalidateAll
 
@@ -42,11 +44,11 @@ When `invalidateAll` is `true` and a successful result is returned from the serv
 
 ### resetForm
 
-Since we're binding the fields to `$form`, a html form reset (clearing all fields in DOM) won't have any effect, so in Superforms, resetting means _going back to the initial state of the form data_, usually the contents of `form` in `PageData`. This may not be exactly what you needed, in which case you can use [an event](/concepts/events) to clear the form instead.
+Since we're binding the fields to `$form`, a html form reset (clearing all fields in DOM) won't have any effect, so in Superforms, resetting means _going back to the initial state of the form data_, which usually is the form data in `PageData`. This may not be exactly what you want, in which case you can use [an event](/concepts/events) to clear the form instead.
 
 ## When to change the defaults?
 
-Quite rarely! If you have a single form on the page and nothing else is causing the page to invalidate, you'll probably be fine as it is. For <a href="/concepts/multiple-forms">multiple forms</a> on the same page, you can use `options.id` to prevent forms from reacting on `$page`, instead of setting `applyAction` to `false`.
+Quite rarely! If you have a single form on the page and nothing else is causing the page to invalidate, you'll probably be fine as it is. For <a href="/concepts/multiple-forms">multiple forms</a> on the same page, use `options.id` to prevent forms from reacting on `$page`, instead of setting `applyAction` to `false`.
 
 ## Differences from SvelteKit's use:enhance
 

@@ -206,7 +206,7 @@ With this, the form should be ready for creating a user. Let's add the form acti
 ```ts
 export const actions = {
   default: async (event) => {
-    const form = await superValidate(event, crudSchema);
+    const form = await superValidate(event, schema);
     if (!form.valid) return fail(400, { form });
 
     if (!form.data.id) {
@@ -249,15 +249,14 @@ To delete a user, we can make use of the html `button` element, which can have a
 {/if}
 ```
 
-In the form action, we now use the `FormData` from the request to check if the delete button was pressed. We can't use the schema since `delete` is not a part of it, but it's not a big change:
+In the form action, we now use the `FormData` from the request to check if the delete button was pressed. We should't use the schema since `delete` is not a part of the user, but it's not a big change:
 
 **src/routes/+page.server.ts**
 
 ```ts
 export const actions = {
-  default: async (event) => {
-    // Use the request instead of the event directly
-    const data = await event.request.formData();
+  default: async ({ request }) => {
+    const data = await request.formData();
     const form = await superValidate(data, schema);
 
     if (!form.valid) return fail(400, { form });

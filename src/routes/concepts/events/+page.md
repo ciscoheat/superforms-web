@@ -49,13 +49,26 @@ When you want detailed control, `onResult` gives you the [ActionResult](https://
 - `formEl` is the `HTMLFormElement` of the form.
 - `cancel()` is a function which will cancel the rest of the event chain and any form updates.
 
+`onResult` is useful when you have set `applyAction = false` and still want to redirect, since the form doesn't do that automatically in that case. Then you can do:
+
+```ts
+const { form } = superForm(data.form, {
+  applyAction: false,
+  onResult({ result }) {
+    if (result.type === 'redirect') {
+      goto(result.location);
+    }
+  }
+});
+```
+
 ### onUpdate
 
 ```ts
 onUpdate: ({ form, cancel }) => void
 ```
 
-If you don't care about the specifics of the `ActionResult`, `onUpdate`, is triggered just before the form update is being applied, and gives you the option to modify the validation result in `form`, or `cancel()` the update altogether.
+If you don't care about the specifics of the `ActionResult`, rather the validation result itself, `onUpdate` is triggered just before the form update is being applied, and gives you the option to modify the validation result in `form`, or `cancel()` the update altogether.
 
 ### onUpdated
 
@@ -63,7 +76,7 @@ If you don't care about the specifics of the `ActionResult`, `onUpdate`, is trig
 onUpdated: ({ form }) => void
 ```
 
-If you just want the default behaviour and check the validation success, `onUpdated` is the easiest way. `form` is the validation result, and should be considered read-only here, since all the stores have already updated at this point.
+If you just want the default behaviour and check the validation success, `onUpdated` is the easiest way. `form` is the validation result, and should be considered read-only here, since the stores have already updated at this point.
 
 **Example:**
 
@@ -87,6 +100,6 @@ Finally, the `onError` event allows you to act on `ActionResult` errors. You can
 
 By setting onError to `apply`, the default `applyAction` behaviour will be used, effectively rendering the nearest `+error` boundary (and wiping out the form, so be careful).
 
-**Tip:** If you're unsure what event to use, try onUpdated.
+**Tip:** If you're unsure what event to use, start with `onUpdated`.
 
 <Next section={concepts} />
