@@ -52,8 +52,7 @@
     <a
       href="https://www.skeleton.dev/"
       target="_blank"
-      style="padding:0 !important"
-      class="mt-1 m-3 text-gray-400">{@html skeleton}</a>
+      class="mt-2 !p-0 text-gray-400 hover:text-gray-300 hover:!bg-transparent">{@html skeleton}</a>
   </div>
 </nav>
 
