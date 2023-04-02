@@ -55,9 +55,3 @@
       class="mt-2 !p-0 text-gray-400 hover:text-gray-300 hover:!bg-transparent">{@html skeleton}</a>
   </div>
 </nav>
-
-<style lang="scss">
-  ul > li > ul {
-    margin-left: 16px;
-  }
-</style>
