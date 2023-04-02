@@ -6,6 +6,7 @@
   import { page } from '$app/stores';
   import { concepts } from './sections';
   import skeleton from '$lib/assets/skeleton.svg?raw';
+  import mdsvex from '$lib/assets/mdsvex.svg?raw';
 
   function drawerClose(): void {
     drawerStore.close();
@@ -52,6 +53,12 @@
     <a
       href="https://www.skeleton.dev/"
       target="_blank"
-      class="mt-2 !p-0 text-gray-400 hover:text-gray-300 hover:!bg-transparent">{@html skeleton}</a>
+      class="mt-1 !p-0 text-gray-400 hover:text-gray-300 hover:!bg-transparent"
+      >{@html skeleton}</a>
+    <a
+      href="https://mdsvex.com/"
+      target="_blank"
+      class="w-20 mt-0 !p-0 text-gray-400 hover:text-gray-300 hover:!bg-transparent"
+      >{@html mdsvex}</a>
   </div>
 </nav>
