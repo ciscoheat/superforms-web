@@ -33,7 +33,7 @@ export const actions = {
 } satisfies Actions;
 ```
 
-`setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. See [the API](http://localhost:5173/api#seterrorform-field-error-options) for more options.
+`setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. See [the API](/api#seterrorform-field-error-options) for more options.
 
 If you have nested data, you'll use an array to specify where in the data structure the error is:
 
