@@ -11,7 +11,7 @@ export const GET = (async ({ url }) => {
   if (!term || term.length == 1) return json({});
   const result = await search(engine, {
     term,
-    tolerance: 1,
+    tolerance: 2,
     limit: 8,
     boost: {
       title: 2
