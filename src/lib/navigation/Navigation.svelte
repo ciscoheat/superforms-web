@@ -7,6 +7,7 @@
   import { concepts } from './sections';
   import skeleton from '$lib/assets/skeleton.svg?raw';
   import mdsvex from '$lib/assets/mdsvex.svg?raw';
+  import SearchButton from '../../routes/SearchButton.svelte';
 
   function drawerClose(): void {
     drawerStore.close();
@@ -27,6 +28,7 @@
 </script>
 
 <nav class="list-nav p-4" bind:this={nav}>
+  <SearchButton cls="md:hidden mx-4 mb-3" width="w-40" />
   <ul>
     <li><A href="/">Home</A></li>
     <li><A href="/get-started">Get started</A></li>

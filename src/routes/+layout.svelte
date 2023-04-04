@@ -6,23 +6,55 @@
   // Most of your app wide CSS should be put in this file
   import '../app.postcss';
   import { AppShell, AppBar, TableOfContents } from '@skeletonlabs/skeleton';
-  import Navigation from '$lib/navigation/Navigation.svelte';
+  import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
   import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
+  import { Modal, modalStore } from '@skeletonlabs/skeleton';
+
+  import Navigation from '$lib/navigation/Navigation.svelte';
   import { page } from '$app/stores';
   import '$lib/assets/prism-gruvbox-dark.css';
   import { afterNavigate } from '$app/navigation';
   import { fade } from 'svelte/transition';
   import { clickOutside } from '$lib/clickOutside';
 
+  import DocsSearch from './DocsSearch.svelte';
+
   import logo from '$lib/assets/logo.svg';
   import github from '$lib/assets/github.svg?raw';
   import kofi from '$lib/assets/ko-fi.svg?raw';
   import paypal from '$lib/assets/paypal.svg?raw';
+  import SearchButton from './SearchButton.svelte';
 
+  // Local
   let hideSponsor = true;
 
   function drawerOpen(): void {
     drawerStore.open({});
+  }
+
+  const modalRegistry: Record<string, ModalComponent> = {
+    search: {
+      ref: DocsSearch
+    }
+  };
+
+  function triggerSearch(): void {
+    const d: ModalSettings = {
+      type: 'component',
+      component: 'search',
+      position: 'item-start'
+    };
+    modalStore.trigger(d);
+  }
+
+  // Keyboard Shortcut (CTRL/⌘+K) to Focus Search
+  function onWindowKeydown(e: KeyboardEvent): void {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      // Prevent default browser behavior of focusing URL bar
+      e.preventDefault();
+      // If modal currently open, close modal (allows to open/close search with CTRL/⌘+K)
+      $modalStore.length ? modalStore.close() : triggerSearch();
+    }
   }
 
   const noToC = ['/'];
@@ -41,6 +73,10 @@
 <svelte:head>
   <title>Superforms for SvelteKit</title>
 </svelte:head>
+
+<svelte:window on:keydown|stopPropagation={onWindowKeydown} />
+
+<Modal components={modalRegistry} />
 
 <Drawer width="w-70">
   <h3 class="p-4">Navigation</h3>
@@ -72,10 +108,10 @@
       </svelte:fragment>
       <svelte:fragment slot="trail">
         <a
+          class="mr-2"
           href="https://discord.gg/AptebvVuhB"
           target="_blank"
-          rel="noreferrer"
-          class="mr-2">
+          rel="noreferrer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="15"
@@ -91,7 +127,10 @@
           href="https://github.com/ciscoheat/sveltekit-superforms"
           class="md:pr-2 w-7 md:w-8 text-primary-500"
           target="_blank"
-          rel="noreferrer">{@html github}</a>
+          rel="noreferrer"
+          >{@html github}
+        </a>
+        <SearchButton cls="hidden md:inline" />
         <button
           type="button"
           class="sponsor btn btn-sm variant-ghost relative"
