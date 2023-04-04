@@ -54,37 +54,22 @@ Yes, there is a helper function for constructing an `ActionResult` that can be r
 
 ---
 
-### I have multiple forms on the same page, can they be factored out into separate components?
+### Can a form be factored out into a separate component?
 
-Having more than a couple of forms on the same page can be messy, since you have to deconstruct a lot of properties for each one:
+A separate component for each form can be useful, in modal components for example, and if you have more than a couple of forms on the same page, since then you have to deconstruct a lot of properties for each one.
 
-```ts
-const {
-  form: loginForm,
-  delayed: loginDelayed,
-  enhance: loginEnhance
-} = superForm(data.loginForm);
-
-const {
-  form: registrationForm,
-  delayed: registrationDelayed,
-  enhance: registrationEnhance
-} = superForm(data.registrationForm);
-
-// And so on...
-```
-
-Instead you could create a separate component for each form. To do that, you need the type of the schema, which can be defined as such:
+To do this, you need the type of the schema, which can be defined as such:
 
 ```ts
 export const loginSchema = z.object({
-  email: ...
-})
+  email: z.string().email(),
+  password: ...
+});
 
-export type LoginSchema = typeof loginSchema
+export type LoginSchema = typeof loginSchema;
 ```
 
-Now you can import and use this in the form component:
+Now you can import and use this type in a separate component:
 
 **LoginForm.svelte**
 
@@ -104,7 +89,7 @@ Now you can import and use this in the form component:
 </form>
 ```
 
-The `+page.svelte` now becomes uncluttered:
+Use it by passing the data from `+page.svelte` to the component:
 
 ```svelte
 <script lang="ts">
@@ -114,5 +99,4 @@ The `+page.svelte` now becomes uncluttered:
 </script>
 
 <LoginForm data={data.loginForm} />
-<RegistrationForm data={data.registrationForm} />
 ```
