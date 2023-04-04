@@ -2,7 +2,7 @@ import adapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
 import rehypeExternalLinks from 'rehype-external-links';
-//import rehypeSlug from 'rehype-slug';
+import rehypeSlug from 'rehype-slug';
 //import addClasses from 'rehype-add-classes';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -26,7 +26,8 @@ const config = {
                 : undefined;
             }
           }
-        ]
+        ],
+        [rehypeSlug, {}]
       ]
     })
   ],

@@ -25,11 +25,14 @@
   }
 
   const noToC = ['/'];
-  $: ToC = !noToC.includes($page.url.pathname);
+  $: displayToC = !noToC.includes($page.url.pathname);
 
   afterNavigate((nav) => {
     if (nav.type == 'link') {
       document.getElementById('page')?.scrollTo(0, 0);
+    } else if (nav.type == 'enter' && $page.url.hash) {
+      const el = document.getElementById($page.url.hash.substring(1));
+      if (el) el.scrollIntoView();
     }
   });
 </script>
@@ -141,7 +144,7 @@
     {#key $page.url.pathname}
       <TableOfContents
         width="w-56"
-        class="{ToC ? 'hidden md:block' : 'hidden'} p-4"
+        class="{displayToC ? 'hidden md:block' : 'hidden'} p-4"
         target="#page" />
     {/key}
   </svelte:fragment>
