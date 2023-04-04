@@ -422,7 +422,7 @@ import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 ### SuperDebug
 
-`SuperDebug` gives you colorized and nicely formatted output for any data structure, usually `$form`.
+`SuperDebug` is a debugging component that gives you colorized and nicely formatted output for any data structure, usually `$form`.
 
 ```svelte
 <SuperDebug
