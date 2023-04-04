@@ -132,7 +132,7 @@
           rel="noreferrer"
           >{@html github}
         </a>
-        <SearchButton cls="hidden md:inline" />
+        <SearchButton cls="hidden" />
         <button
           type="button"
           class="sponsor btn btn-sm variant-ghost relative"
