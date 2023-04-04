@@ -1,5 +1,7 @@
 # API reference
 
+<svelte:head><title>API reference</title></svelte:head>
+
 Throughout the reference, the following types are represented:
 
 ```ts

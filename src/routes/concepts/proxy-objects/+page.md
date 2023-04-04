@@ -9,6 +9,8 @@
 
 # Proxy objects
 
+<svelte:head><title>Proxy objects</title></svelte:head>
+
 Sometimes the form data must be proxied, which could happen when you get a `string` value from an input field, third-party library, etc, and want it to be automatically converted and updating a non-string value in your form data structure. Fortunately, there are a number of objects available for that:
 
 ## Usage

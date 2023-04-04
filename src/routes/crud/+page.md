@@ -1,5 +1,7 @@
 # Designing a CRUD interface
 
+<svelte:head><title>CRUD tutorial</title></svelte:head>
+
 An excellent use case for Superforms is a backend interface, commonly used as in the acronym **CRUD** (Create, Read, Update, Delete):
 
 1. Display an empty form

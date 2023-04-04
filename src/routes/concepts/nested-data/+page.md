@@ -9,7 +9,9 @@
 
 # Nested data
 
-Html forms are inherently one-dimensional, in the sense that the input fields can only handle string values. There is no easy way to represent a nested data structure or more complex values like dates... until now!
+<svelte:head><title>Nested data</title></svelte:head>
+
+Html forms are inherently one-dimensional, in the sense that the input fields can only handle string values. There is no built-in way to represent a nested data structure or more complex values like dates. But this can be handled by Superforms!
 
 ## Usage
 
@@ -21,13 +23,16 @@ const { form, errors, constraints } = superForm(data.form, {
 
 ### dataType
 
-The annoyance that everything becomes a `string` when we are posting forms is finally over.
+By simply setting `dataType` to `json`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the form, and you don't have to worry about failed coercion, converting arrays to strings and back, etc! You don't even have to set names for the form fields anymore, since the data in the `$form` store is now posted, not the fields in the html. They are now merely UI components for the data.
 
-By simply setting `dataType` to `json`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the form, and you don't have to worry about failed coercion, converting arrays to strings, etc! You don't even have to set names for the form fields anymore, since the `$form` store data is now posted, not the fields in the html. They are now merely placeholders for the data.
+As a precaution, `superForm` will try to detect nested objects, and if found, an error is thrown unless `dataType = 'json'`.
 
 ## Requirements
 
-The requirement for this however, is that **1. JavaScript is enabled in the browser**, and **2. The form has use:enhance applied**. `superForm` will try to detect nested objects, and if found, an error is thrown unless `dataType = 'json'`.
+The requirement for this however, is that
+
+1. **JavaScript is enabled in the browser**
+2. **The form has use:enhance applied.**
 
 ## Nested errors and constraints
 
@@ -35,7 +40,7 @@ When your schema contains arrays or objects, you can access them through the `$f
 
 `$errors` and `$constraints` actually mirrors the `$form` data, but with every field or "leaf" in the object replaced with `string[]` and `InputConstraints` respectively.
 
-## Example
+### Example
 
 Given the following schema, that describes an array of tag objects:
 
@@ -76,13 +81,11 @@ You can build up a html form for these tags using an `{#each}` loop:
       <input
         type="number"
         data-invalid={$errors.tags?.[i]?.id}
-        bind:value={$form.tags[i].id}
-      />
+        bind:value={$form.tags[i].id} />
       Name
       <input
         data-invalid={$errors.tags?.[i]?.name}
-        bind:value={$form.tags[i].name}
-      />
+        bind:value={$form.tags[i].name} />
       {#if $errors.tags?.[i]?.id}
         <br />
         <span class="invalid">{$errors.tags[i].id}</span>

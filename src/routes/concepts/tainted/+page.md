@@ -9,6 +9,8 @@
 
 # Tainted form check
 
+<svelte:head><title>Tainted form check</title></svelte:head>
+
 When a form field is modified, that field, and in turn the form, is considered _tainted_. A Superforms feature is to prevent the user from losing data, by accidentaly navigating away from a tainted form.
 
 ## Usage

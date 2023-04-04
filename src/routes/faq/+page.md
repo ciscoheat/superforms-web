@@ -1,5 +1,7 @@
 # FAQ
 
+<svelte:head><title>FAQ</title></svelte:head>
+
 ### I want to reuse common options, how to do that easily?
 
 When you start to configure the library to suit your stack, it's recommended to create an object with default options that you will refer to instead:

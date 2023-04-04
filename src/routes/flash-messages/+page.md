@@ -1,5 +1,7 @@
 # Flash messages
 
+<svelte:head><title>Integrate Superforms with sveltekit-flash-message</title></svelte:head>
+
 [Status messages](/concepts/messages) are useful, but redirects will cause them to be lost, because they need to be returned in `{ form }`, usually as a response from a POST request.
 
 Since it's common to redirect after a successful post, especially in backend interfaces, the `form.message` property isn't a general solution for displaying status messages.

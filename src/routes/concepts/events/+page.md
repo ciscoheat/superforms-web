@@ -10,6 +10,8 @@
 
 # Events
 
+<svelte:head><title>Events</title></svelte:head>
+
 With `use:enhance` enabled, you get full control over the form submit process through a number of events.
 
 ## Event flowchart

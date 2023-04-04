@@ -9,6 +9,8 @@
 
 # Status messages
 
+<svelte:head><title>Status messages</title></svelte:head>
+
 So far, almost every feature has been on the client! That's where the action is, but you may have noticed that a status message like "Form posted" is displayed when submitting the forms in the examples.
 
 The validation object contains a `message` property that is used for this.

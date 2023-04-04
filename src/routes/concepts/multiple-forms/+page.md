@@ -9,6 +9,8 @@
 
 # Multiple forms
 
+<svelte:head><title>Multiple forms</title></svelte:head>
+
 Since there is only one `$page.form` per page, having multiple forms, for example a register and login form on the same page, can cause trouble since an update with the built-in `use:enhance` will affect both forms.
 
 Fortunately Superforms has a solution for this! Multiple forms on the same page are possible by setting `options.id` for each form (one can have the default id, `undefined`). This prevents them from interfering with with each other, which can happen since they all update the same `$page.status` and `$page.form`.

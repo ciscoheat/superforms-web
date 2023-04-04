@@ -1,5 +1,7 @@
 # Default values
 
+<svelte:head><title>Default values</title></svelte:head>
+
 When `superValidate` encounters a schema field that isn't optional, or when a `FormData` field is empty, a default value is returned to the form, to ensure that the type is correct:
 
 | type    | value       |

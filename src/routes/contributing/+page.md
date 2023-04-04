@@ -2,6 +2,8 @@
   import Sponsor from './Sponsor.svelte'
 </script>
 
+<svelte:head><title>Contributing and sponsoring</title></svelte:head>
+
 # Contributing
 
 Contributions to Superforms are very welcome! The issues and discussion pages on Github are always open for comments, and if you want to contribute some code, it's quite easy. Just fork either the [Superforms](https://github.com/ciscoheat/sveltekit-superforms) repository or its [website](https://github.com/ciscoheat/superforms-web), then you just need to execute the following to be up and running:

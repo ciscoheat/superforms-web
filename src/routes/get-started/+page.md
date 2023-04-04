@@ -8,10 +8,7 @@
 	$: form = formComponent && formComponent.formData()
 </script>
 
-<svelte:head>
-
-<title>Get started - Tutorial for Superforms</title>
-</svelte:head>
+<svelte:head><title>Get started - Tutorial for Superforms</title></svelte:head>
 
 ## Installation
 
@@ -219,8 +216,7 @@ We do that by adding properties to the destructuring assignment of `superForm`:
     name="name"
     data-invalid={$errors.name}
     bind:value={$form.name}
-    {...$constraints.name}
-  />
+    {...$constraints.name} />
   {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
 
   <label for="email">E-mail</label>
@@ -229,8 +225,7 @@ We do that by adding properties to the destructuring assignment of `superForm`:
     name="email"
     data-invalid={$errors.email}
     bind:value={$form.email}
-    {...$constraints.email}
-  />
+    {...$constraints.email} />
   {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
 
   <div><button>Submit</button></div>
@@ -251,7 +246,7 @@ There are no hidden DOM manipulations or other secrets, it's just html attribute
 
 ## Next steps
 
-This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring. 
+This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring.
 
 To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. All pages here contain interactive examples that helps you use the library to its fullest.
 

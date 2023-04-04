@@ -10,6 +10,8 @@
 
 # Timers
 
+<svelte:head><title>Timers</title></svelte:head>
+
 As said in the previous section, the user should understand that things are happening when they submit the form. Timers gives us a way of providing feedback at the right time, based upon human perception research.
 
 ## Usage
