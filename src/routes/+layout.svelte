@@ -62,7 +62,9 @@
 
   afterNavigate((nav) => {
     if (nav.type == 'link') {
-      document.getElementById('page')?.scrollTo(0, 0);
+      // If linked to a page, sometimes it won't scroll to the top.
+      const id = nav.to?.url.hash ? nav.to.url.hash.slice(1) : 'page';
+      document.getElementById(id)?.scrollTo(0, 0);
     } else if (nav.type == 'enter' && $page.url.hash) {
       const el = document.getElementById($page.url.hash.substring(1));
       if (el) el.scrollIntoView();

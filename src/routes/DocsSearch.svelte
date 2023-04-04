@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Modal, modalStore } from '@skeletonlabs/skeleton';
+  import magnify from '$lib/assets/magnify.svg?raw';
 
   // Classes
   const cBase =
@@ -15,34 +16,63 @@
 
   // Local
   let searchTerm = '';
-  let navigationOriginal: any[] = [];
-  let navigation: any[] = navigationOriginal;
+  let listPos = -1;
+  let navigation: Array<{ title: string; url: string; hash: string }> = [];
+
+  $: console.log(listPos);
 
   // Elements
   let elemDocSearch: HTMLElement;
+  let searchInput: HTMLInputElement;
 
-  function filterList(list: any[]): any[] {
-    return list.filter((rowObj: any) => {
-      const formattedSearchTerm = searchTerm.toLowerCase() || '';
-      return Object.values(rowObj)
-        .join(' ')
-        .toLowerCase()
-        .includes(formattedSearchTerm);
-    });
+  async function onSearch() {
+    if (searchTerm.length == 0) navigation = [];
+
+    if (searchTerm.length < 2) return;
+    const response = await fetch('/search?q=' + encodeURIComponent(searchTerm));
+    const data = await response.json();
+
+    if (Array.isArray(data)) navigation = data;
+    else navigation = [];
   }
 
-  function onSearch(): void {
-    let navDeepCopy = JSON.parse(JSON.stringify(navigationOriginal));
-    navigation = navDeepCopy.filter((category: any) => {
-      category.list = filterList(category.list);
-      if (category.list.length) return category;
-    });
+  function searchResultsKeyDown(event: KeyboardEvent) {
+    const results = Array.from(
+      elemDocSearch.querySelectorAll('[data-result-link]')
+    );
+
+    const currentIndex = document.activeElement
+      ? results.indexOf(document.activeElement)
+      : -1;
+
+    if (currentIndex == -1) return;
+
+    if (event.code == 'Backspace') {
+      //event.preventDefault();
+      searchInput.focus();
+      //searchInput.value = searchInput.value.slice(0, -1);
+      return;
+    }
+
+    const offset =
+      event.code == 'ArrowDown' ? 1 : event.code == 'ArrowUp' ? -1 : 0;
+
+    if (offset === 0) return;
+
+    event.preventDefault();
+
+    const next = results.at(
+      currentIndex == 0 && offset == -1
+        ? results.length - 1
+        : currentIndex - results.length + offset
+    );
+    if (next instanceof HTMLAnchorElement) next.focus();
   }
 
-  function onInputKeyDown(event: KeyboardEvent): void {
+  function searchFieldKeyDown(event: KeyboardEvent) {
     if (['Enter', 'ArrowDown'].includes(event.code)) {
-      const queryFirstAnchorElement = elemDocSearch.querySelector('a');
-      if (queryFirstAnchorElement) queryFirstAnchorElement.focus();
+      const firstAnchor = elemDocSearch.querySelector('[data-result-link]');
+      if (firstAnchor instanceof HTMLAnchorElement) firstAnchor.focus();
     }
   }
 </script>
@@ -50,43 +80,44 @@
 <div bind:this={elemDocSearch} class="modal-search {cBase}">
   <!-- Header -->
   <header class="modal-search-header {cHeader}">
-    <i class="fa-solid fa-magnifying-glass text-xl ml-4" />
+    <span class="text-xl ml-4 w-8">{@html magnify}</span>
     <input
       class={cSearchInput}
+      bind:this={searchInput}
       bind:value={searchTerm}
       type="search"
       placeholder="Search..."
       on:input={onSearch}
-      on:keydown={onInputKeyDown} />
+      on:keydown={searchFieldKeyDown} />
   </header>
   <!-- Results -->
-  <div class="modal-search-results {cResults}">
+  <div
+    class="modal-search-results {cResults}"
+    on:keydown={searchResultsKeyDown}>
     <nav class="list-nav">
-      <!-- Categories -->
-      {#each navigation as category}
-        <div class="text-sm font-bold p-4">{category.title}</div>
-        <ul>
-          <!-- Item -->
-          {#each category.list as link}
-            <li class="text-lg">
-              <!-- prettier-ignore -->
-              <a class={cResultAnchor} href={link.href} on:click={() => { modalStore.close(); }}>
+      <ul>
+        <!-- Item -->
+        {#each navigation as link}
+          <li class="text-lg">
+            <!-- prettier-ignore -->
+            <a data-result-link class={cResultAnchor} href={link.url + (link.hash ? `#${link.hash}` : '')} on:click={() => { modalStore.close(); }}>
 								<div class="flex items-center gap-4">
-									<i class="fa-regular fa-file" />
-									<span class="flex-auto font-bold opacity-75">{link.label}</span>
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" 
+                    d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6m0 2h7v5h5v11H6V4m2"/>
+                  </svg>
+									<span class="flex-auto font-bold opacity-75">{link.title}</span>
 								</div>
-								<span class="hidden md:block text-xs opacity-50">{link.href}</span>
+								<span class="hidden md:block text-xs opacity-50">{link.url}</span>
 							</a>
-            </li>
-          {/each}
-        </ul>
-      {/each}
+          </li>
+        {/each}
+      </ul>
     </nav>
   </div>
   <!-- Footer -->
   <footer class="modal-search-footer {cFooter}">
     <div><kbd>Esc</kbd> to close</div>
-    <div><kbd>Tab</kbd> to navigate</div>
+    <div><kbd>↓</kbd><kbd>↑</kbd> to navigate</div>
     <div><kbd>Enter</kbd> to select</div>
   </footer>
 </div>
