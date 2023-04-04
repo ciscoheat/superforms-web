@@ -105,9 +105,9 @@ const schema = userSchema.extend({
 });
 ```
 
-Zod makes it quite easy to append a modifier to a field, without duplicating the whole schema! (Of course, the original `userSchema` is kept intact.)
+Zod makes it quite easy to append a modifier to a field without duplicating the whole schema. (Of course, the original `userSchema` is kept intact.)
 
-With this, **Create** and **Update** can now use the same schema, which means that they can share the same user interface. This is a basic feature in Superforms, you can pass either empty data or an entity partially matching the schema to `superValidate`, and it will generate default values for any empty fields, ensuring the type safety.
+With this, **Create** and **Update** can now use the same schema, which means that they can share the same user interface. This is a basic feature in Superforms, you can pass either empty data or an entity partially matching the schema to `superValidate`, and it will generate default values for any empty fields, ensuring type safety.
 
 ## Reading a user from the database
 

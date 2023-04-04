@@ -81,6 +81,24 @@ This is the selector used to find the invalid input fields. The default is `[dat
 
 If you have a sticky navbar, set its selector here and it won't hide any errors due to its height and z-index.
 
+## Form-level errors
+
+It's also possible to set form-level errors, either through refining the schema, or the `setError` function.
+
+```ts
+const refined = z
+  .object({
+    name: z.string().min(1)
+  })
+  .refine((data) => request.method == 'POST', 'Invalid request method.');
+
+const form = await superValidate(request, refined);
+
+return setError(form, null, 'Form-level problem.');
+```
+
+These can be accessed on the client through `$errors._errors`.
+
 ## Listing errors
 
 You may also want to list the errors above the form. The `$allErrors` store can be used for this. It's an array that contains all errors and their field names:

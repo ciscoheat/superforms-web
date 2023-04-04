@@ -114,13 +114,15 @@ See [this FAQ entry](https://github.com/ciscoheat/sveltekit-superforms/wiki/Defa
 ```ts
 setError(
   form: Validation<T, M>,
-  field: keyof S | [keyof S, ...(string | number)[]],
+  field: keyof S | [keyof S, ...(string | number)[]] | [] | null,
   error: string | string[],
   options?: { overwrite = false, status = 400 }
 ) : ActionFailure<{form: Validation<T>}>
 ```
 
 If you want to set an error on the form after validation, use `setError`. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400`.
+
+If the `field` argument is set to an empty array or `null`, the error will be a form-level error that can be accessed on the client with `$errors._errors`.
 
 ### message(form, message, options?)
 
@@ -346,11 +348,11 @@ FormField<S, Prop extends keyof S> = {
 
 ### intProxy(form, fieldName)
 
-Creates a proxy store for an integer form field. Changes in either the proxy store or the form field will reflect in the other.
+Creates a proxy store for an integer schema field. Changes in either the proxy store or the form field will reflect in the other.
 
 ### numberProxy(form, fieldName)
 
-Creates a proxy store for a numeric form field. Changes in either the proxy store or the form field will reflect in the other.
+Creates a proxy store for a numeric form field.
 
 ### booleanProxy(form, fieldName, options?)
 
@@ -362,19 +364,29 @@ Creates a proxy store for a numeric form field. Changes in either the proxy stor
 }
 ```
 
-Creates a proxy store for a boolean form field. Changes in either the proxy store or the form field will reflect in the other. The option can be used to change what string value represents `true`.
+Creates a proxy store for a boolean schema field. The option can be used to change what string value represents `true`.
 
 ### dateProxy(form, fieldName, options?)
+
+Creates a proxy store for a Date schema field. The option can be used to change the proxied format of the date.
 
 **Options:**
 
 ```ts
 {
-  format: 'date-local' | 'datetime-local' | 'time-local' | 'iso' = 'iso'
+  format:
+    // Extract the part of the date as a substring:
+    | 'date' | 'datetime' | 'time'
+    // Convert the date to UTC:
+    | 'date-utc' | 'datetime-utc' | 'time-utc'
+    // Convert the date to local time:
+    | 'date-local' | 'datetime-local' | 'time-local'
+    // The default ISODateString:
+    | 'iso' = 'iso'
 }
 ```
 
-## Proxy example
+## Example
 
 Given the following schema:
 
@@ -394,7 +406,7 @@ A date proxy can be used like this:
   export let data: PageData;
 
   const form = superForm(data.form)
-  const date = dateProxy(form, 'date', { format: 'date-local' ))
+  const date = dateProxy(form, 'date', { format: 'date' ))
 </script>
 
 <input name="date" type="date" bind:value={$date} />
@@ -418,8 +430,7 @@ import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
   promise?={false}
   status?={true}
   stringTruncate?={120}
-  ref?={HTMLPreElement}
-/>
+  ref?={HTMLPreElement} />
 ```
 
 #### Props

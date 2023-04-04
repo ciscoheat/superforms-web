@@ -40,6 +40,7 @@
 
     <Title id="concepts">Other topics</Title>
 
+    <li><A href="/contributing">Contributing</A></li>
     <li><A href="/crud">CRUD tutorial</A></li>
     <li><A href="/default-values">Default values</A></li>
     <li><A href="/faq">FAQ</A></li>

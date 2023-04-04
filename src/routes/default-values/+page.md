@@ -2,15 +2,15 @@
 
 When `superValidate` encounters a schema field that isn't optional, or when a `FormData` field is empty, a default value is returned to the form, to ensure that the type is correct:
 
-| type          | value       |
-| ------------- | ----------- |
-| string        | `""`        |
-| number        | `0`         |
-| boolean       | `false`     |
-| Array.isArray | `[]`        |
-| object        | `{}`        |
-| bigint        | `BigInt(0)` |
-| symbol        | `Symbol()`  |
+| type    | value       |
+| ------- | ----------- |
+| string  | `""`        |
+| number  | `0`         |
+| boolean | `false`     |
+| Array   | `[]`        |
+| object  | `{}`        |
+| bigint  | `BigInt(0)` |
+| symbol  | `Symbol()`  |
 
 This behavior of returning empty values can be turned off if you pass `options.implicitDefaults = false` to `superValidate`, which means that you must add `default` to all required fields of your schema.
 
