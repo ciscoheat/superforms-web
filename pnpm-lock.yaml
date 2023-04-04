@@ -1,9 +1,17 @@
 lockfileVersion: '6.0'
 
+dependencies:
+  '@orama/plugin-data-persistence':
+    specifier: 1.0.0-beta.7
+    version: 1.0.0-beta.7
+
 devDependencies:
   '@jsdevtools/rehype-toc':
     specifier: ^3.0.2
     version: 3.0.2
+  '@orama/orama':
+    specifier: 1.0.0-beta.7
+    version: 1.0.0-beta.7
   '@skeletonlabs/skeleton':
     specifier: ^1.0.0
     version: 1.0.0
@@ -25,6 +33,15 @@ devDependencies:
   '@tailwindcss/typography':
     specifier: ^0.5.9
     version: 0.5.9(tailwindcss@3.2.7)
+  '@types/canvas-confetti':
+    specifier: ^1.6.0
+    version: 1.6.0
+  '@types/marked':
+    specifier: ^4.0.8
+    version: 4.0.8
+  '@types/node':
+    specifier: ^18.15.11
+    version: 18.15.11
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.45.0
     version: 5.56.0(@typescript-eslint/parser@5.56.0)(eslint@8.36.0)(typescript@5.0.2)
@@ -34,6 +51,9 @@ devDependencies:
   autoprefixer:
     specifier: ^10.4.14
     version: 10.4.14(postcss@8.4.21)
+  canvas-confetti:
+    specifier: ^1.6.0
+    version: 1.6.0
   eslint:
     specifier: ^8.28.0
     version: 8.36.0
@@ -43,6 +63,15 @@ devDependencies:
   eslint-plugin-svelte3:
     specifier: ^4.0.0
     version: 4.0.0(eslint@8.36.0)(svelte@3.57.0)
+  fast-glob:
+    specifier: ^3.2.12
+    version: 3.2.12
+  github-slugger:
+    specifier: ^2.0.0
+    version: 2.0.0
+  marked:
+    specifier: ^4.3.0
+    version: 4.3.0
   mdsvex:
     specifier: ^0.10.6
     version: 0.10.6(svelte@3.57.0)
@@ -90,7 +119,7 @@ devDependencies:
     version: 5.0.2
   vite:
     specifier: ^4.2.0
-    version: 4.2.1(sass@1.60.0)
+    version: 4.2.1(@types/node@18.15.11)(sass@1.60.0)
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -589,6 +618,11 @@ packages:
       - supports-color
     dev: true
 
+  /@msgpack/msgpack@2.8.0:
+    resolution: {integrity: sha512-h9u4u/jiIRKbq25PM+zymTyW6bhTzELvOoUd+AvYriWOAKpLGnIamaET3pnHYoI5iYphAHBI4ayx0MehR+VVPQ==}
+    engines: {node: '>= 10'}
+    dev: false
+
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -609,6 +643,18 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
+
+  /@orama/orama@1.0.0-beta.7:
+    resolution: {integrity: sha512-Ri4390vHAugZID61bUAF/nxrnmFsEz/IIAnuKBpyRqfD82SN7Kyoq4q7AUI+lnqoWhH4BB8bq1H5sha3AT6EsQ==}
+    engines: {node: '>= 16.0.0'}
+
+  /@orama/plugin-data-persistence@1.0.0-beta.7:
+    resolution: {integrity: sha512-l+MTpqDTQhGeECrsLuLnV8bo9oxUk4S01bLnx5BVg6h1AJ/DIbiBd6DsFCH1CfhLSS9MXorda4CkCVcHjLksXg==}
+    dependencies:
+      '@msgpack/msgpack': 2.8.0
+      '@orama/orama': 1.0.0-beta.7
+      dpack: 0.6.22
+    dev: false
 
   /@polka/url@1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
@@ -673,7 +719,7 @@ packages:
       svelte: 3.57.0
       tiny-glob: 0.2.9
       undici: 5.21.0
-      vite: 4.2.1(sass@1.60.0)
+      vite: 4.2.1(@types/node@18.15.11)(sass@1.60.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -691,7 +737,7 @@ packages:
       magic-string: 0.29.0
       svelte: 3.57.0
       svelte-hmr: 0.15.1(svelte@3.57.0)
-      vite: 4.2.1(sass@1.60.0)
+      vite: 4.2.1(@types/node@18.15.11)(sass@1.60.0)
       vitefu: 0.2.4(vite@4.2.1)
     transitivePeerDependencies:
       - supports-color
@@ -726,6 +772,10 @@ packages:
       tailwindcss: 3.2.7(postcss@8.4.21)
     dev: true
 
+  /@types/canvas-confetti@1.6.0:
+    resolution: {integrity: sha512-Yq6rIccwcco0TLD5SMUrIM7Fk7Fe/C0jmNRxJJCLtAF6gebDkPuUjK5EHedxecm69Pi/aA+It39Ux4OHmFhjRw==}
+    dev: true
+
   /@types/cookie@0.5.1:
     resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
     dev: true
@@ -738,6 +788,14 @@ packages:
 
   /@types/json-schema@7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
+    dev: true
+
+  /@types/marked@4.0.8:
+    resolution: {integrity: sha512-HVNzMT5QlWCOdeuBsgXP8EZzKUf0+AXzN+sLmjvaB3ZlLqO+e4u0uXrdw9ub69wBKFs+c6/pA4r9sy6cCDvImw==}
+    dev: true
+
+  /@types/node@18.15.11:
+    resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
     dev: true
 
   /@types/pug@2.0.6:
@@ -1101,6 +1159,10 @@ packages:
     resolution: {integrity: sha512-065uNwY6QtHCBOExzbV6m236DDhYCCtPmQUCoQtwkVqzud8v5QPidoMr6CoMkC2nfp6nksjttqWQRRh75LqUmA==}
     dev: true
 
+  /canvas-confetti@1.6.0:
+    resolution: {integrity: sha512-ej+w/m8Jzpv9Z7W7uJZer14Ke8P2ogsjg4ZMGIuq4iqUOqY2Jq8BNW42iGmNfRwREaaEfFIczLuZZiEVSYNHAA==}
+    dev: true
+
   /chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
@@ -1255,6 +1317,10 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /dpack@0.6.22:
+    resolution: {integrity: sha512-WGPNlW2OAE7Bj0eODMpAHUcEqxrlg01e9OFZDxQodminIgC194/cRHT7K04Z1j7AUEWTeeplYGrIv/xRdwU9Hg==}
+    dev: false
 
   /electron-to-chromium@1.4.340:
     resolution: {integrity: sha512-zx8hqumOqltKsv/MF50yvdAlPF9S/4PXbyfzJS6ZGhbddGkRegdwImmfSVqCkEziYzrIGZ/TlrzBND4FysfkDg==}
@@ -1905,6 +1971,12 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       semver: 6.3.0
+    dev: true
+
+  /marked@4.3.0:
+    resolution: {integrity: sha512-PRsaiG84bK+AMvxziE/lCFss8juXjNaWzVbN5tXAm4XjeaS9NAHhop+PjQxz2A9h8Q4M/xGmzP8vqNwy6JeK0A==}
+    engines: {node: '>= 12'}
+    hasBin: true
     dev: true
 
   /mdsvex@0.10.6(svelte@3.57.0):
@@ -2921,7 +2993,7 @@ packages:
       vfile-message: 3.1.4
     dev: true
 
-  /vite@4.2.1(sass@1.60.0):
+  /vite@4.2.1(@types/node@18.15.11)(sass@1.60.0):
     resolution: {integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -2946,6 +3018,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 18.15.11
       esbuild: 0.17.14
       postcss: 8.4.21
       resolve: 1.22.1
@@ -2963,7 +3036,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.2.1(sass@1.60.0)
+      vite: 4.2.1(@types/node@18.15.11)(sass@1.60.0)
     dev: true
 
   /webidl-conversions@3.0.1:

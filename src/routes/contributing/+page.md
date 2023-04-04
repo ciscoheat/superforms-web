@@ -1,6 +1,9 @@
 <script lang="ts">
   import Sponsor from './Sponsor.svelte'
+  import Message from './Message.svelte'
 </script>
+
+<Message />
 
 <svelte:head><title>Contributing and sponsoring</title></svelte:head>
 

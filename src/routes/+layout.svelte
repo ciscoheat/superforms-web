@@ -17,6 +17,7 @@
   import logo from '$lib/assets/logo.svg';
   import github from '$lib/assets/github.svg?raw';
   import kofi from '$lib/assets/ko-fi.svg?raw';
+  import paypal from '$lib/assets/paypal.svg?raw';
 
   let hideSponsor = true;
 
@@ -88,7 +89,7 @@
         </a>
         <a
           href="https://github.com/ciscoheat/sveltekit-superforms"
-          class="md:pr-2 w-8 text-primary-500"
+          class="md:pr-2 w-7 md:w-8 text-primary-500"
           target="_blank"
           rel="noreferrer">{@html github}</a>
         <button
@@ -112,12 +113,14 @@
     {#if !hideSponsor}
       <div
         transition:fade={{ duration: 150 }}
-        class="sponsor card absolute p-4 flex flex-col justify-end gap-3 h-48 md:h-40"
+        class="sponsor card absolute p-4 flex flex-col justify-end gap-3 h-50 md:h-52"
         use:clickOutside={{
           event: () => (hideSponsor = !hideSponsor),
           ignore: '.sponsor.btn'
         }}>
-        <div class="sm:block md:hidden text-center">Sponsor</div>
+        <div class="relative -left-5 -top-1 w-28 md:hidden text-center">
+          Sponsor
+        </div>
         <a
           href="https://github.com/sponsors/ciscoheat"
           target="_blank"
@@ -132,6 +135,17 @@
           <span class="w-6 p-0 text-primary-500">{@html kofi}</span>
           <span>Ko-fi</span>
         </a>
+        <form
+          class="flex"
+          action="https://www.paypal.com/donate"
+          method="POST"
+          target="_top">
+          <input type="hidden" name="hosted_button_id" value="NY7F5ALHHSVQS" />
+          <button type="submit" class="btn btn-sm variant-ghost">
+            <span class="w-6 p-0 text-primary-500">{@html paypal}</span>
+            <span class="pr-3">Paypal</span>
+          </button>
+        </form>
       </div>
     {/if}
   </svelte:fragment>

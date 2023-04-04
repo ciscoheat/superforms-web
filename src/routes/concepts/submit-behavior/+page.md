@@ -5,6 +5,8 @@
 
 # Submit behavior
 
+<svelte:head><title>Submit behavior</title></svelte:head>
+
 Making the user understand that things are happening when they submit the form is imperative for the best possible user experience. Superforms provides you with timers (see next section) and the following option for handling this:
 
 ## Usage
