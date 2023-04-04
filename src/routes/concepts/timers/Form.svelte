@@ -15,6 +15,7 @@
   const { form, enhance, message, submitting, delayed, timeout } = superForm(
     data.form,
     {
+      taintedMessage: null,
       onSubmit() {
         prevented = 0;
       },

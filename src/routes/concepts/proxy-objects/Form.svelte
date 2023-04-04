@@ -9,7 +9,9 @@
   }
 
   export let data: PageData;
-  const { form, errors, enhance, message, constraints } = superForm(data.form);
+  const { form, errors, enhance, message, constraints } = superForm(data.form, {
+    taintedMessage: null
+  });
 
   const proxyDate = dateProxy(form, 'date', { format: 'date-local' });
 </script>
@@ -20,8 +22,7 @@
   method="POST"
   action={$page.url.pathname}
   class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
-  use:enhance
->
+  use:enhance>
   {#if $message}
     <h3 class="rounded p-2 bg-green-700">{$message}</h3>
   {/if}
@@ -34,8 +35,7 @@
       data-invalid={$errors.date}
       bind:value={$proxyDate}
       {...$constraints.date}
-      min={$constraints.date?.min?.toString().slice(0, 10)}
-    />
+      min={$constraints.date?.min?.toString().slice(0, 10)} />
     {#if $errors.date}<span class="text-red-500" data-invalid
         >{$errors.date}</span
       >{/if}

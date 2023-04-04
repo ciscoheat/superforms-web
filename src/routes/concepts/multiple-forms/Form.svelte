@@ -10,14 +10,22 @@
     errors: errors1,
     enhance: enhance1,
     message: message1
-  } = superForm(data.registerForm, { resetForm: true, invalidateAll: false });
+  } = superForm(data.registerForm, {
+    resetForm: true,
+    invalidateAll: false,
+    taintedMessage: null
+  });
 
   const {
     form: login,
     errors: errors2,
     enhance: enhance2,
     message: message2
-  } = superForm(data.loginForm, { resetForm: true, invalidateAll: false });
+  } = superForm(data.loginForm, {
+    resetForm: true,
+    invalidateAll: false,
+    taintedMessage: null
+  });
 </script>
 
 <Debug data={{ $register, $login }} />
@@ -27,8 +35,7 @@
     method="POST"
     action="{$page.url.pathname}?/register"
     class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
-    use:enhance1
-  >
+    use:enhance1>
     <h3>Register user</h3>
     {#if $message1}
       <h4 class="rounded p-2 bg-green-700">{$message1}</h4>
@@ -39,8 +46,7 @@
         class="input"
         type="text"
         name="name"
-        bind:value={$register.name}
-      />
+        bind:value={$register.name} />
       {#if $errors1.name}<span class="text-red-500">{$errors1.name}</span>{/if}
     </label>
 
@@ -50,8 +56,7 @@
         class="input"
         type="email"
         name="email"
-        bind:value={$register.email}
-      />
+        bind:value={$register.email} />
       {#if $errors1.email}<span class="text-red-500">{$errors1.email}</span
         >{/if}
     </label>
@@ -63,8 +68,7 @@
         type="password"
         name="pwd"
         autocomplete="new-password"
-        bind:value={$register.pwd}
-      />
+        bind:value={$register.pwd} />
       {#if $errors1.pwd}<span class="text-red-500">{$errors1.pwd}</span>{/if}
     </label>
 
@@ -75,8 +79,7 @@
     method="POST"
     action="{$page.url.pathname}?/login"
     class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
-    use:enhance2
-  >
+    use:enhance2>
     <h3>Login</h3>
     {#if $message2}
       <h4 class="rounded p-2 bg-green-700">{$message2}</h4>
@@ -89,8 +92,7 @@
         type="email"
         name="email"
         autocomplete="off"
-        bind:value={$login.email}
-      />
+        bind:value={$login.email} />
       {#if $errors2.email}
         <span class="text-red-500">{$errors2.email}</span>
       {/if}
@@ -103,8 +105,7 @@
         type="password"
         name="pwd"
         autocomplete="new-password"
-        bind:value={$login.pwd}
-      />
+        bind:value={$login.pwd} />
       {#if $errors2.pwd}<span class="text-red-500">{$errors2.pwd}</span>{/if}
     </label>
 

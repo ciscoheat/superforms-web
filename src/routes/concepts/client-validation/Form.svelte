@@ -15,6 +15,7 @@
   export let data: PageData;
 
   const { form, errors, enhance, message, constraints } = superForm(data.form, {
+    taintedMessage: null,
     validators: {
       tags: (tag) =>
         tag.length < 2 ? 'Tag must be at least 2 characters' : null
@@ -36,8 +37,7 @@
   method="POST"
   action={$page.url.pathname}
   class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
-  use:enhance
->
+  use:enhance>
   {#if $message}
     <h3 class="rounded p-2 bg-green-700">{$message}</h3>
   {/if}
@@ -50,8 +50,7 @@
       type="text"
       name="tags"
       bind:value={$form.tags[i]}
-      data-invalid={$errors.tags?.[i]}
-    />
+      data-invalid={$errors.tags?.[i]} />
     {#if $errors.tags?.[i]}<span class="text-red-500">{$errors.tags[i]}</span
       >{/if}
   {/each}
@@ -62,16 +61,14 @@
     placeholder="Add new tag..."
     bind:value={newTag}
     bind:this={newTagEl}
-    on:change={() => addTag()}
-  />
+    on:change={() => addTag()} />
 
   {#if newTag}
     <input
       class="input"
       type="text"
       placeholder="Add new tag..."
-      on:focus={() => newTagEl.focus()}
-    />
+      on:focus={() => newTagEl.focus()} />
   {/if}
 
   <div>

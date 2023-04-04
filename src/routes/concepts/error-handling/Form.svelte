@@ -10,15 +10,16 @@
 
   export let data: PageData;
   const { form, errors, allErrors, enhance, tainted, message, constraints } =
-    superForm(data.form);
+    superForm(data.form, {
+      taintedMessage: null
+    });
 </script>
 
 <form
   method="POST"
   action={$page.url.pathname}
   class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
-  use:enhance
->
+  use:enhance>
   {#if $allErrors}
     <ul class="list m-0 p-0">
       {#each $allErrors as error}
@@ -33,28 +34,24 @@
   {/if}
   <label class="label">
     <span
-      >Name {#if $constraints.name?.required}*{/if}</span
-    >
+      >Name {#if $constraints.name?.required}*{/if}</span>
     <input
       class="input"
       type="text"
       name="name"
       bind:value={$form.name}
-      data-invalid={$errors.name}
-    />
+      data-invalid={$errors.name} />
   </label>
 
   <label class="label">
     <span
-      >E-mail {#if $constraints.email?.required}*{/if}</span
-    >
+      >E-mail {#if $constraints.email?.required}*{/if}</span>
     <input
       class="input"
       type="text"
       name="email"
       bind:value={$form.email}
-      data-invalid={$errors.email}
-    />
+      data-invalid={$errors.email} />
   </label>
 
   <button type="submit" class="btn variant-filled">Submit</button>

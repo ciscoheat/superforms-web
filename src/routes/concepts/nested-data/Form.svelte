@@ -9,7 +9,8 @@
   const { form, errors, message, enhance } = superForm(data.form, {
     dataType: 'json',
     errorSelector: '.input-error',
-    defaultValidator: 'clear'
+    defaultValidator: 'clear',
+    taintedMessage: null
   });
 </script>
 
@@ -19,8 +20,7 @@
   method="POST"
   action={$page.url.pathname}
   class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
-  use:enhance
->
+  use:enhance>
   {#if $message}
     <h3 class="rounded p-2 bg-green-700">{$message}</h3>
   {/if}
@@ -31,16 +31,14 @@
         <input
           type="number"
           class:input-error={$errors.tags?.[i]?.id}
-          bind:value={$form.tags[i].id}
-        />
+          bind:value={$form.tags[i].id} />
       </div>
       <div class="input-group grid-cols-[auto_1fr_auto]">
         <div class="input-group-shim">Name</div>
         <input
           type="text"
           class:input-error={$errors.tags?.[i]?.name}
-          bind:value={$form.tags[i].name}
-        />
+          bind:value={$form.tags[i].name} />
       </div>
       {#if $errors.tags?.[i]?.id && $errors.tags?.[i]?.name}
         <div class="ml-4 text-red-500 col-start-1">{$errors.tags?.[i]?.id}</div>

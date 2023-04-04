@@ -10,7 +10,8 @@
 
   export let data: PageData;
   const { form, errors, enhance, tainted, message, constraints } = superForm(
-    data.form
+    data.form,
+    { taintedMessage: null }
   );
 </script>
 
@@ -20,23 +21,20 @@
   method="POST"
   action={$page.url.pathname}
   class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
-  use:enhance
->
+  use:enhance>
   {#if $message}
     <h3 class="rounded p-2 bg-green-700">{$message}</h3>
   {/if}
   <label class="label">
     <span
-      >Name {#if $constraints.name?.required}*{/if}</span
-    >
+      >Name {#if $constraints.name?.required}*{/if}</span>
     <input class="input" type="text" name="name" bind:value={$form.name} />
     {#if $errors.name}<span class="text-red-500">{$errors.name}</span>{/if}
   </label>
 
   <label class="label">
     <span
-      >E-mail {#if $constraints.email?.required}*{/if}</span
-    >
+      >E-mail {#if $constraints.email?.required}*{/if}</span>
     <input class="input" type="text" name="email" bind:value={$form.email} />
     {#if $errors.email}<span class="text-red-500">{$errors.email}</span>{/if}
   </label>
