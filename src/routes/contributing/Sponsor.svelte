@@ -21,5 +21,6 @@
     align-items: center;
     gap: 12px;
     text-decoration: none;
+    width: min-content;
   }
 </style>
