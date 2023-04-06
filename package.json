@@ -51,11 +51,10 @@
     "typescript": "^5.0.3",
     "vite": "^4.2.1",
     "vitest": "^0.29.8",
-    "zod": "^3.21.4"
-  },
-  "type": "module",
-  "dependencies": {
+    "zod": "^3.21.4",
     "@orama/orama": "1.0.0-beta.7",
     "@orama/plugin-data-persistence": "1.0.0-beta.7"
-  }
+  },
+  "type": "module",
+  "dependencies": {}
 }
