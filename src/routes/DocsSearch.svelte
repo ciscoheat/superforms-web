@@ -70,9 +70,20 @@
   }
 
   function searchFieldKeyDown(event: KeyboardEvent) {
+    let anchor: Element | null | undefined;
+
     if (['Enter', 'ArrowDown'].includes(event.code)) {
-      const firstAnchor = elemDocSearch.querySelector('[data-result-link]');
-      if (firstAnchor instanceof HTMLAnchorElement) firstAnchor.focus();
+      anchor = elemDocSearch.querySelector('[data-result-link]');
+    } else if (['ArrowUp'].includes(event.code)) {
+      const anchors = Array.from(
+        elemDocSearch.querySelectorAll('[data-result-link]')
+      );
+      anchor = anchors[anchors.length - 1];
+    }
+
+    if (anchor && anchor instanceof HTMLAnchorElement) {
+      event.preventDefault();
+      anchor.focus();
     }
   }
 </script>
