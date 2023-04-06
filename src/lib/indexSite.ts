@@ -26,7 +26,7 @@ function siteSchema() {
     },
     components: {
       tokenizer: {
-        stemmer: stemmers.english
+        stemming: false
       }
     }
   });
