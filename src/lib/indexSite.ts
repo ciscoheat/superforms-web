@@ -1,4 +1,4 @@
-import { create, insert, stemmers } from '@orama/orama';
+import { create, insert } from '@orama/orama';
 import fg from 'fast-glob';
 import fs from 'fs/promises';
 import { normalizePath } from 'vite';
@@ -26,7 +26,7 @@ function siteSchema() {
     },
     components: {
       tokenizer: {
-        stemmer: stemmers.english
+        stemming: false
       }
     }
   });
