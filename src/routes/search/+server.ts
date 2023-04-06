@@ -4,7 +4,7 @@ import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
 
-const engine = await searchEngine();
+const engine = await searchEngine(true);
 
 export const GET = (async ({ url }) => {
   const term = url.searchParams.get('q');

@@ -3,9 +3,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig(async ({ command }) => {
-  if (command == 'build') {
-    await indexSite('./static/orama.db');
-  }
+  if (command == 'serve') await indexSite();
   return {
     plugins: [sveltekit()],
     test: {

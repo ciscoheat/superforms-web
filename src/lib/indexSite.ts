@@ -1,10 +1,10 @@
-import { create, insert } from '@orama/orama';
+import { create, insert, stemmers } from '@orama/orama';
 import fg from 'fast-glob';
 import fs from 'fs/promises';
 import { normalizePath } from 'vite';
 import { persistToFile, restoreFromFile } from '@orama/plugin-data-persistence';
 import { marked } from 'marked';
-import path from 'path';
+import path, { dirname } from 'path';
 import GithubSlugger from 'github-slugger';
 
 type Schema = {
@@ -26,32 +26,30 @@ function siteSchema() {
     },
     components: {
       tokenizer: {
-        stemming: false
+        stemmer: stemmers.english
       }
     }
   });
 }
 
-let _search: Awaited<ReturnType<typeof siteSchema>>;
+const persistedDB = '/tmp/oramadb.json';
 
-export async function searchEngine() {
-  if (!_search) {
-    _search = await siteSchema();
-    /*
-    try {
-      await fs.mkdir('./db');
-    } catch {
-      //
-    }
-    await indexSite('./db/searchIndex.json');
-    */
-    await indexSite();
+let _search = await siteSchema();
+
+export async function searchEngine(restore = false) {
+  if (restore) {
+    console.log('Restoring from disk: ' + persistedDB);
+    _search = (await restoreFromFile(
+      'json',
+      persistedDB
+    )) as unknown as typeof _search;
   }
   return _search;
 }
 
 let currentUrl: string;
 let currentSection: Schema | undefined;
+let sectionCount = 0;
 
 async function insertCurrentSection() {
   if (!currentSection) return;
@@ -66,6 +64,7 @@ async function insertCurrentSection() {
 
     currentSection.title = currentSection.title.trim();
     await insert(_search, currentSection);
+    sectionCount++;
   }
 
   currentSection = undefined;
@@ -73,7 +72,7 @@ async function insertCurrentSection() {
 
 async function index(file: string) {
   file = normalizePath(file);
-  //console.log('🚀 ~ file: indexSite.ts:48 ~ index ~ file:', file);
+  console.log('[orama] Indexing', file);
 
   let fileContent = await fs.readFile(file, { encoding: 'utf-8' });
 
@@ -94,11 +93,14 @@ async function index(file: string) {
     currentUrl = path.dirname(file.replace(/^src\/routes\//, '/'));
 
     newSection(parsedTitle[1]);
+    sectionCount = 0;
 
     marked.parse(fileContent);
 
-    insertCurrentSection();
+    await insertCurrentSection();
   }
+
+  console.log('[orama] added', sectionCount, 'sections.');
 }
 
 function newSection(title: string) {
@@ -133,11 +135,17 @@ marked.use({
   }
 });
 
-export async function indexSite(persistTo?: string) {
+export async function indexSite() {
+  await fs.mkdir(dirname(persistedDB), { recursive: true });
+  await indexSitePath(persistedDB);
+}
+
+export async function indexSitePath(persistTo?: string) {
   for (const file of await fg('**/+page.md')) {
+    // Skip start page
     if (file === 'src/routes/+page.md') continue;
     await index(file);
   }
 
-  if (persistTo) await persistToFile(_search, 'binary', persistTo);
+  if (persistTo) await persistToFile(_search, 'json', persistTo);
 }
