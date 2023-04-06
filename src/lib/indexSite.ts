@@ -2,7 +2,7 @@ import { create, insert } from '@orama/orama';
 import fg from 'fast-glob';
 import fs from 'fs/promises';
 import { normalizePath } from 'vite';
-import { persistToFile } from '@orama/plugin-data-persistence';
+import { persistToFile, restoreFromFile } from '@orama/plugin-data-persistence';
 import { marked } from 'marked';
 import path from 'path';
 import GithubSlugger from 'github-slugger';
@@ -133,11 +133,11 @@ marked.use({
   }
 });
 
-async function indexSite(persistTo?: string) {
+export async function indexSite(persistTo?: string) {
   for (const file of await fg('**/+page.md')) {
     if (file === 'src/routes/+page.md') continue;
     await index(file);
   }
 
-  if (persistTo) await persistToFile(_search, 'json', persistTo);
+  if (persistTo) await persistToFile(_search, 'binary', persistTo);
 }
