@@ -27,14 +27,14 @@ const form = await superValidate(data.form, schema, {
 By setting an id like this on the server, you'll ensure that only forms with the matching id on the client will react on the updates:
 
 ```ts
-export const load = (async (event) => {
-  const form = await superValidate(event, loginSchema, { id: 'login-form' });
+export const load = (async () => {
+  const form = await superValidate(loginSchema, { id: 'login-form' });
   return { form };
 }) satisfies PageServerLoad;
 
 export const actions = {
-  default: async (event) => {
-    const loginForm = await superValidate(event, loginSchema, {
+  default: async ({ request }) => {
+    const loginForm = await superValidate(request, loginSchema, {
       id: 'login-form'
     });
     return { loginForm };

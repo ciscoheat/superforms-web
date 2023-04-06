@@ -10,8 +10,8 @@ const _schema = z.object({
 
 export const load = echoLoad(_schema);
 export const actions = {
-  default: async (event) => {
-    const form = await superValidate(event, _schema);
+  default: async ({ request }) => {
+    const form = await superValidate(request, _schema);
 
     if (!form.valid) {
       return fail(400, { form });

@@ -28,8 +28,8 @@ export function echo<
 export function echoLoad<T extends AnyZodObject, S extends ZodValidation<T>>(
   schema: S
 ) {
-  return async function load(event: ServerLoadEvent) {
-    const form = await superValidate(event, schema);
+  return async function load() {
+    const form = await superValidate(schema)
     return { form };
   };
 }

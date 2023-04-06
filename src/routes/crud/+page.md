@@ -207,8 +207,8 @@ With this, the form should be ready for creating a user. Let's add the form acti
 
 ```ts
 export const actions = {
-  default: async (event) => {
-    const form = await superValidate(event, schema);
+  default: async ({ request }) => {
+    const form = await superValidate(request, schema);
     if (!form.valid) return fail(400, { form });
 
     if (!form.data.id) {

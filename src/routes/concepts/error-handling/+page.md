@@ -19,8 +19,8 @@ Most errors will be set automatically through the validation schema, but you may
 import { setError, superValidate } from 'sveltekit-superforms/server';
 
 export const actions = {
-  default: async (event) => {
-    const form = await superValidate(event, schema);
+  default: async ({ request }) => {
+    const form = await superValidate(request, schema);
 
     if (!form.valid) {
       return fail(400, { form });

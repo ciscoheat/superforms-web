@@ -37,8 +37,8 @@ But first we want to sent it from the server. This is quite easy using the `mess
 import { message, superValidate } from 'sveltekit-superforms/server';
 
 export const actions = {
-  default: async (event) => {
-    const form = await superValidate(event, schema);
+  default: async ({ request }) => {
+    const form = await superValidate(request, schema);
 
     if (!form.valid) {
       // Will return fail(400, { form }) since form isn't valid

@@ -77,6 +77,25 @@ import {
 ### superValidate(data, schema, options?)
 
 ```ts
+SuperValidateOptions = {
+  noErrors = false;    // Remove errors from output (but preserves valid status)
+  includeMeta = false; // Add metadata to the validation entity
+  id?: string          // Form id, for multiple forms support
+}
+```
+
+If you want the form to be initially empty, you can pass the schema as the first parameter:
+
+```ts
+superValidate<T extends AnyZodObject, M = any>(
+  schema: T | ZodEffects<T>,
+  options?: SuperValidateOptions
+): Promise<Validation<T, M>>
+```
+
+If you want to populate the form, for example from DB or `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter, the schema second:
+
+```ts
 superValidate<T extends AnyZodObject, M = any>(
   data:
     | RequestEvent
@@ -87,11 +106,8 @@ superValidate<T extends AnyZodObject, M = any>(
     | Partial<S>
     | null
     | undefined,
-  schema: T | ZodEffects<T>, // refine/superRefine/transform
-  options?: {
-    noErrors = false;    // Remove errors from output (but preserves valid status)
-    includeMeta = false; // Add metadata to the validation entity
-    id?: string          // Form id, for multiple forms support
+  schema: T | ZodEffects<T>,
+  options?: SuperValidateOptions
   }
 ): Promise<Validation<T, M>>
 ```
@@ -199,8 +215,8 @@ const loginSchema = z.object({
   password: z.string().min(5)
 });
 
-export const POST = (async (event) => {
-  const form = await superValidate(event, loginSchema);
+export const POST = (async ({ request }) => {
+  const form = await superValidate(request, loginSchema);
   if (!form.valid) return actionResult('failure', { form });
 
   // Verify login here //
@@ -303,7 +319,7 @@ FormOptions<T extends AnyZodObject, M> = Partial<{
 ### superForm return type
 
 ```ts
-EnhancedForm<T extends AnyZodObject, M = any> = {
+SuperForm<T extends AnyZodObject, M = any> = {
   form: Writable<S>;
   formId: Writable<string | undefined>;
   errors: Writable<Nested<S, string[] | undefined>>;

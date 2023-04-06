@@ -66,24 +66,45 @@ const schema = z.object({
   email: z.string().email()
 });
 
-export const load = (async (event) => {
+export const load = (async () => {
   // Server API:
-  const form = await superValidate(event, schema);
+  const form = await superValidate(schema);
 
   // Always return { form } in load and form actions.
   return { form };
 }) satisfies PageServerLoad;
 ```
 
-The Superform server API is called `superValidate`. Its first parameter is the data that should be sent to the form. It can come from:
+The Superform server API is called `superValidate`. You can call it in two ways in the load function:
 
-- `FormData` in a POST request
-- From a database call in the load function, so the form will be populated directly (very useful for backend interfaces)
-- Or it can be empty, in which case it will be filled with default values based on the schema. `z.string()` results in an empty string, for example.
+**1. Empty form**
 
-In our case, the form should be initially empty, so we can use the `RequestEvent`, which then looks for `FormData`, but as the load function is a `GET` request, it won't find any and will return the default values for the schema.
+If you want to the form to be initially empty, just pass the schema as in the example above, and it will be filled with default values based on the schema. For example, a `z.string()` field results in an empty string, unless you have set a default.
 
-Note that at the end of the load function we return `{ form }`. As a rule, you should always return the validation object to the client in this manner.
+**2. Populate from database**
+
+If you want to populate the form, you can call the database and send the data to the form as the first parameter, schema second, like this:
+
+```ts
+export const load = (async ({ params }) => {
+  const user = db.users.findUnique({
+    where: { id: params.id }
+  });
+
+  if (!user) throw error(404, 'Not found');
+
+  const form = await superValidate(user, schema);
+
+  // Always return { form } in load and form actions.
+  return { form };
+}) satisfies PageServerLoad;
+```
+
+As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is very useful for backend interfaces, where the form usually should be populated based on an url like `/users/123`.
+
+### Important note about return values
+
+At the end of the load function we return `{ form }`. You should **always** return the validation object to the client in this manner, either directly or through a helper function. The name of the variable doesn't matter, you can call it `{ loginForm }` or anything else, but it needs to be returned in all code paths, both in load functions and form actions, encapsulated in an object.
 
 ### Displaying the form
 
@@ -113,7 +134,7 @@ Now when we have sent the validation data to the client, we will retrieve it usi
 </form>
 ```
 
-`superForm` is used on the client to display the data, conveniently supplied from `data.form`.
+`superForm` is used on the client to display the data, that we just sent from the server in `data.form`.
 
 This is what the form should look like now:
 
@@ -141,7 +162,13 @@ Edit the form fields and see how the data is automatically updated. The componen
 
 ### Posting data
 
-Let's add a minimal form action, to be able to post the data back to the server:
+In form actions, we'll use the same `superValidate` function, but now it should be populated with `FormData`. This can be done in several ways:
+
+- Use `request` parameter (which contains `FormData`)
+- Use the `event` object (which contains the request)
+- Use `FormData` directly.
+
+Let's use `request` is a minimal form action, so we can post the form back to the server:
 
 **src/routes/+page.server.ts**
 
@@ -151,9 +178,8 @@ import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 
 export const actions = {
-  default: async (event) => {
-    // Same syntax as in the load function
-    const form = await superValidate(event, schema);
+  default: async ({ request }) => {
+    const form = await superValidate(request, schema);
     console.log('POST', form);
 
     // Convenient validation check:
@@ -248,7 +274,7 @@ There are no hidden DOM manipulations or other secrets, it's just html attribute
 
 This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring.
 
-To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. All pages here contain interactive examples that helps you use the library to its fullest.
+To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. Most pages there contain interactive examples that helps you use the library to its fullest.
 
 When you've gone over all the concepts, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
 

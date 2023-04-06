@@ -11,19 +11,19 @@ const registerSchema = z.object({
 
 const loginSchema = registerSchema.omit({ name: true });
 
-export const load = (async (event) => {
+export const load = (async () => {
   // Server API:
-  const registerForm = await superValidate(event, registerSchema, {
+  const registerForm = await superValidate(registerSchema, {
     id: 'register'
   });
-  const loginForm = await superValidate(event, loginSchema, { id: 'login' });
+  const loginForm = await superValidate(loginSchema, { id: 'login' });
 
   return { registerForm, loginForm };
 }) satisfies PageServerLoad;
 
 export const actions = {
-  login: async (event) => {
-    const form = await superValidate(event, loginSchema, { id: 'login' });
+  login: async ({ request }) => {
+    const form = await superValidate(request, loginSchema, { id: 'login' });
 
     if (!form.valid) {
       return fail(400, { form });
@@ -32,8 +32,8 @@ export const actions = {
     return message(form, 'Login successful!');
   },
 
-  register: async (event) => {
-    const form = await superValidate(event, registerSchema, { id: 'register' });
+  register: async ({ request }) => {
+    const form = await superValidate(request, registerSchema, { id: 'register' });
 
     if (!form.valid) {
       return fail(400, { form });
