@@ -1,17 +1,15 @@
 lockfileVersion: '6.0'
 
-dependencies:
+devDependencies:
+  '@jsdevtools/rehype-toc':
+    specifier: ^3.0.2
+    version: 3.0.2
   '@orama/orama':
     specifier: 1.0.0-beta.7
     version: 1.0.0-beta.7
   '@orama/plugin-data-persistence':
     specifier: 1.0.0-beta.7
     version: 1.0.0-beta.7
-
-devDependencies:
-  '@jsdevtools/rehype-toc':
-    specifier: ^3.0.2
-    version: 3.0.2
   '@skeletonlabs/skeleton':
     specifier: ^1.1.0
     version: 1.1.0
@@ -85,8 +83,8 @@ devDependencies:
     specifier: ^2.10.0
     version: 2.10.0(prettier@2.8.7)(svelte@3.58.0)
   prettier-plugin-tailwindcss:
-    specifier: ^0.2.6
-    version: 0.2.6(prettier-plugin-svelte@2.10.0)(prettier@2.8.7)
+    specifier: ^0.2.7
+    version: 0.2.7(prettier-plugin-svelte@2.10.0)(prettier@2.8.7)
   rehype-add-classes:
     specifier: ^1.0.0
     version: 1.0.0
@@ -106,8 +104,8 @@ devDependencies:
     specifier: ^3.2.0
     version: 3.2.0(postcss@8.4.21)(sass@1.60.0)(svelte@3.58.0)
   sveltekit-superforms:
-    specifier: ^0.6.8
-    version: 0.6.8(@sveltejs/kit@1.15.1)(svelte@3.58.0)(zod@3.21.4)
+    specifier: ^0.6.9
+    version: 0.6.9(@sveltejs/kit@1.15.1)(svelte@3.58.0)(zod@3.21.4)
   tailwindcss:
     specifier: ^3.3.1
     version: 3.3.1(postcss@8.4.21)
@@ -627,7 +625,7 @@ packages:
   /@msgpack/msgpack@2.8.0:
     resolution: {integrity: sha512-h9u4u/jiIRKbq25PM+zymTyW6bhTzELvOoUd+AvYriWOAKpLGnIamaET3pnHYoI5iYphAHBI4ayx0MehR+VVPQ==}
     engines: {node: '>= 10'}
-    dev: false
+    dev: true
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -653,7 +651,7 @@ packages:
   /@orama/orama@1.0.0-beta.7:
     resolution: {integrity: sha512-Ri4390vHAugZID61bUAF/nxrnmFsEz/IIAnuKBpyRqfD82SN7Kyoq4q7AUI+lnqoWhH4BB8bq1H5sha3AT6EsQ==}
     engines: {node: '>= 16.0.0'}
-    dev: false
+    dev: true
 
   /@orama/plugin-data-persistence@1.0.0-beta.7:
     resolution: {integrity: sha512-l+MTpqDTQhGeECrsLuLnV8bo9oxUk4S01bLnx5BVg6h1AJ/DIbiBd6DsFCH1CfhLSS9MXorda4CkCVcHjLksXg==}
@@ -661,7 +659,7 @@ packages:
       '@msgpack/msgpack': 2.8.0
       '@orama/orama': 1.0.0-beta.7
       dpack: 0.6.22
-    dev: false
+    dev: true
 
   /@polka/url@1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
@@ -1181,7 +1179,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001474
-      electron-to-chromium: 1.4.352
+      electron-to-chromium: 1.4.353
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10(browserslist@4.21.5)
     dev: true
@@ -1410,14 +1408,14 @@ packages:
 
   /dpack@0.6.22:
     resolution: {integrity: sha512-WGPNlW2OAE7Bj0eODMpAHUcEqxrlg01e9OFZDxQodminIgC194/cRHT7K04Z1j7AUEWTeeplYGrIv/xRdwU9Hg==}
-    dev: false
+    dev: true
 
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /electron-to-chromium@1.4.352:
-    resolution: {integrity: sha512-ikFUEyu5/q+wJpMOxWxTaEVk2M1qKqTGKKyfJmod1CPZxKfYnxVS41/GCBQg21ItBpZybyN8sNpRqCUGm+Zc4Q==}
+  /electron-to-chromium@1.4.353:
+    resolution: {integrity: sha512-IdJVpMHJoBT/nn0GQ02wPfbhogDVpd1ud95lP//FTf5l35wzxKJwibB4HBdY7Q+xKPA1nkZ0UDLOMyRj5U5IAQ==}
     dev: true
 
   /emoji-regex@8.0.0:
@@ -2425,7 +2423,7 @@ packages:
       postcss: 8.4.21
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.1
+      resolve: 1.22.2
     dev: true
 
   /postcss-js@4.0.1(postcss@8.4.21):
@@ -2509,8 +2507,8 @@ packages:
       svelte: 3.58.0
     dev: true
 
-  /prettier-plugin-tailwindcss@0.2.6(prettier-plugin-svelte@2.10.0)(prettier@2.8.7):
-    resolution: {integrity: sha512-F+7XCl9RLF/LPrGdUMHWpsT6TM31JraonAUyE6eBmpqymFvDwyl0ETHsKFHP1NG+sEfv8bmKqnTxEbWQbHPlBA==}
+  /prettier-plugin-tailwindcss@0.2.7(prettier-plugin-svelte@2.10.0)(prettier@2.8.7):
+    resolution: {integrity: sha512-jQopIOgjLpX+y8HeD56XZw7onupRTC0cw7eKKUimI7vhjkPF5/1ltW5LyqaPtSyc8HvEpvNZsvvsGFa2qpa59w==}
     engines: {node: '>=12.17.0'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
@@ -2672,8 +2670,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /resolve@1.22.1:
-    resolution: {integrity: sha512-nBpuuYuY5jFsli/JIs1oldw6fOQCBioohqWZg/2hiaOybXOft4lonv85uDOKXdf8rhyK159cxU5cDcK/NKk8zw==}
+  /resolve@1.22.2:
+    resolution: {integrity: sha512-Sb+mjNHOULsBv818T40qSPeRiuWLyaGMa5ewydRLFimneixmVy2zdivRl+AF6jaYPC8ERxGDmFSiqui6SfPd+g==}
     hasBin: true
     dependencies:
       is-core-module: 2.11.0
@@ -3019,8 +3017,8 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /sveltekit-superforms@0.6.8(@sveltejs/kit@1.15.1)(svelte@3.58.0)(zod@3.21.4):
-    resolution: {integrity: sha512-/ZejVGMjXw7CSoVtyh3ClB/XgylHUbddc3pa4q4cQ4c4IhCzFpoPyn6c5I2MHpmjQauXEylb8xpq4DqnjSdOlA==}
+  /sveltekit-superforms@0.6.9(@sveltejs/kit@1.15.1)(svelte@3.58.0)(zod@3.21.4):
+    resolution: {integrity: sha512-UyTFKAVeooqkjumg1F3XNF16z7QEKhDxXsIT3T48Z1cN3UDiTcUEWNougTZ+yxejI0GCq2ddSLLSxWjnq+NGBw==}
     peerDependencies:
       '@sveltejs/kit': 1.x
       svelte: 3.x
@@ -3060,7 +3058,7 @@ packages:
       postcss-selector-parser: 6.0.11
       postcss-value-parser: 4.2.0
       quick-lru: 5.1.1
-      resolve: 1.22.1
+      resolve: 1.22.2
       sucrase: 3.31.0
     transitivePeerDependencies:
       - ts-node
@@ -3334,7 +3332,7 @@ packages:
       '@types/node': 18.15.11
       esbuild: 0.17.15
       postcss: 8.4.21
-      resolve: 1.22.1
+      resolve: 1.22.2
       rollup: 3.20.2
       sass: 1.60.0
     optionalDependencies:
