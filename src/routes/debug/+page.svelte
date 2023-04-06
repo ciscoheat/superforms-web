@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PageData } from './$types.js';
+  import type { PageData } from './$types';
 
   export let data: PageData;
   $: browser = data.browser;

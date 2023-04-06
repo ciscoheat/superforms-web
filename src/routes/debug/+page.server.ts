@@ -1,5 +1,5 @@
 import { lstatSync, readdirSync } from 'fs';
-import type { PageServerLoad } from './$types.js';
+import type { PageServerLoad } from './$types';
 import path from 'path';
 
 //const fileName = '.vercel/output/orama/+page.md';

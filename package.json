@@ -57,10 +57,5 @@
   "dependencies": {
     "@orama/orama": "1.0.0-beta.7",
     "@orama/plugin-data-persistence": "1.0.0-beta.7"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@orama/orama@1.0.0-beta.7": "patches/@orama__orama@1.0.0-beta.7.patch"
-    }
   }
 }
