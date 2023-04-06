@@ -1,5 +1,6 @@
-import { searchEngine } from '$lib/indexSite';
+//import { searchEngine } from '$lib/indexSite';
 import { search, type Orama } from '@orama/orama';
+import { restore } from '@orama/plugin-data-persistence';
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
@@ -7,7 +8,9 @@ import type { RequestHandler } from './$types';
 let engine: Orama;
 
 export const GET = (async ({ url, fetch }) => {
-  if (!engine) engine = await searchEngine(fetch);
+  const data = await fetch('/oramadb.json');
+  if (!engine)
+    engine = (await restore('json', await data.text())) as unknown as Orama;
 
   const term = url.searchParams.get('q');
   if (!term || term.length == 1) return json({});
