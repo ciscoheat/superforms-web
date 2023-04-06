@@ -28,7 +28,7 @@
 </script>
 
 <nav class="list-nav p-4" bind:this={nav}>
-  <SearchButton cls="hidden mx-4 mb-3" width="w-40" />
+  <SearchButton cls="md:hidden mx-4 mb-3" width="w-40" />
   <ul>
     <li><A href="/">Home</A></li>
     <li><A href="/get-started">Get started</A></li>
