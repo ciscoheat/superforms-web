@@ -68,7 +68,7 @@ You can build up a html form for these tags using an `{#each}` loop:
 
 ```svelte
 <script lang="ts">
-  const { form, enhance } = superForm(data.form, {
+  const { form, errors, enhance } = superForm(data.form, {
     // This is a requirement when the schema contains nested objects:
     dataType: 'json'
   });

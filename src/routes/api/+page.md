@@ -82,6 +82,8 @@ superValidate<T extends AnyZodObject, M = any>(
     | RequestEvent
     | Request
     | FormData
+    | URL
+    | URLSearchParams
     | Partial<S>
     | null
     | undefined,

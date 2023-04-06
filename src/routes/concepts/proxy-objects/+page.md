@@ -49,7 +49,17 @@ Creates a proxy (store) for a boolean form field. The option can be used to chan
 **Options**
 
 ```ts
-{ format: 'date-local' | 'datetime-local' | 'time-local' | 'iso' = 'iso' }
+{
+  format:
+    // Extract the part of the date as a substring:
+    | 'date' | 'datetime' | 'time'
+    // Convert the date to UTC:
+    | 'date-utc' | 'datetime-utc' | 'time-utc'
+    // Convert the date to local time:
+    | 'date-local' | 'datetime-local' | 'time-local'
+    // The default ISODateString:
+    | 'iso' = 'iso'
+}
 ```
 
 Creates a proxy store for a date field. The option can be used to format the resulting date string differently, useful when data comes from a date input (see the example below).
