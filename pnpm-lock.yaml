@@ -111,6 +111,9 @@ devDependencies:
   tailwindcss:
     specifier: ^3.3.1
     version: 3.3.1(postcss@8.4.21)
+  traverse-fs:
+    specifier: ^0.0.9
+    version: 0.0.9
   tslib:
     specifier: ^2.5.0
     version: 2.5.0
@@ -3127,6 +3130,10 @@ packages:
 
   /tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
+    dev: true
+
+  /traverse-fs@0.0.9:
+    resolution: {integrity: sha512-Nd+Lhfgsq72P7oPDH/JGulEO4/NX/6jhsGxuw0PuUXo8xJvRjVVWkaNrzRYUHyB49lY6zdHP9Z/OyGwctgYEtg==}
     dev: true
 
   /trough@2.1.0:
