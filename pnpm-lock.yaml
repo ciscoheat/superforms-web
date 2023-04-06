@@ -1,9 +1,14 @@
 lockfileVersion: '6.0'
 
+patchedDependencies:
+  '@orama/orama@1.0.0-beta.7':
+    hash: drp4rfpmmshjw4ywcxiznsksre
+    path: patches/@orama__orama@1.0.0-beta.7.patch
+
 dependencies:
   '@orama/orama':
     specifier: 1.0.0-beta.7
-    version: 1.0.0-beta.7
+    version: 1.0.0-beta.7(patch_hash=drp4rfpmmshjw4ywcxiznsksre)
   '@orama/plugin-data-persistence':
     specifier: 1.0.0-beta.7
     version: 1.0.0-beta.7
@@ -650,16 +655,17 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@orama/orama@1.0.0-beta.7:
+  /@orama/orama@1.0.0-beta.7(patch_hash=drp4rfpmmshjw4ywcxiznsksre):
     resolution: {integrity: sha512-Ri4390vHAugZID61bUAF/nxrnmFsEz/IIAnuKBpyRqfD82SN7Kyoq4q7AUI+lnqoWhH4BB8bq1H5sha3AT6EsQ==}
     engines: {node: '>= 16.0.0'}
     dev: false
+    patched: true
 
   /@orama/plugin-data-persistence@1.0.0-beta.7:
     resolution: {integrity: sha512-l+MTpqDTQhGeECrsLuLnV8bo9oxUk4S01bLnx5BVg6h1AJ/DIbiBd6DsFCH1CfhLSS9MXorda4CkCVcHjLksXg==}
     dependencies:
       '@msgpack/msgpack': 2.8.0
-      '@orama/orama': 1.0.0-beta.7
+      '@orama/orama': 1.0.0-beta.7(patch_hash=drp4rfpmmshjw4ywcxiznsksre)
       dpack: 0.6.22
     dev: false
 

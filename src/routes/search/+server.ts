@@ -1,8 +1,8 @@
-import { searchEngine } from '$lib/indexSite';
+import { searchEngine } from '$lib/indexSite.js';
 import { search, type Orama } from '@orama/orama';
 import { json } from '@sveltejs/kit';
 
-import type { RequestHandler } from './$types';
+import type { RequestHandler } from './$types.js';
 
 let engine: Orama;
 
