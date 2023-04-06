@@ -5,7 +5,17 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig(async ({ mode }) => {
   if (mode == 'development') await indexSite();
   return {
-    plugins: [sveltekit()],
+    plugins: [
+      sveltekit(),
+      {
+        name: 'index-site',
+        handleHotUpdate(ctx) {
+          if (ctx.file.endsWith('+page.md')) {
+            indexSite();
+          }
+        }
+      }
+    ],
     test: {
       include: ['src/**/*.{test,spec}.{js,ts}']
     }

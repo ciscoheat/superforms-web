@@ -1,4 +1,4 @@
-import { create, insert } from '@orama/orama';
+import { create, insert, stemmers } from '@orama/orama';
 import fg from 'fast-glob';
 import fs from 'fs/promises';
 import { normalizePath } from 'vite';
@@ -26,7 +26,7 @@ function siteSchema() {
     },
     components: {
       tokenizer: {
-        stemming: false
+        stemmer: stemmers.english
       }
     }
   });
@@ -73,7 +73,7 @@ async function insertCurrentSection() {
 
 async function index(file: string) {
   file = normalizePath(file);
-  console.log('[orama] Indexing', file);
+  //console.log('[orama] Indexing', file);
 
   let fileContent = await fs.readFile(file, { encoding: 'utf-8' });
 
@@ -101,7 +101,7 @@ async function index(file: string) {
     await insertCurrentSection();
   }
 
-  console.log('[orama] added', sectionCount, 'sections.');
+  //console.log('[orama] added', sectionCount, 'sections.');
 }
 
 function newSection(title: string) {
@@ -137,6 +137,7 @@ marked.use({
 });
 
 export async function indexSite() {
+  console.log('Indexing site...');
   await fs.mkdir(dirname(persistedDB), { recursive: true });
   await indexSitePath(persistedDB);
 }

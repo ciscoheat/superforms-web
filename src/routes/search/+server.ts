@@ -4,6 +4,7 @@ import { restore } from '@orama/plugin-data-persistence';
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
+import { dev } from '$app/environment';
 
 let engine: Orama;
 
@@ -16,12 +17,21 @@ export const GET = (async ({ url, fetch }) => {
   if (!term || term.length == 1) return json({});
   const result = await search(engine, {
     term,
-    tolerance: 2,
+    properties: ['title', 'content'],
+    tolerance: 3,
     limit: 8,
     boost: {
-      title: 2
+      title: 3
     }
   });
+
+  if (dev) {
+    console.log(
+      `----- ${term} ---------------------------------------------------`
+    );
+    console.log(result.hits.map((h) => ({ score: h.score, doc: h.document })));
+  }
+
   return json(
     result.hits.map((h) => {
       const { title, hash, url } = h.document;
