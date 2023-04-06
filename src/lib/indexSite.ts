@@ -32,7 +32,7 @@ function siteSchema() {
   });
 }
 
-const persistedDB = '/tmp/oramadb.json';
+const persistedDB = 'static/oramadb.json';
 
 let _search = await siteSchema();
 
