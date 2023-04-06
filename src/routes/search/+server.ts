@@ -1,12 +1,14 @@
 import { searchEngine } from '$lib/indexSite';
-import { search } from '@orama/orama';
+import { search, type Orama } from '@orama/orama';
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
 
-const engine = await searchEngine(true);
+let engine: Orama;
 
 export const GET = (async ({ url }) => {
+  if (!engine) engine = await searchEngine(true);
+
   const term = url.searchParams.get('q');
   if (!term || term.length == 1) return json({});
   const result = await search(engine, {
