@@ -40,7 +40,6 @@ let _search = await siteSchema();
 export async function searchEngine(load?: typeof fetch) {
   if (load) {
     const data = await fetch(file);
-    data.json;
     _search = (await restore(
       'json',
       await data.text()

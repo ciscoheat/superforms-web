@@ -38,8 +38,10 @@ function dir(directory: string): Dir {
   }
 }
 
-export const load = (async ({ url }) => {
+export const load = (async ({ url, fetch }) => {
+  const data = await fetch('/oramadb.json');
   return {
+    db: (await data.text()).length,
     browser: dir(url.searchParams.get('dir') ?? process.cwd())
   };
 }) satisfies PageServerLoad;

@@ -5,6 +5,8 @@
   $: browser = data.browser;
 </script>
 
+<h1>*{data.db}*</h1>
+
 {#key browser}
   <h3>{browser.path}</h3>
 {/key}
