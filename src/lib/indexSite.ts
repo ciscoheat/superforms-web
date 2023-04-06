@@ -2,7 +2,7 @@ import { create, insert, stemmers } from '@orama/orama';
 import fg from 'fast-glob';
 import fs from 'fs/promises';
 import { normalizePath } from 'vite';
-import { persistToFile, restoreFromFile } from '@orama/plugin-data-persistence';
+import { persistToFile, restore } from '@orama/plugin-data-persistence';
 import { marked } from 'marked';
 import path, { dirname } from 'path';
 import GithubSlugger from 'github-slugger';
@@ -32,16 +32,18 @@ function siteSchema() {
   });
 }
 
-const persistedDB = 'static/oramadb.json';
+const file = '/oramadb.json';
+const persistedDB = 'static' + file;
 
 let _search = await siteSchema();
 
-export async function searchEngine(restore = false) {
-  if (restore) {
-    console.log('Restoring from disk: ' + persistedDB);
-    _search = (await restoreFromFile(
+export async function searchEngine(load?: typeof fetch) {
+  if (load) {
+    const data = await fetch(file);
+    data.json;
+    _search = (await restore(
       'json',
-      persistedDB
+      await data.text()
     )) as unknown as typeof _search;
   }
   return _search;

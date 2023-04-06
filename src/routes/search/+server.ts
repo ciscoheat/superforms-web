@@ -6,8 +6,8 @@ import type { RequestHandler } from './$types';
 
 let engine: Orama;
 
-export const GET = (async ({ url }) => {
-  if (!engine) engine = await searchEngine(true);
+export const GET = (async ({ url, fetch }) => {
+  if (!engine) engine = await searchEngine(fetch);
 
   const term = url.searchParams.get('q');
   if (!term || term.length == 1) return json({});
