@@ -168,7 +168,7 @@ In form actions, we'll use the same `superValidate` function, but now it should 
 - Use the `event` object (which contains the request)
 - Use `FormData` directly.
 
-Let's use `request` is a minimal form action, so we can post the form back to the server:
+Let's use `request` in a minimal form action, so we can post the form back to the server:
 
 **src/routes/+page.server.ts**
 

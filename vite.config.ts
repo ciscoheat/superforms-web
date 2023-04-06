@@ -11,7 +11,7 @@ export default defineConfig(async ({ mode }) => {
         name: 'index-site',
         handleHotUpdate(ctx) {
           if (ctx.file.endsWith('+page.md')) {
-            indexSite();
+            //indexSite();
           }
         }
       }
