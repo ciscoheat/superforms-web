@@ -5,8 +5,8 @@ import traverse from 'traverse-fs';
 import path from 'path';
 import fs from 'fs/promises';
 
-export default defineConfig(() => ({
-  plugins: [sveltekit(), indexSite()],
+export default defineConfig(({ command }) => ({
+  plugins: [sveltekit(), indexSite(command)],
   test: {
     include: ['src/**/*.{test,spec}.{js,ts}']
   }
@@ -14,11 +14,12 @@ export default defineConfig(() => ({
 
 const src = 'src/routes';
 
-function indexSite() {
+function indexSite(command: string) {
   return {
     name: 'index-site',
 
     async buildStart() {
+      if (command == 'serve') return;
       return traverse.dir(
         src,
         true,

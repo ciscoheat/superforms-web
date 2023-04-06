@@ -1,0 +1,45 @@
+import { lstatSync, readdirSync } from 'fs';
+import type { PageServerLoad } from './$types';
+import path from 'path';
+
+//const fileName = '.vercel/output/orama/+page.md';
+
+type Dir = {
+  path: string;
+  files: string[];
+  dirs: string[];
+  sep: '\\' | '/';
+};
+
+function file(path: string, isDir: boolean) {
+  try {
+    const stat = lstatSync(path);
+    if (isDir && stat.isDirectory()) return true;
+    if (!isDir && !stat.isDirectory()) return true;
+  } catch (e) {
+    console.log(e);
+  }
+  return false;
+}
+
+function dir(directory: string): Dir {
+  try {
+    const files = readdirSync(directory);
+    return {
+      path: path.resolve(directory),
+      files: files.filter((f) => file(path.join(directory, f), false)),
+      dirs: ['..'].concat(
+        files.filter((f) => file(path.join(directory, f), true))
+      ),
+      sep: path.sep
+    };
+  } catch (e) {
+    return { path: directory, files: [String(e)], dirs: [], sep: path.sep };
+  }
+}
+
+export const load = (async ({ url }) => {
+  return {
+    browser: dir(url.searchParams.get('dir') ?? process.cwd())
+  };
+}) satisfies PageServerLoad;
