@@ -24,12 +24,17 @@
   import kofi from '$lib/assets/ko-fi.svg?raw';
   import paypal from '$lib/assets/paypal.svg?raw';
   import SearchButton from './SearchButton.svelte';
+  import { tick } from 'svelte';
 
   // Local
   let hideSponsor = true;
 
-  function drawerOpen(): void {
+  async function drawerOpen() {
     drawerStore.open({});
+    await tick();
+    if (document.activeElement?.id === 'search-button') {
+      (document.activeElement as HTMLButtonElement).blur();
+    }
   }
 
   const modalRegistry: Record<string, ModalComponent> = {

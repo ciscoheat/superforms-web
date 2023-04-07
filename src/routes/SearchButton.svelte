@@ -5,6 +5,7 @@
 
   export let cls = '';
   export let width = '';
+  export let buttonStyle = '';
 
   function triggerSearch(): void {
     const d: ModalSettings = {
@@ -25,7 +26,8 @@
 <!-- Search -->
 <div class={cls}>
   <button
-    class="btn p-2 px-4 space-x-4 variant-soft hover:variant-soft-primary {width}"
+    id="search-button"
+    class="btn p-2 px-4 space-x-4 variant-soft variant-soft-primary {width} {buttonStyle}"
     on:click={triggerSearch}>
     <span class="w-6">{@html magnify}</span>
     <span class="inline-block badge variant-soft"
@@ -36,5 +38,9 @@
 <style lang="scss">
   * {
     color: #a59639 !important;
+  }
+
+  #search-button:focus {
+    background-color: #5a521f !important;
   }
 </style>
