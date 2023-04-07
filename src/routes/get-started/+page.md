@@ -177,6 +177,11 @@ import type { Actions, PageServerLoad } from './$types';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 
+const schema = z.object({
+  name: z.string().default('Hello world!'),
+  email: z.string().email()
+});
+
 export const actions = {
   default: async ({ request }) => {
     const form = await superValidate(request, schema);
