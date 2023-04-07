@@ -46,10 +46,9 @@ InputConstraints = Partial<{
 }>;
 ```
 
+### Return value from superValidate
+
 ```ts
-/**
- * The return value from superValidate
- */
 Validation<T, M = any> = {
   valid: boolean;
   data: S;
@@ -76,14 +75,6 @@ import {
 
 ### superValidate(data, schema, options?)
 
-```ts
-SuperValidateOptions = {
-  noErrors = false;    // Remove errors from output (but preserves valid status)
-  includeMeta = false; // Add metadata to the validation entity
-  id?: string          // Form id, for multiple forms support
-}
-```
-
 If you want the form to be initially empty, you can pass the schema as the first parameter:
 
 ```ts
@@ -93,7 +84,7 @@ superValidate<T extends AnyZodObject, M = any>(
 ): Promise<Validation<T, M>>
 ```
 
-If you want to populate the form, for example from DB or `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter, the schema second:
+If you want to populate the form, for example from a database or `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter, the schema second:
 
 ```ts
 superValidate<T extends AnyZodObject, M = any>(
@@ -108,11 +99,18 @@ superValidate<T extends AnyZodObject, M = any>(
     | undefined,
   schema: T | ZodEffects<T>,
   options?: SuperValidateOptions
-  }
 ): Promise<Validation<T, M>>
 ```
 
-If `data` is determined to be empty (`null`, `undefined` or no `FormData`), a validation with a default entity for the schema is returned, in this shape:
+```ts
+SuperValidateOptions = {
+  noErrors = false;    // Remove errors from output (but preserves valid status)
+  includeMeta = false; // Add metadata to the validation entity
+  id?: string          // Form id, for multiple forms support
+}
+```
+
+If `data` is empty, a validation with a default entity for the schema is returned, in this shape:
 
 ```js
 {
@@ -137,10 +135,12 @@ setError(
   field: keyof S | [keyof S, ...(string | number)[]] | [] | null,
   error: string | string[],
   options?: { overwrite = false, status = 400 }
-) : ActionFailure<{form: Validation<T>}>
+) : ActionFailure<{form: Validation<T, M>}>
 ```
 
-If you want to set an error on the form after validation, use `setError`. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400`.
+For setting errors on the form after validation. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. 
+
+Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400`.
 
 If the `field` argument is set to an empty array or `null`, the error will be a form-level error that can be accessed on the client with `$errors._errors`.
 

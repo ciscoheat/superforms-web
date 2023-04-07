@@ -13,7 +13,7 @@
 
 Most errors will be set automatically through the validation schema, but you may want to add errors after determining that the data is valid. This is easily done with the `setError` helper function.
 
-## Usage (server)
+## setError
 
 ```ts
 import { setError, superValidate } from 'sveltekit-superforms/server';

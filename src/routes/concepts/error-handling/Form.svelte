@@ -56,3 +56,9 @@
 
   <button type="submit" class="btn variant-filled">Submit</button>
 </form>
+
+<style lang="scss">
+  li {
+    white-space: normal;
+  }
+</style>
