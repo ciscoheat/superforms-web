@@ -22,7 +22,7 @@ By using `enhance` returned from `superForm` on a form, we'll get the client-sid
 
 Now all form submissions will happen on the client, and we unlock a ton of extra features, that will be explained here and in the rest of this section.
 
-As a general rule, without `use:enhance` on the form, **not much will work**. You'll get no events, timers, client-side validation, etc.
+As a general rule, without `use:enhance` on the form, **not much will work**. You'll get no events, no timers, no client-side validation except for `constraints`, etc.
 
 ## Usage
 
@@ -44,7 +44,7 @@ Turning this behavior off can be useful when you want to isolate the form from o
 
 ### invalidateAll
 
-When `invalidateAll` is `true` and a successful result is returned from the server, the page will be invalidated and the load function will run.
+When `invalidateAll` is `true` and a successful validation result is returned from the server, the page will be invalidated and the load function will run.
 
 ### resetForm
 
