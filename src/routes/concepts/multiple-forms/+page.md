@@ -78,7 +78,7 @@ Here we have two forms, with separate id's and two extra options:
   resetForm: true,
   // Prevent page invalidation, which would clear the other form
   // when the load function executes again.
-  invalidateAll: true
+  invalidateAll: false
 }
 ```
 
