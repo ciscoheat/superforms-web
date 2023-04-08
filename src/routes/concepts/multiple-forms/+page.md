@@ -32,7 +32,7 @@ export const load = (async () => {
   const registerForm = await superValidate(registerSchema, {
     id: 'registerForm'
   });
-  return { form };
+  return { loginForm, registerForm };
 }) satisfies PageServerLoad;
 
 export const actions = {
@@ -55,9 +55,13 @@ export const actions = {
 
 This is only the **server-to-client** part however. You can still post to this form action from anywhere, and the server knows nothing about who sent the form.
 
-This may work with the example above, a login form that probably is the only form that posts to its form action or endpoint. But for more dynamic scenarios, let's say a database table where rows can be editable, you want to communicate to the server which form id was sent.
+The example above is using [named form actions](https://kit.svelte.dev/docs/form-actions#named-actions) to determine which form was posted. The form element will look something like this:
 
-This could be as simple as using [named form actions](https://kit.svelte.dev/docs/form-actions#named-actions), or in a more dynamic fashion, using a hidden form field or a query parameter, to let the server know what `id` was posting.
+```svelte
+<form method="POST" action="?/login" use:enhance>
+```
+
+This works well with forms that only posts to its dedicated form action. But for more dynamic scenarios, let's say a database table where rows can be editable, you want to communicate to the server which form id was sent. This can be done with a hidden form field or a query parameter, to let the server know what `id` was posting, and what it should respond with.
 
 ### Setting id on the client
 
