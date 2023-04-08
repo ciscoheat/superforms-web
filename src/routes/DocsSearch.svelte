@@ -56,7 +56,7 @@
 
     const current = list.indexOf(document.activeElement as HTMLInputElement);
 
-    console.log(current, e.code, e.target, e.currentTarget);
+    //console.log(current, e.code, e.target, e.currentTarget);
 
     function focusOn(index: number) {
       e.preventDefault();
