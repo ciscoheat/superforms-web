@@ -13,6 +13,7 @@ type Schema = {
   //depth: number;
   url: string;
   content: string;
+  code: string;
 };
 
 function siteSchema() {
@@ -22,7 +23,8 @@ function siteSchema() {
       hash: 'string',
       //depth: 'number',
       url: 'string',
-      content: 'string'
+      content: 'string',
+      code: 'string'
     },
     components: {
       tokenizer: {
@@ -109,7 +111,8 @@ function newSection(title: string) {
     title,
     hash: new GithubSlugger().slug(title),
     url: currentUrl,
-    content: ''
+    content: '',
+    code: ''
     //depth: token.depth,
   };
 }
@@ -129,16 +132,18 @@ marked.use({
       skip = 1;
     } else if (
       currentSection &&
-      ['text', 'space', 'code', 'codespan'].includes(token.type)
+      ['text', 'space', 'codespan'].includes(token.type)
     ) {
       currentSection.content += token.raw.replaceAll(/```\w*[\r\n]/g, '');
+    } else if (currentSection && token.type == 'code') {
+      currentSection.code += token.text + '\n';
     }
   }
 });
 
 export async function indexSite() {
   console.log('Indexing site...');
-  _search = await siteSchema()
+  _search = await siteSchema();
   await fs.mkdir(dirname(persistedDB), { recursive: true });
   await indexSitePath(persistedDB);
 }

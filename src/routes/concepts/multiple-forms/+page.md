@@ -28,16 +28,25 @@ By setting an id like this on the server, you'll ensure that only forms with the
 
 ```ts
 export const load = (async () => {
-  const form = await superValidate(loginSchema, { id: 'login-form' });
+  const loginForm = await superValidate(loginSchema, { id: 'loginForm' });
+  const registerForm = await superValidate(registerSchema, {
+    id: 'registerForm'
+  });
   return { form };
 }) satisfies PageServerLoad;
 
 export const actions = {
-  default: async ({ request }) => {
+  login: async ({ request }) => {
     const loginForm = await superValidate(request, loginSchema, {
-      id: 'login-form'
+      id: 'loginForm'
     });
     return { loginForm };
+  },
+  register: async ({ request }) => {
+    const registerForm = await superValidate(request, registerSchema, {
+      id: 'registerForm'
+    });
+    return { registerForm };
   }
 } satisfies Actions;
 ```
@@ -59,7 +68,7 @@ On the client, the id is picked up automatically when you pass `data.form` to `s
 const { form, errors } = superForm(data.loginForm, schema);
 
 // If no data is sent (for empty forms), the id can be used directly.
-const { form, errors } = superForm('login-form', schema);
+const { form, errors } = superForm('loginForm', schema);
 
 // In advanced cases, you can set the id as an option.
 // It will take precedence over data.form.id.
@@ -67,6 +76,10 @@ const { form, errors } = superForm(data.form, schema, {
   id: 'special-id'
 });
 ```
+
+## Configuration and troubleshooting
+
+Due to the many different use cases, it's hard to set sensible defaults for multiple forms. If you experience unwanted behavior, experiment with the [use:enhance](/enhance) options.
 
 ## Test it out
 

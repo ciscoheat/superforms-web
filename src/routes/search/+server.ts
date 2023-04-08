@@ -17,11 +17,12 @@ export const GET = (async ({ url, fetch }) => {
   if (!term || term.length == 1) return json({});
   const result = await search(engine, {
     term,
-    properties: ['title', 'content'],
-    tolerance: 3,
+    properties: ['title', 'content', 'code'],
+    tolerance: 4,
     limit: 8,
     boost: {
-      title: 3
+      title: 4,
+      content: 3
     }
   });
 
