@@ -1,6 +1,9 @@
 <script lang="ts">
   import { modalStore, drawerStore } from '@skeletonlabs/skeleton';
   import magnify from '$lib/assets/magnify.svg?raw';
+  import { debounce } from 'throttle-debounce';
+  import { onDestroy, onMount } from 'svelte';
+  import { listen } from 'svelte/internal';
 
   // Classes
   const cBase =
@@ -16,79 +19,67 @@
 
   // Local
   let searchTerm = '';
-  let listPos = -1;
-  let navigation: Array<{ title: string; url: string; hash: string }> = [];
-
-  $: console.log(listPos);
+  let results: Array<{ title: string; url: string; hash: string }> = [];
 
   // Elements
-  let elemDocSearch: HTMLElement;
+  let docSearch: HTMLElement;
   let searchInput: HTMLInputElement;
 
-  async function onSearch() {
-    if (searchTerm.length == 0) navigation = [];
-
+  const search = debounce(150, async function search(e: Event) {
     if (searchTerm.length < 2) return;
+    //if (searchTerm.length == 0) navigation = [];
+
     const response = await fetch('/search?q=' + encodeURIComponent(searchTerm));
     const data = await response.json();
 
-    if (Array.isArray(data)) navigation = data;
-    else navigation = [];
-  }
+    if (Array.isArray(data)) results = data;
+    else results = [];
+  });
 
-  function searchResultsKeyDown(event: KeyboardEvent) {
-    const results = Array.from(
-      elemDocSearch.querySelectorAll('[data-result-link]')
-    );
+  const eventName = 'keydown';
 
-    const currentIndex = document.activeElement
-      ? results.indexOf(document.activeElement)
-      : -1;
+  onMount(() => {
+    window.addEventListener(eventName, docSearchKeyUp);
+  });
 
-    if (currentIndex == -1) return;
+  onDestroy(() => {
+    window.removeEventListener(eventName, docSearchKeyUp);
+  });
 
-    if (event.code == 'Backspace') {
-      //event.preventDefault();
-      searchInput.focus();
-      //searchInput.value = searchInput.value.slice(0, -1);
-      return;
+  function docSearchKeyUp(e: KeyboardEvent) {
+    const list = [
+      searchInput,
+      ...Array.from(
+        docSearch.querySelectorAll<HTMLAnchorElement>('[data-result-link]')
+      )
+    ];
+
+    const current = list.indexOf(document.activeElement as HTMLInputElement);
+
+    console.log(current, e.code, e.target, e.currentTarget);
+
+    function focusOn(index: number) {
+      e.preventDefault();
+      list.at(index)?.focus();
     }
 
-    const offset =
-      event.code == 'ArrowDown' ? 1 : event.code == 'ArrowUp' ? -1 : 0;
-
-    if (offset === 0) return;
-
-    event.preventDefault();
-
-    const next = results.at(
-      currentIndex == 0 && offset == -1
-        ? results.length - 1
-        : currentIndex - results.length + offset
-    );
-    if (next instanceof HTMLAnchorElement) next.focus();
-  }
-
-  function searchFieldKeyDown(event: KeyboardEvent) {
-    let anchor: Element | null | undefined;
-
-    if (['Enter', 'ArrowDown'].includes(event.code)) {
-      anchor = elemDocSearch.querySelector('[data-result-link]');
-    } else if (['ArrowUp'].includes(event.code)) {
-      const anchors = Array.from(
-        elemDocSearch.querySelectorAll('[data-result-link]')
-      );
-      anchor = anchors[anchors.length - 1];
-    }
-
-    if (anchor && anchor instanceof HTMLAnchorElement) {
-      event.preventDefault();
-      anchor.focus();
+    if (current === 0 && list.length > 1) {
+      if (e.code === 'ArrowUp') {
+        focusOn(-1);
+      } else if (e.code === 'ArrowDown' || e.code === 'Enter') {
+        focusOn(1);
+      }
+    } else if (e.code === 'ArrowUp' && e.target === list[1]) {
+      focusOn(0);
+    } else if (e.code === 'ArrowDown' && e.target === list.at(-1)) {
+      focusOn(0);
+    } else if (e.code == 'Backspace') {
+      list[0].focus();
     }
   }
 </script>
 
-<div bind:this={elemDocSearch} class="modal-search {cBase}">
+<div bind:this={docSearch} class="modal-search {cBase}">
   <!-- Header -->
   <header class="modal-search-header {cHeader}">
     <span class="text-xl ml-4 w-8">{@html magnify}</span>
@@ -96,30 +87,29 @@
       class={cSearchInput}
       bind:this={searchInput}
       bind:value={searchTerm}
+      on:input={search}
       type="search"
-      placeholder="Search..."
-      on:input={onSearch}
-      on:keydown={searchFieldKeyDown} />
+      placeholder="Search..." />
   </header>
   <!-- Results -->
-  <div
-    class="modal-search-results {cResults}"
-    on:keydown={searchResultsKeyDown}>
+  <div class="modal-search-results {cResults}">
     <nav class="list-nav">
       <ul>
         <!-- Item -->
-        {#each navigation as link}
+        {#each results as link}
           <li class="text-lg">
             <!-- prettier-ignore -->
             <a data-result-link class={cResultAnchor} href={link.url + (link.hash ? `#${link.hash}` : '')} on:click={() => { modalStore.close(); drawerStore.close() }}>
-								<div class="flex items-center gap-4">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" 
-                    d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6m0 2h7v5h5v11H6V4m2"/>
-                  </svg>
-									<span class="flex-auto font-bold opacity-75">{link.title}</span>
-								</div>
-								<span class="hidden md:block text-xs opacity-50">{link.url}</span>
-							</a>
+              <div class="flex items-center gap-4 w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" 
+                  d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6m0 2h7v5h5v11H6V4m2"/>
+                </svg>
+                <div class="flex flex-auto justify-between items-center opacity-75">
+                  <div class="font-bold w-full">{link.title} <span class="hidden md:inline text-sm opacity-50 font-normal">{link.url}</span></div>
+                  <!--div class="hidden md:block text-sm opacity-50">{link.url}</div-->
+                </div>
+              </div>
+            </a>
           </li>
         {/each}
       </ul>
