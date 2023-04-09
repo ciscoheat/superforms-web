@@ -4,21 +4,26 @@
 
 When `superValidate` encounters a schema field that isn't optional, or when a `FormData` field is empty, a default value is returned to the form, to ensure that the type is correct:
 
-| type    | value       |
-| ------- | ----------- |
-| string  | `""`        |
-| number  | `0`         |
-| boolean | `false`     |
-| Array   | `[]`        |
-| object  | `{}`        |
-| bigint  | `BigInt(0)` |
-| symbol  | `Symbol()`  |
+| type    | value           |
+| ------- | --------------- |
+| string  | `""`            |
+| number  | `0`             |
+| boolean | `false`         |
+| Date    | `new Date(NaN)` |
+| Array   | `[]`            |
+| object  | `{}`            |
+| bigint  | `BigInt(0)`     |
+| symbol  | `Symbol()`      |
 
 This behavior of returning empty values can be turned off if you pass `options.implicitDefaults = false` to `superValidate`, which means that you must add `default` to all required fields of your schema.
 
+## optional vs. nullable
+
+`null` will take precedence over `undefined`, so a field both `nullable` and `optional` will have `null` as its default value. Otherwise it's `undefined`.
+
 ## Changing a default value
 
-If you're not satisfied with the default values, you can set a default value in the schema. You can even abuse the typing system a bit to handle the classic "agree to terms" checkbox:
+If you're not satisfied with the default values, you can set your own in the schema. You can even abuse the typing system a bit to handle the classic "agree to terms" checkbox:
 
 ```ts
 const schema = z.object({
@@ -27,9 +32,9 @@ const schema = z.object({
 });
 ```
 
-This looks strange, but will ensure that an age must be selected and the agree checkbox is unchecked as default, and will only accept true as a value.
+This looks strange, but will ensure that an age isn't set to 0 as default, but also that the agree checkbox is unchecked as default, and will only accept true (checked) as a value.
 
-Just note that you will bypass the type system with this, so the default value will not correspond to the data type, but this will usually not be a problem since `form.valid` will be `false` if the default values are posted as-is, and that should be the main determinant whether the data is trustworthy.
+Just note that you will bypass the type system with this, so the default value will not correspond to the data type, but this will usually not be a problem since `form.valid` will be `false` if these values are posted, and that should be the main determinant whether the data is trustworthy.
 
 ## Non-supported defaults
 
