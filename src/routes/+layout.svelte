@@ -25,6 +25,7 @@
   import paypal from '$lib/assets/paypal.svg?raw';
   import SearchButton from './SearchButton.svelte';
   import { tick } from 'svelte';
+  import { writable } from 'svelte/store';
 
   // Local
   let hideSponsor = true;
@@ -39,7 +40,10 @@
 
   const modalRegistry: Record<string, ModalComponent> = {
     search: {
-      ref: DocsSearch
+      ref: DocsSearch,
+      props: {
+        results: writable({ term: '', results: [] })
+      }
     }
   };
 
