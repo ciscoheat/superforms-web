@@ -240,11 +240,11 @@ How nice would this be? This can actually be pulled of in a typesafe way with a 
 </style>
 ```
 
-Some explanations are definitiely at hand! First `type T = $$Generic<AnyZodObject>;` is a way of defining generic arguments in components. Having defined `T`, we can use it in the props to ensure that only a `SuperForm` with existing fieldss are used. Unfortunately this takes a bit of knowledge of the types, but that's what examples are for, right?
+Some explanations are definitiely at hand! First `type T = $$Generic<AnyZodObject>;` is a way of defining generic arguments in components. Having defined `T`, we can use it in the props to ensure that only a `SuperForm` with existing fields are used. Unfortunately this takes a bit of knowledge of the types, but that's what examples are for, right?
 
 What may look strange is `UnwrapEffects<T>`, this is because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type. The `UnwrapEffects` type will extract the actual object, which may be several levels deep.
 
-We also need the keys for the actual data object, not the schema itself. `z.infer<T>` is used for that. Finally, `FieldPath` is the type for a nested path, so we can reach into the data structure to any depth.
+We also need the field names for the actual data object, not the schema itself. `z.infer<T>` is used for that. Finally, `FieldPath` is the type for a nested path, so we can reach into the data structure to any depth.
 
 ## Using the componentized field in awesome ways
 
