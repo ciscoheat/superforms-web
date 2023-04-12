@@ -73,7 +73,7 @@ import {
 } from 'sveltekit-superforms/server';
 ```
 
-### superValidate(schema | data, schema | options?, options?)
+### superValidate(schema | data, schema? | options?, options?)
 
 If you want the form to be initially empty, you can pass the schema as the first parameter:
 
@@ -102,6 +102,8 @@ superValidate<T extends AnyZodObject, M = any>(
 ): Promise<Validation<T, M>>
 ```
 
+The options are as follows:
+
 ```ts
 SuperValidateOptions = {
   id?: string          // Form id, for multiple forms support
@@ -110,7 +112,7 @@ SuperValidateOptions = {
 }
 ```
 
-If data isn't empty, errors will be returned unless disabled with `options.errors = false`.
+If `data` isn't empty, errors will be returned unless `options.errors = false`.
 
 If `data` is empty, a validation with a default entity for the schema is returned, in this shape:
 
