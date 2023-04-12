@@ -45,7 +45,7 @@ And it gets bad even in the script part when you have more than a couple of form
 </script>
 ```
 
-This leads to the question if a form and its fields can be factored out components?
+This leads to the question if a form and its fields can be factored out into components?
 
 ## Factoring out a form
 

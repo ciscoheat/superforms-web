@@ -58,47 +58,4 @@ Yes, there is a helper function for constructing an `ActionResult` that can be r
 
 ### Can a form be factored out into a separate component?
 
-A separate component for each form can be useful, in modal components for example, and if you have more than a couple of forms on the same page, since then you have to deconstruct a lot of properties for each one.
-
-To do this, you need the type of the schema, which can be defined as such:
-
-```ts
-export const loginSchema = z.object({
-  email: z.string().email(),
-  password: ...
-});
-
-export type LoginSchema = typeof loginSchema;
-```
-
-Now you can import and use this type in a separate component:
-
-**LoginForm.svelte**
-
-```svelte
-<script lang="ts">
-  import type { Validation } from 'sveltekit-superforms';
-  import type { UserSchema } from '$lib/schemas';
-  import { superForm } from 'sveltekit-superforms/client'
-
-  export let data: Validation<LoginSchema>;
-
-  const { form, errors, enhance, ... } = superForm(data);
-</script>
-
-<form method="POST" use:enhance>
-  <!-- Business as usual -->
-</form>
-```
-
-Use it by passing the data from `+page.svelte` to the component:
-
-```svelte
-<script lang="ts">
-  import type { PageData } from './$types';
-
-  export let data: PageData;
-</script>
-
-<LoginForm data={data.loginForm} />
-```
+This question now has its own [article page here](/components).
