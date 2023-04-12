@@ -237,11 +237,35 @@ How nice would this be? This can actually be pulled of in a typesafe way with a 
 </style>
 ```
 
-Some explanations are definitiely at hand! First `type T = $$Generic<AnyZodObject>;` is a way of defining generic arguments in components. Having defined `T`, we can use it in the props to ensure that only a `SuperForm` with existing fields are used. Unfortunately this takes a bit of knowledge of the types, but that's what examples are for, right?
+Some explanations are definitiely at hand! First, `type T = $$Generic<AnyZodObject>` is a way of defining generic arguments in components. Having defined `T` as `AnyZodObject` (our schema type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop are used. Unfortunately this takes a bit of knowledge of the types, but that's what examples are for, right?
 
 What may look strange is `UnwrapEffects<T>`, this is because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type. The `UnwrapEffects` type will extract the actual object, which may be several levels deep.
 
 We also need the field names for the actual data object, not the schema itself. `z.infer<T>` is used for that. Finally, `FieldPath` is the type for a nested path, so we can reach into the data structure to any depth.
+
+## A minor issue: Checkboxes
+
+One thing that needs a workaround are checkboxes, since they don't bind with `bind:value` but with `bind:checked`, which requires a `boolean`.
+
+Because our component is generic, `value` returned from `formFieldProxy` can't be `boolean` specifically, so we need to make a specific checkbox component to use it, or cast it with a dynamic declaration:
+
+```svelte
+<script lang="ts">
+  import type { Writable } from 'svelte/store';
+
+  const { value, errors, constraints } = formFieldProxy(form, field);
+
+  $: boolValue = value as Writable<boolean>;
+</script>
+
+<input
+  type="checkbox"
+  class="checkbox"
+  bind:checked={$boolValue}
+  {...$constraints}
+  {...$$restProps}
+/>
+```
 
 ## Using the componentized field in awesome ways
 
@@ -255,7 +279,7 @@ But to show off some real super proxy power, let's re-create the above tags exam
 
 ```svelte
 <form method="POST" use:enhance>
-  <TextField {form} field="name" />
+  <TextField name="name" {form} field="name" />
 
   <h4>Tags</h4>
 
