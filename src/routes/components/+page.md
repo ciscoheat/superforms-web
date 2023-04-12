@@ -159,8 +159,7 @@ You may have heard of [proxy objects](/concepts/proxy-objects) for converting an
 ```svelte
 <script lang="ts">
   import type { PageData } from './$types';
-  import { superForm } from 'sveltekit-superforms/client'
-  import { fieldProxy } from 'sveltekit-superforms/client/proxies';
+  import { superForm, fieldProxy } from 'sveltekit-superforms/client'
 
   export let data: PageData;
 
@@ -184,8 +183,7 @@ The solution is to use a `formFieldProxy`, which is a helper function for produc
 ```svelte
 <script lang="ts">
   import type { PageData } from './$types';
-  import { superForm } from 'sveltekit-superforms/client'
-  import { formFieldProxy } from 'sveltekit-superforms/client/proxies';
+  import { superForm, formFieldProxy } from 'sveltekit-superforms/client'
 
   export let data: PageData;
 
@@ -209,9 +207,8 @@ How nice would this be? This can actually be pulled of in a typesafe way with a 
 <script lang="ts">
   import type { FieldPath, UnwrapEffects } from 'sveltekit-superforms';
   import type { SuperForm } from 'sveltekit-superforms/client';
+  import { formFieldProxy } from 'sveltekit-superforms/client';
   import type { z, AnyZodObject } from 'zod';
-
-  import { formFieldProxy } from 'sveltekit-superforms/client/proxies';
 
   type T = $$Generic<AnyZodObject>;
 

@@ -229,7 +229,9 @@ import {
   intProxy,
   numberProxy,
   booleanProxy,
-  dateProxy
+  dateProxy,
+  fieldProxy,
+  formFieldProxy
 } from 'sveltekit-superforms/client';
 ```
 
@@ -401,6 +403,10 @@ Creates a proxy store for a Date schema field. The option can be used to change 
     | 'iso' = 'iso'
 }
 ```
+
+### fieldProxy, formFieldProxy
+
+See the dedicated article for documentation about [fieldProxy](/components#using-a-fieldproxy) and [formFieldProxy](/components#using-a-formfieldproxy).
 
 ## Example
 
