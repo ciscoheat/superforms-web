@@ -37,6 +37,8 @@ When a validation result is returned for the form with a status between `200-299
 
 Try that by posting the form with valid values. The tainted message should not appear when browsing away from the page.
 
+You can also modify the `$tainted` store directly, in case some changes should not be regarded as user-modified. When you do that, you may need to use a `setTimeout` or (several) `await tick()` to be certain that the `$form` store have completed its updates.
+
 ## Disabling the check
 
 By setting `taintedMessage` to `null` in the options, the form won't be checked for modifications when navigating away from the page.

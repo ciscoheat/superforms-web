@@ -1,0 +1,273 @@
+<svelte:head><title>Forms and fields in components</title></svelte:head>
+
+# Forms and fields in components
+
+Just by looking at the rather simple tutorial, it's obvious that quite a bit of boilerplate code adds up when building a Superform:
+
+```svelte
+<label for="name">Name</label>
+<input
+  type="text"
+  name="name"
+  data-invalid={$errors.name}
+  bind:value={$form.name}
+  {...$constraints.name} 
+/>
+{#if $errors.name}
+  <span class="invalid">{$errors.name}</span>
+{/if}
+```
+
+And it gets bad even in the script part when you have more than a couple of forms on the page.
+
+```svelte
+<script lang="ts">
+  import type { PageData } from './$types';
+  import { superForm } from 'sveltekit-superforms/client'
+
+  export let data: PageData;
+
+  const { form, errors, enhance, ... } = superForm(data.form);
+
+  const { 
+    form: loginForm, 
+    errors: loginErrors, 
+    enhance: loginEnhance, 
+    ... 
+  } = superForm(data.loginForm);
+
+  const { 
+    form: registerForm, 
+    errors: registerErrors, 
+    enhance: registerEnhance, 
+    ... 
+  } = superForm(data.registerForm);
+</script>
+```
+
+This leads to the question if a form and its fields can be factored out components?
+
+## Factoring out a form
+
+To do this, you need the type of the schema, which can be defined as such:
+
+```ts
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: ...
+});
+
+export type LoginSchema = typeof loginSchema;
+```
+
+Now you can import and use this type in a separate component by using:
+
+**LoginForm.svelte**
+
+```svelte
+<script lang="ts">
+  import type { Validation } from 'sveltekit-superforms';
+  import type { LoginSchema } from '$lib/schemas';
+  import { superForm } from 'sveltekit-superforms/client'
+
+  export let data: Validation<LoginSchema>;
+
+  const { form, errors, enhance, ... } = superForm(data);
+</script>
+
+<form method="POST" use:enhance>
+  <!-- Business as usual -->
+</form>
+```
+
+Use it by passing the data from `+page.svelte` to the component, making it much less cluttered:
+
+**+page.svelte**
+
+```svelte
+<script lang="ts">
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+</script>
+
+<LoginForm data={data.loginForm} />
+<RegisterForm data={data.registerForm} />
+```
+
+## Factoring out form fields
+
+Since `bind` is available even on components, we can make a `TextInput` component quite easily:
+
+**TextInput.svelte**
+
+```svelte
+<script lang="ts">
+  import type { InputConstraint } from 'sveltekit-superforms';
+
+  export let value: string;
+  export let label: string | undefined = undefined;
+  export let errors: string[] | undefined = undefined;
+  export let constraints: InputConstraint | undefined = undefined;
+</script>
+
+<label>
+  {#if label}<span>{label}</span><br />{/if}
+  <input type="text" bind:value {...constraints} {...$$restProps} />
+</label>
+{#if errors}<span class="invalid">{errors}</span>{/if}
+
+<style lang="scss">
+  .invalid {
+    color: indianred;
+  }
+</style>
+```
+
+**+page.svelte**
+
+```svelte
+<form method="POST" use:enhance>
+  <TextInput
+    name="name"
+    label="name"
+    bind:value={$form.name}
+    errors={$errors.name}
+    constraints={$constraints.name}
+  />
+
+  <h4>Tags</h4>
+
+  {#each $form.tags as _, i}
+    <TextInput
+      name="tags"
+      label="Name"
+      bind:value={$form.tags[i].name}
+      errors={$errors.tags?.[i]?.name}
+      constraints={$constraints.tags?.name}
+    />
+  {/each}
+</form>
+```
+
+It's a little bit better, and will certainly help when the components requires some styling, but there are still plenty of attributes. Can we do even better?
+
+### Using a fieldProxy
+
+You may have heard of [proxy objects](/concepts/proxy-objects) for converting an input field value like `"2023-04-12"` into a `Date`, but this is just a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:
+
+```svelte
+<script lang="ts">
+  import type { PageData } from './$types';
+  import { superForm } from 'sveltekit-superforms/client'
+  import { fieldProxy } from 'sveltekit-superforms/client/proxies';
+
+  export let data: PageData;
+
+  const { form } = superForm(data.form);
+
+  const name = fieldProxy(form, 'name');
+</script>
+
+<div>Name: {$name}</div>
+<button on:click={() => $name = ''}>Clear name</button>
+```
+
+Any updates to `$name` will reflect in `$form.name`. Note that this will also [taint](/concepts/tainted) that field, so if this not intended, you may want to deconstruct the `$tainted` store and undefine its `name` field.
+
+A `fieldProxy` isn't enough here however. We'd still have to make three proxies for `form`, `errors` and `constraints`, and then we're back to the same problem again.
+
+### Using a formFieldProxy
+
+The solution is to use a `formFieldProxy`, which is a helper function for producing the above three proxies from a form. To do this, we cannot immediately deconstruct what we need from `superForm`, since the `formFieldProxy` takes the form itself as an argument:
+
+```svelte
+<script lang="ts">
+  import type { PageData } from './$types';
+  import { superForm } from 'sveltekit-superforms/client'
+  import { formFieldProxy } from 'sveltekit-superforms/client/proxies';
+
+  export let data: PageData;
+
+  const superFrm = superForm(data.form);
+
+  const { path, value, errors, constraints } = formFieldProxy(superFrm, 'name');
+</script>
+```
+
+But we didn't want to pass all those proxies, so let's imagine a component that will handle even the above proxy creation for us.
+
+```svelte
+<TextField form={superFrm} field="name" />
+```
+
+How nice would this be? This can actually be pulled of in a typesafe way with a bit of Svelte magic:
+
+**TextField.svelte**
+
+```svelte
+<script lang="ts">
+  import type { FieldPath, UnwrapEffects } from 'sveltekit-superforms';
+  import type { SuperForm } from 'sveltekit-superforms/client';
+  import type { z, AnyZodObject } from 'zod';
+
+  import { formFieldProxy } from 'sveltekit-superforms/client/proxies';
+
+  type T = $$Generic<AnyZodObject>;
+
+  export let form: SuperForm<UnwrapEffects<T>, unknown>;
+  export let field: keyof z.infer<T> | FieldPath<z.infer<T>>;
+
+  const { path, value, errors, constraints } = formFieldProxy(form, field);
+</script>
+
+<label>
+  {String(path)}<br />
+  <input
+    type="text"
+    data-invalid={$errors}
+    bind:value={$value}
+    {...$constraints}
+    {...$$restProps}
+  />
+</label>
+{#if $errors}<span class="invalid">{$errors}</span>{/if}
+
+<style lang="scss">
+  .invalid {
+    color: orangered;
+  }
+</style>
+```
+
+Some explanations are definitiely at hand! First `type T = $$Generic<AnyZodObject>;` is a way of defining generic arguments in components. Having defined `T`, we can use it in the props to ensure that only a `SuperForm` with existing fieldss are used. Unfortunately this takes a bit of knowledge of the types, but that's what examples are for, right?
+
+What may look strange is `UnwrapEffects<T>`, this is because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type. The `UnwrapEffects` type will extract the actual object, which may be several levels deep.
+
+We also need the keys for the actual data object, not the schema itself. `z.infer<T>` is used for that. Finally, `FieldPath` is the type for a nested path, so we can reach into the data structure to any depth.
+
+## Using the componentized field in awesome ways
+
+As mentioned, using this field component is now as simple as (assuming you renamed `superFrm` to `form`):
+
+```svelte
+<TextField {form} field="name" />
+```
+
+But to show off some real super proxy power, let's re-create the above tags example with the `TextField` component:
+
+```svelte
+<form method="POST" use:enhance>
+  <TextField {form} field="name" />
+
+  <h4>Tags</h4>
+
+  {#each $form.tags as _, i}
+    <TextField name="tags" {form} field={["tags", i, "name"]} />
+  {/each}
+</form>
+```
+
+We can now produce a text field for any part of our data, and it will update the `$form` store without hassle. This example even works without `use:enhance` and `dataType = 'json'`, since arrays of primitive values are coerced automatically.
+
+I hope you now feel under your fingers the superpowers that Superforms bring! 💥
