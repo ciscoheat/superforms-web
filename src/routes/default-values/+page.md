@@ -9,13 +9,10 @@ When `superValidate` encounters a schema field that isn't optional, or when a `F
 | string  | `""`            |
 | number  | `0`             |
 | boolean | `false`         |
-| Date    | `new Date(NaN)` |
 | Array   | `[]`            |
 | object  | `{}`            |
 | bigint  | `BigInt(0)`     |
 | symbol  | `Symbol()`      |
-
-This behavior of returning empty values can be turned off if you pass `options.implicitDefaults = false` to `superValidate`, which means that you must add `default` to all required fields of your schema.
 
 ## optional vs. nullable
 
