@@ -64,6 +64,8 @@ const { form } = superForm(data.form, {
 });
 ```
 
+Also if `applyAction` is `false`, which means that `$page.status` won't update, you'll find the status code for the request in `result`.
+
 ### onUpdate
 
 ```ts

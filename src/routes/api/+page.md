@@ -34,15 +34,16 @@ Nested<S, string[] | undefined> // Errors for each field in S
 ```ts
 /**
  * HTML input constraints returned from superValidate
+ * Properties are mapped from the schema:
  */
 InputConstraints = Partial<{
-  pattern: string;
-  min: number | string;
-  max: number | string;
-  required: boolean;
-  step: number;
-  minlength: number;
-  maxlength: number;
+  required: boolean;    // Not nullable(), nullish() or optional()
+  pattern: string;      // z.string().regex(r)
+  min: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
+  max: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
+  step: number;         // z.number().step(n)
+  minlength: number;    // z.string().min(n)
+  maxlength: number;    // z.string().max(n)
 }>;
 ```
 
@@ -51,9 +52,9 @@ InputConstraints = Partial<{
 ```ts
 Validation<T, M = any> = {
   valid: boolean;
+  empty: boolean;
   data: S;
   errors: Nested<S, string[] | undefined>;
-  empty: boolean;
   constraints: Nested<S, InputConstraints | undefined>;
   message?: M;
   id?: string;
@@ -68,12 +69,11 @@ import {
   superValidate,
   setError,
   message,
-  noErrors,
   actionResult
 } from 'sveltekit-superforms/server';
 ```
 
-### superValidate(data, schema, options?)
+### superValidate(schema | data, schema | options?, options?)
 
 If you want the form to be initially empty, you can pass the schema as the first parameter:
 
@@ -104,20 +104,22 @@ superValidate<T extends AnyZodObject, M = any>(
 
 ```ts
 SuperValidateOptions = {
-  noErrors = false;    // Remove errors from output (but preserves valid status)
-  includeMeta = false; // Add metadata to the validation entity
   id?: string          // Form id, for multiple forms support
+  errors?: boolean     // Add or remove errors from output (preserves valid status)
+  includeMeta = false; // Add metadata to the validation object
 }
 ```
+
+If data isn't empty, errors will be returned unless disabled with `options.errors = false`.
 
 If `data` is empty, a validation with a default entity for the schema is returned, in this shape:
 
 ```js
 {
   valid: false;
-  errors: {};
-  data: S;
   empty: true;
+  errors: options.errors ? Nested<S, string[] | undefined> : {};
+  data: S;
   constraints: Nested<S, InputConstraints>;
   id?: undefined;
   message?: undefined;
@@ -125,7 +127,7 @@ If `data` is empty, a validation with a default entity for the schema is returne
 }
 ```
 
-See [this FAQ entry](https://github.com/ciscoheat/sveltekit-superforms/wiki/Default-entity-values) for a list of default entity values.
+See [this page](/default-values) for a list of default entity values.
 
 ### setError(form, field, error, options?)
 
@@ -179,14 +181,6 @@ export const actions = {
     return message(form, 'Valid form!');
   }
 };
-```
-
-### noErrors(form)
-
-If you want to return a form with no validation errors. Only the `errors` property will be modified, so `valid` still indicates the validation status. Can be useful for load functions where the entity is invalid, but as an initial state no errors should be displayed on the form.
-
-```ts
-noErrors(form: Validation<T, M>) : Validation<T, M>
 ```
 
 ### actionResult(type, data?, status?)
@@ -243,7 +237,7 @@ import {
 superForm<T, M = any>(
   form: Validation<T, M> | null | undefined,
   options?: FormOptions<T, M>
-) : EnhancedForm<T, M>
+) : SuperForm<T, M>
 ```
 
 ```ts

@@ -46,7 +46,7 @@ The constraints is an object with validation properties mapped from the schema:
   maxlength?: number;    // z.string().max(n)
   min?: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
   max?: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
-  required?: true;       // Not nullable, nullish or optional
+  required?: true;       // Not nullable(), nullish() or optional()
 }
 ```
 

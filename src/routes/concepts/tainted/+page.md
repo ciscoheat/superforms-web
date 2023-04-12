@@ -11,7 +11,7 @@
 
 <svelte:head><title>Tainted form check</title></svelte:head>
 
-When a form field is modified, that field, and in turn the form, is considered _tainted_. A Superforms feature is to prevent the user from losing data, by accidentaly navigating away from a tainted form.
+When form data is modified, that piece of data, and in turn the form, is considered _tainted_. A Superforms feature is to prevent the user from losing data, by accidentaly navigating away from a tainted form.
 
 ## Usage
 
@@ -29,6 +29,8 @@ Try to modify the form below, then close the tab or hit the back button. A confi
 
 You can access the exact fields that are tainted through the `$tainted` store, returned from `superForm`. When you modify the form fields above you'll see how the `$tainted` store reacts.
 
+**Note:** Any modification to the `$form` store will taint the affected field(s)! The tainted check doesn't have anything to do with the html inputs themselves.
+
 ## Untainting the form
 
 When a validation result is returned for the form with a status between `200-299`, the form is automatically marked as untainted by setting the `$tainted` store to `undefined`.
@@ -37,6 +39,6 @@ Try that by posting the form with valid values. The tainted message should not a
 
 ## Disabling the check
 
-By setting `taintedMessage = null` in the options, the form won't be checked for modifications.
+By setting `taintedMessage` to `null` in the options, the form won't be checked for modifications when navigating away from the page.
 
 <Next section={concepts} />

@@ -269,11 +269,100 @@ We do that by adding properties to the destructuring assignment of `superForm`:
 </style>
 ```
 
-As you see, by including `errors` we can display errors where it's appropriate, and through `constraints` we get browser validation even without javascript enabled.
+As you see, by including `errors` we can display errors where it's appropriate, and through `constraints` we get browser validation even without javascript enabled. The `data-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
 
-We now have a fully working form with convenient handling of data and validation both on client and server!
+We now have a fully working form with convenient handling of data and validation both on client and server! There are no hidden DOM manipulations or other behind the scenes secrets, it's just html attributes and Svelte stores.
 
-There are no hidden DOM manipulations or other secrets, it's just html attributes and Svelte stores.
+## Complete example code
+
+Also available [on Stackblitz](https://stackblitz.com/edit/sveltekit-superforms-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte).
+
+**src/routes/+page.server.ts**
+
+```ts
+import type { Actions, PageServerLoad } from './$types';
+import { fail } from '@sveltejs/kit';
+import { z } from 'zod';
+import { superValidate } from 'sveltekit-superforms/server';
+
+const schema = z.object({
+  name: z.string().default('Hello world!'),
+  email: z.string().email()
+});
+
+export const load = (async () => {
+  // Server API:
+  const form = await superValidate(schema);
+
+  // Always return { form } in load and form actions.
+  return { form };
+}) satisfies PageServerLoad;
+
+const schema = z.object({
+  name: z.string().default('Hello world!'),
+  email: z.string().email()
+});
+
+export const actions = {
+  default: async ({ request }) => {
+    const form = await superValidate(request, schema);
+    console.log('POST', form);
+
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+
+    // TODO: Do something with the validated data
+
+    return { form };
+  }
+} satisfies Actions;
+```
+
+**src/routes/+page.svelte**
+
+```svelte
+<script lang="ts">
+  import type { PageData } from './$types';
+  import { superForm } from 'sveltekit-superforms/client';
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+
+  export let data: PageData;
+
+  // Client API:
+  const { form, errors, constraints } = superForm(data.form);
+</script>
+
+<SuperDebug data={$form} />
+
+<form method="POST">
+  <label for="name">Name</label>
+  <input
+    type="text"
+    name="name"
+    data-invalid={$errors.name}
+    bind:value={$form.name}
+    {...$constraints.name} />
+  {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
+
+  <label for="email">E-mail</label>
+  <input
+    type="email"
+    name="email"
+    data-invalid={$errors.email}
+    bind:value={$form.email}
+    {...$constraints.email} />
+  {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
+
+  <div><button>Submit</button></div>
+</form>
+
+<style>
+  .invalid {
+    color: red;
+  }
+</style>
+```
 
 ## Next steps
 

@@ -46,17 +46,29 @@ setError(form, ['post', 'tags', 3], 'Invalid tag name.');
 
 ## Usage (client)
 
-On the client, errors are available in the `$errors` store. It gives you a high flexibility, since you can place error messages anywhere on the page. But there are more to errors than just displaying them.
+On the client, errors are available in the `$errors` store. It gives you a high flexibility, since you can place error messages anywhere on the page.
 
-On larger forms the submit button may be far away from the error. Then it's nice showing the user where the first error is. There are a couple of options for that:
+In larger forms, the submit button may be far away from the error, then it's nice showing the user where the first error is. There are a couple of options for that:
 
 ```ts
 const { form, enhance, errors, allErrors } = superForm(data.form, {
+  errorSelector: string | undefined = '[data-invalid]'
   scrollToError: 'smooth' | 'auto' | 'off' = 'smooth'
   autoFocusOnError: boolean | 'detect' = 'detect'
-  errorSelector: string | undefined = '[data-invalid]'
   stickyNavbar: string | undefined = undefined
 })
+```
+
+### errorSelector
+
+This is the selector used to find the invalid input fields. The default is `[data-invalid]`, and the first one found on the page will be handled according to the other settings. You usually set it on the input fields as such:
+
+```svelte
+<input
+  type="email"
+  name="email"
+  bind:value={$form.email}
+  data-invalid={$errors.email} />
 ```
 
 ### scrollToError
@@ -66,18 +78,6 @@ The `scrollToError` options determines how to scroll to the first error message 
 ### autoFocusOnError
 
 When `autoFocusOnError` is set to its default value `detect`, it checks if the user is on a mobile device, **if not** it will automatically focus on the first error input field. It's prevented on mobile since auto-focusing will open the on-screen keyboard, most likely hiding the validation error.
-
-### errorSelector
-
-This is the selector used to find the invalid input fields. The default is `[data-invalid]`, and the first one found on the page will be handled according to the two previous settings. You usually set it on the input fields as such:
-
-```svelte
-<input
-  type="email"
-  name="email"
-  bind:value={$form.email}
-  data-invalid={$errors.email} />
-```
 
 ### stickyNavbar
 

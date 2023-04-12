@@ -40,7 +40,7 @@ These three options are the most boring ones, we'll get to the fun stuff soon!
 
 When `applyAction` is `true` the form will have the default SvelteKit behavior of updating and reacting on `$page.form` and `$page.status`, and also redirecting automatically.
 
-Turning this behavior off can be useful when you want to isolate the form from other sources updating the page, for example **Supabase events**. Read more about what happens when `applyAction` is applied [in the SvelteKit docs](https://kit.svelte.dev/docs/form-actions#progressive-enhancement-applyaction).
+Turning this behavior off can be useful when you want to isolate the form from other sources updating the page, for example Supabase events, a known source of confusing form behavior. Read more about `applyAction` [in the SvelteKit docs](https://kit.svelte.dev/docs/form-actions#progressive-enhancement-applyaction).
 
 ### invalidateAll
 
