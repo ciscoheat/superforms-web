@@ -52,7 +52,7 @@
 
   <div class="p-4 text-gray-600">
     <hr class="mt-5 mb-2" />
-    Made with<br />
+    Built with<br />
     <a
       href="https://www.skeleton.dev/"
       target="_blank"
