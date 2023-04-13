@@ -335,7 +335,9 @@ SuperForm<T extends AnyZodObject, M = any> = {
   firstError: Readable<{ path: string[]; message: string } | null>;
   allErrors: Readable<{ path: string[]; message: string }[]>;
 
-  tainted: Readable<Nested<S, true | undefined> | undefined>;
+  tainted: Writable<Nested<S, boolean | undefined> | undefined>;
+
+  options: FormOptions<T, M>;
 
   enhance: (el: HTMLFormElement, {
     onSubmit, onResult, onError, onUpdate, onUpdated
