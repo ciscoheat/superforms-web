@@ -41,6 +41,6 @@ You can also modify the `$tainted` store directly, in case some changes should n
 
 ## Disabling the check
 
-By setting `taintedMessage` to `null` in the options, the form won't be checked for modifications when navigating away from the page.
+By setting `taintedMessage` to `null` in the options, the form won't be checked for modifications when navigating away from the page. Especially useful for forms like login and registration, where password managers can taint the form when inserting saved usernames and passwords.
 
 <Next section={concepts} />

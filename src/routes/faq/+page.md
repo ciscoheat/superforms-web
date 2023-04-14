@@ -52,7 +52,7 @@ export const actions = {
 
 ### Can I use endpoints instead of form actions?
 
-Yes, there is a helper function for constructing an `ActionResult` that can be returned from [endpoints](https://kit.svelte.dev/docs/routing#server). See [the API reference](/api#actionresulttype-data-status) for more information!
+Yes, there is a helper function for constructing an `ActionResult` that can be returned from [endpoints](https://kit.svelte.dev/docs/routing#server). See [the API reference](/api#actionresulttype-data-options--status) for more information!
 
 ---
 

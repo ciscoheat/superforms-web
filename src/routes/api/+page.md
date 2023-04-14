@@ -37,13 +37,13 @@ Nested<S, string[] | undefined> // Errors for each field in S
  * Properties are mapped from the schema:
  */
 InputConstraints = Partial<{
-  required: boolean;    // Not nullable(), nullish() or optional()
-  pattern: string;      // z.string().regex(r)
+  required: boolean; // Not nullable(), nullish() or optional()
+  pattern: string; // z.string().regex(r)
   min: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
   max: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
-  step: number;         // z.number().step(n)
-  minlength: number;    // z.string().min(n)
-  maxlength: number;    // z.string().max(n)
+  step: number; // z.number().step(n)
+  minlength: number; // z.string().min(n)
+  maxlength: number; // z.string().max(n)
 }>;
 ```
 
@@ -142,7 +142,7 @@ setError(
 ) : ActionFailure<{form: Validation<T, M>}>
 ```
 
-For setting errors on the form after validation. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. 
+For setting errors on the form after validation. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning.
 
 Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400`.
 
@@ -185,19 +185,27 @@ export const actions = {
 };
 ```
 
-### actionResult(type, data?, status?)
+### actionResult(type, data?, options? | status?)
 
-When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you must return an `ActionResult`, `throw redirect(...)` won't work directly since `superForms` expects an `ActionResult`. This method helps you construct one in a `Response` object, so you can return a validation object from your API/endpoints.
+When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you must return an `ActionResult`, `throw redirect(...)` won't work directly since `superForm` expects an `ActionResult`. This method helps you construct one in a `Response` object, so you can return a validation object from your API/endpoints.
 
 ```ts
-// Every call can take a http status as a third parameter.
-actionResult('success', { form });
-actionResult('failure', { form });
-actionResult('redirect', '/');
-actionResult('error', 'Error message');
+actionResult('success', { form }, (status = 200));
+actionResult('failure', { form }, (status = 400));
+actionResult('redirect', '/', (status = 303));
+actionResult('error', 'Error message', (status = 500));
 ```
 
-Example for a login request:
+Additionally, the `redirect` version can send a flash message as a third parameter, in case you're using [flash messages](/flash-messages):
+
+```ts
+actionResult('redirect', '/', {
+  message: App.PageData['flash'],
+  status = 303
+});
+```
+
+#### Login request example
 
 **src/routes/login/+server.ts**
 
