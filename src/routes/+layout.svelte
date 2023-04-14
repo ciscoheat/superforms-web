@@ -13,7 +13,7 @@
   import Navigation from '$lib/navigation/Navigation.svelte';
   import { page } from '$app/stores';
   import '$lib/assets/prism-gruvbox-dark.css';
-  import { afterNavigate } from '$app/navigation';
+  import { beforeNavigate, afterNavigate } from '$app/navigation';
   import { fade } from 'svelte/transition';
   import { clickOutside } from '$lib/clickOutside';
 
@@ -26,6 +26,7 @@
   import SearchButton from './SearchButton.svelte';
   import { tick } from 'svelte';
   import { writable } from 'svelte/store';
+  import copy from 'clipboard-copy';
 
   // Local
   let hideSponsor = true;
@@ -69,6 +70,13 @@
   const noToC = ['/'];
   $: displayToC = !noToC.includes($page.url.pathname);
 
+  beforeNavigate((nav) => {
+    if (nav.type == 'form') return;
+    document
+      .querySelectorAll('.copy-content')
+      .forEach((el) => el.removeEventListener('click', copyContent));
+  });
+
   afterNavigate((nav) => {
     if (nav.type == 'link') {
       // If linked to a page, sometimes it won't scroll to the top.
@@ -78,7 +86,48 @@
       const el = document.getElementById($page.url.hash.substring(1));
       if (el) el.scrollIntoView();
     }
+
+    if (nav.type != 'form') {
+      copyBoxes();
+    }
   });
+
+  const checkedIcon =
+    '<path fill="currentColor" d="m10.6 16.2l7.05-7.05l-1.4-1.4l-5.65 5.65l-2.85-2.85l-1.4 1.4l4.25 4.25ZM5 21q-.825 0-1.413-.588T3 19V5q0-.825.588-1.413T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.588 1.413T19 21H5Zm0-2h14V5H5v14ZM5 5v14V5Z"/>';
+
+  async function copyContent(e: Event) {
+    if (!e.target) return;
+    const parent = (e.target as HTMLElement).closest('pre');
+    if (!parent) return;
+
+    const codeEl = parent.querySelector('code');
+    const svg = parent.querySelector('.copy-content svg');
+
+    if (codeEl) {
+      await copy(codeEl.innerText);
+      if (svg) {
+        const oldContent = svg.innerHTML;
+        svg.innerHTML = checkedIcon;
+        setTimeout(() => (svg.innerHTML = oldContent), 800);
+      }
+    }
+  }
+
+  function copyBoxes() {
+    document
+      .querySelectorAll<HTMLElement>('pre:not(.super-debug--pre) > code')
+      .forEach((el) => {
+        const pre = el.parentElement as HTMLPreElement;
+        var copy = document.createElement('div');
+        copy.classList.add('copy-content');
+        copy.addEventListener('click', copyContent);
+
+        copy.innerHTML =
+          '<button type="button"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M5 22q-.825 0-1.413-.588T3 20V6h2v14h11v2H5Zm4-4q-.825 0-1.413-.588T7 16V4q0-.825.588-1.413T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.588 1.413T18 18H9Zm0-2h9V4H9v12Zm0 0V4v12Z"/></svg></button>';
+
+        pre.prepend(copy);
+      });
+  }
 </script>
 
 <svelte:head>
@@ -237,5 +286,10 @@
   .sponsor.card {
     top: 10px;
     right: 5px;
+  }
+
+  :global(.copy-content) {
+    float: right;
+    color: #84792e;
   }
 </style>

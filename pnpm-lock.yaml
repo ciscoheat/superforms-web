@@ -55,6 +55,9 @@ devDependencies:
   canvas-confetti:
     specifier: ^1.6.0
     version: 1.6.0
+  clipboard-copy:
+    specifier: ^4.0.1
+    version: 4.0.1
   eslint:
     specifier: ^8.38.0
     version: 8.38.0
@@ -1302,6 +1305,10 @@ packages:
     dependencies:
       slice-ansi: 5.0.0
       string-width: 5.1.2
+    dev: true
+
+  /clipboard-copy@4.0.1:
+    resolution: {integrity: sha512-wOlqdqziE/NNTUJsfSgXmBMIrYmfd5V0HCGsR8uAKHcg+h9NENWINcfRjtWGU77wDHC8B8ijV4hMTGYbrKovng==}
     dev: true
 
   /color-convert@2.0.1:
