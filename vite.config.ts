@@ -9,9 +9,9 @@ export default defineConfig(async ({ mode }) => {
       sveltekit(),
       {
         name: 'index-site',
-        handleHotUpdate(ctx) {
+        async handleHotUpdate(ctx) {
           if (ctx.file.endsWith('+page.md')) {
-            indexSite();
+            await indexSite();
           }
         }
       }

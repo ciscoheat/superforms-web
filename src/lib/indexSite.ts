@@ -145,6 +145,11 @@ export async function indexSite() {
   console.log('Indexing site...');
   _search = await siteSchema();
   await fs.mkdir(dirname(persistedDB), { recursive: true });
+  try {
+    await fs.rm(persistedDB);
+  } catch {
+    //
+  }
   await indexSitePath(persistedDB);
 }
 
