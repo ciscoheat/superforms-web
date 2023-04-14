@@ -1,5 +1,4 @@
 import { lstatSync, readdirSync } from 'fs';
-import type { PageServerLoad } from './$types';
 import path from 'path';
 
 //const fileName = '.vercel/output/orama/+page.md';
@@ -44,4 +43,4 @@ export const load = (async ({ url, fetch }) => {
     db: (await data.text()).length,
     browser: dir(url.searchParams.get('dir') ?? process.cwd())
   };
-}) satisfies PageServerLoad;
+})

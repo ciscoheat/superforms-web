@@ -11,8 +11,8 @@ export const _schema = z.object({
 export const load = (async () => {
   const form = await superValidate(_schema);
   return { form };
-}) satisfies PageServerLoad;
+})
 
 export const actions = {
   default: echo(_schema)
-} satisfies Actions;
+} 

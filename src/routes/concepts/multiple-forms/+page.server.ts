@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { Actions, PageServerLoad } from './$types';
 import { fail } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
 
@@ -19,7 +18,7 @@ export const load = (async () => {
   const loginForm = await superValidate(loginSchema, { id: 'login' });
 
   return { registerForm, loginForm };
-}) satisfies PageServerLoad;
+})
 
 export const actions = {
   login: async ({ request }) => {
@@ -41,4 +40,4 @@ export const actions = {
 
     return message(form, 'Registration successful!');
   }
-} satisfies Actions;
+}

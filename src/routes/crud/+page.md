@@ -128,7 +128,7 @@ export const load = (async ({ url }) => {
 
   const form = await superValidate(user, schema);
   return { form, users };
-}) satisfies PageServerLoad;
+})
 ```
 
 In a real application, we would have used SvelteKit [route parameters](https://kit.svelte.dev/docs/routing) instead, like `/users/[id]`.
@@ -228,7 +228,7 @@ export const actions = {
 
     return { form };
   }
-} satisfies Actions;
+}
 ```
 
 This is where you should access your database API. In our case, we're only doing some array manipulations.

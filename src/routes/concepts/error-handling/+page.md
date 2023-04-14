@@ -32,7 +32,7 @@ export const actions = {
 
     return { form };
   }
-} satisfies Actions;
+}
 ```
 
 `setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. See [the API](/api#seterrorform-field-error-options) for more options.

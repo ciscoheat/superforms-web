@@ -2,8 +2,6 @@
 import { search, type Orama } from '@orama/orama';
 import { restore } from '@orama/plugin-data-persistence';
 import { json } from '@sveltejs/kit';
-
-import type { RequestHandler } from './$types';
 import { dev } from '$app/environment';
 
 let engine: Orama;
@@ -39,4 +37,4 @@ export const GET = (async ({ url, fetch }) => {
       return { title, hash, url };
     })
   );
-}) satisfies RequestHandler;
+})

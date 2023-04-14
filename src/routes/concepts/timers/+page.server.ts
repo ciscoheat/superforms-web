@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { echoLoad } from '$lib/echo';
-import type { Actions } from './$types';
 import { superValidate, message } from 'sveltekit-superforms/server';
 import { error, fail } from '@sveltejs/kit';
 
@@ -25,4 +24,4 @@ export const actions = {
 
     return message(form, 'Form posted!');
   }
-} satisfies Actions;
+}

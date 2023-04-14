@@ -212,7 +212,6 @@ actionResult('redirect', '/', {
 ```ts
 import { actionResult, superValidate } from '$lib/server';
 import { z } from 'zod';
-import type { RequestHandler } from './$types';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -226,7 +225,7 @@ export const POST = (async ({ request }) => {
   // Verify login here //
 
   return actionResult('success', { form });
-}) satisfies RequestHandler;
+})
 ```
 
 ## Client API

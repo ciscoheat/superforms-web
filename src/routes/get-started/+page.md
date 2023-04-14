@@ -59,7 +59,6 @@ Let's use this schema with Superforms on the start page of the site:
 ```ts
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
-import type { PageServerLoad } from './$types';
 
 const schema = z.object({
   name: z.string().default('Hello world!'),
@@ -72,7 +71,7 @@ export const load = (async () => {
 
   // Always return { form } in load and form actions.
   return { form };
-}) satisfies PageServerLoad;
+})
 ```
 
 The Superform server API is called `superValidate`. You can call it in two ways in the load function:
@@ -97,7 +96,7 @@ export const load = (async ({ params }) => {
 
   // Always return { form } in load and form actions.
   return { form };
-}) satisfies PageServerLoad;
+})
 ```
 
 As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is very useful for backend interfaces, where the form usually should be populated based on an url like `/users/123`.
@@ -173,7 +172,6 @@ Let's use `request` in a minimal form action, so we can post the form back to th
 **src/routes/+page.server.ts**
 
 ```ts
-import type { Actions, PageServerLoad } from './$types';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 
@@ -198,7 +196,7 @@ export const actions = {
     // Yep, return { form } here too
     return { form };
   }
-} satisfies Actions;
+}
 ```
 
 Submit the form, and see what's happening on the server:
@@ -280,7 +278,6 @@ Also available [on Stackblitz](https://stackblitz.com/edit/sveltekit-superforms-
 **src/routes/+page.server.ts**
 
 ```ts
-import type { Actions, PageServerLoad } from './$types';
 import { fail } from '@sveltejs/kit';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -296,7 +293,7 @@ export const load = (async () => {
 
   // Always return { form } in load and form actions.
   return { form };
-}) satisfies PageServerLoad;
+})
 
 const schema = z.object({
   name: z.string().default('Hello world!'),
@@ -316,7 +313,7 @@ export const actions = {
 
     return { form };
   }
-} satisfies Actions;
+}
 ```
 
 **src/routes/+page.svelte**

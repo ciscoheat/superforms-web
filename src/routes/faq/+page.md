@@ -28,7 +28,7 @@ export function yourSuperForm<T extends AnyZodObject>(
 
 ### How to handle file uploads?
 
-Currently, file uploads are not handled with Superforms. The recommended way to do it is to grab the `FormData` and extract the files from there, after validation:
+Currently, file uploads are not handled with Superforms. Fields containing files will be `undefined` in `form.data` after validation. The recommended way to handle files is to grab the `FormData` and extract the files from there, after validation:
 
 ```ts
 export const actions = {
@@ -45,7 +45,7 @@ export const actions = {
 
     return { form };
   }
-} satisfies Actions;
+}
 ```
 
 ---
