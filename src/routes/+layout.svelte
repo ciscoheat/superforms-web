@@ -288,8 +288,13 @@
     right: 5px;
   }
 
+  :global(pre:hover .copy-content) {
+    visibility: visible;
+  }
+
   :global(.copy-content) {
     float: right;
     color: #84792e;
+    visibility: hidden;
   }
 </style>
