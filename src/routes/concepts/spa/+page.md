@@ -67,30 +67,29 @@ Displaying the form is just like with server-side validation, but with the `SPA`
 ```svelte
 <script lang="ts">
   import type { PageData } from './$types';
-  import {
-    superForm,
-    setMessage,
-    setError
-  } from 'sveltekit-superforms/client';
+  import { superForm, setMessage, setError } from 'sveltekit-superforms/client';
   import { _userSchema } from './+page';
 
   export let data: PageData;
 
-  const { form, errors, message, constraints, enhance, delayed } = superForm(data.form, {
-    SPA: true,
-    validators: _userSchema,
-    onUpdate({ form }) {
-      if (form.data.email.includes('spam')) {
-        setError(form, 'email', 'Suspicious email address.');
-      } else if (form.valid) {
-        setMessage(form, 'Valid data!');
-        // TODO: Do something with the validated data
+  const { form, errors, message, constraints, enhance, delayed } = superForm(
+    data.form,
+    {
+      SPA: true,
+      validators: _userSchema,
+      onUpdate({ form }) {
+        if (form.data.email.includes('spam')) {
+          setError(form, 'email', 'Suspicious email address.');
+        } else if (form.valid) {
+          setMessage(form, 'Valid data!');
+          // TODO: Do something with the validated data
+        }
+      },
+      onError({ result, message }) {
+        message.set(result.error.message);
       }
-    },
-    onError({ result, message }) {
-      message.set(result.error.message);
     }
-  });
+  );
 </script>
 
 <h1>Edit user</h1>
@@ -148,7 +147,7 @@ export const _userSchema = z.object({
   email: z.string().email()
 });
 
-export type UserSchema = typeof _userSchema
+export type UserSchema = typeof _userSchema;
 ```
 
 **src/routes/user/[id]/+page.ts**
@@ -182,10 +181,14 @@ export const load = async ({ params, fetch }) => {
   const { form, errors, enhance } = superForm<UserSchema>(data.user, {
     SPA: true,
     validators: {
-      name: (name) => (name.length <= 2 ? 'Name is too short' : null)
+      name: (name) => (name.length <= 2 ? 'Name is too short' : null),
+      email: (email) =>
+        email.includes('spam') ? 'Suspicious email address.' : null
     },
-    onUpdated({ form }) {
-      // As before
+    onUpdate({ form }) {
+      if (form.valid) {
+        form.message = 'Valid data!';
+      }
     }
   });
 </script>
