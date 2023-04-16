@@ -32,7 +32,7 @@ export const actions = {
 
     return { form };
   }
-}
+};
 ```
 
 `setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. See [the API](/api#seterrorform-field-error-options) for more options.
@@ -55,7 +55,8 @@ const { form, enhance, errors, allErrors } = superForm(data.form, {
   errorSelector: string | undefined = '[data-invalid]'
   scrollToError: 'smooth' | 'auto' | 'off' = 'smooth'
   autoFocusOnError: boolean | 'detect' = 'detect'
-  stickyNavbar: string | undefined = undefined
+  stickyNavbar: string | undefined = undefined,
+  onError: (({ result, message }) => void) | 'apply'
 })
 ```
 
@@ -82,6 +83,18 @@ When `autoFocusOnError` is set to its default value `detect`, it checks if the u
 ### stickyNavbar
 
 If you have a sticky navbar, set its selector here and it won't hide any errors due to its height and z-index.
+
+### onError
+
+This option is an event, explained more in detail [on the event page](/concepts/events#onerror), but it's mentioned here since you should usually implement this to display server errors in a user-friendly way. It can be as simple as this:
+
+```ts
+// result is an error ActionResult
+// message is the form $message store
+onError({ result, message }) {
+  message.set(result.error.message);
+}
+```
 
 ## Form-level errors
 
