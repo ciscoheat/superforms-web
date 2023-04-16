@@ -238,7 +238,22 @@ import {
   booleanProxy,
   dateProxy,
   fieldProxy,
-  formFieldProxy
+  formFieldProxy,
+  superValidate,
+  setError,
+  message,
+  actionResult
+} from 'sveltekit-superforms/client';
+```
+
+The server part of the API can also be imported, for [single-page app](/concepts/spa) usage:
+
+```ts
+import {
+  superValidate,
+  setError,
+  setMessage, // Same as message
+  actionResult
 } from 'sveltekit-superforms/client';
 ```
 

@@ -10,5 +10,6 @@ export const concepts = [
   ['/concepts/multiple-forms', 'Multiple forms'],
   ['/concepts/messages', 'Status messages'],
   ['/concepts/proxy-objects', 'Proxy objects'],
-  ['/concepts/snapshots', 'Snapshots']
+  ['/concepts/snapshots', 'Snapshots'],
+  ['/concepts/spa', 'Single-page apps']
 ];
