@@ -15,6 +15,7 @@
     SPA: true,
     validators: _userSchema,
     onUpdate({ form }) {
+      console.log('SPA post', form);
       if (form.data.email.includes('spam')) {
         setError(form, 'email', 'Suspicious email address.');
       } else if (form.valid) {
