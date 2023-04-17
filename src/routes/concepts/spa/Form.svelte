@@ -14,6 +14,7 @@
   >(data.form, {
     SPA: true,
     validators: _userSchema,
+    taintedMessage: null,
     onUpdate({ form }) {
       console.log('SPA post', form);
       if (form.data.email.includes('spam')) {
