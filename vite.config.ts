@@ -16,6 +16,9 @@ export default defineConfig(async ({ mode }) => {
         }
       }
     ],
+    build: {
+      sourcemap: true
+    },
     test: {
       include: ['src/**/*.{test,spec}.{js,ts}']
     }
