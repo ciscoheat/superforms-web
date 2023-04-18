@@ -3,8 +3,7 @@
   import magnify from '$lib/assets/magnify.svg?raw';
   import { debounce } from 'throttle-debounce';
   import { onDestroy, onMount } from 'svelte';
-  import { listen } from 'svelte/internal';
-  import type { Unsubscriber, Writable } from 'svelte/store';
+  import type { Writable } from 'svelte/store';
 
   // Classes
   const cBase =
@@ -42,12 +41,19 @@
 
   const eventName = 'keydown';
 
+  modalStore.subscribe(async (modals) => {
+    if (modals.length && modals[0].component == 'search') {
+      const search = document.getElementById('search-input');
+      if (search) (search as HTMLInputElement).select();
+    }
+  });
+
   onMount(() => {
-    window.addEventListener(eventName, docSearchKeyUp);
+    window.addEventListener(eventName, docSearchKeyDown);
   });
 
   onDestroy(() => {
-    window.removeEventListener(eventName, docSearchKeyUp);
+    window.removeEventListener(eventName, docSearchKeyDown);
   });
 
   function currentListIndex(list?: ReturnType<typeof searchList>) {
@@ -66,7 +72,7 @@
     ];
   }
 
-  function docSearchKeyUp(e: KeyboardEvent) {
+  function docSearchKeyDown(e: KeyboardEvent) {
     if (e.code == 'Escape') {
       e.preventDefault();
       close();
@@ -108,6 +114,7 @@
   <header class="modal-search-header {cHeader}">
     <span class="text-xl ml-4 w-8">{@html magnify}</span>
     <input
+      id="search-input"
       class={cSearchInput}
       bind:this={searchInput}
       bind:value={$results.term}
