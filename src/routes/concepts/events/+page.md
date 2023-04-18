@@ -38,7 +38,7 @@ const { form } = superForm(data.form, {
 onSubmit: ({ action, data, form, controller, cancel }) => void;
 ```
 
-The `onSubmit` event is the first one triggered, that hooks you in to SvelteKit's `use:enhance` function. See SvelteKit docs for the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature.
+The `onSubmit` event is the first one triggered, hooking you into SvelteKit's `use:enhance` function. See SvelteKit docs for the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature.
 
 ### onResult
 
@@ -46,7 +46,7 @@ The `onSubmit` event is the first one triggered, that hooks you in to SvelteKit'
 onResult: ({ result, formEl, cancel }) => void
 ```
 
-When you want detailed control, `onResult` gives you the [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) in `result`. You can modify it, which will be used further down the event chain.
+When you want detailed control, `onResult` gives you the [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) in `result`. You can modify it, changes will be applied further down the event chain.
 
 - `formEl` is the `HTMLFormElement` of the form.
 - `cancel()` is a function which will cancel the rest of the event chain and any form updates.
@@ -72,7 +72,9 @@ Also if `applyAction` is `false`, which means that `$page.status` won't update, 
 onUpdate: ({ form, cancel }) => void
 ```
 
-If you don't care about the specifics of the `ActionResult`, rather the validation result itself, `onUpdate` is triggered just before the form update is being applied, and gives you the option to modify the validation result in `form`, or `cancel()` the update altogether.
+If you don't care about the details of the `ActionResult`, rather the validation result, `onUpdate` is triggered just before the form update is being applied, and gives you the option to modify the validation result in `form`, or `cancel()` the update altogether.
+
+This is the event you should use with a single-page application (SPA) if you want to validate the data. see [the SPA page](/concepts/spa) for details.
 
 ### onUpdated
 
@@ -80,7 +82,9 @@ If you don't care about the specifics of the `ActionResult`, rather the validati
 onUpdated: ({ form }) => void
 ```
 
-If you just want the default behaviour and check the validation success, `onUpdated` is the easiest way. `form` is the validation result, and should be considered read-only here, since the stores have already updated at this point.
+If you just want the default behaviour and do something after a valid update, like showing a toast notification, `onUpdated` is the easiest way.
+
+`form` contains the validation result, and is read-only here, since the stores have already updated at this point.
 
 **Example:**
 
@@ -104,6 +108,6 @@ Finally, the `onError` event allows you to act on `ActionResult` errors. You can
 
 By setting onError to `apply`, the default `applyAction` behaviour will be used, effectively rendering the nearest `+error` boundary (and wiping out the form, so be careful).
 
-**Tip:** If you're unsure what event to use, start with `onUpdated`.
+**Tip:** If you're unsure what event to use, start with `onUpdated`. If your app is a [SPA](/concepts/spa), `onUpdate` is most likely the one you should be using.
 
 <Next section={concepts} />

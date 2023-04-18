@@ -112,9 +112,14 @@ SuperValidateOptions = {
 }
 ```
 
-If `data` isn't empty, errors will be returned unless `options.errors = false`.
+#### Error and data behavior
 
-If `data` is empty, a validation with a default entity for the schema is returned, in this shape:
+- If the data passed to `superValidate` isn't empty, errors will be returned unless the `errors` option is `false`.
+- If the data *is* empty, no errors will be returned unless `errors` is `true`. 
+
+This does not affect the `valid` property of the `Validation` object, which always indicates whether validation succeeded or not.
+
+If data is empty, a `Validation` object with default values for the schema is returned, in this shape:
 
 ```js
 {
@@ -129,7 +134,7 @@ If `data` is empty, a validation with a default entity for the schema is returne
 }
 ```
 
-See [this page](/default-values) for a list of default entity values.
+See [this page](/default-values) for a list of default schema values.
 
 ### setError(form, field, error, options?)
 
@@ -218,14 +223,14 @@ const loginSchema = z.object({
   password: z.string().min(5)
 });
 
-export const POST = (async ({ request }) => {
+export const POST = async ({ request }) => {
   const form = await superValidate(request, loginSchema);
   if (!form.valid) return actionResult('failure', { form });
 
   // Verify login here //
 
   return actionResult('success', { form });
-})
+};
 ```
 
 ## Client API
@@ -238,11 +243,7 @@ import {
   booleanProxy,
   dateProxy,
   fieldProxy,
-  formFieldProxy,
-  superValidate,
-  setError,
-  message,
-  actionResult
+  formFieldProxy
 } from 'sveltekit-superforms/client';
 ```
 
