@@ -146,9 +146,7 @@ const { form, enhance } = superForm(data.form, schema, {
 
 ## Configuration and troubleshooting
 
-Due to the many different use cases, it's hard to set sensible defaults for multiple forms. A common issue is that the other forms' data are lost when one is submitted. This is due to the page being invalidated as default on a successful response. If you want to preserve their data, you'd almost certainly want to set `invalidateAll: false` on them, as in the example above.
-
-If you experience unwanted behavior with multiple forms, experiment with the [use:enhance](/enhance) options.
+Due to the many different use cases, it's hard to set sensible defaults for multiple forms. A common issue is that the other forms' data are lost when one is submitted. This is due to the page being invalidated as default on a successful response. If you want to preserve their data, you'd almost certainly want to set `invalidateAll: false` or `applyAction: false` on them, as in the example above. The [use:enhance](/concepts/enhance) options explains the differences between them.
 
 Also check out the [componentization](/components) page for ideas how to place the forms into separate components, to make `+page.svelte` less cluttered.
 

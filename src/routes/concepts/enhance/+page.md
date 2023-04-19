@@ -44,15 +44,15 @@ Turning this behavior off can be useful when you want to isolate the form from o
 
 ### invalidateAll
 
-When `invalidateAll` is `true` and a successful validation result is returned from the server, the page will be invalidated and the load function will run.
+When `invalidateAll` is `true` (the default) and a successful validation result is returned from the server, the page will be invalidated and the load functions will run again. A login form takes advantage of this, directly updating user information on the page.
 
 ### resetForm
 
-Since we're binding the fields to `$form`, a html form reset (clearing all fields in DOM) won't have any effect, so in Superforms, resetting means _going back to the initial state of the form data_, which usually is the form data in `PageData`. This may not be exactly what you want, in which case you can use [an event](/concepts/events) to clear the form instead.
+Since we're binding the fields to `$form`, a html form reset (clearing all fields in DOM) won't have any effect, so in Superforms, resetting means _going back to the initial state of the form data_, which usually is what you initially sent to the client in `PageData`. If this isn't what you want, you can use [an event](/concepts/events) to set `$form` and `$tainted` directly.
 
 ## When to change the defaults?
 
-Quite rarely! If you have a single form on the page and nothing else is causing the page to invalidate, you'll probably be fine as it is. 
+Quite rarely! If you have a single form on the page and nothing else is causing the page to invalidate, you'll probably be fine as it is.
 
 For <a href="/concepts/multiple-forms">multiple forms</a> on the same page, use `options.id` to prevent forms from reacting on `$page`, instead of setting `applyAction` to `false`, though if you have events triggered that will invalidate the page, it may be the solution.
 
