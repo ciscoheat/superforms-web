@@ -194,6 +194,6 @@ export const load = async ({ params, fetch }) => {
 </script>
 ```
 
-This will reduce the added size to just the client-side part of Superforms, a mere 25 Kb. The downside is that you won't get any [constraints](/concepts/client-validation#constraints), the initial data won't be validated, and you have to rely on the Superforms validator scheme, compared to the much more powerful Zod.
+This will reduce the added size to just the client-side part of Superforms, around 25 Kb. The downside is that you won't get any [constraints](/concepts/client-validation#constraints), the initial data won't be validated, and you have to rely on the Superforms validator scheme, compared to the much more powerful Zod.
 
 <Next section={concepts} />
