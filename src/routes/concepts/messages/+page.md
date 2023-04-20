@@ -25,7 +25,7 @@ This is for displaying the message on the client, like any other store:
 
 ```svelte
 {#if $message}
-  <div class="error">{$message}</div>
+  <div class="message">{$message}</div>
 {/if}
 ```
 
@@ -60,16 +60,16 @@ export const actions = {
 
 ## Strongly typed message
 
-The `message` is of type `any` as default, but it's recommended that you type it, by passing a generic parameter to `superValidate`:
+The `message` is of type `any` as default, but you can type it with type parameters in `superValidate`:
 
 ```ts
 const form = await superValidate<typeof schema, string>(event, schema);
 ```
 
-A string can be a bit limiting though, more realistically there should be a status connected to it, so making a `Message` type can be useful for consistency.
+A string can be a bit limiting though, more realistically there will be a status as well, so making a `Message` type can be useful for consistency.
 
 ```ts
-type Message = { status: 'error' | 'success'; text: string };
+type Message = { status: 'error' | 'success' | 'warning'; text: string };
 ```
 
 Though if you want to keep it simple with a string, you can use `$page.status` to style the message appropriately:
