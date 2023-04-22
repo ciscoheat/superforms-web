@@ -1,6 +1,6 @@
 export const concepts = [
   ['/concepts/enhance', 'use:enhance'],
-  ['/concepts/tainted', 'Tainted form check'],
+  ['/concepts/tainted', 'Tainted fields'],
   ['/concepts/events', 'Events'],
   ['/concepts/error-handling', 'Error handling'],
   ['/concepts/submit-behavior', 'Submit behavior'],

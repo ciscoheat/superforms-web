@@ -7,11 +7,11 @@
 	export let data;
 </script>
 
-# Tainted form check
+# Tainted fields
 
-<svelte:head><title>Tainted form check</title></svelte:head>
+<svelte:head><title>Tainted form fields</title></svelte:head>
 
-When form data is modified, that piece of data, and in turn the form, is considered _tainted_. A Superforms feature is to prevent the user from losing data, by accidentaly navigating away from a tainted form.
+When the form data is modified, that piece of data, and in turn the form, is considered _tainted_. A Superforms feature is to prevent the user from losing data, when accidentaly navigating away from a tainted form.
 
 ## Usage
 
@@ -37,7 +37,16 @@ When a validation result is returned for the form with a status between `200-299
 
 Try that by posting the form with valid values. The tainted message should not appear when browsing away from the page.
 
-You can also modify the `$tainted` store directly, in case some changes should not be regarded as user-modified. When you do that, you may need to use a `setTimeout` or (several) `await tick()` to be certain that the `$form` store have completed its updates.
+You can also modify the `$tainted` store directly, but the recommended way is to set an option when modifying `form`:
+
+```ts
+const { form } = superForm(data.form)
+
+form.update($form => {
+  $form.name = data.name
+  return $form
+}, { taint: false }) // boolean | 'untaint' | 'untaint-all'
+```
 
 ## Disabling the check
 

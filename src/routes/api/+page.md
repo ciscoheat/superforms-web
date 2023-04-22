@@ -31,37 +31,6 @@ S = z.infer<T>
 Nested<S, string[] | undefined> // Errors for each field in S
 ```
 
-```ts
-/**
- * HTML input constraints returned from superValidate
- * Properties are mapped from the schema:
- */
-InputConstraints = Partial<{
-  required: boolean; // Not nullable(), nullish() or optional()
-  pattern: string; // z.string().regex(r)
-  min: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
-  max: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
-  step: number; // z.number().step(n)
-  minlength: number; // z.string().min(n)
-  maxlength: number; // z.string().max(n)
-}>;
-```
-
-### Return value from superValidate
-
-```ts
-Validation<T, M = any> = {
-  valid: boolean;
-  empty: boolean;
-  data: S;
-  errors: Nested<S, string[] | undefined>;
-  constraints: Nested<S, InputConstraints | undefined>;
-  message?: M;
-  id?: string;
-  meta?: { types: Nested<S, string> }
-};
-```
-
 ## Server API
 
 ```ts
@@ -78,8 +47,8 @@ import {
 If you want the form to be initially empty, you can pass the schema as the first parameter:
 
 ```ts
-superValidate<T extends AnyZodObject, M = any>(
-  schema: T | ZodEffects<T>,
+superValidate<T, M = any>(
+  schema: T,
   options?: SuperValidateOptions
 ): Promise<Validation<T, M>>
 ```
@@ -87,7 +56,7 @@ superValidate<T extends AnyZodObject, M = any>(
 If you want to populate the form, for example from a database or `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter, the schema second:
 
 ```ts
-superValidate<T extends AnyZodObject, M = any>(
+superValidate<T, M = any>(
   data:
     | RequestEvent
     | Request
@@ -97,12 +66,12 @@ superValidate<T extends AnyZodObject, M = any>(
     | Partial<S>
     | null
     | undefined,
-  schema: T | ZodEffects<T>,
+  schema: T,
   options?: SuperValidateOptions
 ): Promise<Validation<T, M>>
 ```
 
-The options are as follows:
+Options:
 
 ```ts
 SuperValidateOptions = {
@@ -112,12 +81,29 @@ SuperValidateOptions = {
 }
 ```
 
+See [this page](/concepts/multiple-forms) for information about `id` and multiple forms on the same page.
+
 #### Error and data behavior
 
-- If the data passed to `superValidate` isn't empty, errors will be returned unless the `errors` option is `false`.
-- If the data *is* empty, no errors will be returned unless `errors` is `true`. 
+- If the data passed to `superValidate` **is not** empty, errors will be returned unless the `errors` option is `false`.
+- Vice versa, if the data **is** empty, no errors will be returned unless `errors` is `true`. 
 
 This does not affect the `valid` property of the `Validation` object, which always indicates whether validation succeeded or not.
+
+### Return value from superValidate
+
+```ts
+Validation<T, M = any> = {
+  valid: boolean;
+  empty: boolean;
+  data: S;
+  errors: Nested<S, string[] | undefined>;
+  constraints: Nested<S, InputConstraints | undefined>;
+  message?: M;
+  id?: string;
+  meta?: { types: Nested<S, string> }
+};
+```
 
 If data is empty, a `Validation` object with default values for the schema is returned, in this shape:
 
@@ -135,6 +121,24 @@ If data is empty, a `Validation` object with default values for the schema is re
 ```
 
 See [this page](/default-values) for a list of default schema values.
+
+### Input constraints
+
+```ts
+/**
+ * HTML input constraints returned from superValidate
+ * Properties are mapped from the schema:
+ */
+InputConstraints = Partial<{
+  required: boolean; // Not nullable(), nullish() or optional()
+  pattern: string; // z.string().regex(r)
+  min: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
+  max: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
+  step: number; // z.number().step(n)
+  minlength: number; // z.string().min(n)
+  maxlength: number; // z.string().max(n)
+}>;
+```
 
 ### setError(form, field, error, options?)
 
@@ -192,7 +196,9 @@ export const actions = {
 
 ### actionResult(type, data?, options? | status?)
 
-When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you must return an `ActionResult`, `throw redirect(...)` won't work directly since `superForm` expects an `ActionResult`. This method helps you construct one in a `Response` object, so you can return a validation object from your API/endpoints.
+When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you **must** return an `ActionResult`, `throw redirect(...)` won't work for example, `superForm` expects an `ActionResult`. 
+
+This method helps you construct one in a `Response` object, so you can return a validation object from your API/endpoints.
 
 ```ts
 actionResult('success', { form }, (status = 200));
@@ -268,27 +274,18 @@ superForm<T, M = any>(
 ```
 
 ```ts
-FormOptions<T extends AnyZodObject, M> = Partial<{
-  id: string;
+FormOptions<T, M> = Partial<{
+    id: string;
   applyAction: boolean;
   invalidateAll: boolean;
-
-  resetForm: boolean;
+  resetForm: boolean | (() => MaybePromise<boolean>);
   scrollToError: 'auto' | 'smooth' | 'off';
   autoFocusOnError: boolean | 'detect';
   errorSelector: string;
   selectErrorText: boolean;
   stickyNavbar: string;
-
   taintedMessage: string | false | null;
-  dataType: 'form' | 'json';
-  validators: Validators<T> | T;
-  defaultValidator: 'keep' | 'clear';
-  clearOnSubmit: 'errors' | 'message' | 'errors-and-message' | 'none';
-
-  delayMs: number;
-  timeoutMs: number;
-  multipleSubmits: 'prevent' | 'allow' | 'abort';
+  SPA: true | { failStatus?: number };
 
   onSubmit: (
     ...params: Parameters<SubmitFunction>
@@ -303,7 +300,7 @@ FormOptions<T extends AnyZodObject, M> = Partial<{
     cancel: () => void;
   }) => MaybePromise<unknown | void>;
   onUpdated: (event: {
-    form: Validation<T, M>;
+    form: Readonly<Validation<T, M>>;
   }) => MaybePromise<unknown | void>;
   onError:
     | 'apply'
@@ -315,7 +312,18 @@ FormOptions<T extends AnyZodObject, M> = Partial<{
         };
         message: Writable<Validation<T, M>['message']>;
       }) => MaybePromise<unknown | void>);
-
+  dataType: 'form' | 'json';
+  validators:
+    | T
+    | false
+    | Validators<T>;
+  validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only';
+  defaultValidator: 'keep' | 'clear';
+  clearOnSubmit: 'errors' | 'message' | 'errors-and-message' | 'none';
+  delayMs: number;
+  timeoutMs: number;
+  multipleSubmits: 'prevent' | 'allow' | 'abort';
+  syncFlashMessage?: boolean;
   flashMessage: {
     module: {
       getFlash(page: Readable<Page>): Writable<App.PageData['flash']>;
@@ -333,6 +341,7 @@ FormOptions<T extends AnyZodObject, M> = Partial<{
       message: Writable<App.PageData['flash']>;
     }) => MaybePromise<unknown | void>;
     cookiePath?: string;
+    cookieName?: string;
   };
 }>;
 ```
@@ -341,11 +350,16 @@ FormOptions<T extends AnyZodObject, M> = Partial<{
 
 ```ts
 SuperForm<T extends AnyZodObject, M = any> = {
-  form: Writable<S>;
+  form: {
+    subscribe: (data: S) => void
+    set: (value: S, options?: { taint?: boolean | 'untaint' | 'untaint-all' }) => void
+    update: (updater: (S) => S, options?: { taint?: boolean | 'untaint' | 'untaint-all' }) => void
+  };
   formId: Writable<string | undefined>;
   errors: Writable<Nested<S, string[] | undefined>>;
   constraints: Writable<Nested<S, InputConstraints | undefined>>;
-  message: Writable<M>;
+  message: Writable<M | undefined>;
+  tainted: Writable<Nested<S, boolean | undefined> | undefined>;
   meta: Readable<{ types: Record<keyof S, string> | undefined }>;
 
   valid: Readable<boolean>;
@@ -358,7 +372,6 @@ SuperForm<T extends AnyZodObject, M = any> = {
   firstError: Readable<{ path: string[]; message: string } | null>;
   allErrors: Readable<{ path: string[]; message: string }[]>;
 
-  tainted: Writable<Nested<S, boolean | undefined> | undefined>;
 
   options: FormOptions<T, M>;
 
@@ -366,17 +379,11 @@ SuperForm<T extends AnyZodObject, M = any> = {
     onSubmit, onResult, onError, onUpdate, onUpdated
   }) => ReturnType<typeof $app/forms/enhance>;
 
-  update: FormUpdate;
   reset: (options?: { keepMessage: boolean }) => void;
 
   capture: () => SuperFormSnapshot<T, M>;
   restore: (snapshot: SuperFormSnapshot<T, M>) => void;
 };
-
-FormUpdate = (
-  result: Exclude<ActionResult, { type: 'error' }>,
-  untaint?: boolean
-) => Promise<void>;
 
 FormField<S, Prop extends keyof S> = {
   readonly name: Prop;
@@ -433,7 +440,7 @@ Creates a proxy store for a Date schema field. The option can be used to change 
 
 See the dedicated article for documentation about [fieldProxy](/components#using-a-fieldproxy) and [formFieldProxy](/components#using-a-formfieldproxy).
 
-## Example
+## Proxy example
 
 Given the following schema:
 

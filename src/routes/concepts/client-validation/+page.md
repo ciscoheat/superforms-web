@@ -11,22 +11,25 @@
 
 <svelte:head><title>Client-side validation</title></svelte:head>
 
-There is already a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which is virtually effortless to use with Superforms. For more advanced cases, you can use either a Zod schema or the built-in validation object for an exhaustive client-side validation.
+## Built-in browser validation
+
+There is already a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which is virtually effortless to use with Superforms. For more advanced cases, you can use a Zod schema or the Superforms validation object for a complete client-side validation.
 
 ## Usage
 
 ```ts
-const { form, enhance, constraints } = superForm(data.form, {
+const { form, enhance, constraints, validate } = superForm(data.form, {
   validators: AnyZodObject | {
     field: (value) => string | string[] | null | undefined;
   },
+  validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only',
   defaultValidator: 'keep' | 'clear' = 'keep'
 })
 ```
 
 ### constraints
 
-To use the web standard constraints, simply spread the `$constraints` store for a field on its input field:
+To use the built-in browser constraints, simply spread the `$constraints` store for a field on its input field:
 
 ```svelte
 <input
@@ -52,7 +55,7 @@ The constraints is an object with validation properties mapped from the schema:
 
 ### validators
 
-If you think the built-in browser validation is too constraining (pun intented), you can set the `validators` option to a Zod schema, or a custom validation object:
+If you think the built-in browser validation is too constraining (pun intented), you can set the `validators` option to a Zod schema, which is the most convenient, but increases the size of the client bundle a bit. A more lightweight alternative is to use a custom validation object:
 
 ```ts
 validators: AnyZodObject | {
@@ -60,7 +63,7 @@ validators: AnyZodObject | {
 }
 ```
 
-It takes an object with the same keys as the form, with a function that receives the field value and should return either a `string` or `string[]` as a "validation failed" message, or `null` or `undefined` if the field is valid.
+It's an object with the same keys as the form, with a function that receives the field value and should return either a `string` or `string[]` as a validation failed message, or `null` or `undefined` if the field is valid.
 
 Here's how to validate a string length, for example:
 
@@ -94,6 +97,19 @@ const { form, errors, enhance } = superForm(data.form, {
 });
 ```
 
+### validationMethod
+
+```ts
+validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only',
+```
+
+The default validation method is based on the "reward early, validate late" patttern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
+
+- If no field error, validate on `blur`
+- If field error exists, validate on `input`
+
+But you can also use the `oninput` or `onblur` setting to always validate on one of these events instead, or `submit-only` to only validate on submit.
+
 ### defaultValidator
 
 There is one additional option for specifying the `on:input` behavior for fields with errors:
@@ -104,7 +120,39 @@ defaultValidator: 'keep' | 'clear' = 'keep'
 
 The default value `keep` means that validation errors will be displayed until the form submits (and is set to clear errors). `clear` will remove the error as soon as that field value is modified.
 
-In a future version, the `validators` will be run `on:input` as well.
+### validate
+
+The `validate` function gives you complete control over the validation process. Examples how to use it:
+
+```ts
+const { form, enhance, validate } = superForm(data.form)
+
+// Simplest case, validate what's in the field right now
+validate('name')
+
+// Validate without updating, for error checking
+const nameErrors = await validate('name', { update: false })
+
+// Validate and update field with a custom value
+validate('name', { value: 'Test' })
+
+// Validate a custom value, update errors only
+validate('name', { value: 'Test', update: 'errors' })
+
+// Validate and update nested data, and also taint the field
+validate(['tags', 1, 'name'], { value: 'Test', taint: true })
+```
+
+## Asynchronous validation and debouncing
+
+All the validators are asynchronous, so you can return a `Promise` and it will work. But for round-trip validation like checking if a username is taken, you might want to delay the validation so a request is not sent for every keystroke. There is no built-in delay option, so this can be achieved with the `on:input` event and a `debounce` function from a package like [throttle-debounce](https://www.npmjs.com/package/throttle-debounce). 
+
+Errors can be set by updating the `$errors` store:
+
+```ts
+// Needs to be a string[]
+$errors.username = ['Username is already taken.']
+```
 
 ## Test it out
 

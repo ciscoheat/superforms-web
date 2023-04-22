@@ -119,7 +119,7 @@ These can be accessed on the client through `$errors._errors`.
 You may also want to list the errors above the form. The `$allErrors` store can be used for this. It's an array that contains all errors and their field names:
 
 ```svelte
-{#if $allErrors}
+{#if $allErrors.length}
   <ul>
     {#each $allErrors as error}
       <li>

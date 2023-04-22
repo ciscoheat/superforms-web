@@ -9,7 +9,7 @@
 
 <svelte:head><title>Progressive enhancement with use:enhance</title></svelte:head>
 
-By using `enhance` returned from `superForm` on a form, we'll get the client-side enhancement expected from a modern webpage:
+By using `enhance` returned from `superForm`, we'll get the client-side enhancement expected from a modern webpage:
 
 ```svelte
 <script lang="ts">

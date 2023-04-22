@@ -20,7 +20,7 @@
   action={$page.url.pathname}
   class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
   use:enhance>
-  {#if $allErrors}
+  {#if $allErrors.length}
     <ul class="list m-0 p-0">
       {#each $allErrors as error}
         <li class="m-0 p-0">
