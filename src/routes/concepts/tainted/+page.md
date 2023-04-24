@@ -29,7 +29,7 @@ Try to modify the form below, then close the tab or hit the back button. A confi
 
 You can access the exact fields that are tainted through the `$tainted` store, returned from `superForm`. When you modify the form fields above you'll see how the `$tainted` store reacts.
 
-**Note:** Any modification to the `$form` store will taint the affected field(s)! The tainted check doesn't have anything to do with the html inputs themselves.
+**Note:** Any direct assignment `$form` will taint the affected field(s)! The tainted check is made on the `form` store, not the html input fields themselves. See below for how to set data without tainting the form.
 
 ## Untainting the form
 

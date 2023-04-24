@@ -4,6 +4,7 @@
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
   import { tick } from 'svelte';
+  import { z } from 'zod';
 
   export function formData() {
     return form;
@@ -14,13 +15,12 @@
 
   export let data: PageData;
 
-  const { form, errors, enhance, message, constraints } = superForm(data.form, {
+  const { form, errors, enhance, message } = superForm(data.form, {
     taintedMessage: null,
     validators: {
       tags: (tag) =>
         tag.length < 2 ? 'Tag must be at least 2 characters' : null
-    },
-    defaultValidator: 'clear'
+    }
   });
 
   async function addTag() {
@@ -31,7 +31,7 @@
   }
 </script>
 
-<Debug open={true} data={$form} />
+<Debug data={$form} />
 
 <form
   method="POST"

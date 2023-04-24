@@ -105,7 +105,7 @@ const { form, errors, enhance } = superForm(data.form, {
 validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only',
 ```
 
-The validation happens per field when the user changes a value, and the default validation method is based on the "reward early, validate late" patttern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
+The validation happens per field when the **a value is changed**, not just when tabbing through a field. The default validation method is based on the "reward early, validate late" patttern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
 
 - If no field error, validate on `blur`
 - If field error exists, validate on `input`
@@ -158,7 +158,9 @@ $errors.username = ['Username is already taken.']
 
 ## Test it out
 
-This example demonstrates how validators are used to check if tags are of the correct length. It uses `defaultValidator = 'clear'` to remove the error when the field changes.
+This example demonstrates how validators are used to check if tags are of the correct length. 
+
+Set a tag name to blank and see that no errors show up until you move focus outside the field (blur). When you go back and correct the mistake, the error is removed as soon as you enter more than one character (input).
 
 <Form {data} />
 
