@@ -4,7 +4,6 @@
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
   import { tick } from 'svelte';
-  import { z } from 'zod';
 
   export function formData() {
     return form;
