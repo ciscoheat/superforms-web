@@ -47,7 +47,7 @@
       image: images[i][0],
       title: images[i][1],
       body: images[i][2],
-      buttonTextCancel: 'OK'
+      buttonTextCancel: 'Close'
     };
     modalStore.trigger(alert);
   }
@@ -78,9 +78,5 @@
       //height: 200px;
       object-fit: contain;
     }
-  }
-
-  :global(.modal-footer) {
-    display: none;
   }
 </style>
