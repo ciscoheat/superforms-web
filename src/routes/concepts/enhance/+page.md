@@ -50,6 +50,8 @@ When `invalidateAll` is `true` (the default) and a successful validation result 
 
 Since we're binding the fields to `$form`, a html form reset (clearing all fields in DOM) won't have any effect, so in Superforms, resetting means _going back to the initial state of the form data_, which usually is what you initially sent to the client in `PageData`. If this isn't what you want, you can use [an event](/concepts/events) to set `$form` and `$tainted` directly.
 
+Without `use:enhance`, you can reset the form by modifying the data returned from `superValidate` before it is sent to the client.
+
 ## When to change the defaults?
 
 Quite rarely! If you have a single form on the page and nothing else is causing the page to invalidate, you'll probably be fine as it is.

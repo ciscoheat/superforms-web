@@ -65,13 +65,13 @@ const schema = z.object({
   email: z.string().email()
 });
 
-export const load = (async () => {
+export const load = async () => {
   // Server API:
   const form = await superValidate(schema);
 
   // Always return { form } in load and form actions.
   return { form };
-})
+};
 ```
 
 The Superform server API is called `superValidate`. You can call it in two ways in the load function:
@@ -85,7 +85,7 @@ If you want to the form to be initially empty, just pass the schema as in the ex
 If you want to populate the form, you can call the database and send the data to the form as the first parameter, schema second, like this:
 
 ```ts
-export const load = (async ({ params }) => {
+export const load = async ({ params }) => {
   const user = db.users.findUnique({
     where: { id: params.id }
   });
@@ -96,14 +96,14 @@ export const load = (async ({ params }) => {
 
   // Always return { form } in load and form actions.
   return { form };
-})
+};
 ```
 
 As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is very useful for backend interfaces, where the form usually should be populated based on an url like `/users/123`.
 
 ### Important note about return values
 
-At the end of the load function we return `{ form }`. You should **always** return the validation object to the client in this manner, either directly or through a helper function. The name of the variable doesn't matter, you can call it `{ loginForm }` or anything else, but it needs to be returned in all code paths, both in load functions and form actions, encapsulated in an object.
+At the end of the load function we return `{ form }`. Unless you redirect or throw an error, you should **always** return the validation object to the client in this manner, either directly or through a helper function. The name of the variable doesn't matter, you can call it `{ loginForm }` or anything else, but it needs to be returned in all code paths, both in load functions and form actions, encapsulated in an object.
 
 ### Displaying the form
 
@@ -196,7 +196,7 @@ export const actions = {
     // Yep, return { form } here too
     return { form };
   }
-}
+};
 ```
 
 Submit the form, and see what's happening on the server:
@@ -287,13 +287,13 @@ const schema = z.object({
   email: z.string().email()
 });
 
-export const load = (async () => {
+export const load = async () => {
   // Server API:
   const form = await superValidate(schema);
 
   // Always return { form } in load and form actions.
   return { form };
-})
+};
 
 const schema = z.object({
   name: z.string().default('Hello world!'),
@@ -313,7 +313,7 @@ export const actions = {
 
     return { form };
   }
-}
+};
 ```
 
 **src/routes/+page.svelte**
