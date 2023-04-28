@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Header from './Header.svelte'
 	import Youtube from '$lib/Youtube.svelte'
+	import Gallery from './Gallery.svelte'
 </script>
 
 <svelte:head><title>Superforms for SvelteKit</title></svelte:head>
@@ -13,11 +14,7 @@ It enables you to use a Zod validation schema as a **single source of truth**, w
 
 The API is minimal, basically a single method on the server and client, but is very flexible and configurable to handle every possible case of:
 
-- Nested data structures
-- Multiple forms on the same page
-- Tainted fields
-- Client-side validation
-- And much more.
+<Gallery />
 
 ## Get started
 
