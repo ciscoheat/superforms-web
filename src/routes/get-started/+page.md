@@ -269,7 +269,19 @@ We do that by adding properties to the destructuring assignment of `superForm`:
 
 As you see, by including `errors` we can display errors where it's appropriate, and through `constraints` we get browser validation even without javascript enabled. The `data-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
 
-We now have a fully working form with convenient handling of data and validation both on client and server! There are no hidden DOM manipulations or other behind the scenes secrets, it's just html attributes and Svelte stores.
+We now have a fully working form with convenient handling of data and validation both on client and server! 
+
+There are no hidden DOM manipulations or other behind the scenes secrets, it's just html attributes and Svelte stores.
+
+## Next steps
+
+This concludes the tutorial (full source code below), but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring.
+
+To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. Most pages there contain interactive examples that helps you use the library to its fullest.
+
+When you've gone over all the concepts, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
+
+If you're ready for a more advanced tutorial, check out [Designing a CRUD interface](/crud), which shows how to make a fully working backend in about 150 lines of code.
 
 ## Complete example code
 
@@ -360,13 +372,3 @@ export const actions = {
   }
 </style>
 ```
-
-## Next steps
-
-This concludes the tutorial, but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring.
-
-To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. Most pages there contain interactive examples that helps you use the library to its fullest.
-
-When you've gone over all the concepts, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
-
-If you're ready for a more advanced tutorial, check out [Designing a CRUD interface](/crud), which shows how to make a fully working backend in about 150 lines of code.

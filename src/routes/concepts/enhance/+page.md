@@ -26,11 +26,13 @@ As a general rule, without `use:enhance` on the form, **not much will work**. Yo
 
 ## Usage
 
+The default values are shown in the example, you don't need to add them unless you want to change a value.
+
 ```ts
 const { form, enhance, reset } = superForm(data.form, {
-  applyAction: boolean = true;
-  invalidateAll: boolean = true;
-  resetForm: boolean = false;
+  applyAction: true;
+  invalidateAll: true;
+  resetForm: false;
 })
 ```
 
