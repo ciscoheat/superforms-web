@@ -11,9 +11,9 @@
 
 <svelte:head><title>Multiple forms on the same page</title></svelte:head>
 
-Since there is only one `$page.form` per page, having multiple forms, for example a register and login form on the same page, can cause trouble since an update with the built-in `use:enhance` will affect both forms.
+Since there is only one `page` store for each `+page.svelte`, having multiple forms, for example a register and login form on the same page, can cause problems since any form action will update `$page.form` and possibly affect both forms.
 
-Fortunately Superforms has a solution for this! Multiple forms on the same page are possible by setting `options.id` for each form (one can have the default id, `undefined`). This prevents them from interfering with with each other, which can happen since they all update the same `$page.status` and `$page.form`.
+Fortunately Superforms has a solution for this: Multiple forms on the same page are possible by setting `options.id` for each form (one can have the default id, `undefined`). This prevents them from interfering with each other.
 
 ## Usage
 
@@ -74,9 +74,9 @@ export const actions = {
 
 ## Server-client communication
 
-This is only the **server-to-client** part however. You can still post to this form action from anywhere, and the server knows nothing about who sent the form.
+This is only the **server-to-client** part however. As you can post to this form action from anywhere, the server knows nothing about who sent the form.
 
-The example above is using [named form actions](https://kit.svelte.dev/docs/form-actions#named-actions) to determine which form was posted. On the client, you'll post to different form actions for the respective forms:
+The example above is using [named form actions](https://kit.svelte.dev/docs/form-actions#named-actions) to determine which form was posted. On the client, you'll post to these different form actions for the respective form:
 
 **+page.svelte**
 
@@ -124,7 +124,7 @@ The example above is using [named form actions](https://kit.svelte.dev/docs/form
 </form>
 ```
 
-This works well with forms that only posts to its dedicated form action. But for more dynamic scenarios, let's say a database table where rows can be editable, you want to communicate to the server which form id was sent. This can be done with a hidden form field or a query parameter, to let the server know what `id` was posting, and what it should respond with.
+This works well with forms that only post to its dedicated form action. But for more dynamic scenarios, let's say a database table where rows can be editable, you want to communicate to the server which form id was sent. This can be done with a hidden form field or a query parameter, to let the server know what `id` was posting, and what it should respond with.
 
 ### Setting id on the client
 
@@ -148,7 +148,7 @@ const { form, enhance } = superForm(data.form, schema, {
 
 Due to the many different use cases, it's hard to set sensible defaults for multiple forms. A common issue is that the other forms' data are lost when one is submitted. This is due to the page being invalidated as default on a successful response. If you want to preserve their data, you'd almost certainly want to set `invalidateAll: false` or `applyAction: false` on them, as in the example above. The [use:enhance](/concepts/enhance) options explains the differences between them.
 
-Also check out the [componentization](/components) page for ideas how to place the forms into separate components, to make `+page.svelte` less cluttered.
+Also check out the [componentization](/components) page for ideas on how to place the forms into separate components, to make `+page.svelte` less cluttered.
 
 ## Test it out
 
