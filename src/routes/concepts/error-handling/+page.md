@@ -59,6 +59,20 @@ const { form, enhance, errors, allErrors } = superForm(data.form, {
   onError: (({ result, message }) => void) | 'apply'
 })
 ```
+### accessible considerations for error messages
+There are only a few adptions needed, to make client side validation accessible to screanreaders.
+```svelte
+<input
+  type="email"
+  name="email"
+  bind:value={$form.email}
+  aria-describedby="emailDescription" />
+<span
+  id="emailDescription"
+  aria-live="assertive">
+  {$errors.email}
+</span>
+```
 
 ### errorSelector
 
