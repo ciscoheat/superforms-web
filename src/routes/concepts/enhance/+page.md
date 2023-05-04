@@ -22,11 +22,13 @@ By using `enhance` returned from `superForm`, we'll get the client-side enhancem
 
 Now all form submissions will happen on the client, and we unlock a ton of extra features, that will be explained here and in the rest of this section.
 
+The `use:enhance` action takes no arguments, instead events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
+
 As a general rule, without `use:enhance` on the form, **not much will work**. You'll get no events, no timers, no client-side validation except for `constraints`, etc.
 
 ## Usage
 
-The default values are shown in the example, you don't need to add them unless you want to change a value.
+The default values are shown in the examples, you don't need to add them unless you want to change a value.
 
 ```ts
 const { form, enhance, reset } = superForm(data.form, {

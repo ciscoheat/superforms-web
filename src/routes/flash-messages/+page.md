@@ -14,7 +14,7 @@ The sister library to Superforms is called [sveltekit-flash-message](https://git
 import * as flashModule from 'sveltekit-flash-message/client';
 
 const { form, errors, enhance } = superForm(data.form, {
-  syncFlashMessage = false,
+  syncFlashMessage: false,
   flashMessage: {
     module: flashModule,
     onError?: ({error, message}) => {
