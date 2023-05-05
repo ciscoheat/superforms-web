@@ -1,6 +1,7 @@
 <script lang="ts">
   import github from '$lib/assets/github.svg?raw';
   import kofi from '$lib/assets/ko-fi.svg?raw';
+  import buymeacoffee from '$lib/assets/buymeacoffee.svg?raw';
   import paypal from '$lib/assets/paypal.svg?raw';
 </script>
 
@@ -13,6 +14,11 @@
   <a href="https://ko-fi.com/ciscoheat" target="_blank">
     <div class="w-9">{@html kofi}</div>
     <div class="btn variant-ghost">Sponsor Superforms on Ko-fi</div>
+  </a>
+
+  <a href="https://buymeacoffee.com/ciscoheat" target="_blank">
+    <div class="w-9">{@html buymeacoffee}</div>
+    <div class="btn variant-ghost">Sponsor Superforms on Buymeacoffee</div>
   </a>
 
   <form

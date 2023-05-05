@@ -23,6 +23,7 @@
   import github from '$lib/assets/github.svg?raw';
   import kofi from '$lib/assets/ko-fi.svg?raw';
   import paypal from '$lib/assets/paypal.svg?raw';
+  import buymeacoffee from '$lib/assets/buymeacoffee.svg?raw';
   import SearchButton from './SearchButton.svelte';
   import { tick } from 'svelte';
   import { writable } from 'svelte/store';
@@ -212,7 +213,7 @@
     {#if !hideSponsor}
       <div
         transition:fade={{ duration: 150 }}
-        class="sponsor card absolute p-4 flex flex-col justify-end gap-3 h-50 md:h-52"
+        class="sponsor card absolute p-4 flex flex-col justify-end gap-3 h-50 md:h-64"
         use:clickOutside={{
           event: () => (hideSponsor = !hideSponsor),
           ignore: '.sponsor.btn'
@@ -234,13 +235,20 @@
           <span class="w-6 p-0 text-primary-500">{@html kofi}</span>
           <span>Ko-fi</span>
         </a>
+        <a
+          href="https://buymeacoffee.com/ciscoheat"
+          target="_blank"
+          class="btn btn-sm variant-ghost">
+          <span class="w-6 p-0 text-primary-500">{@html buymeacoffee}</span>
+          <span>Buymeacoffee</span>
+        </a>
         <form
           class="flex"
           action="https://www.paypal.com/donate"
           method="POST"
           target="_top">
           <input type="hidden" name="hosted_button_id" value="NY7F5ALHHSVQS" />
-          <button type="submit" class="btn btn-sm variant-ghost">
+          <button type="submit" class="btn btn-sm variant-ghost w-full">
             <span class="w-6 p-0 text-primary-500">{@html paypal}</span>
             <span class="pr-3">Paypal</span>
           </button>
