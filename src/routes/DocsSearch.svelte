@@ -84,9 +84,9 @@
 
     //console.log(current, e.code, e.target, e.currentTarget);
 
-    function focusOn(index: number) {
+    function focusOn(index: number | -1) {
       e.preventDefault();
-      list.at(index)?.focus();
+      list[index == -1 ? list.length - 1 : index]?.focus();
     }
 
     if (current === 0 && list.length > 1) {
@@ -97,7 +97,7 @@
       }
     } else if (e.code === 'ArrowUp' && e.target === list[1]) {
       focusOn(0);
-    } else if (e.code === 'ArrowDown' && e.target === list.at(-1)) {
+    } else if (e.code === 'ArrowDown' && e.target === list[list.length - 1]) {
       focusOn(0);
     } else if (e.code == 'Backspace') {
       list[0].focus();
