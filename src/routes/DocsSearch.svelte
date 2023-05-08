@@ -97,7 +97,7 @@
       }
     } else if (e.code === 'ArrowUp' && e.target === list[1]) {
       focusOn(0);
-    } else if (e.code === 'ArrowDown' && e.target === list.at(-1)) {
+    } else if (e.code === 'ArrowDown' && e.target === list[list.length - 1]) {
       focusOn(0);
     } else if (e.code == 'Backspace') {
       list[0].focus();
