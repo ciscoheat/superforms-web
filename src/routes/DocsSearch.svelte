@@ -86,7 +86,7 @@
 
     function focusOn(index: number) {
       e.preventDefault();
-      list.at(index)?.focus();
+      list?.[index]?.focus();
     }
 
     if (current === 0 && list.length > 1) {
