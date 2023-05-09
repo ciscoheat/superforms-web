@@ -221,6 +221,7 @@ How nice would this be? This can actually be pulled of in a typesafe way with a 
 <label>
   {String(path)}<br />
   <input
+    name={field}
     type="text"
     data-invalid={$errors}
     bind:value={$value}
@@ -241,7 +242,7 @@ Some explanations are definitiely at hand! First, `type T = $$Generic<AnyZodObje
 
 What may look strange is `UnwrapEffects<T>`, this is because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type. The `UnwrapEffects` type will extract the actual object, which may be several levels deep.
 
-We also need the field names for the actual data object, not the schema itself. `z.infer<T>` is used for that. Finally, `FieldPath` is the type for a nested path, so we can reach into the data structure to any depth.
+We also need the field names for the actual data object, not the schema itself. `z.infer<T>` is used for that. Finally, `FieldPath` is the type for a nested path, so we can reach into the data structure to any depth (which requires `dataType: 'json'` to be set, since it's [nested data](/concepts/nested-data)).
 
 ## A minor issue: Checkboxes
 
@@ -259,6 +260,7 @@ Because our component is generic, `value` returned from `formFieldProxy` can't b
 </script>
 
 <input
+  name={field}
   type="checkbox"
   class="checkbox"
   bind:checked={$boolValue}

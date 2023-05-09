@@ -59,3 +59,9 @@ Yes, there is a helper function for constructing an `ActionResult` that can be r
 ### Can a form be factored out into a separate component?
 
 This question now has its own [article page here](/components).
+
+---
+
+### I see the data in $form, but it's not posted to the server?
+
+The most common mistake is to forget a `name` attribute on the input field. If you're not using `dataType: 'json'` (see [nested data](/concepts/nested-data)), the form is treated as a normal HTML form, which requires a name attribute for posting the form data.
