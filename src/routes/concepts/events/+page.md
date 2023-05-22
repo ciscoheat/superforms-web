@@ -66,13 +66,15 @@ const { form } = superForm(data.form, {
 
 Also if `applyAction` is `false`, which means that `$page.status` won't update, you'll find the status code for the request in `result`.
 
+**Note:** if you just want to check if the validation succeeded, use `onUpdated` instead of `onResult`, it's simpler.
+
 ### onUpdate
 
 ```ts
-onUpdate: ({ form, cancel }) => void
+onUpdate: ({ form, formEl, cancel }) => void
 ```
 
-If you don't care about the details of the `ActionResult`, rather the validation result, `onUpdate` is triggered just before the form update is being applied, and gives you the option to modify the validation result in `form`, or `cancel()` the update altogether.
+If you don't care about the details of the `ActionResult`, rather the validation result, `onUpdate` is triggered just before the form update is being applied, and gives you the option to modify the validation result in `form`, or `cancel()` the update altogether. You have also access to the form's `HTMLFormElement` with `formEl`.
 
 This is the event you should use with a single-page application (SPA) if you want to validate the data. see [the SPA page](/concepts/spa) for details.
 
@@ -84,7 +86,7 @@ onUpdated: ({ form }) => void
 
 If you just want the default behaviour and do something after a valid update, like showing a toast notification, `onUpdated` is the easiest way.
 
-`form` contains the validation result, and is read-only here, since the stores have already updated at this point.
+`form` contains the validation result, and is read-only here, since the stores have updated at this point.
 
 **Example:**
 

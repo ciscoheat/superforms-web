@@ -86,7 +86,7 @@ See [this page](/concepts/multiple-forms) for information about `id` and multipl
 #### Error and data behavior
 
 - If the data passed to `superValidate` **is not** empty, errors will be returned unless the `errors` option is `false`.
-- Vice versa, if the data **is** empty, no errors will be returned unless `errors` is `true`. 
+- Vice versa, if the data **is** empty, no errors will be returned unless `errors` is `true`.
 
 This does not affect the `valid` property of the `Validation` object, which always indicates whether validation succeeded or not.
 
@@ -196,7 +196,7 @@ export const actions = {
 
 ### actionResult(type, data?, options? | status?)
 
-When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you **must** return an `ActionResult`, `throw redirect(...)` won't work for example, `superForm` expects an `ActionResult`. 
+When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you **must** return an `ActionResult`, `throw redirect(...)` won't work for example, `superForm` expects an `ActionResult`.
 
 This method helps you construct one in a `Response` object, so you can return a validation object from your API/endpoints.
 
@@ -275,7 +275,7 @@ superForm<T, M = any>(
 
 ```ts
 FormOptions<T, M> = Partial<{
-    id: string;
+  id: string;
   applyAction: boolean;
   invalidateAll: boolean;
   resetForm: boolean | (() => MaybePromise<boolean>);
@@ -297,6 +297,7 @@ FormOptions<T, M> = Partial<{
   }) => MaybePromise<unknown | void>;
   onUpdate: (event: {
     form: Validation<T, M>;
+    formEl: HTMLFormElement;
     cancel: () => void;
   }) => MaybePromise<unknown | void>;
   onUpdated: (event: {
@@ -313,10 +314,7 @@ FormOptions<T, M> = Partial<{
         message: Writable<Validation<T, M>['message']>;
       }) => MaybePromise<unknown | void>);
   dataType: 'form' | 'json';
-  validators:
-    | T
-    | false
-    | Validators<T>;
+  validators: T | false | Validators<T>;
   validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only';
   defaultValidator: 'keep' | 'clear';
   clearOnSubmit: 'errors' | 'message' | 'errors-and-message' | 'none';
