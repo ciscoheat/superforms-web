@@ -11,9 +11,27 @@
 
 <svelte:head><title>Error handling</title></svelte:head>
 
-Most errors will be set automatically through the validation schema, but you may want to add errors after determining that the data is valid. This is easily done with the `setError` helper function.
+By deconstructing `errors` from `superForm`, you'll get an object with form errors that you can display where it's appropriate:
+
+```svelte
+<script lang="ts">
+  const { form, errors } = superForm(data.form);
+</script>
+
+<form method="POST">
+  <label for="name">Name</label>
+  <input name="name" data-invalid={$errors.name} bind:value={$form.name} />
+  {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
+
+  <div><button>Submit</button></div>
+</form>
+```
+
+The `data-invalid` attribute is used to automatically focus on the first error field, see the `errorSelector` option further below.
 
 ## setError
+
+Most errors will be set automatically when the data is validated, but you may want to add errors after determining that the data is valid. This is easily done with the `setError` helper function.
 
 ```ts
 import { setError, superValidate } from 'sveltekit-superforms/server';
@@ -46,9 +64,9 @@ setError(form, ['post', 'tags', 3], 'Invalid tag name.');
 
 ## Usage (client)
 
-On the client, errors are available in the `$errors` store. It gives you a high flexibility, since you can place error messages anywhere on the page.
+As said, errors are available in the `$errors` store. It gives you a high flexibility, since you can place error messages anywhere on the page.
 
-In larger forms, the submit button may be far away from the error, then it's nice showing the user where the first error is. There are a couple of options for that:
+In larger forms, the submit button may be far away from the error, so it's nice showing the user where the first error is. There are a couple of options for that:
 
 ```ts
 const { form, enhance, errors, allErrors } = superForm(data.form, {
@@ -62,7 +80,7 @@ const { form, enhance, errors, allErrors } = superForm(data.form, {
 
 ### errorSelector
 
-This is the selector used to find the invalid input fields. The default is `[data-invalid]`, and the first one found on the page will be handled according to the other settings. You usually set it on the input fields as such:
+This is the CSS selector used to locate the invalid input fields after form submission. The default is `[data-invalid]`, and the first one found on the page will be scrolled to and focused on, depending on the other settings. You usually set it on the input fields as such:
 
 ```svelte
 <input
@@ -93,6 +111,24 @@ This option is an event, explained more in detail [on the event page](/concepts/
 // message is the form $message store
 onError({ result, message }) {
   message.set(result.error.message);
+}
+```
+
+The errors can be thrown server-side with the SvelteKit error helper:
+
+```ts
+import { error } from '@sveltejs/kit';
+
+export const actions = {
+  default: async ({ request }) => {
+    const form = await superValidate(request, schema);
+
+    try {
+      db.insert(form.data)
+    } catch(e) {
+      throw error(500, 'Something went wrong, please try again.')
+    }
+  }
 }
 ```
 
