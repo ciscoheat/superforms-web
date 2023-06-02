@@ -243,19 +243,35 @@ We do that by adding properties to the destructuring assignment of `superForm`:
   <input
     type="text"
     name="name"
+    aria-describedby="nameDescription"
     data-invalid={$errors.name}
     bind:value={$form.name}
     {...$constraints.name} />
-  {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
+  {#if $errors.name}
+    <span
+      class="invalid"
+      id="nameDescription"
+      aria-live="assertive" >
+      {$errors.name}
+    </span>
+  {/if}
 
   <label for="email">E-mail</label>
   <input
     type="email"
     name="email"
+    aria-describedby="emailDescription"
     data-invalid={$errors.email}
     bind:value={$form.email}
     {...$constraints.email} />
-  {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
+  {#if $errors.email}
+    <span
+      class="invalid"
+      id="emailDescription"
+      aria-live="assertive" >
+      {$errors.email}
+    </span>
+  {/if}
 
   <div><button>Submit</button></div>
 </form>
