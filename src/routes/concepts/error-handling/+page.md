@@ -114,7 +114,7 @@ onError({ result, message }) {
 }
 ```
 
-The errors can be thrown server-side with the SvelteKit error helper:
+Errors can be thrown server-side with the SvelteKit `error` helper:
 
 ```ts
 import { error } from '@sveltejs/kit';
@@ -124,12 +124,12 @@ export const actions = {
     const form = await superValidate(request, schema);
 
     try {
-      db.insert(form.data)
-    } catch(e) {
-      throw error(500, 'Something went wrong, please try again.')
+      db.insert(form.data);
+    } catch (e) {
+      throw error(500, 'Something went wrong, please try again.');
     }
   }
-}
+};
 ```
 
 ## Form-level errors
@@ -166,6 +166,8 @@ You may also want to list the errors above the form. The `$allErrors` store can 
   </ul>
 {/if}
 ```
+
+This can also be useful to disable the submit button if there are any errors.
 
 ## Test it out
 
