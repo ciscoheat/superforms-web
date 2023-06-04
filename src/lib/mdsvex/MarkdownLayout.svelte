@@ -1,7 +1,8 @@
 <script lang="ts" context="module">
   import ol from './ol.svelte';
   import table from './table.svelte';
-  export { ol, table };
+  import blockquote from './blockquote.svelte';
+  export { ol, table, blockquote };
 </script>
 
 <script lang="ts">
