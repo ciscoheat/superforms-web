@@ -49,7 +49,6 @@
     <li><A href="/faq">FAQ</A></li>
     <li><A href="/flash-messages">Flash messages</A></li>
     <li><A href="/playground">Playground</A></li>
-    <li><A href="/roadmap">Roadmap to 1.0</A></li>
   </ul>
 
   <div class="p-4 text-gray-600">

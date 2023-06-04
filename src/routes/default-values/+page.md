@@ -34,11 +34,11 @@ const schema = z.object({
 
 This looks a bit strange, but will ensure that an age isn't set to 0 as default (which will hide placeholder text in the input field), but also that the agree checkbox is unchecked as default, and will only accept true (checked) as a value.
 
-Just note that you will bypass the type system with this, so the default value will not correspond to the type, but this will usually not be a problem since `form.valid` will be `false` if these values are posted, and that should be the main determinant whether the data is trustworthy.
+> The type system is bypassed with this, so the default value will not correspond to the type, but this will usually not be a problem since `form.valid` will be `false` if these values are posted, and that should be the main determinant whether the data is trustworthy.
 
 ## Non-supported defaults
 
-Some Zod types like `ZodEnum` and `ZodUnion` can't use the above default values, in that case you have to set a default value for them yourself:
+Some Zod types like `ZodEnum` and `ZodUnion` can't use the above default values, in that case you must set a default value for them:
 
 ```ts
 const schema = z.object({
@@ -46,7 +46,7 @@ const schema = z.object({
 });
 
 // If it's nullable/optional/nullish, no need for a default (but can still be set).
-const schema = z.object({
+const schema2 = z.object({
   fish: z.enum(['Salmon', 'Tuna', 'Trout']).nullable()
 });
 ```

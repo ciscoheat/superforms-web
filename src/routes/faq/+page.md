@@ -4,18 +4,22 @@
 
 ### I want to reuse common options, how to do that easily?
 
-When you start to configure the library to suit your stack, it's recommended to create an object with default options that you will refer to instead:
+When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
 
 ```ts
-import { superForm } from 'sveltekit-superforms/client';
+import type { ZodValidation } from 'sveltekit-superforms';
+import { superForm as realSuperForm } from 'sveltekit-superforms/client';
 import type { AnyZodObject } from 'zod';
 
-export type Message = { status: 'success' | 'error'; text: string };
+export type Message = { 
+  status: 'success' | 'error' | 'warning'; 
+  text: string 
+};
 
-export function yourSuperForm<T extends AnyZodObject>(
-  ...params: Parameters<typeof superForm<T>>
+export function superForm<T extends ZodValidation<AnyZodObject>>(
+  ...params: Parameters<typeof realSuperForm<T, Message>>
 ) {
-  return superForm<T, Message>(params[0], {
+  return realSuperForm<T, Message>(params[0], {
     // Your defaults here
     errorSelector: '.has-error',
     delayMs: 300,
@@ -28,7 +32,7 @@ export function yourSuperForm<T extends AnyZodObject>(
 
 ### How to handle file uploads?
 
-Currently, file uploads are not handled with Superforms. Fields containing files will be `undefined` in `form.data` after validation. The recommended way to handle files is to grab the `FormData` and extract the files from there, after validation:
+File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation. The recommended way to handle files is to grab the `FormData` and extract the files from there, after validation:
 
 ```ts
 export const actions = {

@@ -8,6 +8,8 @@ Since it's common to redirect after a successful post, especially in backend int
 
 The sister library to Superforms is called [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message), a useful addon that handles temporary messages sent with redirects. Follow the installation and configuration instructions at its repo, then you can add it to Superforms, and it will work without any extra calls to `updateFlash`.
 
+If you want to integrate the flash message more closely with a form, you have a couple of options for that:
+
 ## Usage
 
 ```ts
@@ -23,6 +25,8 @@ const { form, errors, enhance } = superForm(data.form, {
   }
 }
 ```
+
+As you see, you need to import the whole client module and add it to the `flashMessage` option. Then you can do the following:
 
 ### syncFlashMessage
 
