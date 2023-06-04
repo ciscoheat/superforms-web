@@ -20,49 +20,12 @@ import {
   intProxy,
   numberProxy,
   booleanProxy,
-  dateProxy
+  dateProxy,
+  stringProxy
 } from 'sveltekit-superforms/client';
 ```
 
-### intProxy(form, fieldName)
-
-Creates a proxy (store) for an integer in the schema. Changes in either the proxy or the form field will reflect in the other.
-
-### numberProxy(form, fieldName)
-
-Creates a proxy (store) for a number in the schema.
-
-### booleanProxy(form, fieldName, options?)
-
-**Options**
-
-```ts
-{
-  trueStringValue: 'true';
-}
-```
-
-Creates a proxy (store) for a boolean form field. The option can be used to change what string value represents `true`.
-
-### dateProxy(form, fieldName, options?)
-
-**Options**
-
-```ts
-{
-  format:
-    // Extract the part of the date as a substring:
-    | 'date' | 'datetime' | 'time'
-    // Convert the date to UTC:
-    | 'date-utc' | 'datetime-utc' | 'time-utc'
-    // Convert the date to local time:
-    | 'date-local' | 'datetime-local' | 'time-local'
-    // The default ISODateString:
-    | 'iso' = 'iso'
-}
-```
-
-Creates a proxy store for a date field. The option can be used to format the resulting date string differently, useful when data comes from a date input (see the example below).
+> See [the API](/api#proxy-objects) for a detailed description of each kind of proxy.
 
 ## Usage
 

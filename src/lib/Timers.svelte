@@ -42,8 +42,8 @@
         color: rgb(55, 200, 55);
       }
     }
-    
-    width: min-content;
+
+    width: max-content;
     font-size: 100%;
     @media screen and (max-width: 600px) {
       font-size: 85%;

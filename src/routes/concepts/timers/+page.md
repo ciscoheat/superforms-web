@@ -12,7 +12,7 @@
 
 <svelte:head><title>Timers</title></svelte:head>
 
-As said in the previous section, the user should understand that things are happening when they submit the form. Timers gives us a way of providing feedback at the right time, based upon human perception research.
+As said in the previous section, the user should understand that things are happening when they submit the form. Timers gives us a way of providing feedback when there is a response delay, based upon human perception research.
 
 ## Usage
 
@@ -25,7 +25,7 @@ const { form, enhance, submitting, delayed, timeout } = superForm(data.form, {
 
 ## Submit state
 
-The `delayMs` and `timeoutMs` decides how long before the submission changes state. The states are:
+After a certain time when the form is submitted, determined by `delayMs` and `timeoutMs`, the timers changes state. The states are:
 
 <Timers />
 
@@ -40,11 +40,12 @@ A perfect use for these timers is to show a loading indicator while the form is 
 ```svelte
 <script lang="ts">
   const { form, errors, enhance, delayed } = superForm(data.form);
+  import spinner from '$lib/assets/spinner.svg'
 </script>
 
 <div>
-  <button>Submit</button>
-  {#if $delayed}<span class="delayed">Working...</span>{/if}
+  <button>Submit</button> 
+  {#if $delayed}<img src={spinner} />{/if}
 </div>
 ```
 
@@ -58,6 +59,6 @@ Click multiple times to see the effect of `multipleSubmits = 'prevent'` as well.
 
 <Form {data} />
 
-Experimenting with these three timers and the delay between them, it's certainly possible to prevent the feeling of unresponsiveness in many cases. Please share your results on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms/discussions), if you do!
+By experimenting with these three timers and the delay between them, it's certainly possible to prevent the feeling of unresponsiveness. Please share your results on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms/discussions), if you do!
 
 <Next section={concepts} />

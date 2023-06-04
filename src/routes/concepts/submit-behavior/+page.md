@@ -7,7 +7,7 @@
 
 <svelte:head><title>Submit behavior</title></svelte:head>
 
-Making the user understand that things are happening when they submit the form is imperative for the best possible user experience. Superforms provides you with timers (see next section) and the following option for handling this:
+When the user submits a form, it's imperative for the best possible user experience to show that things are processing. Superforms provides you with timers (see next section) and the following options for handling this:
 
 ## Usage
 
@@ -28,7 +28,7 @@ If you don't want any jumping content, which could occur when error messages are
 
 This one is as much for the sake of the server than of the user.
 
-- When set to `prevent`, the form cannot be submitted again until a result is received, or the `timeout` state is reached (see next section).
+- When set to `prevent`, the form cannot be submitted again until a result is received, or the `timeout` state is reached (see next section about timers).
 - `abort` is the next sensible approach, which will cancel the previous request before submitting again.
 - Finally, `allow` will pass through any number of frenetic clicks on the submit button!
 

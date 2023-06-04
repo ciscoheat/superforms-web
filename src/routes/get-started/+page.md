@@ -133,6 +133,8 @@ Now when we have sent the validation data to the client, we will retrieve it usi
 </form>
 ```
 
+> Don't forget the `name` attribute on the form fields! Unless you are using [nested data](/concepts/nested-data), they are required.
+
 `superForm` is used on the client to display the data, that we just sent from the server in `data.form`.
 
 This is what the form should look like now:
@@ -204,9 +206,9 @@ Submit the form, and see what's happening on the server:
 ```ts
 POST {
   valid: false,
+  posted: true,
   errors: { email: [ 'Invalid email' ] },
   data: { name: 'Hello world!', email: '' },
-  empty: false,
   message: undefined,
   constraints: {
     name: { required: true },
@@ -217,10 +219,10 @@ POST {
 
 This is the validation object returned from `superValidate`, containing all you need to handle the rest of the logic:
 
-- `valid` - Tells you whether the validation succeeded or not.
+- `valid` - Tells you whether the validation succeeded or not, used mostly in [events](/concepts/events).
+- `posted` - Tells you if the data was posted (in a form action, usually) or not (in a load function).
 - `errors` - An object with all validation errors.
 - `data` - The posted data, in this case not valid, so it should be returned to the client using `fail`.
-- `empty` - Tells you if the data passed to `superValidate` was empty, as it was in the load function.
 - `message` - A property that can be set as a general information message.
 - `constraints` - An object with [html validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation) that can be spread on input fields.
 

@@ -13,7 +13,7 @@
 
 ## Built-in browser validation
 
-There is already a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which is virtually effortless to use with Superforms. For more advanced cases, you can use a Zod schema or the Superforms validation object for a complete client-side validation.
+There is already a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which is virtually effortless to use with Superforms. For more advanced cases, you can use a Zod schema or the Superforms validation object, for a complete realtime client-side validation.
 
 ## Usage
 
@@ -44,7 +44,7 @@ The constraints is an object with validation properties mapped from the schema:
 ```ts
 {
   pattern?: string;      // z.string().regex(r)
-  step?: number;         // z.number().step(n)
+  step?: number | 'any'; // z.number().step(n)
   minlength?: number;    // z.string().min(n)
   maxlength?: number;    // z.string().max(n)
   min?: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
@@ -55,7 +55,7 @@ The constraints is an object with validation properties mapped from the schema:
 
 ## Realtime validators
 
-The built-in browser validation can be a bit constrained (pun intented), for example you can't easily control the position and appearance of the error messages. Instead you can set the `validators` option to a Zod schema, which is the most convenient, but increases the size of the client bundle a bit. A more lightweight alternative is to use a custom validation object.
+The built-in browser validation can be a bit constrained (pun intented), for example you can't easily control the position and appearance of the error messages. Instead you can set the `validators` option to a Zod schema, which is the most convenient, but it increases the size of the client bundle a bit. A more lightweight alternative is to use a custom validation object.
 
 ### validators
 
@@ -65,7 +65,7 @@ validators: AnyZodObject | {
 }
 ```
 
-The custom `validators` option is an object with the same keys as the form, with a function that receives the field value and should return either a `string` or `string[]` as a validation failed message, or `null` or `undefined` if the field is valid.
+The custom `validators` option is an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as a validation failed message, or `null | undefined` if the field is valid.
 
 Here's how to validate a string length, for example:
 
@@ -81,15 +81,11 @@ const { form, errors, enhance } = superForm(data.form, {
 For nested data, just keep building on the `validators` structure. Note that arrays have a single validator for the whole array:
 
 ```ts
-// On the server
 const schema = z.object({
   name: z.string().min(3),
   tags: z.string().min(2).array()
 });
-```
 
-```ts
-// On the client
 const { form, errors, enhance } = superForm(data.form, {
   validators: {
     name: (name) =>
@@ -112,19 +108,23 @@ The validation happens per field when the **a value is changed**, not just when 
 
 But you can also use the `oninput` or `onblur` setting to always validate on one of these events instead, or `submit-only` to only validate on submit.
 
+> If you're using a Zod schema as `validators`, be aware that if there are any effects on the schema (`refine/superRefine/transform`), the whole schema will validate, not just the validator for the modified field.<br><br>This is because the effects can add errors to any field in the schema, so everything must be validated to know the final result.
+
 ### defaultValidator
 
-There is one additional option for specifying the `on:input` behavior for fields with errors:
+There is one additional option for specifying the `on:input` behavior for fields, when no validator exists for a field:
 
 ```ts
 defaultValidator: 'keep' | 'clear' = 'keep'
 ```
 
-The default value `keep` means that validation errors will be displayed until the form submits (and is set to clear errors). `clear` will remove the error as soon as that field value is modified.
+The default value `keep` means that validation errors will be displayed until the form submits (given that it is set to [clear errors on submit](/concepts/submit-behavior#clearonsubmit)). 
+
+The other option `clear` will remove the error as soon as the field value is modified.
 
 ### validate
 
-The `validate` function gives you complete control over the validation process. Examples how to use it:
+The `validate` function, deconstructed from `superForm`, gives you complete control over the validation process. Examples how to use it:
 
 ```ts
 const { form, enhance, validate } = superForm(data.form)
@@ -142,14 +142,14 @@ validate('name', { value: 'Test' })
 validate('name', { value: 'Test', update: 'errors' })
 
 // Validate and update nested data, and also taint the field
-validate(['tags', 1, 'name'], { value: 'Test', taint: true })
+validate('tags[1].name', { value: 'Test', taint: true })
 ```
 
 ## Asynchronous validation and debouncing
 
-All the validators are asynchronous, so you can return a `Promise` and it will work. But for round-trip validation like checking if a username is taken, you might want to delay the validation so a request is not sent for every keystroke. There is no built-in delay option, so this can be achieved with the `on:input` event and a `debounce` function from a package like [throttle-debounce](https://www.npmjs.com/package/throttle-debounce). 
+All the validators are asynchronous, so you can return a `Promise` and it will work. But a slow validator will delay the others, so for a server round-trip validation like checking if a username is available, you might want to exclude that field from the schema and handle it manually, with `on:input` and a package like [throttle-debounce](https://www.npmjs.com/package/throttle-debounce).
 
-Errors can be set by updating the `$errors` store:
+Errors can also be set manually by updating the `$errors` store:
 
 ```ts
 // Needs to be a string[]

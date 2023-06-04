@@ -27,7 +27,7 @@ By deconstructing `errors` from `superForm`, you'll get an object with form erro
 </form>
 ```
 
-The `data-invalid` attribute is used to automatically focus on the first error field, see the `errorSelector` option further below.
+The `data-invalid` attribute is used to automatically focus on the first error field, see the [errorSelector](/concepts/error-handling#errorselector) option further below.
 
 ## setError
 
@@ -80,14 +80,14 @@ const { form, enhance, errors, allErrors } = superForm(data.form, {
 
 ### errorSelector
 
-This is the CSS selector used to locate the invalid input fields after form submission. The default is `[data-invalid]`, and the first one found on the page will be scrolled to and focused on, depending on the other settings. You usually set it on the input fields as such:
+This is the CSS selector used to locate the invalid input fields after form submission. The default is `[aria-invalid="true"],[data-invalid]`, and the first one found in the form will be scrolled to and focused on, depending on the other settings. You usually set it on the input fields as such:
 
 ```svelte
 <input
   type="email"
   name="email"
   bind:value={$form.email}
-  data-invalid={$errors.email} />
+  aria-invalid={$errors.email ? 'true' : undefined} />
 ```
 
 ### scrollToError
@@ -96,7 +96,7 @@ The `scrollToError` options determines how to scroll to the first error message 
 
 ### autoFocusOnError
 
-When `autoFocusOnError` is set to its default value `detect`, it checks if the user is on a mobile device, **if not** it will automatically focus on the first error input field. It's prevented on mobile since auto-focusing will open the on-screen keyboard, most likely hiding the validation error.
+When `autoFocusOnError` is set to its default value `detect`, it checks if the user is on a mobile device, **if not** it will automatically focus on the first error input field. It's prevented on mobile devices since focusing will open the on-screen keyboard, causing the viewport to shift and could also hide the validation error.
 
 ### stickyNavbar
 
@@ -107,8 +107,10 @@ If you have a sticky navbar, set its selector here and it won't hide any errors 
 This option is an event, explained more in detail [on the event page](/concepts/events#onerror), but it's mentioned here since you should usually implement this to display server errors in a user-friendly way. It can be as simple as this:
 
 ```ts
-// result is an error ActionResult
-// message is the form $message store
+/**
+ * result is an ActionResult with type error
+ * message is the $message store
+ */
 onError({ result, message }) {
   message.set(result.error.message);
 }
@@ -134,21 +136,23 @@ export const actions = {
 
 ## Form-level errors
 
-It's also possible to set form-level errors, either through refining the schema, or the `setError` function.
+It's also possible to set form-level errors by refining the schema:
 
 ```ts
 const refined = z
   .object({
-    name: z.string().min(1)
+    password: z.string().min(8),
+    confirm: z.string().min(8)
   })
-  .refine((data) => request.method == 'POST', 'Invalid request method.');
-
-const form = await superValidate(request, refined);
-
-return setError(form, null, 'Form-level problem.');
+  .refine(
+    (data) => data.password == data.confirm, 
+    "Passwords didn't match."
+  );
 ```
 
 These can be accessed on the client through `$errors._errors`.
+
+> The form-level errors will be added and removed during [client-side validation](/concepts/client-validation). If you would like a message to persist until the next submission, use a [status message](/concepts/messages) instead.
 
 ## Listing errors
 
@@ -159,15 +163,14 @@ You may also want to list the errors above the form. The `$allErrors` store can 
   <ul>
     {#each $allErrors as error}
       <li>
-        <b>{error.path}:</b>
-        {error.message}
+        <b>{error.path}:</b> {error.messages.join('. ')}
       </li>
     {/each}
   </ul>
 {/if}
 ```
 
-This can also be useful to disable the submit button if there are any errors.
+`$allErrors` can also be useful to disable the submit button if there are any errors.
 
 ## Test it out
 

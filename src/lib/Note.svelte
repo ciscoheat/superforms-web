@@ -3,7 +3,12 @@
 </aside>
 
 <style lang="scss">
+  :global(aside.alert > p) {
+    margin-left: 1.5rem;
+  }
+
   :global(aside.alert > p::before) {
     content: '💥 ';
+    margin-left: -1.75rem;
   }
 </style>

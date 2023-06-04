@@ -11,11 +11,9 @@
 
 <svelte:head><title>Multiple forms on the same page</title></svelte:head>
 
-Since there is only one `page` store for each `+page.svelte`, having multiple forms, for example a register and login form on the same page, can cause problems since any form action will update `$page.form` and possibly affect both forms.
+Since there is only one `page` store, multiple forms, for example a register and login form on the same page, can cause problems since form actions will update the single `$page.form`, and possibly affect both forms.
 
-Fortunately Superforms has a solution for this: Multiple forms on the same page are possible by setting `options.id` for each form (one can have the default id, `undefined`). This prevents them from interfering with each other.
-
-## Usage
+With Superforms though, multiple forms on the same page are handled transparently if you are using `use:enhance`, and the forms have different schemas. If you're using the same schema for the forms, you need to use the `id` option:
 
 ```ts
 const form = await superValidate(schema, {
@@ -23,7 +21,9 @@ const form = await superValidate(schema, {
 });
 ```
 
-By setting an id like this on the server, you'll ensure that only forms with the matching id on the client will react on the updates:
+By setting an id on the server, you'll ensure that only forms with the matching id on the client will react on the updates.
+
+> Again, you only need to add an `id` when the same schemas are being used for multiple forms on the same page.
 
 **+page.server.ts**
 
@@ -72,11 +72,7 @@ export const actions = {
 };
 ```
 
-## Server-client communication
-
-This is only the **server-to-client** part however. As you can post to this form action from anywhere, the server knows nothing about who sent the form.
-
-The example above is using [named form actions](https://kit.svelte.dev/docs/form-actions#named-actions) to determine which form was posted. On the client, you'll post to these different form actions for the respective form:
+The code above is using [named form actions](https://kit.svelte.dev/docs/form-actions#named-actions) to determine which form was posted. On the client, you'll post to these different form actions for the respective form:
 
 **+page.svelte**
 
@@ -132,21 +128,41 @@ On the client, the id is picked up automatically when you pass `data.form` to `s
 
 ```ts
 // The default: If data is used, the id is sent along with it.
-const { form, enhance } = superForm(data.loginForm, schema);
-
-// If no data is sent (for empty forms), the id can be used directly.
-const { form, enhance } = superForm('loginForm', schema);
+const { form, enhance, formId } = superForm(data.loginForm);
 
 // In advanced cases, you can set the id as an option.
 // It will take precedence over data.form.id.
-const { form, enhance } = superForm(data.form, schema, {
-  id: 'special-id'
+const { form, enhance, formId } = superForm(data.form, {
+  id: 'custom-id'
 });
+```
+
+You can change the id dynamically with the `$formId` store.
+
+### Without use:enhance
+
+Multiple forms also works without `use:enhance`, in that case you can add a hidden field called `__superform_id` with the `$formId` value:
+
+```svelte
+<script lang="ts">
+  import { superForm } from 'sveltekit-superforms/client';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+
+  const { form, errors, formId } = superForm(data.form);
+</script>
+
+<form method="POST" action="?/login">
+  <input type="hidden" name="__superform_id" bind:value={$formId}>
+</form>
 ```
 
 ## Configuration and troubleshooting
 
-Due to the many different use cases, it's hard to set sensible defaults for multiple forms. A common issue is that the other forms' data are lost when one is submitted. This is due to the page being invalidated as default on a successful response. If you want to preserve their data, you'd almost certainly want to set `invalidateAll: false` or `applyAction: false` on them, as in the example above. The [use:enhance](/concepts/enhance) options explains the differences between them.
+Due to the many different use cases, it's hard to set sensible defaults for multiple forms. A common issue is that the other forms' data are lost when one is submitted. This is due to the page being invalidated as default on a successful response. 
+
+If you want to preserve their data, you'd almost certainly want to set `invalidateAll: false` or `applyAction: false` on them, as in the example above. The [use:enhance](/concepts/enhance) options explains the differences between them.
 
 Also check out the [componentization](/components) page for ideas on how to place the forms into separate components, to make `+page.svelte` less cluttered.
 

@@ -11,7 +11,9 @@
 
 <svelte:head><title>Tainted form fields</title></svelte:head>
 
-When the form data is modified, that piece of data, and in turn the form, is considered _tainted_. A Superforms feature is to prevent the user from losing data, when accidentaly navigating away from a tainted form.
+When the form data is modified, that piece of data, and in turn the form, is considered _tainted_, also known as "dirty" in other form libraries. 
+
+A Superforms feature is to prevent the user from losing data, when accidentaly navigating away from a tainted form.
 
 ## Usage
 
@@ -21,6 +23,10 @@ const { form, enhance, tainted } = superForm(data.form, {
 })
 ```
 
+> For the user's sake, the tainted message is on as default, but if you're certain you don't want an alert to appear for a particular form, set the option to `null`. This can be necessary for login and registration forms, where password managers can taint the form when inserting saved usernames and passwords.
+
+## Example
+
 Try to modify the form below, then close the tab or hit the back button. A confirmation dialog should prevent you from losing the changes.
 
 <Form {data} />
@@ -29,7 +35,7 @@ Try to modify the form below, then close the tab or hit the back button. A confi
 
 You can access the exact fields that are tainted through the `$tainted` store, returned from `superForm`. When you modify the form fields above you'll see how the `$tainted` store reacts.
 
-**Note:** Any direct assignment to `$form` will taint the affected field(s)! The tainted check is made on the `form` store, not the html input fields. See below for how to set form data without tainting the form.
+> Any direct assignment to `$form` will taint the affected field(s)! The tainted check is made on the `form` store, not the html input fields. In general, don't modify the `$tainted` store directly, instead see below for how to set form data without tainting the form.
 
 ## Untainting the form
 
@@ -47,9 +53,5 @@ form.update($form => {
   return $form
 }, { taint: false }) // boolean | 'untaint' | 'untaint-all'
 ```
-
-## Disabling the check
-
-By setting `taintedMessage` to `null` in the options, the form won't be checked for modifications when navigating away from the page. Especially useful for forms like login and registration, where password managers can taint the form when inserting saved usernames and passwords.
 
 <Next section={concepts} />

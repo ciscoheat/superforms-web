@@ -29,6 +29,19 @@ S = z.infer<T>
  * { name: string[] | undefined }
  */
 Nested<S, string[] | undefined> // Errors for each field in S
+
+/**
+ * FormPath and FormPathLeaves are string paths that points to a field in the schema.
+ * FormPathLeaves can only be used at the end nodes of the schema.
+ * 
+ * z.object({
+ *   tags: z.object({
+ *     name: z.string().min(1)
+ *   }).array()
+ * })
+ */
+FormPath<S> = "tags[3]"
+FormPathLeaves<S> = "tags[3].name"
 ```
 
 ## Server API
@@ -36,9 +49,11 @@ Nested<S, string[] | undefined> // Errors for each field in S
 ```ts
 import {
   superValidate,
-  setError,
+  superValidateSync,
+  actionResult,
+  defaultValues,
   message,
-  actionResult
+  setError,
 } from 'sveltekit-superforms/server';
 ```
 
@@ -50,7 +65,7 @@ If you want the form to be initially empty, you can pass the schema as the first
 superValidate<T, M = any>(
   schema: T,
   options?: SuperValidateOptions
-): Promise<Validation<T, M>>
+): Promise<SuperValidated<T, M>>
 ```
 
 If you want to populate the form, for example from a database or `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter, the schema second:
@@ -68,55 +83,74 @@ superValidate<T, M = any>(
     | undefined,
   schema: T,
   options?: SuperValidateOptions
-): Promise<Validation<T, M>>
+): Promise<SuperValidated<T, M>>
+```
+
+The `superValidateSync` function can be useful on the client in Svelte components, since they cannot have top-level `await`.
+
+```ts
+superValidateSync<T, M = any>(
+  data:
+    | FormData
+    | URL
+    | URLSearchParams
+    | Partial<S>
+    | null
+    | undefined,
+  schema: T,
+  options?: SuperValidateOptions
+): SuperValidated<T, M>
 ```
 
 Options:
 
 ```ts
 SuperValidateOptions = {
-  id?: string          // Form id, for multiple forms support
-  errors?: boolean     // Add or remove errors from output (preserves valid status)
-  includeMeta = false; // Add metadata to the validation object
+  errors?: boolean;   // Add or remove errors from output (valid status is always preserved)
+  id?: string;        // Form id, for multiple forms support
+  warnings?: {        // Disable warnings
+    multipleRegexps?: boolean;
+    multipleSteps?: boolean;
+  };
 }
 ```
 
-See [this page](/concepts/multiple-forms) for information about `id` and multiple forms on the same page.
+See the page about [multiple forms](/concepts/multiple-forms) for information about when to use `id`.
 
 #### Error and data behavior
 
-- If the data passed to `superValidate` **is not** empty, errors will be returned unless the `errors` option is `false`.
-- Vice versa, if the data **is** empty, no errors will be returned unless `errors` is `true`.
+The default data in an empty form is usually invalid, but displaying lots of errors upon page load doesn't look good. Superforms handles it like this:
 
-This does not affect the `valid` property of the `Validation` object, which always indicates whether validation succeeded or not.
+- If data was sent to `superValidate`, either posted or populated with data, errors **will** be returned unless the `errors` option is `false`.
+- If no data was posted or sent to `superValidate`, **no errors will be returned** unless `errors` is `true`.
+
+This does not affect the `valid` property of the `SuperValidated` object, which always indicates whether validation succeeded or not.
 
 ### Return value from superValidate
 
 ```ts
-Validation<T, M = any> = {
+SuperValidated<T, M = any> = {
   valid: boolean;
-  empty: boolean;
+  posted: boolean;
   data: S;
   errors: Nested<S, string[] | undefined>;
   constraints: Nested<S, InputConstraints | undefined>;
   message?: M;
   id?: string;
-  meta?: { types: Nested<S, string> }
 };
 ```
 
-If data is empty, a `Validation` object with default values for the schema is returned, in this shape:
+If data is empty, a `SuperValidated` object with default values for the schema is returned, in this shape:
 
 ```js
 {
   valid: false;
-  empty: true;
+  posted: false;
   errors: options.errors ? Nested<S, string[] | undefined> : {};
   data: S;
   constraints: Nested<S, InputConstraints>;
-  id?: undefined;
-  message?: undefined;
-  meta?: { types: Record<keyof S, string> }
+  id: undefined;
+  message: undefined;
 }
 ```
 
@@ -134,7 +168,7 @@ InputConstraints = Partial<{
   pattern: string; // z.string().regex(r)
   min: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
   max: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
-  step: number; // z.number().step(n)
+  step: number | "any"; // z.number().step(n)
   minlength: number; // z.string().min(n)
   maxlength: number; // z.string().max(n)
 }>;
@@ -144,27 +178,25 @@ InputConstraints = Partial<{
 
 ```ts
 setError(
-  form: Validation<T, M>,
-  field: keyof S | [keyof S, ...(string | number)[]] | [] | null,
+  form: SuperValidated<T, M>,
+  field: FormPathLeaves<S>,
   error: string | string[],
   options?: { overwrite = false, status = 400 }
-) : ActionFailure<{form: Validation<T, M>}>
+) : ActionFailure<{form: SuperValidated<T, M>}>
 ```
 
 For setting errors on the form after validation. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning.
 
 Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400`.
 
-If the `field` argument is set to an empty array or `null`, the error will be a form-level error that can be accessed on the client with `$errors._errors`.
-
 ### message(form, message, options?)
 
 ```ts
 message(
-  form: Validation<T, M>,
+  form: SuperValidated<T, M>,
   message: M,
-  options?: { status? : number }
-) : { form: Validation<T, M> } | ActionFailure<{form: Validation<T, M>}>
+  options?: { status? : number, valid? : boolean }
+) : { form: SuperValidated<T, M> } | ActionFailure<{form: SuperValidated<T, M>}>
 ```
 
 `message` is a convenience method for setting `form.message`, best explained by an example:
@@ -182,7 +214,7 @@ export const actions = {
     }
 
     if (form.data.email.includes('spam')) {
-      // Will also return fail, since status is >= 400
+      // Will return fail and set form.valid = false, since status is >= 400
       return message(form, 'No spam please', {
         status: 403
       });
@@ -244,10 +276,11 @@ export const POST = async ({ request }) => {
 ```ts
 import {
   superForm,
-  intProxy,
-  numberProxy,
   booleanProxy,
   dateProxy,
+  intProxy,
+  numberProxy,
+  stringProxy,
   fieldProxy,
   formFieldProxy
 } from 'sveltekit-superforms/client';
@@ -258,9 +291,11 @@ The server part of the API can also be imported, for [single-page app](/concepts
 ```ts
 import {
   superValidate,
+  superValidateSync,
   setError,
   setMessage, // Same as message
-  actionResult
+  actionResult,
+  defaultValues
 } from 'sveltekit-superforms/client';
 ```
 
@@ -268,7 +303,7 @@ import {
 
 ```ts
 superForm<T, M = any>(
-  form: Validation<T, M> | null | undefined,
+  form: SuperValidated<T, M> | null | undefined,
   options?: FormOptions<T, M>
 ) : SuperForm<T, M>
 ```
@@ -278,7 +313,7 @@ FormOptions<T, M> = Partial<{
   id: string;
   applyAction: boolean;
   invalidateAll: boolean;
-  resetForm: boolean | (() => MaybePromise<boolean>);
+  resetForm: boolean | (() => boolean);
   scrollToError: 'auto' | 'smooth' | 'off';
   autoFocusOnError: boolean | 'detect';
   errorSelector: string;
@@ -296,12 +331,12 @@ FormOptions<T, M> = Partial<{
     cancel: () => void;
   }) => MaybePromise<unknown | void>;
   onUpdate: (event: {
-    form: Validation<T, M>;
+    form: SuperValidated<T, M>;
     formEl: HTMLFormElement;
     cancel: () => void;
   }) => MaybePromise<unknown | void>;
   onUpdated: (event: {
-    form: Readonly<Validation<T, M>>;
+    form: Readonly<SuperValidated<T, M>>;
   }) => MaybePromise<unknown | void>;
   onError:
     | 'apply'
@@ -311,7 +346,7 @@ FormOptions<T, M> = Partial<{
           status?: number;
           error: App.Error;
         };
-        message: Writable<Validation<T, M>['message']>;
+        message: Writable<SuperValidated<T, M>['message']>;
       }) => MaybePromise<unknown | void>);
   dataType: 'form' | 'json';
   validators: T | false | Validators<T>;
@@ -323,13 +358,7 @@ FormOptions<T, M> = Partial<{
   multipleSubmits: 'prevent' | 'allow' | 'abort';
   syncFlashMessage?: boolean;
   flashMessage: {
-    module: {
-      getFlash(page: Readable<Page>): Writable<App.PageData['flash']>;
-      updateFlash(
-        page: Readable<Page>,
-        update?: () => Promise<void>
-      ): Promise<void>;
-    };
+    module: import * as flashModule from 'sveltekit-flash-message/client';
     onError?: (event: {
       result: {
         type: 'error';
@@ -340,6 +369,9 @@ FormOptions<T, M> = Partial<{
     }) => MaybePromise<unknown | void>;
     cookiePath?: string;
     cookieName?: string;
+  };
+  warnings: {
+    duplicateId?: boolean;
   };
 }>;
 ```
@@ -360,16 +392,13 @@ SuperForm<T extends AnyZodObject, M = any> = {
   tainted: Writable<Nested<S, boolean | undefined> | undefined>;
   meta: Readable<{ types: Record<keyof S, string> | undefined }>;
 
-  valid: Readable<boolean>;
-  empty: Readable<boolean>;
   submitting: Readable<boolean>;
   delayed: Readable<boolean>;
   timeout: Readable<boolean>;
+  posted: Readable<boolean>;
 
   fields: Record<keyof S, FormField<T>>;
-  firstError: Readable<{ path: string[]; message: string } | null>;
-  allErrors: Readable<{ path: string[]; message: string }[]>;
-
+  allErrors: Readable<{ path: string; messages: string[] }[]>;
 
   options: FormOptions<T, M>;
 
@@ -381,6 +410,13 @@ SuperForm<T extends AnyZodObject, M = any> = {
 
   capture: () => SuperFormSnapshot<T, M>;
   restore: (snapshot: SuperFormSnapshot<T, M>) => void;
+
+  validate: (path: FormPathLeaves<S>, opts?: {
+    value: FormPathType<FormPathLeaves<S>>;
+    update: boolean | 'errors' | 'value';
+    taint: boolean | 'untaint' | 'untaint-all';
+    errors: string | string[];
+  }) => Promise<string[] | undefined>;
 };
 
 FormField<S, Prop extends keyof S> = {
@@ -388,19 +424,30 @@ FormField<S, Prop extends keyof S> = {
   value: Writable<S[Prop]>;
   errors?: Writable<ValidationErrors<S[Prop]>>;
   constraints?: Writable<InputConstraints<S[Prop]>>;
-  readonly type?: string;
 };
 ```
 
 ## Proxy objects
 
-### intProxy(form, fieldName)
+### intProxy(form, fieldName, options?)
 
 Creates a proxy store for an integer schema field. Changes in either the proxy store or the form field will reflect in the other.
 
-### numberProxy(form, fieldName)
+**Options:**
+
+```ts
+{ empty?: 'null' | 'undefined'; }
+```
+
+### numberProxy(form, fieldName, options?)
 
 Creates a proxy store for a numeric form field.
+
+**Options:**
+
+```ts
+{ empty?: 'null' | 'undefined'; }
+```
 
 ### booleanProxy(form, fieldName, options?)
 
@@ -430,8 +477,19 @@ Creates a proxy store for a Date schema field. The option can be used to change 
     // Convert the date to local time:
     | 'date-local' | 'datetime-local' | 'time-local'
     // The default ISODateString:
-    | 'iso' = 'iso'
+    | 'iso' = 'iso';
+  empty?: 'null' | 'undefined'
 }
+```
+
+### stringProxy(form, fieldName, options)
+
+Creates a proxy store for a string schema field. Changes in either the proxy store or the form field will reflect in the other.
+
+**Options:**
+
+```ts
+{ empty: 'null' | 'undefined'; }
 ```
 
 ### fieldProxy, formFieldProxy
@@ -458,7 +516,7 @@ A date proxy can be used like this:
   export let data: PageData;
 
   const form = superForm(data.form)
-  const date = dateProxy(form, 'date', { format: 'date' ))
+  const date = dateProxy(form, 'date', { format: 'date', empty: 'undefined' })
 </script>
 
 <input name="date" type="date" bind:value={$date} />

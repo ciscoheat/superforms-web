@@ -2,7 +2,6 @@
   import type { PageData } from './$types';
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
-  import Debug from '$lib/Debug.svelte';
 
   export function formData() {
     return form;

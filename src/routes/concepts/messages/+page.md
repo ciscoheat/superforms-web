@@ -13,7 +13,7 @@
 
 So far, almost every feature has been on the client! That's where the action is, but you may have noticed that a status message like "Form posted" is displayed when submitting the forms in the examples.
 
-The validation object contains a `message` property that is used for this.
+The validation object contains a `message` property used for this:
 
 ## Usage
 
@@ -21,7 +21,7 @@ The validation object contains a `message` property that is used for this.
 const { form, message } = superForm(data.form);
 ```
 
-This is for displaying the message on the client, like any other store:
+It is used to display the message on the client, like any other store:
 
 ```svelte
 {#if $message}
@@ -29,7 +29,7 @@ This is for displaying the message on the client, like any other store:
 {/if}
 ```
 
-But first we want to sent it from the server. This is quite easy using the `message` helper function.
+First we want to sent it from the server though. This is quite easy using the `message` helper function.
 
 ## The message helper
 
@@ -52,7 +52,7 @@ export const actions = {
       });
     }
 
-    // Returns { form }
+    // Just returns { form } with the message.
     return message(form, 'Valid form!');
   }
 };
@@ -89,7 +89,7 @@ Though if you want to keep it simple with a string, you can use `$page.status` t
 
 ## Event handling in non-JS settings
 
-Events aren't available unless JavaScript and `use:enhance` is enabled. But you can use the message as a simple event handler in non-JS scenarios. Its existence means that the form was submitted, and you can decorate it with extra metadata.
+[Events](/concepts/events) aren't available unless JavaScript and `use:enhance` are enabled. But you can use the message as a simple event handler in non-JS scenarios. Its existence means that the form was submitted, and you can decorate it with extra metadata.
 
 ## Limitations
 
