@@ -2,7 +2,7 @@
   import { modalStore, drawerStore } from '@skeletonlabs/skeleton';
   import magnify from '$lib/assets/magnify.svg?raw';
   import { debounce } from 'throttle-debounce';
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy, onMount, tick } from 'svelte';
   import type { Writable } from 'svelte/store';
 
   // Classes
@@ -43,6 +43,7 @@
 
   modalStore.subscribe(async (modals) => {
     if (modals.length && modals[0].component == 'search') {
+      await tick();
       const search = document.getElementById('search-input');
       if (search) (search as HTMLInputElement).select();
     }
@@ -82,8 +83,6 @@
     const list = searchList();
     const current = currentListIndex(list);
 
-    //console.log(current, e.code, e.target, e.currentTarget);
-
     function focusOn(index: number | -1) {
       e.preventDefault();
       list[index == -1 ? list.length - 1 : index]?.focus();
@@ -101,6 +100,10 @@
       focusOn(0);
     } else if (e.code == 'Backspace') {
       list[0].focus();
+    } else if (e.code == 'ArrowDown') {
+      focusOn(current + 1);
+    } else if (e.code == 'ArrowUp') {
+      focusOn(current - 1);
     }
   }
 
@@ -132,9 +135,7 @@
             <!-- prettier-ignore -->
             <a data-result-link class={cResultAnchor} href={link.url + (link.hash ? `#${link.hash}` : '')} on:click={() => { close(); drawerStore.close() }}>
               <div class="flex items-center gap-4 w-full">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" 
-                  d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6m0 2h7v5h5v11H6V4m2"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="currentColor" d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6m0 2h7v5h5v11H6V4"/></svg>
                 <div class="flex flex-auto justify-between items-center opacity-75">
                   <div class="font-bold w-full">{link.title} <span class="hidden md:inline text-sm opacity-50 font-normal">{link.url}</span></div>
                   <!--div class="hidden md:block text-sm opacity-50">{link.url}</div-->
