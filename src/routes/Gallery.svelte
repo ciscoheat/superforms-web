@@ -63,7 +63,7 @@
       <button type="button" on:click={() => showImage(i)}>
         <img class="m-0" alt="Multiple forms" src={image[0]} />
       </button>
-      <figcaption class="text-center">{image[1]}</figcaption>
+      <figcaption class="text-center not-italic">{image[1]}</figcaption>
     </figure>
   {/each}
 </div>
