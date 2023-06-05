@@ -1,6 +1,6 @@
 # Superforms website
 
-Powered by the beautify UI framework [Skeleton](https://www.skeleton.dev/) and the Markdown preprocessor [mdsvex](https://mdsvex.com/) that integrates with Svelte like magic.
+Powered by the beautiful UI framework [Skeleton](https://www.skeleton.dev/) and the Markdown preprocessor [mdsvex](https://mdsvex.com/) that integrates with Svelte like magic.
 
 ## Developing
 

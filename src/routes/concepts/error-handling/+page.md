@@ -20,14 +20,19 @@ By deconstructing `errors` from `superForm`, you'll get an object with form erro
 
 <form method="POST">
   <label for="name">Name</label>
-  <input name="name" data-invalid={$errors.name} bind:value={$form.name} />
+  <input
+    name="name"
+    aria-invalid={$errors.name ? 'true' : undefined}
+    bind:value={$form.name} />
   {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
 
   <div><button>Submit</button></div>
 </form>
 ```
 
-The `data-invalid` attribute is used to automatically focus on the first error field, see the [errorSelector](/concepts/error-handling#errorselector) option further below.
+The `aria-invalid` attribute is used to automatically focus on the first error field, see the [errorSelector](/concepts/error-handling#errorselector) option further below.
+
+> To track touched fields, the `$errors` object doesn't remove any fields from itself when there are no errors, it sets them to `undefined`. A truthy/falsy check should be made for each field when checking for errors.
 
 ## setError
 
@@ -55,11 +60,10 @@ export const actions = {
 
 `setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. See [the API](/api#seterrorform-field-error-options) for more options.
 
-If you have nested data, you'll use an array to specify where in the data structure the error is:
+If you have nested data, you'll use a string path to specify where in the data structure the error is:
 
 ```ts
-// Error in post.tags[3]
-setError(form, ['post', 'tags', 3], 'Invalid tag name.');
+setError(form, 'post.tags[3].name', 'Invalid tag name.');
 ```
 
 ## Usage (client)
@@ -70,7 +74,7 @@ In larger forms, the submit button may be far away from the error, so it's nice 
 
 ```ts
 const { form, enhance, errors, allErrors } = superForm(data.form, {
-  errorSelector: string | undefined = '[data-invalid]'
+  errorSelector: string | undefined = '[aria-invalid="true"],[data-invalid]'
   scrollToError: 'smooth' | 'auto' | 'off' = 'smooth'
   autoFocusOnError: boolean | 'detect' = 'detect'
   stickyNavbar: string | undefined = undefined,
@@ -144,10 +148,7 @@ const refined = z
     password: z.string().min(8),
     confirm: z.string().min(8)
   })
-  .refine(
-    (data) => data.password == data.confirm, 
-    "Passwords didn't match."
-  );
+  .refine((data) => data.password == data.confirm, "Passwords didn't match.");
 ```
 
 These can be accessed on the client through `$errors._errors`.
@@ -163,7 +164,8 @@ You may also want to list the errors above the form. The `$allErrors` store can 
   <ul>
     {#each $allErrors as error}
       <li>
-        <b>{error.path}:</b> {error.messages.join('. ')}
+        <b>{error.path}:</b>
+        {error.messages.join('. ')}
       </li>
     {/each}
   </ul>

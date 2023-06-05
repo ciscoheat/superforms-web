@@ -24,7 +24,7 @@ Now all form submissions will happen on the client, and we unlock a ton of extra
 
 The `use:enhance` action takes no arguments, instead events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
-> As a general rule, without `use:enhance` on the form, not much will work. You'll get no events, no timers, no client-side validation except for `constraints`, etc.
+> As a general rule, without `use:enhance` on the form, not much will work. You'll get no events, no timers, no client-side validation except for `constraints`, no error focus, etc.
 
 ## Usage
 
@@ -52,7 +52,7 @@ When `invalidateAll` is `true` (the default) and a successful validation result 
 
 ### resetForm
 
-Since we're binding the fields to `$form`, a html form reset (clearing all fields in DOM) won't have any effect, so in Superforms, resetting means **going back to the initial state of the form data**, usually what you initially sent to the client in `PageData`. If this isn't what you want, you can use [an event](/concepts/events) and the `reset` function.
+Since we're binding the fields to `$form`, a html form reset (clearing all fields in DOM) won't have any effect, so in Superforms, resetting means **going back to the initial state of the form data**, usually what you initially sent to the client in `PageData`. If this isn't what you want, you can use the [events](/concepts/events) and the `reset` function instead.
 
 ## When to change the defaults?
 
