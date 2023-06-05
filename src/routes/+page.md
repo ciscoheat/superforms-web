@@ -10,7 +10,7 @@
 
 Superforms is a SvelteKit library that helps you with **server-side validation** and **client-side display** of forms.
 
-It enables you to use a Zod validation schema as a **single source of truth**, with consistent handling of form data and validation errors, and full type safety.
+It enables you to use a Zod validation schema as a **single source of truth**, with consistent handling of form data and validation errors, and full type safety. It works with both TypeScript and JavaScript.
 
 The API is minimal, basically a single method on the server and client, but is very flexible and configurable to handle every possible case of:
 
