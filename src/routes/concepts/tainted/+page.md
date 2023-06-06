@@ -39,11 +39,11 @@ You can access the exact fields that are tainted through the `$tainted` store, r
 
 ## Untainting the form
 
-When a validation result is returned for the form with a status between `200-299`, the form is automatically marked as untainted by setting the `$tainted` store to `undefined`.
+When a validation result is returned for the form with a `valid` status set to `true`, the form is automatically marked as untainted by setting the `$tainted` store to `undefined`.
 
 Try that by posting the form with valid values. The tainted message should not appear when browsing away from the page.
 
-You can also modify the `$tainted` store directly, but the recommended way is to set an option when modifying `form`:
+If you're assigning to `$form` and don't want it to be tainted, you can instead update it with an extra option:
 
 ```ts
 const { form } = superForm(data.form)

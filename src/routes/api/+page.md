@@ -372,6 +372,7 @@ FormOptions<T, M> = Partial<{
   };
   warnings: {
     duplicateId?: boolean;
+    noValidationAndConstraints?: boolean;
   };
 }>;
 ```
@@ -411,12 +412,12 @@ SuperForm<T extends AnyZodObject, M = any> = {
   capture: () => SuperFormSnapshot<T, M>;
   restore: (snapshot: SuperFormSnapshot<T, M>) => void;
 
-  validate: (path: FormPathLeaves<S>, opts?: {
+  validate: (path?: FormPathLeaves<S>, opts?: {
     value: FormPathType<FormPathLeaves<S>>;
     update: boolean | 'errors' | 'value';
     taint: boolean | 'untaint' | 'untaint-all';
     errors: string | string[];
-  }) => Promise<string[] | undefined>;
+  }) => Promise<(string[] | undefined) | SuperValidated<T, M>>;
 };
 
 FormField<S, Prop extends keyof S> = {

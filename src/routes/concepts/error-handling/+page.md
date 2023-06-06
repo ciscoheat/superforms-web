@@ -138,22 +138,22 @@ export const actions = {
 };
 ```
 
-## Form-level errors
+## Form-level and array errors
 
-It's also possible to set form-level errors by refining the schema:
+It's possible to set form-level errors by refining the schema:
 
 ```ts
-const refined = z
-  .object({
-    password: z.string().min(8),
-    confirm: z.string().min(8)
-  })
-  .refine((data) => data.password == data.confirm, "Passwords didn't match.");
+const refined = z.object({
+  tags: z.string().array().max(3)
+  password: z.string().min(8),
+  confirm: z.string().min(8)
+})
+.refine((data) => data.password == data.confirm, "Passwords didn't match.");
 ```
 
-These can be accessed on the client through `$errors._errors`.
+These can be accessed on the client through `$errors?._errors`. The same goes for array errors, which in the above case can be accessed through `$errors.tags?._errors`.
 
-> The form-level errors will be added and removed during [client-side validation](/concepts/client-validation). If you would like a message to persist until the next submission, use a [status message](/concepts/messages) instead.
+> The form-level and array errors will be added and removed during [client-side validation](/concepts/client-validation). If you would like a message to persist until the next submission, use a [status message](/concepts/messages) instead.
 
 ## Listing errors
 
@@ -176,7 +176,7 @@ You may also want to list the errors above the form. The `$allErrors` store can 
 
 ## Test it out
 
-This form has `data-invalid` set on erroneous fields, and lists all errors on top of the form using `$allErrors`. Try to submit and see that the first error field gets focus automatically, unless on mobile.
+This form has `aria-invalid` set on erroneous fields, and lists all errors on top of the form using `$allErrors`. Try to submit and see that the first error field gets focus automatically, unless on mobile.
 
 <Form {data} />
 

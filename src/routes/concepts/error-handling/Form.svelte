@@ -10,7 +10,8 @@
   export let data: PageData;
   const { form, errors, allErrors, enhance, tainted, message, constraints } =
     superForm(data.form, {
-      taintedMessage: null
+      taintedMessage: null,
+      clearOnSubmit: 'none'
     });
 </script>
 
@@ -23,7 +24,7 @@
     <ul class="list m-0 p-0">
       {#each $allErrors as error}
         <li class="m-0 p-0">
-          <span class="flex-auto"><b>{error.path}:</b> {error.message}</span>
+          <span class="flex-auto"><b>{error.path}:</b> {error.messages}</span>
         </li>
       {/each}
     </ul>
@@ -39,7 +40,7 @@
       type="text"
       name="name"
       bind:value={$form.name}
-      data-invalid={$errors.name} />
+      aria-invalid={$errors.name ? 'true' : undefined} />
   </label>
 
   <label class="label">
@@ -50,7 +51,7 @@
       type="text"
       name="email"
       bind:value={$form.email}
-      data-invalid={$errors.email} />
+      aria-invalid={$errors.email ? 'true' : undefined} />
   </label>
 
   <button type="submit" class="btn variant-filled">Submit</button>

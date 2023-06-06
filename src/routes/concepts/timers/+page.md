@@ -12,7 +12,7 @@
 
 <svelte:head><title>Timers</title></svelte:head>
 
-As said in the previous section, the user should understand that things are happening when they submit the form. Timers gives us a way of providing feedback when there is a response delay, based upon human perception research.
+As said in the previous section, the user should understand that things are happening when they submit the form. Timers gives us a way of providing feedback, based upon human perception research, when there is a response delay.
 
 ## Usage
 
@@ -53,7 +53,7 @@ The reason for using `delayed` instead of `submitting` is based on the article [
 
 ## Visualizing the timers
 
-Try submitting this form and see how different delay times affect the timers. Loading spinners are set to display when `delayed` and `timeout` are true. The request itself is set to timeout with an error after 10 seconds.
+Submit the following form and see how different response times affect the timers. Loading spinners are set to display when `delayed` and `timeout` are true. The request itself is set to timeout with an error after 10 seconds.
 
 Click multiple times to see the effect of `multipleSubmits = 'prevent'` as well.
 

@@ -24,7 +24,7 @@ pnpm i -D sveltekit-superforms zod
 
 ## Following along
 
-The easiest way is to open [the Stackblitz project](https://stackblitz.com/edit/sveltekit-superforms-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) for this tutorial.
+The easiest way is to open [the Stackblitz project](https://stackblitz.com/edit/sveltekit-superforms-1-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) for this tutorial.
 
 Otherwise, you can create a new SvelteKit project with `npm create svelte@latest` and copy/paste the code as you go along, or add it to an existing project.
 
@@ -245,7 +245,7 @@ We do that by adding properties to the destructuring assignment of `superForm`:
   <input
     type="text"
     name="name"
-    data-invalid={$errors.name}
+    aria-invalid={$errors.name ? 'true' : undefined}
     bind:value={$form.name}
     {...$constraints.name} />
   {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
@@ -254,7 +254,7 @@ We do that by adding properties to the destructuring assignment of `superForm`:
   <input
     type="email"
     name="email"
-    data-invalid={$errors.email}
+    aria-invalid={$errors.email ? 'true' : undefined}
     bind:value={$form.email}
     {...$constraints.email} />
   {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
@@ -269,9 +269,9 @@ We do that by adding properties to the destructuring assignment of `superForm`:
 </style>
 ```
 
-As you see, by including `errors` we can display errors where it's appropriate, and through `constraints` we get browser validation even without javascript enabled. The `data-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
+As you see, by including `errors` we can display errors where it's appropriate, and through `constraints` we get browser validation even without javascript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
 
-We now have a fully working form with convenient handling of data and validation both on client and server! 
+We now have a fully working form, with convenient handling of data and validation both on client and server! 
 
 There are no hidden DOM manipulations or other behind the scenes secrets, it's just html attributes and Svelte stores.
 
@@ -287,7 +287,7 @@ If you're ready for a more advanced tutorial, check out [Designing a CRUD interf
 
 ## Complete example code
 
-Also available [on Stackblitz](https://stackblitz.com/edit/sveltekit-superforms-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte).
+Also available [on Stackblitz](https://stackblitz.com/edit/sveltekit-superforms-1-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte).
 
 **src/routes/+page.server.ts**
 
@@ -351,7 +351,7 @@ export const actions = {
   <input
     type="text"
     name="name"
-    data-invalid={$errors.name}
+    aria-invalid={$errors.name ? 'true' : undefined}
     bind:value={$form.name}
     {...$constraints.name} />
   {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
@@ -360,7 +360,7 @@ export const actions = {
   <input
     type="email"
     name="email"
-    data-invalid={$errors.email}
+    aria-invalid={$errors.email ? 'true' : undefined}
     bind:value={$form.email}
     {...$constraints.email} />
   {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}

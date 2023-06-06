@@ -53,9 +53,24 @@ The constraints is an object with validation properties mapped from the schema:
 }
 ```
 
+For some input fields like `date`, you need to modify some constraint fields, for example if you want to limit the date to today or after:
+
+```svelte
+<input
+  name="date"
+  type="date"
+  aria-invalid={$errors.date ? 'true' : undefined}
+  bind:value={$form.date}
+  {...$constraints.date}
+  min={$constraints.date?.min?.toString().slice(0, 10)} 
+/>
+```
+
+Check the validation attributes and their valid values at [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation#validation-related_attributes).
+
 ## Realtime validators
 
-The built-in browser validation can be a bit constrained (pun intented), for example you can't easily control the position and appearance of the error messages. Instead you can set the `validators` option to a Zod schema, which is the most convenient, but it increases the size of the client bundle a bit. A more lightweight alternative is to use a custom validation object.
+The built-in browser validation can be a bit constrained (pun intented), for example you can't easily control the position and appearance of the error messages. Instead you can set the `validators` option.
 
 ### validators
 
@@ -65,7 +80,9 @@ validators: AnyZodObject | {
 }
 ```
 
-The custom `validators` option is an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as a validation failed message, or `null | undefined` if the field is valid.
+Setting it to the same Zod schema as on the server is the most convenient and recommended, but it increases the size of the client bundle a bit. A lightweight alternative is to use a custom validation object.
+
+It's an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as a validation failed message, or `null | undefined` if the field is valid.
 
 Here's how to validate a string length, for example:
 
@@ -101,18 +118,18 @@ const { form, errors, enhance } = superForm(data.form, {
 validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only',
 ```
 
-The validation happens per field when the **a value is changed**, not just when tabbing through a field. The default validation method is based on the "reward early, validate late" patttern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
+The validation is triggerd when the **a value is changed**, not just when tabbing through a field. The default validation method is based on the "reward early, validate late" patttern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
 
 - If no field error, validate on `blur`
 - If field error exists, validate on `input`
 
 But you can also use the `oninput` or `onblur` setting to always validate on one of these events instead, or `submit-only` to only validate on submit.
 
-> If you're using a Zod schema as `validators`, be aware that if there are any effects on the schema (`refine/superRefine/transform`), the whole schema will validate, not just the validator for the modified field.<br><br>This is because the effects can add errors to any field in the schema, so everything must be validated to know the final result.
+> If you're using a Zod schema as `validators`, be aware that the whole schema will validate, not just the validator for the modified field.<br><br>This is because the effects can add errors to any field in the schema, so everything must be validated to know the final result.
 
 ### defaultValidator
 
-There is one additional option for specifying the `on:input` behavior for fields, when no validator exists for a field:
+There is one additional option for specifying the validation behavior for fields when no validation exists for a field:
 
 ```ts
 defaultValidator: 'keep' | 'clear' = 'keep'
@@ -120,29 +137,37 @@ defaultValidator: 'keep' | 'clear' = 'keep'
 
 The default value `keep` means that validation errors will be displayed until the form submits (given that it is set to [clear errors on submit](/concepts/submit-behavior#clearonsubmit)). 
 
-The other option `clear` will remove the error as soon as the field value is modified.
+The other option, `clear`, will remove the error as soon as the field value is modified.
 
 ### validate
 
-The `validate` function, deconstructed from `superForm`, gives you complete control over the validation process. Examples how to use it:
+The `validate` function, deconstructed from `superForm`, gives you complete control over the validation process. Examples on how to use it:
 
 ```ts
-const { form, enhance, validate } = superForm(data.form)
+const { form, enhance, validate } = superForm(data.form);
 
 // Simplest case, validate what's in the field right now
-validate('name')
+validate('name');
 
 // Validate without updating, for error checking
-const nameErrors = await validate('name', { update: false })
+const nameErrors = await validate('name', { update: false });
 
 // Validate and update field with a custom value
-validate('name', { value: 'Test' })
+validate('name', { value: 'Test' });
 
 // Validate a custom value, update errors only
-validate('name', { value: 'Test', update: 'errors' })
+validate('name', { value: 'Test', update: 'errors' });
 
 // Validate and update nested data, and also taint the field
-validate('tags[1].name', { value: 'Test', taint: true })
+validate('tags[1].name', { value: 'Test', taint: true });
+
+// If called with no arguments, it validates the whole form and
+// returns a result similar to superValidate
+const result = await validate();
+
+if(result.valid) {
+  // ...
+}
 ```
 
 ## Asynchronous validation and debouncing

@@ -7,7 +7,7 @@
 
 <svelte:head><title>Submit behavior</title></svelte:head>
 
-When the user submits a form, it's imperative for the best possible user experience to show that things are processing. Superforms provides you with timers (see next section) and the following options for handling this:
+When the user submits a form, it's important for the user experience to show that things are processing. Superforms provides you with timers (see next section) and the following options for handling this:
 
 ## Usage
 
