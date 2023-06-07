@@ -1,5 +1,21 @@
 <script lang="ts">
   import logo from '$lib/assets/logo.svg';
+  import confetti from 'canvas-confetti';
+  import { onMount, tick } from 'svelte';
+
+  onMount(async () => {
+    if (!localStorage.getItem('1.0 release')) {
+      localStorage.setItem('1.0 release', 'true');
+      await tick();
+      confetti({
+        particleCount: 75,
+        spread: 180,
+        ticks: 200,
+        origin: { y: 0.25 },
+        colors: ['#edce0f', '#edce0f', '#E81224', '#efd210', '#7f8be6']
+      });
+    }
+  });
 </script>
 
 <div class="flex flex-col items-center pb-4">

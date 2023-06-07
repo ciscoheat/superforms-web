@@ -14,13 +14,9 @@ When `superValidate` encounters a schema field that isn't optional, or when a `F
 | bigint  | `BigInt(0)` |
 | symbol  | `Symbol()`  |
 
-## optional vs. nullable
-
-`null` will take precedence over `undefined`, so a field both `nullable` and `optional` will have `null` as its default value. Otherwise it's `undefined`.
-
 ## Changing a default value
 
-If you're not satisfied with the default values, you can set your own in the schema. You can even abuse the typing system a bit to handle the classic "agree to terms" checkbox:
+You can of course set your own default values in the schema, using the `default` method. You can even abuse the typing system a bit to handle the classic "agree to terms" checkbox:
 
 ```ts
 const schema = z.object({
@@ -36,16 +32,21 @@ This looks a bit strange, but will ensure that an age isn't set to 0 as default 
 
 > The type system is bypassed with this, so the default value will not correspond to the type, but this will usually not be a problem since `form.valid` will be `false` if these values are posted, and that should be the main determinant whether the data is trustworthy.
 
+## optional vs. nullable
+
+Fields set to `null` will take precedence over `undefined`, so a field both `nullable` and `optional` will have `null` as its default value. Otherwise it's `undefined`.
+
 ## Non-supported defaults
 
-Some Zod types like `ZodEnum` and `ZodUnion` can't use the above default values, in that case you must set a default value for them:
+The Zod types `ZodEnum` and `ZodUnion` can't use the listed default values, in which case you must set a default value for them:
 
 ```ts
 const schema = z.object({
   fish: z.enum(['Salmon', 'Tuna', 'Trout']).default('Salmon')
 });
 
-// If it's nullable/optional/nullish, no need for a default (but can still be set).
+// If it's nullable/optional/nullish, no need for a default
+// (but it can still be set)
 const schema2 = z.object({
   fish: z.enum(['Salmon', 'Tuna', 'Trout']).nullable()
 });

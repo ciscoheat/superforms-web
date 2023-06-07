@@ -181,13 +181,13 @@ setError(
   form: SuperValidated<T, M>,
   field: FormPathLeaves<S>,
   error: string | string[],
-  options?: { overwrite = false, status = 400 }
+  options?: { overwrite = false, status : NumericRange<400, 599> = 400 }
 ) : ActionFailure<{form: SuperValidated<T, M>}>
 ```
 
 For setting errors on the form after validation. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning.
 
-Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400`.
+Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400` (which must be in the range 400-599).
 
 ### message(form, message, options?)
 
@@ -195,7 +195,7 @@ Use the `overwrite` option to remove all previously set errors for the field, an
 message(
   form: SuperValidated<T, M>,
   message: M,
-  options?: { status? : number, valid? : boolean }
+  options?: { status? : NumericRange<400, 599> }
 ) : { form: SuperValidated<T, M> } | ActionFailure<{form: SuperValidated<T, M>}>
 ```
 
@@ -226,6 +226,25 @@ export const actions = {
 };
 ```
 
+Note that the `status` option must be in the range `400-599`.
+
+### defaultValues(schema)
+
+Returns the default values for a schema, either the [Superforms defaults](/default-values), or the ones you set on the schema yourself.
+
+```ts
+import { defaultValues } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+
+const schema = z.object({
+  name: z.string().min(2),
+  tags: z.string().min(1).array().default(['a', 'b'])
+})
+
+// Returns { name: '', tags: ['a', 'b'] }
+const defaults = defaultValues(schema)
+```
+
 ### actionResult(type, data?, options? | status?)
 
 When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you **must** return an `ActionResult`, `throw redirect(...)` won't work for example, `superForm` expects an `ActionResult`.
@@ -233,6 +252,8 @@ When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of fo
 This method helps you construct one in a `Response` object, so you can return a validation object from your API/endpoints.
 
 ```ts
+import { actionResult } from 'sveltekit-superforms/server';
+
 actionResult('success', { form }, (status = 200));
 actionResult('failure', { form }, (status = 400));
 actionResult('redirect', '/', (status = 303));

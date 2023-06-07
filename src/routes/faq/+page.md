@@ -2,31 +2,9 @@
 
 <svelte:head><title>FAQ</title></svelte:head>
 
-### I want to reuse common options, how to do that easily?
+### I see the data in $form, but it's not posted to the server?
 
-When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
-
-```ts
-import type { ZodValidation } from 'sveltekit-superforms';
-import { superForm as realSuperForm } from 'sveltekit-superforms/client';
-import type { AnyZodObject } from 'zod';
-
-export type Message = { 
-  status: 'success' | 'error' | 'warning'; 
-  text: string 
-};
-
-export function superForm<T extends ZodValidation<AnyZodObject>>(
-  ...params: Parameters<typeof realSuperForm<T, Message>>
-) {
-  return realSuperForm<T, Message>(params[0], {
-    // Your defaults here
-    errorSelector: '.has-error',
-    delayMs: 300,
-    ...params[1]
-  });
-}
-```
+The most common mistake is to forget the `name` attribute on the input field. If you're not using `dataType: 'json'` (see [nested data](/concepts/nested-data)), the form is treated as a normal HTML form, which requires a name attribute for posting the form data.
 
 ---
 
@@ -66,6 +44,28 @@ This question now has its own [article page here](/components).
 
 ---
 
-### I see the data in $form, but it's not posted to the server?
+### I want to reuse common options, how to do that easily?
 
-The most common mistake is to forget a `name` attribute on the input field. If you're not using `dataType: 'json'` (see [nested data](/concepts/nested-data)), the form is treated as a normal HTML form, which requires a name attribute for posting the form data.
+When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
+
+```ts
+import type { ZodValidation } from 'sveltekit-superforms';
+import { superForm as realSuperForm } from 'sveltekit-superforms/client';
+import type { AnyZodObject } from 'zod';
+
+export type Message = { 
+  status: 'success' | 'error' | 'warning'; 
+  text: string 
+};
+
+export function superForm<T extends ZodValidation<AnyZodObject>>(
+  ...params: Parameters<typeof realSuperForm<T, Message>>
+) {
+  return realSuperForm<T, Message>(params[0], {
+    // Your defaults here
+    errorSelector: '.has-error',
+    delayMs: 300,
+    ...params[1]
+  });
+}
+```

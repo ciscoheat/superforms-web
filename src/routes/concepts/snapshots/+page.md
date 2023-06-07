@@ -30,7 +30,7 @@ export const snapshot = { capture, restore };
 
 ## Test it out
 
-Modify the form below without submitting, then click the browser back button and then forward again. The form should be restored to its intermediate state. (`taintedMessage` is set to `null` for this example.)
+Modify the form below without submitting, then click the browser back button and then forward again. The form should be restored to its intermediate state. The [taintedMessage](/concepts/tainted) option is also set to `null`.
 
 <Form {form} {errors} {enhance} {message} {reset} />
 

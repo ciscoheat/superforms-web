@@ -36,10 +36,12 @@ The usage for all of them is the same:
 // z.object({ id: z.number().int() })
 
 const { form } = superForm(data.form);
-const idProxy = intProxy(form, 'id'); // Writable<string>
+
+// Returns a Writable<string>
+const idProxy = intProxy(form, 'id');
 ```
 
-Now if you bind to `$idProxy` instead of directly to `$form.id`, the value will be converted to an integer and `$form.id` will be updated automatically.
+Now if you bind to `$idProxy` instead of directly to `$form.id`, the value will be converted to and from an integer, and `$form.id` will be updated automatically.
 
 Note that this will usually happen automatically with `bind:value`, so check out all the possible [Svelte bindings](https://svelte.dev/tutorial/text-inputs) first, to avoid complicating the code!
 

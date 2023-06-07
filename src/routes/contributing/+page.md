@@ -9,7 +9,7 @@
 
 # Contributing
 
-Contributions to Superforms are very welcome! The issues and discussion pages on Github are always open for comments, and if you want to contribute some code, it's quite easy. Just fork either the [Superforms](https://github.com/ciscoheat/sveltekit-superforms) repository or its [website](https://github.com/ciscoheat/superforms-web), then you just need to execute the following to be up and running:
+Contributions to Superforms are very welcome! The issues and discussion pages on [Github](https://github.com/ciscoheat/sveltekit-superforms) are always open for comments, and if you want to contribute some code, it's quite easy. Just fork either the [Superforms](https://github.com/ciscoheat/sveltekit-superforms) repository or its [website](https://github.com/ciscoheat/superforms-web), then you just need to execute the following to be up and running:
 
 ```
 npm install

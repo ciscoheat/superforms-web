@@ -11,7 +11,7 @@
 
 # Single-page applications (SPA)
 
-Even though the validation has its place on the server, it's possible to use the whole Superforms library on the client in single page applications, aka SPA. A SPA is easy to create with SvelteKit, [fully documented here](https://kit.svelte.dev/docs/single-page-apps).
+Even though validation has its place on the server, it's possible to use the whole Superforms library on the client in single page applications. A SPA is easy to create with SvelteKit, [fully documented here](https://kit.svelte.dev/docs/single-page-apps).
 
 ## Usage
 
@@ -26,11 +26,11 @@ const { form, enhance } = superForm(data, {
 
 By setting the `SPA` option to `true`, the form will not send anything to the server. Instead the client-side [validators](/concepts/client-validation) option will determine the success or failure of the "client-posted" form, which will trigger the [event chain](/concepts/events), and the result will be most conveniently consumed in `onUpdate`.
 
-> Remember that `use:enhance` also needs to be added to the form!
+> Remember that `use:enhance` must be added to the form for SPA to work!
 
 ## Using +page.ts instead of +page.server.ts
 
-Since SPA pages don't have a server representation, you can use [+page.ts](https://kit.svelte.dev/docs/routing#page-page-js) to load initial data. Combined with a route parameter, we can make a CRUD-like page in a very simple manner:
+Since SPA pages don't have a server representation, you can use [+page.ts](https://kit.svelte.dev/docs/routing#page-page-js) to load initial data. Combined with a route parameter, we can make a CRUD-like page in a straightforward manner:
 
 **src/routes/user/[id]/+page.ts**
 
@@ -60,7 +60,7 @@ export const load = async ({ params, fetch }) => {
 };
 ```
 
-> If no data should be loaded from `+page.ts`, or you simply don't want to use it, you can import `superValidateSync` directly in `+page.svelte` instead.
+> If no data should be loaded from `+page.ts`, or you simply don't want to have such a page, you can import `superValidateSync` directly in `+page.svelte` instead.
 
 ## Displaying the form
 
@@ -82,6 +82,7 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
       SPA: true,
       validators: _userSchema,
       onUpdate({ form }) {
+        // Form validation
         if (form.data.email.includes('spam')) {
           setError(form, 'email', 'Suspicious email address.');
         } else if (form.valid) {
@@ -121,7 +122,7 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
 </form>
 ```
 
-The validation in `onUpdate` is almost the same as validating on the server. Nothing needs to be returned at the end since all modifications to `form` will reflect in the view after the `onUpdate` event is done.
+The validation in `onUpdate` is almost the same as validating in a form action on the server. Nothing needs to be returned at the end since all modifications to `form` will reflect in the view after the `onUpdate` event is done.
 
 ## Test it out
 

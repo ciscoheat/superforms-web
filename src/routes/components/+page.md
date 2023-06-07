@@ -2,7 +2,7 @@
 
 # Forms and fields in components
 
-Just by looking at the rather simple tutorial, it's obvious that quite a bit of boilerplate code adds up when building a Superform:
+Just by looking at the rather simple [get started tutorial](/get-started), it's obvious that quite a bit of boilerplate code adds up when building a Superform:
 
 ```svelte
 <label for="name">Name</label>
@@ -18,7 +18,7 @@ Just by looking at the rather simple tutorial, it's obvious that quite a bit of 
 {/if}
 ```
 
-And it gets bad in the script part when you have more than a couple of forms on the page:
+And it also gets bad in the script part when you have more than a couple of forms on the page:
 
 ```svelte
 <script lang="ts">
@@ -51,6 +51,8 @@ This leads to the question if a form and its fields can be factored out into com
 
 To do this, you need the type of the schema, which can be defined as such:
 
+**src/lib/schemas.ts**
+
 ```ts
 export const loginSchema = z.object({
   email: z.string().email(),
@@ -62,15 +64,15 @@ export type LoginSchema = typeof loginSchema;
 
 Now you can import and use this type in a separate component by using:
 
-**LoginForm.svelte**
+**src/routes/LoginForm.svelte**
 
 ```svelte
 <script lang="ts">
-  import type { Validation } from 'sveltekit-superforms';
-  import type { LoginSchema } from '$lib/schemas';
+  import type { SuperValidated } from 'sveltekit-superforms';
   import { superForm } from 'sveltekit-superforms/client'
+  import type { LoginSchema } from '$lib/schemas';
 
-  export let data: Validation<LoginSchema>;
+  export let data: SuperValidated<LoginSchema>;
 
   const { form, errors, enhance, ... } = superForm(data);
 </script>
@@ -154,7 +156,7 @@ It's a little bit better, and will certainly help when the components requires s
 
 ### Using a fieldProxy
 
-You may have heard of [proxy objects](/concepts/proxy-objects) for converting an input field value like `"2023-04-12"` into a `Date`, but this is just a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:
+You may have used [proxy objects](/concepts/proxy-objects) for converting an input field string like `"2023-04-12"` into a `Date`, but this is just a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:
 
 ```svelte
 <script lang="ts">
@@ -178,7 +180,7 @@ A `fieldProxy` isn't enough here however. We'd still have to make three proxies 
 
 ### Using a formFieldProxy
 
-The solution is to use a `formFieldProxy`, which is a helper function for producing the above three proxies from a form. To do this, we cannot immediately deconstruct what we need from `superForm`, since the `formFieldProxy` takes the form itself as an argument:
+The solution is to use a `formFieldProxy`, which is a helper function for producing the above three proxies from a form. To do this, we cannot immediately deconstruct what we need from `superForm`, since `formFieldProxy` takes the form itself as an argument:
 
 ```svelte
 <script lang="ts">
@@ -214,11 +216,11 @@ How nice would this be? This can actually be pulled of in a typesafe way with a 
   export let form: SuperForm<ZodValidation<T>, never>;
   export let field: FormPathLeaves<z.infer<T>>;
 
-  const { path, value, errors, constraints } = formFieldProxy(form, field);
+  const { value, errors, constraints } = formFieldProxy(form, field);
 </script>
 
 <label>
-  {String(path)}<br />
+  {field}<br />
   <input
     name={field}
     type="text"
@@ -241,7 +243,7 @@ Some explanations are definitiely at hand! First, `type T = $$Generic<AnyZodObje
 
 What may look strange is `ZodValidation<T>`, this is required because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type, so it's not a `AnyZodObject` anymore. The `ZodValidation` type will extract the actual object, which may be several levels deep.
 
-We also need the field names for the actual data object, not the schema itself. `z.infer<T>` is used for that. And it's wrapped in, `FormPathLeaves`, the type for a nested path, so we can reach into the data structure at any depth.
+We also need the field names for the actual data object, not the schema itself. `z.infer<T>` is used for that. And it's wrapped in `FormPathLeaves`, the type for a nested path, so we can reach into the data structure at any depth.
 
 > Nested data requires the `dataType` option to be set to `'json'`. Read more about it [here](/concepts/nested-data).
 
@@ -254,6 +256,7 @@ Because our component is generic, `value` returned from `formFieldProxy` can't b
 ```svelte
 <script lang="ts">
   import type { Writable } from 'svelte/store';
+  // ... other imports and props
 
   const { value, errors, constraints } = formFieldProxy(form, field);
 
@@ -278,7 +281,7 @@ As mentioned, using this field component is now as simple as:
 <TextField {form} field="name" />
 ```
 
-But to show off some real super proxy power, let's recreate the tags example above with the `TextField` component:
+But to show off some super proxy power, let's recreate the tags example above with the `TextField` component:
 
 ```svelte
 <form method="POST" use:enhance>
@@ -292,6 +295,6 @@ But to show off some real super proxy power, let's recreate the tags example abo
 </form>
 ```
 
-We can now produce a text field for any part of our data, and it will update the `$form` store automatically. This example even works without `use:enhance` and `dataType = 'json'`, since arrays of primitive values are coerced automatically.
+We can now produce a text field for any object inside our data, which will update the `$form` store. This example even works without `use:enhance` and `dataType = 'json'`, since arrays of primitive values are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
 
 I hope you now feel under your fingers the superpowers that Superforms bring! 💥

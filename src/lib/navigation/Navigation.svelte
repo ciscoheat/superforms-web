@@ -48,6 +48,7 @@
     <li><A href="/default-values">Default values</A></li>
     <li><A href="/faq">FAQ</A></li>
     <li><A href="/flash-messages">Flash messages</A></li>
+    <li><A href="/migration">Migration guide</A></li>
     <li><A href="/playground">Playground</A></li>
   </ul>
 

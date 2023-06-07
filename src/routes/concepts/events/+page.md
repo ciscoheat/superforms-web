@@ -12,7 +12,9 @@
 
 <svelte:head><title>Events</title></svelte:head>
 
-With `use:enhance` enabled, you get full control over the form submit process through a number of events.
+> Events are only available when JavaScript is enabled in the browser and `use:enhance` is added to the form.
+
+A number of events, triggered on form submission, gives you full control over the submit process.
 
 ## Event flowchart
 
@@ -116,6 +118,6 @@ const { form, enhance } = superForm(data.form, {
 
 You can also set `onError` to the string value "apply", in which case the default `applyAction` behaviour will be used, rendering the nearest `+error` boundary and wiping out the form, so be careful.
 
-> If you're unsure what event to use, start with `onUpdated`. If your app is a [SPA](/concepts/spa), `onUpdate` is most likely the one you should be using to validate the form data.
+> If you're unsure what event to use, start with `onUpdated`, unless your app is a [SPA](/concepts/spa), then `onUpdate` is most likely the one you should be using to validate the form data.
 
 <Next section={concepts} />

@@ -47,16 +47,19 @@ export const actions = {
 
     if (form.data.email.includes('spam')) {
       // Will also return fail, since status is >= 400
+      // form.valid will also be set to false.
       return message(form, 'No spam please', {
         status: 403
       });
     }
 
-    // Just returns { form } with the message.
+    // Just returns { form } with the message (and status code 200).
     return message(form, 'Valid form!');
   }
 };
 ```
+
+> Note that a successful form action in SvelteKit can only return status code `200`, so the status option for `message` must be in the range `400-599`, otherwise `{ form }` will be returned with a status of `200`, no matter what the status option is set to.
 
 ## Strongly typed message
 
@@ -66,7 +69,7 @@ The `message` is of type `any` as default, but you can type it with type paramet
 const form = await superValidate<typeof schema, string>(event, schema);
 ```
 
-A string can be a bit limiting though, more realistically there will be a status as well, so making a `Message` type can be useful for consistency.
+A string can be a bit limiting though, more realistically there will some kind of status as well, so making a `Message` type can be useful for consistency.
 
 ```ts
 type Message = { status: 'error' | 'success' | 'warning'; text: string };
@@ -86,10 +89,6 @@ Though if you want to keep it simple with a string, you can use `$page.status` t
   </div>
 {/if}
 ```
-
-## Event handling in non-JS settings
-
-[Events](/concepts/events) aren't available unless JavaScript and `use:enhance` are enabled. But you can use the message as a simple event handler in non-JS scenarios. Its existence means that the form was submitted, and you can decorate it with extra metadata.
 
 ## Limitations
 

@@ -25,11 +25,11 @@ const { form, errors, constraints } = superForm(data.form, {
 
 By simply setting `dataType` to `'json'`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the form, and you don't have to worry about failed coercion, converting arrays to strings and back, etc! You don't even have to set names for the form fields anymore, since the data in the `$form` store is now posted, not the fields in the html. They are now just UI components for modifying a data model.
 
-> As a precaution, `superForm` will try to detect nested objects, and if found, an error is thrown unless `dataType` is set to `'json'`.
+> This also means that the `disabled` attribute, that normally prevent fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
 
 ## Requirements
 
-The requirements for nested data to work, is that
+The requirements for nested data to work, is that:
 
 1. **JavaScript is enabled in the browser**
 2. **The form has use:enhance applied.**
@@ -104,8 +104,41 @@ Note that we're using the index of the loop, so the value can be bound directly 
 
 <Form {data} />
 
-## An exception: Primitive arrays
+## An exception: Arrays with primitive values
 
-Since you can post multiple html elements with the same name, you don't have to use `dataType = 'json'` for arrays of primitive values like numbers and strings. Just add the input fields, all with the same name as the schema field. Superforms will handle the type coercion to array automatically.
+Since you can post multiple html elements with the same name, you don't have to use `dataType = 'json'` for arrays of primitive values like numbers and strings. Just add the input fields, all with the same name as the schema field. Superforms will handle the type coercion to array automatically (just remember the name attribute):
+
+```ts
+export const schema = z.object({
+  // Note: Max three tags
+  tags: z.string().min(2).array().max(3)
+});
+```
+
+```svelte
+<script lang="ts">
+  const { form, errors } = superForm(data.form);
+</script>
+
+<form method="POST">
+  <div>Tags</div>
+  {#if $errors.tags?._errors}
+    <div class="invalid">{$errors.tags._errors}</div>
+  {/if}
+
+  {#each $form.tags as _, i}
+    <div>
+      <input name="tags" bind:value={$form.tags[i]} />
+      {#if $errors.tags?.[i]}
+        <span class="invalid">{$errors.tags[i]}</span>
+      {/if}
+    </div>
+  {/each}
+
+  <button>Submit</button>
+</form>
+```
+
+This example also shows how to display array-level errors, using the `$errors.tags._errors` field.
 
 <Next section={concepts} />
