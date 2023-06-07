@@ -106,6 +106,7 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
   import type { InputConstraint } from 'sveltekit-superforms';
 
   export let value: string;
+  export let name: string;
   export let label: string | undefined = undefined;
   export let errors: string[] | undefined = undefined;
   export let constraints: InputConstraint | undefined = undefined;
