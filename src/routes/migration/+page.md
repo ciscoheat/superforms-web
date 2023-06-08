@@ -32,7 +32,9 @@ The `$valid`, `$empty` and `$firstError` stores are removed from the client, the
 
 ### setError
 
-The `setError` function doesn't handle form-level errors anymore, because it conflicts with client-side validation. Use refine/superRefine on the schema, or the `message` helper instead.
+The `setError` function works as before, except that you must use an empty string instead of `null` for form-level errors.
+
+**Note however** that `setError` conflicts with client-side validation, the errors will be removed when a Zod schema is used for validation. Therefore, rely on the schema for most validation, if you're using it client-side.
 
 ```ts
 const schema = z
@@ -45,7 +47,7 @@ const schema = z
 
 The above error set in `refine` will be available on the client as `$errors._errors` as before, and will be automatically removed (or added) during client-side validation.
 
-If you'd like the error to persist, using `message` will persist it until the next form submission.
+If you'd like a form-level message to persist, using `message` instead of `setError` will persist it until the next form submission:
 
 ```ts
 const form = await superValidate(request, schema);
