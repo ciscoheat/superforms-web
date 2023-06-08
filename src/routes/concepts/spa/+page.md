@@ -60,7 +60,7 @@ export const load = async ({ params, fetch }) => {
 };
 ```
 
-> If no data should be loaded from `+page.ts`, or you simply don't want to have such a page, you can import `superValidateSync` directly in `+page.svelte` instead.
+> If no data should be loaded from `+page.ts`, or you simply don't want to have such a page, see further down on how to use `superValidate` in a page or component.
 
 ## Displaying the form
 
@@ -76,7 +76,7 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
 
   export let data: PageData;
 
-  const { form, errors, message, constraints, enhance, delayed } = superForm(
+  const { form, errors, message, constraints, enhance } = superForm(
     data.form,
     {
       SPA: true,
@@ -124,6 +124,27 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
 
 The validation in `onUpdate` is almost the same as validating in a form action on the server. Nothing needs to be returned at the end since all modifications to `form` will reflect in the view after the `onUpdate` event is done.
 
+## Using superValidate in +page.svelte
+
+Since you can't use top-level await in Svelte components, you can't use `superValidate` directly in `+page.svelte`, but you can import `superValidateSync` instead, to avoid having a `+page.ts` if you just want the default values for a schema:
+
+```svelte
+<script lang="ts">
+  import { superForm, superValidateSync } from 'sveltekit-superforms/client';
+  import { loginSchema } from '$lib/schemas';
+
+  const { form, errors, enhance } = superForm(
+    superValidateSync(loginSchema), {
+      SPA: true,
+      validators: loginSchema,
+      onUpdate({ form }) {
+        // TODO: Form validation
+      }
+    }
+  );
+</script>
+```
+
 ## Test it out
 
 The following form has `SPA: true` set, and is using `+page.ts` for loading the initial data. Take a look in the browser devtools and see that nothing is posted to the server on submit.
@@ -132,7 +153,7 @@ The following form has `SPA: true` set, and is using `+page.ts` for loading the 
 
 ## Trimming down the bundle size
 
-In the above example, we're adding both Zod and the Superforms server part to the client. This adds about 65 Kb to the client output size, which hopefully is negligible, but if you're hunting bytes, you can optimize by skipping the `superValidate` part in `+page.ts`, and use only the built-in validators in `+page.svelte`.
+In the above example, we're adding both Zod and the Superforms server part to the client. This adds about 65 Kb to the client output size, which hopefully is negligible, but if you're hunting bytes, you can optimize by skipping the `superValidate` part in `+page.ts`, and in `+page.svelte`, construct your own `SuperValidated` response and use the Superforms validators:
 
 **src/lib/schemas.ts**
 
@@ -171,12 +192,22 @@ export const load = async ({ params, fetch }) => {
 
 ```svelte
 <script lang="ts">
+  import type { PageData } from './$types';
+  import type { SuperValidated } from 'sveltekit-superforms';
   import { superForm } from 'sveltekit-superforms/client';
   import type { UserSchema } from '$lib/schemas';
 
   export let data: PageData;
 
-  const { form, errors, enhance } = superForm<UserSchema>(data.user, {
+  const validated : SuperValidated<UserSchema> = {
+    valid: false, // Or true, if you trust the data
+    posted: false,
+    data: data.user,
+    errors: {},
+    constraints: {}
+  }
+
+  const { form, errors, enhance } = superForm(validated, {
     SPA: true,
     validators: {
       name: (name) => (name.length <= 2 ? 'Name is too short' : null),

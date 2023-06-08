@@ -20,13 +20,13 @@ The guide is written with the affected methods in the headlines, so you can scan
 
 ### superForm
 
-For type safety reasons, you cannot pass `null` or `undefined` to `superForm` anymore, which isn't a problem usually since you should be using `superValidate` to get the initial form data that should be sent to `superForm`. 
+For type safety reasons, you cannot pass `null`, `undefined` or arbitrary data to `superForm` anymore. Instead you should be using `superValidate` to get the initial form object that should be sent to `superForm`, which is what's been done if you're returning `{ form }` from a load function or form action.
 
-But you can also pass a data object based on the schema type, which won't be validated, and there will be no constraints, so using `superValidate` is recommended.
+So if the form data is coming from the server this is not a problem, but on the client, especially in SPA settings, you must use `superValidate` or `superValidateSync` before calling `superForm`. Read more on the [SPA page](/concepts/spa) about this.
 
 ### valid, empty, firstError
 
-The `$valid`, `$empty` and `$firstError` stores are removed from the client, they weren't that useful. `$allErrors` can be used instead, together with the `$posted` store.
+The `$valid`, `$empty` and `$firstError` stores are removed from the client, they weren't that useful. `$allErrors` can be used instead, together with the new `$posted` store (which shows if the form has been previously posted or not).
 
 `empty` is removed from the object returned from `superValidate`, which type was previously called `Validation` but is now called `SuperValidated`.
 
@@ -45,22 +45,24 @@ const schema = z
 
 The above error set in `refine` will be available on the client as `$errors._errors` as before, and will be automatically removed (or added) during client-side validation.
 
-If you'd like the error to persist, `message` will persist until the next form submission.
+If you'd like the error to persist, using `message` will persist it until the next form submission.
 
 ```ts
 const form = await superValidate(request, schema);
 
 if (!form.valid) return fail(400, { form });
 
-if (form.data.password != form.data.confirmPassword)
+if (form.data.password != form.data.confirmPassword) {
+  // Stays until form is posted again, regardless of client-side validation
   return message(form, `Passwords doesn't match`, { status: 400 });
+}
 ```
 
-Finally, the status option for `setError` (and `message`) cannot be lower than 400.
+Finally, the status option for `setError` (and `message`) must be in the `400-599` range.
 
 ### setError (again), validate, proxy functions
 
-`FieldPath` is gone - the above methods are now using a string accessor like `tags[2].id` instead of an array like `['tags', 2, 'id']`.
+`FieldPath` is gone - the above methods are now using a string accessor like `tags[2].id` instead of the previous array syntax `['tags', 2, 'id']`.
 
 ```diff
 const { form, enhance, validate } = superForm(data.form)
@@ -69,7 +71,7 @@ const { form, enhance, validate } = superForm(data.form)
 validate(`tags[${i}].name`, { update: false });
 ```
 
-This also applies to generic components, so you should change the type of the field prop, as described on the [componentization page](https://superforms.vercel.app/components):
+This also applies to generic components. The types have been simplified, so you should change them to this, also described on the [componentization page](https://superforms.vercel.app/components):
 
 ```svelte
 <script lang="ts">
@@ -112,7 +114,9 @@ const tag = formFieldProxy(formData, 'tags[0]');
 const tagName = formFieldProxy(formData, 'tags[0].name');
 ```
 
-This only applies to `formFieldProxy`, since it maps to errors and constraints as well as the form. If you want to proxy a form value only, the `fieldProxy` will work with any of the above.
+> The `FormPathLeaves` type is there to prevent using a schema field that isn't at the end of the schema (the "leaves" of the schema tree)
+
+This only applies to `formFieldProxy`, since it maps to errors and constraints as well as the form. If you want to proxy just a form value, the `fieldProxy` will work with any part of the schema.
 
 ```ts
 import { fieldProxy } from 'sveltekit-superforms/client';
@@ -163,20 +167,22 @@ Or as before, separate for each error:
 
 ### defaultData
 
-The `defaultData` function is now called `defaultValues`. You can use this to get the default values for a schema.
+The undocumented `defaultData` function is now called `defaultValues`. You can use this to get the default values for a schema.
 
 ```diff
 - import { defaultData } from 'sveltekit-superforms/server`
 import { defaultValues } from 'sveltekit-superforms/server`
 ```
 
-### meta
-
-The virtually unused `meta` store has been removed. Use the Zod schema directly instead for reflection.
+See [the API](/api#defaultvaluesschema) for documentation.
 
 ### message, setMessage
 
-The `valid` option is removed from `message/setMessage`, any status >= 400 will return a fail. As with `setError`, the status code cannot be lower than 400.
+The `valid` option is removed from `message/setMessage`, any status >= 400 will return a fail. As with `setError`, the status code must be in the `400-599` range.
+
+### meta
+
+The virtually unused `meta` store, which containted some basic metadata about the schema, has been removed. Use the Zod schema directly instead for reflection.
 
 ## Client options
 
@@ -184,7 +190,7 @@ The following `superForm` options have changed:
 
 ### resetForm
 
-Resetting the form now works without `use:enhance`! Just set the `resetForm` option to `true` and it will work.
+Resetting the form now works without `use:enhance` and without JavaScript! Just set the `resetForm` option to `true`.
 
 If you have used the function version of `resetForm`, `() => boolean`, it is now synchronous.
 
@@ -193,12 +199,12 @@ If you have used the function version of `resetForm`, `() => boolean`, it is now
 The default `errorSelector` is now `[aria-invalid="true"],[data-invalid]`, so if you want to be more accessibility-friendly:
 
 ```diff
-<input
-  name="name"
-  bind:value={$form.name}
-- data-invalid={$errors.name}
-  aria-invalid={$errors.name ? 'true' : undefined}
-/>
+ <input
+   name="name"
+   bind:value={$form.name}
+-  data-invalid={$errors.name}
+   aria-invalid={$errors.name ? 'true' : undefined}
+ />
 ```
 
 ## Server options
@@ -214,4 +220,4 @@ The following `superValidate` options have changed:
 const form = await superValidate(schema, { errors: true });
 ```
 
-The [changelog](https://github.com/ciscoheat/sveltekit-superforms/blob/main/CHANGELOG.md) has a full list of changes.
+The [changelog](https://github.com/ciscoheat/sveltekit-superforms/blob/main/CHANGELOG.md) has a full list of changes for 1.0, and as usual, let me know on Github or Discord if something is unclear or not working.
