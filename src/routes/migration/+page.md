@@ -70,7 +70,7 @@ Finally, the status option for `setError` (and `message`) must be in the `400-59
 const { form, enhance, validate } = superForm(data.form)
 
 - validate(['tags', i, 'name'], { update: false });
-validate(`tags[${i}].name`, { update: false });
++ validate(`tags[${i}].name`, { update: false });
 ```
 
 This also applies to generic components. The types have been simplified, so you should change them to this, also described on the [componentization page](https://superforms.vercel.app/components):
@@ -90,7 +90,9 @@ This also applies to generic components. The types have been simplified, so you 
 </script>
 ```
 
-Also note that **arrays and objects cannot be used in formFieldProxy**. So if your schema is defined as:
+> The `FormPathLeaves` type is there to prevent using a schema field that isn't at the end of the schema (the "leaves" of the schema tree)
+
+Also note that arrays and objects **cannot** be used in `formFieldProxy`. So if your schema is defined as:
 
 ```ts
 import { formFieldProxy } from 'sveltekit-superforms/client';
@@ -106,19 +108,17 @@ const schema = z.object({
 
 const formData = superForm(data.form);
 
-// This won't work properly!
+// This won't work
 const tags = formFieldProxy(formData, 'tags');
 
 // Not this either
 const tag = formFieldProxy(formData, 'tags[0]');
 
-// But this will work
+// But this will work since it's a field at the "end" of the schema
 const tagName = formFieldProxy(formData, 'tags[0].name');
 ```
 
-> The `FormPathLeaves` type is there to prevent using a schema field that isn't at the end of the schema (the "leaves" of the schema tree)
-
-This only applies to `formFieldProxy`, since it maps to errors and constraints as well as the form. If you want to proxy just a form value, the `fieldProxy` will work with any part of the schema.
+This only applies to `formFieldProxy`, since it maps to errors and constraints as well as the form. If you want to proxy just a form value, `fieldProxy` will work with any part of the schema.
 
 ```ts
 import { fieldProxy } from 'sveltekit-superforms/client';
@@ -127,13 +127,13 @@ const { form } = superForm(data.form);
 const tags = fieldProxy(form, 'tags');
 ```
 
-### allErrors, firstError
+### allErrors
 
-The signature for `allErrors` and `firstError` has changed, to make it easier to group related messages:
+The signature for `allErrors` has changed, to make it easier to group related messages:
 
 ```diff
 - { path: string[]; message: string[] }
-{ path: string; messages: string[] }
++ { path: string; messages: string[] }
 ```
 
 The path follows the same format as the above described string accessor path. If you want to display all messages grouped:
@@ -173,7 +173,7 @@ The undocumented `defaultData` function is now called `defaultValues`. You can u
 
 ```diff
 - import { defaultData } from 'sveltekit-superforms/server`
-import { defaultValues } from 'sveltekit-superforms/server`
++ import { defaultValues } from 'sveltekit-superforms/server`
 ```
 
 See [the API](/api#defaultvaluesschema) for documentation.
@@ -205,7 +205,7 @@ The default `errorSelector` is now `[aria-invalid="true"],[data-invalid]`, so if
    name="name"
    bind:value={$form.name}
 -  data-invalid={$errors.name}
-   aria-invalid={$errors.name ? 'true' : undefined}
++  aria-invalid={$errors.name ? 'true' : undefined}
  />
 ```
 

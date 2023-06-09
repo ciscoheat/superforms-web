@@ -12,7 +12,7 @@
 
   import Navigation from '$lib/navigation/Navigation.svelte';
   import { page } from '$app/stores';
-  import '$lib/assets/prism-gruvbox-dark.css';
+  import '$lib/assets/prism-vsc-dark-plus.css';
   import { beforeNavigate, afterNavigate } from '$app/navigation';
   import { fade } from 'svelte/transition';
   import { clickOutside } from '$lib/clickOutside';

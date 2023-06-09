@@ -34,6 +34,11 @@
     <li><A href="/get-started">Get started</A></li>
     <li><A href="/api">API</A></li>
 
+    <Title id="version-1">Version 1.0</Title>
+
+    <li><A href="/whats-new-v1">What's new?</A></li>
+    <li><A href="/migration">Migration guide</A></li>
+
     <Title id="concepts">Concepts</Title>
 
     {#each concepts as concept}
@@ -48,7 +53,6 @@
     <li><A href="/default-values">Default values</A></li>
     <li><A href="/faq">FAQ</A></li>
     <li><A href="/flash-messages">Flash messages</A></li>
-    <li><A href="/migration">Migration guide</A></li>
     <li><A href="/playground">Playground</A></li>
   </ul>
 

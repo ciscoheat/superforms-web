@@ -6,15 +6,15 @@
 
 <svelte:head><title>Superforms for SvelteKit</title></svelte:head>
 
-> Superforms 1.0 has just been released! Check out the [migration guide](/migration) for information on how to update.
+> Superforms 1.0 has just been released! Check out [what's new](/whats-new-v1), and the [migration guide](/migration) for information on how to update.
 
 <Header />
 
-Superforms is a SvelteKit library that gives you a thorough solution for **server-side validation** and **client-side display** of forms.
+Superforms is a SvelteKit library that gives you a comprehensive solution for **server-side validation** and **client-side display** of forms.
 
-It uses a Zod validation schema as a **single source of truth**, with consistent handling of form data and validation errors, including full type safety. It works with both TypeScript and JavaScript.
+It uses a Zod validation schema as a **single source of truth**, with consistent handling of form data and validation errors, with full type safety. It works with both TypeScript and JavaScript.
 
-The API is minimal, basically a single method on the server and client, but is very flexible and configurable to handle every possible case of:
+The API is minimal, basically a single method on the server and client, but it's very flexible and configurable to handle every possible case of:
 
 <Gallery />
 

@@ -37,7 +37,14 @@ const { form, enhance } = superForm(data.form, {
 ### onSubmit
 
 ```ts
-onSubmit: ({ action, data, form, controller, cancel }) => void;
+onSubmit: ({ 
+  action, 
+  formData, 
+  formElement, 
+  controller, 
+  submitter, 
+  cancel 
+}) => void;
 ```
 
 The `onSubmit` event is the first one triggered, hooking you into SvelteKit's `use:enhance` function, also giving you a chance to cancel the submission altogether. See SvelteKit docs for the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature.
@@ -50,10 +57,9 @@ onResult: ({ result, formEl, cancel }) => void
 
 If the submission isn't cancelled, the form is posted to the server, which responds with a SvelteKit [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult), triggering the `onResult` event.
 
+> If you just want to check if the the form validation succeeded, use [onUpdated](/concepts/events#onupdated) instead.
 
 `result` contains the ActionResult. You can modify it, changes will be applied further down the event chain. `formEl` is the `HTMLFormElement` of the form. `cancel()` is a function which will cancel the rest of the event chain and any form updates.
-
-> If you just want to check if the the form validation succeeded, use [onUpdated](/concepts/events#onupdated) instead.
 
 `onResult` is useful when you have set `applyAction = false` and still want to redirect, since the form doesn't do that automatically in that case. Then you can do:
 
@@ -116,7 +122,7 @@ const { form, enhance } = superForm(data.form, {
 });
 ```
 
-You can also set `onError` to the string value "apply", in which case the default `applyAction` behaviour will be used, rendering the nearest `+error` boundary and wiping out the form, so be careful.
+You can also set `onError` to the string value `'apply'`, in which case the SvelteKit `applyAction` error behaviour will be used, which is to render the nearest `+error` boundary (and wiping out the form, so be careful).
 
 > If you're unsure what event to use, start with `onUpdated`, unless your app is a [SPA](/concepts/spa), then `onUpdate` is most likely the one you should be using to validate the form data.
 

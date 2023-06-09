@@ -8,6 +8,26 @@ The most common mistake is to forget the `name` attribute on the input field. If
 
 ---
 
+### How can I return additional data together with the form?
+
+You're not limited to just `return { form }` in load functions and form actions, you can return anything else together with the form variables (which can also be called anything you'd like).
+
+```ts
+const loginForm = await superValidate(request, loginSchema)
+const registerForm = await superValidate(request, registerSchema)
+const userName = locals.currentUser.name
+
+return { loginForm, registerForm, userName }
+```
+
+These can now be accessed in `PageData` in `+page.svelte` as usual.
+
+---
+
+The most common mistake is to forget the `name` attribute on the input field. If you're not using `dataType: 'json'` (see [nested data](/concepts/nested-data)), the form is treated as a normal HTML form, which requires a name attribute for posting the form data.
+
+---
+
 ### How to handle file uploads?
 
 File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation. The recommended way to handle files is to grab the `FormData` and extract the files from there, after validation:
@@ -34,13 +54,13 @@ export const actions = {
 
 ### Can I use endpoints instead of form actions?
 
-Yes, there is a helper function for constructing an `ActionResult` that can be returned from [endpoints](https://kit.svelte.dev/docs/routing#server). See [the API reference](/api#actionresulttype-data-options--status) for more information!
+Yes, there is a helper function for constructing an `ActionResult` that can be returned from SvelteKit [endpoints](https://kit.svelte.dev/docs/routing#server). See [the API reference](/api#actionresulttype-data-options--status) for more information.
 
 ---
 
 ### Can a form be factored out into a separate component?
 
-This question now has its own [article page here](/components).
+Yes - this question now has its own [article page here](/components).
 
 ---
 
