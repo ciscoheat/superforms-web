@@ -245,6 +245,8 @@ const schema = z.object({
 const defaults = defaultValues(schema)
 ```
 
+This corresponds to the `form.data` returned from `const form = await superValidate(schema)`.
+
 ### actionResult(type, data?, options? | status?)
 
 When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you **must** return an `ActionResult`, `throw redirect(...)` won't work for example, `superForm` expects an `ActionResult`.

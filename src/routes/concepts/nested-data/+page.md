@@ -25,7 +25,7 @@ const { form, errors, constraints } = superForm(data.form, {
 
 By simply setting `dataType` to `'json'`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the form, and you don't have to worry about failed coercion, converting arrays to strings and back, etc! You don't even have to set names for the form fields anymore, since the data in the `$form` store is now posted, not the fields in the html. They are now just UI components for modifying a data model.
 
-> This also means that the `disabled` attribute, that normally prevent fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
+> When `dataType` is set to `'json'`, the `onSubmit` event contains `formData`, but it cannot be used to modified the posted data. You need to set or update the `$form` store.<br><br>It also means that the `disabled` attribute, that normally prevent fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
 
 ## Requirements
 
