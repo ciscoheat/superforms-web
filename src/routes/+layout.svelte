@@ -260,6 +260,10 @@
     <Navigation />
   </svelte:fragment>
   <!-- Page Route Content -->
+  <div class="p-3 font-bold text-center bg-surface-500">
+    This is the legacy documentation for Superforms 0.x. The 1.0 version can be
+    found at <a href="https://superforms.rocks">superforms.rocks</a>!
+  </div>
   <slot />
   <svelte:fragment slot="sidebarRight">
     {#key $page.url.pathname}
