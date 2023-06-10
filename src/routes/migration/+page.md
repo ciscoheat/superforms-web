@@ -222,4 +222,4 @@ The following `superValidate` options have changed:
 const form = await superValidate(schema, { errors: true });
 ```
 
-The [changelog](https://github.com/ciscoheat/sveltekit-superforms/blob/main/CHANGELOG.md) has a full list of changes for 1.0, and as usual, let me know on Github or Discord if something is unclear or not working.
+The [1.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v1.0.0) has a full list of changes, and as usual, let me know on Github or Discord if something is unclear or not working.
