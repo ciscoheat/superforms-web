@@ -6,7 +6,7 @@
 
 <svelte:head><title>Superforms for SvelteKit</title></svelte:head>
 
-> Superforms 1.0 has just been released! Check out [what's new](/whats-new-v1), and the [migration guide](/migration) for information on how to update.
+> Superforms 1.0 has just been released! Check out [what's new](/whats-new-v1), and the [migration guide](/migration) for information on how to update. Documentation for 0.x can be found [here](https://superforms-legacy.vercel.app/).
 
 <Header />
 

@@ -1,8 +1,6 @@
 import { lstatSync, readdirSync } from 'fs';
 import path from 'path';
 
-//const fileName = '.vercel/output/orama/+page.md';
-
 type Dir = {
   path: string;
   files: string[];

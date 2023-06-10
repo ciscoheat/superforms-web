@@ -73,7 +73,7 @@ const { form, enhance, validate } = superForm(data.form)
 + validate(`tags[${i}].name`, { update: false });
 ```
 
-This also applies to generic components. The types have been simplified, so you should change them to this, also described on the [componentization page](https://superforms.vercel.app/components):
+This also applies to generic components. The types have been simplified, so you should change them to this, also described on the [componentization page](/components):
 
 ```svelte
 <script lang="ts">
