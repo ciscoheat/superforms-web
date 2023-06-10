@@ -3,6 +3,10 @@
 </aside>
 
 <style lang="scss">
+  :global(aside.alert) {
+    border: 1px solid #b7a73f;
+  }
+
   :global(aside.alert > p) {
     margin-left: 1.5rem;
   }

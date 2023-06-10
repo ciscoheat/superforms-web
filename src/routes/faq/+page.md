@@ -30,7 +30,9 @@ The most common mistake is to forget the `name` attribute on the input field. If
 
 ### How to handle file uploads?
 
-File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation. The recommended way to handle files is to grab the `FormData` and extract the files from there, after validation:
+File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation, so they need to have names that doesn't conflict with the fields in the schema. 
+
+The recommended way to handle files is to grab the `FormData` and extract the files from there, after validation:
 
 ```ts
 export const actions = {

@@ -83,6 +83,7 @@ const i = 1;
 import { intProxy } from 'sveltekit-superforms/client'
 
 const { form } = superForm(data.form);
+
 - const idProxy = intProxy(form, ['user', 'profile', 'id']);
 + const idProxy = intProxy(form, 'user.profile.id');
 ```

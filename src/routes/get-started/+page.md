@@ -220,7 +220,7 @@ POST {
 This is the validation object returned from `superValidate`, containing all you need to handle the rest of the logic:
 
 - `valid` - Tells you whether the validation succeeded or not, used mostly in [events](/concepts/events).
-- `posted` - Tells you if the data was posted (in a form action, usually) or not (in a load function).
+- `posted` - Tells you if the data was posted (in a form action) or not (in a load function).
 - `errors` - An object with all validation errors.
 - `data` - The posted data, in this case not valid, so it should be returned to the client using `fail`.
 - `message` - A property that can be set as a general information message.
