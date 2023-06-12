@@ -18,9 +18,9 @@
         <Avatar
           src={sponsor[0]}
           background="transparent"
-          width="w-32"
+          width="w-32 md:w-24"
           rounded={sponsor[3] || 'rounded-full'} />
-        <span class="name">{sponsor[1]}</span>
+        <span class="name mt-1">{sponsor[1]}</span>
       </a>
     </div>
   {/each}
@@ -31,6 +31,11 @@
     max-width: 128px;
     max-height: 128px;
     margin: 0;
+
+    @media screen and (max-width: 768px) {
+      max-width: 96px;
+      max-height: 96px;
+    }
   }
 
   :global(#sponsoring) {
@@ -39,11 +44,15 @@
 
   .sponsors {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     text-align: center;
     margin-bottom: 1rem;
 
     a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-decoration: none !important;
     }
   }
