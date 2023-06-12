@@ -281,7 +281,7 @@ This concludes the tutorial (full source code below), but you'd probably want to
 
 To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. Most pages there contain interactive examples that helps you use the library to its fullest.
 
-When you've gone over all the concepts, check the [API reference](/api) for a full list of properties returned from `superForm`, and all options that you can use.
+> If you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) section carefully.
 
 If you're ready for a more advanced tutorial, check out [Designing a CRUD interface](/crud), which shows how to make a fully working backend in about 150 lines of code.
 

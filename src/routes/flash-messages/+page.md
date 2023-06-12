@@ -6,11 +6,11 @@
 
 Since it's common to redirect after a successful post, especially in backend interfaces, the `form.message` property isn't a general solution for displaying status messages.
 
-The sister library to Superforms is called [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message), a useful addon that handles temporary messages sent with redirects. Just follow the installation and configuration instructions at its repo.
-
-If you want to integrate the flash message more closely with a form, you can do that by importing it when calling `superForm`:
+The sister library to Superforms is called [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message), a useful addon that handles temporary messages sent with redirects. Just follow the installation and configuration instructions at its repo. Note that at least version 1.0 is required!
 
 ## Usage
+
+If you want to integrate the flash message more closely with a form, you can do that by importing its module when calling `superForm`:
 
 ```ts
 import * as flashModule from 'sveltekit-flash-message/client';
@@ -32,8 +32,8 @@ Then you have access to the following options:
 
 ### syncFlashMessage
 
-If set to `true`, when `form.message` is updated, the flash message will be synchronized with it.
+If set to `true`, when `form.message` is updated, the flash message will be synchronized with it. In this case it's important that the flash and form message types are matching.
 
 ### flashMessage.onError
 
-If there is an error, the `onError` callback can be used to transform thrown errors into your flash message type, or leave it out to disregard them.
+If a form error occurs (an `ActionResult` is returned with type `error`), the `flashMessage.onError` callback can be used to transform it into your flash message type, so you can display the error at the flash message instead of in `form.message`.

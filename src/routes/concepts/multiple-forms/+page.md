@@ -119,7 +119,7 @@ The code above is using [named form actions](https://kit.svelte.dev/docs/form-ac
 </form>
 ```
 
-This works well with forms that only post to its dedicated form action. But for more dynamic scenarios, let's say a database table where rows can be editable, the form id should correspond to the row id, and you'd want to communicate to the server which id was sent. This can be done with a hidden form field or a query parameter, to let the server know what `id` was posting, and what it should respond with.
+This works well with forms that only post to its dedicated form action. But for more dynamic scenarios, let's say a database table where rows can be editable, the form id should correspond to the row id, and you'd want to communicate to the server which id was sent. This can be done by modifying the `$formId` store, to let the server know what `id` was posting, and what it should respond with.
 
 ### Setting id on the client
 

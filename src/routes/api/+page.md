@@ -424,7 +424,11 @@ SuperForm<T extends AnyZodObject, M = any> = {
     onSubmit, onResult, onError, onUpdate, onUpdated
   }) => ReturnType<typeof $app/forms/enhance>;
 
-  reset: (options?: { keepMessage: boolean }) => void;
+  reset: (options?: { 
+    keepMessage?: boolean;
+    id?: string;
+    data?: Partial<S>;
+  }) => void;
 
   capture: () => SuperFormSnapshot<T, M>;
   restore: (snapshot: SuperFormSnapshot<T, M>) => void;
