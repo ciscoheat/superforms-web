@@ -6,9 +6,8 @@
 </script>
 
 <p>
-  The library is widely used, so there will be bug fixes, more support in the
-  Discord now that version 1.0 is released, future features to work on, and so
-  on.
+  Now that version 1.0 is released, there will be bug fixes, more support
+  questions on the Discord server, future features to work on, and so on.
 </p>
 <p>
   If you're using Superforms in non-profit circumstances, the library is

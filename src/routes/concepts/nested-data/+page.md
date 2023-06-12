@@ -108,11 +108,10 @@ Note that we're using the index of the loop, so the value can be bound directly 
 
 ## Arrays with primitive values
 
-Since you can post multiple html elements with the same name, you could but **don't have to** use `dataType: 'json'` for arrays of primitive values like numbers and strings. Just add the input fields, all **with the same name** as the schema field. Superforms will handle the type coercion to array automatically (just remember the name attribute):
+Since you can post multiple html elements with the same name, you could, but **don't have to** use `dataType: 'json'` for arrays of primitive values like numbers and strings. Just add the input fields, all **with the same name** as the schema field, which can only be on the top level of the schema, of course. Superforms will handle the type coercion to array automatically (just remember the name attribute):
 
 ```ts
 export const schema = z.object({
-  // Note: Max three tags
   tags: z.string().min(2).array().max(3)
 });
 ```
@@ -143,6 +142,6 @@ export const schema = z.object({
 
 To summarize, the index `i` of the `#each` loop is used to access `$form.tags`, which is the real array, and then the `name` attribute is set to the schema field `tags`, so its array will be populated when posted.
 
-This example also shows how to display array-level errors, using the `$errors.tags._errors` field.
+This example, having a `max(3)` limitation of the number of tags, also shows how to display array-level errors with the `$errors.tags._errors` field.
 
 <Next section={concepts} />
