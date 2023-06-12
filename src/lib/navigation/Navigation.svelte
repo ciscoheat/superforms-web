@@ -33,6 +33,7 @@
     <li><A href="/">Home</A></li>
     <li><A href="/get-started">Get started</A></li>
     <li><A href="/api">API</A></li>
+    <li><A href="/sponsors">Sponsors</A></li>
 
     <Title id="version-1">Version 1.0</Title>
 

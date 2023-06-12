@@ -31,8 +31,9 @@ S = z.infer<T>
 Nested<S, string[] | undefined> // Errors for each field in S
 
 /**
- * FormPath and FormPathLeaves are string paths that points to a field in the schema.
- * FormPathLeaves can only be used at the end nodes of the schema.
+ * FormPath and FormPathLeaves are string paths that points to a
+ * field in the schema. FormPathLeaves can only be used at the 
+ * end nodes of the schema.
  * 
  * z.object({
  *   tags: z.object({
@@ -102,7 +103,7 @@ superValidateSync<T, M = any>(
 ): SuperValidated<T, M>
 ```
 
-Options:
+### superValidate options
 
 ```ts
 SuperValidateOptions = {
@@ -117,16 +118,7 @@ SuperValidateOptions = {
 
 See the page about [multiple forms](/concepts/multiple-forms) for information about when to use `id`.
 
-#### Error and data behavior
-
-The default data in an empty form is usually invalid, but displaying lots of errors upon page load doesn't look good. Superforms handles it like this:
-
-- If data was sent to `superValidate`, either posted or populated with data, errors **will** be returned unless the `errors` option is `false`.
-- If no data was posted or sent to `superValidate`, **no errors will be returned** unless `errors` is `true`.
-
-This does not affect the `valid` property of the `SuperValidated` object, which always indicates whether validation succeeded or not.
-
-### Return value from superValidate
+### superValidate return type
 
 ```ts
 SuperValidated<T, M = any> = {
@@ -330,6 +322,8 @@ superForm<T, M = any>(
   options?: FormOptions<T, M>
 ) : SuperForm<T, M>
 ```
+
+### superForm options
 
 ```ts
 FormOptions<T, M> = Partial<{

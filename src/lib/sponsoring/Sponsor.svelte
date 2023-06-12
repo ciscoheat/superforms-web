@@ -5,7 +5,26 @@
   import paypal from '$lib/assets/paypal.svg?raw';
 </script>
 
-<div>
+<p>
+  The library is widely used, so there will be bug fixes, more support in the
+  Discord now that version 1.0 is released, future features to work on, and so
+  on.
+</p>
+<p>
+  If you're using Superforms in non-profit circumstances, the library is
+  completely free, a star on Github is more than enough if you want to give your
+  support. But if you are using Superforms in a commercial project, would you or
+  the company you work for consider donating?
+</p>
+<p>
+  If you have appreciated my support on <a href="https://discord.gg/AptebvVuhB"
+    >Discord</a>
+  and <a href="https://github.com/ciscoheat/sveltekit-superforms">Github</a>, or
+  want to ensure that things keep rolling, please support open source software
+  in this way.
+</p>
+
+<div class="sponsoring">
   <a href="https://github.com/sponsors/ciscoheat" target="_blank">
     <div class="w-9"><div class="w-8">{@html github}</div></div>
     <div class="btn variant-ghost">Sponsor Superforms on Github</div>
@@ -34,13 +53,15 @@
 </div>
 
 <style lang="scss">
-  a,
-  form {
-    padding-top: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    width: min-content;
+  .sponsoring {
+    a,
+    form {
+      padding-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none !important;
+      width: min-content;
+    }
   }
 </style>

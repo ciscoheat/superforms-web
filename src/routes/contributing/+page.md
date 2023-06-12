@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Sponsor from './Sponsor.svelte'
-  import Message from './Message.svelte'
+  import Sponsor from '$lib/sponsoring/Sponsor.svelte'
+  import Message from '$lib/sponsoring/Message.svelte'
 </script>
 
 <Message />
@@ -25,9 +25,9 @@ If you find a typo on the website, you can make a quick PR directly in its [Gith
 
 ## Sponsoring
 
-I'm doing my very best to provide super support on [Discord](https://discord.gg/AptebvVuhB) and [Github](https://github.com/ciscoheat/sveltekit-superforms) to everyone who needs help, and also to keep improving the library and this website. If you want to contribute a small sum towards that, it's greatly appreciated, knowing that someone wants to see this project improve and live on.
-
 <Sponsor />
+
+Any $10 or more monthly donation will be listed on the [Sponsors](/sponsors) page with picture and link!
 
 ## Voting on new features
 

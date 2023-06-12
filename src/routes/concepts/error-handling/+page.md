@@ -66,6 +66,17 @@ If you have nested data, you'll use a string path to specify where in the data s
 setError(form, 'post.tags[3].name', 'Invalid tag name.');
 ```
 
+## Initial form errors
+
+The default data in an empty form is usually invalid, but displaying lots of errors upon page load doesn't look good. Superforms handles it like this:
+
+- If no data was posted or sent to `superValidate`, **no errors will be returned** unless the `errors` option is `true`. This is the "load function" scenario.
+- If data was sent to `superValidate`, either posted or populated with data, errors **will** be returned unless the `errors` option is `false`. This is the "form action" scenario.
+
+In some cases you may populate the form with invalid data, but still don't want to display these. Setting `errors` to `false` will remove them initially, until the user interacts with the form.
+
+> The `errors` option does not affect the `valid` property of the `SuperValidated` object, which always indicates whether validation succeeded or not.
+
 ## Usage (client)
 
 As said, errors are available in the `$errors` store. It gives you a high flexibility, since you can place error messages anywhere on the page.
