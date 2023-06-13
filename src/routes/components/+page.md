@@ -213,7 +213,7 @@ How nice would this be? This can actually be pulled of in a typesafe way with a 
 
   type T = $$Generic<AnyZodObject>;
 
-  export let form: SuperForm<ZodValidation<T>, never>;
+  export let form: SuperForm<ZodValidation<T>, unknown>;
   export let field: FormPathLeaves<z.infer<T>>;
 
   const { value, errors, constraints } = formFieldProxy(form, field);
