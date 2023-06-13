@@ -115,7 +115,13 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 
 <label>
   {#if label}<span>{label}</span><br />{/if}
-  <input type="text" bind:value {...constraints} {...$$restProps} />
+  <input
+    type="text"
+    bind:value
+    aria-invalid={errors ? 'true' : undefined}
+    {...constraints}
+    {...$$restProps}
+  />
 </label>
 {#if errors}<span class="invalid">{errors}</span>{/if}
 
@@ -224,7 +230,7 @@ How nice would this be? This can actually be pulled of in a typesafe way with a 
   <input
     name={field}
     type="text"
-    data-invalid={$errors}
+    aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
     {...$constraints}
     {...$$restProps}
@@ -290,7 +296,7 @@ But to show off some super proxy power, let's recreate the tags example above wi
   <h4>Tags</h4>
 
   {#each $form.tags as _, i}
-    <TextField name="tags" {form} field={`tags[${i}].name`} />
+    <TextField name="tags" {form} field="tags[{i}].name" />
   {/each}
 </form>
 ```
