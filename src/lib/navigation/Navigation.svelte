@@ -40,7 +40,8 @@
     <li><A href="/whats-new-v1">What's new?</A></li>
     <li><A href="/migration">Migration guide</A></li>
     <li>
-      <A href="https://superforms-legacy.vercel.app/">0.x documentation</A>
+      <A href="https://superforms-legacy.vercel.app/" target="_blank"
+        >0.x documentation</A>
     </li>
 
     <Title id="concepts">Concepts</Title>
