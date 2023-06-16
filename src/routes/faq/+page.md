@@ -20,11 +20,7 @@ const userName = locals.currentUser.name
 return { loginForm, registerForm, userName }
 ```
 
-These can now be accessed in `PageData` in `+page.svelte` as usual.
-
----
-
-The most common mistake is to forget the `name` attribute on the input field. If you're not using `dataType: 'json'` (see [nested data](/concepts/nested-data)), the form is treated as a normal HTML form, which requires a name attribute for posting the form data.
+If you return this in a load function, it can be accessed in `PageData` in `+page.svelte`. By returning it in a form action, it can be accessed in `ActionData` instead.
 
 ---
 
