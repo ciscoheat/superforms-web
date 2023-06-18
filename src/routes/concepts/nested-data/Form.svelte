@@ -61,8 +61,3 @@
     <button type="submit" class="btn variant-filled">Submit</button>
   </div>
 </form>
-
-<style lang="scss">
-  .error {
-  }
-</style>
