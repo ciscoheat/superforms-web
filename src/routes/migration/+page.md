@@ -16,6 +16,8 @@ To update, change your `package.json` entry for `sveltekit-superforms` to `^1.0.
 }
 ```
 
+(If you're using [Svelte 4](https://svelte.dev/blog/svelte-4), you'll need at least version `^1.1.2` of Superforms.)
+
 The guide is written with the affected methods in the headlines, so you can scan through this page and apply the changes if you're using them in your code.
 
 ### superForm
