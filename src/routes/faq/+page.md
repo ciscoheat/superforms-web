@@ -24,6 +24,29 @@ If you return this in a load function, it can be accessed in `PageData` in `+pag
 
 ---
 
+### What about the other way around, posting additional data to the server?
+
+Conversely, you can add additional form fields not included in the schema, including files (see next question), and also add form data in [onSubmit](/concepts/events#onsubmit), to send extra data to the server. They can then be accessed with `request.formData()` in the form action:
+
+```ts
+export const actions = {
+  default: async ({ request }) => {
+    const formData = await request.formData();
+    const form = await superValidate(formData, schema);
+
+    if (!form.valid) return fail(400, { form });
+
+    if(formData.get('extra')) {
+      // Do something with the extra data
+    }
+
+    return { form };
+  }
+}
+```
+
+---
+
 ### How to handle file uploads?
 
 File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation, so they need to have names that doesn't conflict with the fields in the schema. 

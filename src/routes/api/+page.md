@@ -451,9 +451,29 @@ FormField<S, Prop extends keyof S> = {
 
 ## Proxy objects
 
+The general way of creating a proxy is like this:
+
+```svelte
+<script lang="ts">
+  import { superForm, intProxy } from 'sveltekit-superforms/client'
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+
+  const { form, enhance } = superForm(data.form);
+  
+  // All proxies are of type Writable<string>
+  const proxy = intProxy(form, 'field', { options });
+</script>
+
+<input name="field" bind:value={$proxy} />
+```
+
+Changes in either the proxy store, or the `$form` field, will reflect in the other.
+
 ### intProxy(form, fieldName, options?)
 
-Creates a proxy store for an integer schema field. Changes in either the proxy store or the form field will reflect in the other.
+Creates a string store for an **integer** field in the schema.
 
 **Options:**
 
@@ -463,7 +483,7 @@ Creates a proxy store for an integer schema field. Changes in either the proxy s
 
 ### numberProxy(form, fieldName, options?)
 
-Creates a proxy store for a numeric form field.
+Creates a string store for a **number** field in the schema.
 
 **Options:**
 
@@ -481,11 +501,11 @@ Creates a proxy store for a numeric form field.
 }
 ```
 
-Creates a proxy store for a boolean schema field. The option can be used to change what string value represents `true`.
+Creates a string store for a **boolean** schema field. The option can be used to change what string value should represent `true`. An empty string represents `false`.
 
 ### dateProxy(form, fieldName, options?)
 
-Creates a proxy store for a Date schema field. The option can be used to change the proxied format of the date.
+Creates a string store for a **Date** schema field. The option can be used to change the proxied string format of the date.
 
 **Options:**
 
@@ -506,7 +526,7 @@ Creates a proxy store for a Date schema field. The option can be used to change 
 
 ### stringProxy(form, fieldName, options)
 
-Creates a proxy store for a string schema field. Changes in either the proxy store or the form field will reflect in the other.
+Creates a string store for a **string** schema field. It may look redundant, but the option can make it useful if you need to convert an empty string to `null` or `undefined`.
 
 **Options:**
 
@@ -528,7 +548,7 @@ const schema = z.object({
 });
 ```
 
-A date proxy can be used like this:
+A proxy for a [html date field](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date) can be used like this:
 
 ```svelte
 <script lang="ts">
@@ -537,7 +557,7 @@ A date proxy can be used like this:
 
   export let data: PageData;
 
-  const form = superForm(data.form)
+  const { form, enhance } = superForm(data.form)
   const date = dateProxy(form, 'date', { format: 'date', empty: 'undefined' })
 </script>
 
