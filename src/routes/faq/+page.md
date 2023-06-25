@@ -36,7 +36,7 @@ export const actions = {
 
     if (!form.valid) return fail(400, { form });
 
-    if(formData.get('extra')) {
+    if(formData.has('extra')) {
       // Do something with the extra data
     }
 
