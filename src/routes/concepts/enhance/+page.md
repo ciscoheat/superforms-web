@@ -32,9 +32,9 @@ The default values are shown in the examples, you don't need to add them unless 
 
 ```ts
 const { form, enhance, reset } = superForm(data.form, {
-  applyAction: true;
-  invalidateAll: true;
-  resetForm: false;
+  applyAction: true,
+  invalidateAll: true,
+  resetForm: false
 })
 ```
 
