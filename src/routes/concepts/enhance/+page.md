@@ -24,21 +24,37 @@ Now all form submissions will happen on the client, and we unlock a ton of extra
 
 The `use:enhance` action takes no arguments, instead events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
-> As a general rule, without `use:enhance` on the form, not much will work. You'll get no events, no timers, no client-side validation except for `constraints`, no error focus, etc.
+> Without `use:enhance` on the form, the client will be static. You'll get no events, no timers, no client-side validation except for `constraints`, no error focus, etc.<br><br>Also note that SvelteKit's own `use:enhance` cannot be used, you must use the one returned from `superForm`. The [events](/concepts/events) contains all you need to replace it.
+
+## Differences from SvelteKit's use:enhance
+
+There are three notable differences between the Superforms and SvelteKit `enhance`.
+
+### 1. ActionResult errors are changed to failure
+
+Any [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) with status `error` is transformed into `failure` to avoid form data loss, which will happen when the nearest `+error.svelte` page is rendered, it will wipe out the form and all data that was just entered. The [onError event](/concepts/events#onerror) is a more user-friendly way of handling server errors.
+
+### 2. The form isn't resetted by default
+
+Resetting the form is optional to avoid data loss, and isn't always wanted, especially in backend interfaces, where the form data should be kept after updating. For custom resets, you can use the [reset](/api#superform-return-type) method returned from `superForm`. Also note that resetting **does not** mean clearing the fields. Read further down at the `resetForm` option for details.
+
+### 3. A tainted form warning is added
+
+The next page describes [tainted fields](/concepts/tainted), which shows a dialog to the user when navigating away from a modified ("tainted" or "dirty") form. This is enabled by default, again to avoid data loss for the user.
 
 ## Usage
 
-The default values are shown in the examples, you don't need to add them unless you want to change a value.
+If you want to modify the `use:enhance` behavior, the following options are available and shows the default values, you don't need to add them unless you want to change a value.
 
 ```ts
 const { form, enhance, reset } = superForm(data.form, {
-  applyAction: true;
-  invalidateAll: true;
-  resetForm: false;
+  applyAction: true,
+  invalidateAll: true,
+  resetForm: false
 })
 ```
 
-These three options are the most boring ones, we'll get to the fun stuff soon!
+These are the most boring ones, we'll get to the fun stuff soon!
 
 ### applyAction
 
@@ -52,7 +68,7 @@ When `invalidateAll` is `true` (the default) and a successful validation result 
 
 ### resetForm
 
-Since we're binding the fields to `$form`, a html form reset (clearing all fields in DOM) won't have any effect, so in Superforms, resetting means **going back to the initial state of the form data**, usually what you initially sent to the client in `PageData`. If this isn't what you want, you can use the [events](/concepts/events) and the `reset` function instead.
+Since we're binding the fields to `$form`, a html form reset (clearing all fields in DOM) won't have any effect, so in Superforms, resetting means **going back to the initial state of the form data**, usually what you initially sent to the client in `PageData`. If this isn't what you want, you can use the [events](/concepts/events) and the [reset](/api#superform-return-type) function instead.
 
 ## When to change the defaults?
 
@@ -60,10 +76,19 @@ Quite rarely! If you have a single form on the page and nothing else is causing 
 
 For multiple forms on the same page, you have to experiment with these three options. Read more on the [multiple forms](/concepts/multiple-forms) page.
 
-## Differences from SvelteKit's use:enhance
+## Making the form behave like the SvelteKit default
 
-The biggest difference is that any [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) with status `error` is transformed into `failure` to avoid form data loss, which will happen when the nearest `+error.svelte` page is rendered, it will wipe out the form and all data that was just entered. The [onError event](/concepts/events#onerror) is a more user-friendly way of handling server errors.
+You can remove all the described differences by setting the following options. Use with care, since the purpose of the changes is to protect the user from data loss.
 
-As described above, the form isn't resetted by default either. This should be opt-in to avoid data loss, and isn't always wanted, especially in backend interfaces, where the form data should be kept after updating. For manual resets, you can use the `reset` method returned from `superForm`.
+```ts
+const { form, enhance, reset } = superForm(data.form, {
+  // Reset the form by default
+  resetForm: true,
+  // On ActionResult error, render the nearest +error boundary
+  onError: 'apply',
+  // No tainted message when the form is modified
+  taintedMessage: null
+})
+```
 
 <Next section={concepts} />

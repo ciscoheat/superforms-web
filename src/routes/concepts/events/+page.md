@@ -12,7 +12,7 @@
 
 <svelte:head><title>Events</title></svelte:head>
 
-> Events are only available when JavaScript is enabled in the browser and `use:enhance` is added to the form.
+> Events are only available when JavaScript is enabled in the browser and the custom [use:enhance](/concepts/enhance) is added to the form.
 
 A number of events, triggered on form submission, gives you full control over the submit process.
 

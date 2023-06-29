@@ -22,9 +22,18 @@ The guide is written with the affected methods in the headlines, so you can scan
 
 ### superForm
 
-For type safety reasons, you cannot pass `null`, `undefined` or arbitrary data to `superForm` anymore. Instead you should be using `superValidate` to get the initial form object that should be sent to `superForm`, which is what's been done if you're returning `{ form }` from a load function or form action.
+For type safety reasons, you cannot pass `null`, `undefined` or arbitrary data to `superForm` anymore. Instead you should be using `superValidate` to get the initial form object, by returning `{ form }` from a load function and passing it to `superForm`.
 
-So if the form data is coming from the server this is not a problem, but on the client, especially in SPA settings, you must use `superValidate` or `superValidateSync` before calling `superForm`. Read more on the [SPA page](/concepts/spa) about this.
+Not doing this will result in the following warning:
+
+```
+No form data sent to superForm, schema type safety cannot be guaranteed. Also, no constraints will exist for the form. 
+Set the warnings.noValidationAndConstraints option to false to disable this warning.
+```
+
+When this happens you need to check the call to `superForm` and apply the above fix.
+
+In client-only scenarios, especially in SPA:s, you must use `superValidate` or `superValidateSync` before calling `superForm`. Read more on the [SPA page](/concepts/spa) about this.
 
 ### valid, empty, firstError
 

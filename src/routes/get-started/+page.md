@@ -205,10 +205,11 @@ Submit the form, and see what's happening on the server:
 
 ```ts
 POST {
+  id: 'a3g9kke',
   valid: false,
   posted: true,
-  errors: { email: [ 'Invalid email' ] },
   data: { name: 'Hello world!', email: '' },
+  errors: { email: [ 'Invalid email' ] },
   message: undefined,
   constraints: {
     name: { required: true },
@@ -219,12 +220,17 @@ POST {
 
 This is the validation object returned from `superValidate`, containing all you need to handle the rest of the logic:
 
-- `valid` - Tells you whether the validation succeeded or not, used mostly in [events](/concepts/events).
-- `posted` - Tells you if the data was posted (in a form action) or not (in a load function).
-- `errors` - An object with all validation errors.
-- `data` - The posted data, in this case not valid, so it should be returned to the client using `fail`.
-- `message` - A property that can be set as a general information message.
-- `constraints` - An object with [html validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation) that can be spread on input fields.
+| Field              | Purpose                                                                                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **id**             | Id for the schema, to handle [multiple forms](/concepts/multiple-forms) on the same page.                                                          |
+| **valid**          | Tells you whether the validation succeeded or not, used mostly in [events](/concepts/events). |
+| **posted**         | Tells you if the data was posted (in a form action) or not (in a load function).                                                                                                                |
+| **data**           | The posted data, which should be returned to the client using `fail` if not valid. |
+| **errors**         | An object with all validation errors, in a structure reflecting the data.                                                  |
+| **message**        | A field that can be set as a [status message](/concepts/messages).  |
+| **constraints**    | An object with [html validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation), that can be spread on input fields. |
+
+There is nothing magical about this data structure, you can modify any of its values, and they will be updated on the client when you `return { form }`. There are a couple of helper functions for making this more convenient, like [message](/concepts/messages) and [setError](/concepts/error-handling).
 
 ### Displaying errors
 
