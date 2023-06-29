@@ -469,7 +469,7 @@ The general way of creating a proxy is like this:
 <input name="field" bind:value={$proxy} />
 ```
 
-Changes in either the proxy store, or the `$form` field, will reflect in the other.
+Changes in either the proxy store, or the corresponding `$form` field, will reflect in the other.
 
 ### intProxy(form, fieldName, options?)
 
