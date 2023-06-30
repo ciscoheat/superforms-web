@@ -140,7 +140,7 @@ export const schema = z.object({
 </form>
 ```
 
-To summarize, the index `i` of the `#each` loop is used to access `$form.tags`, which is the real array, and then the `name` attribute is set to the schema field `tags`, so its array will be populated when posted.
+To summarize, the index `i` of the `#each` loop is used to access `$form.tags`, where the current values are, and then the `name` attribute is set to the schema field `tags`, so its array will be populated when posted.
 
 This example, having a `max(3)` limitation of the number of tags, also shows how to display array-level errors with the `$errors.tags._errors` field.
 

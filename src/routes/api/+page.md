@@ -171,7 +171,7 @@ InputConstraints = Partial<{
 ```ts
 setError(
   form: SuperValidated<T, M>,
-  field: FormPathLeaves<S>,
+  field: '' | FormPathLeaves<S>,
   error: string | string[],
   options?: { overwrite = false, status : NumericRange<400, 599> = 400 }
 ) : ActionFailure<{form: SuperValidated<T, M>}>
@@ -180,6 +180,9 @@ setError(
 For setting errors on the form after validation. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning.
 
 Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400` (which must be in the range 400-599).
+
+- To set form-level errors, use an empty string as field.
+- To set array-level errors, append `._errors` to the field, like `tags._errors`.
 
 ### message(form, message, options?)
 

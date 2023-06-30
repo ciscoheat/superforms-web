@@ -249,9 +249,9 @@ Some explanations are definitiely at hand! First, `type T = $$Generic<AnyZodObje
 
 What may look strange is `ZodValidation<T>`, this is required because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type, so it's not a `AnyZodObject` anymore. The `ZodValidation` type will extract the actual object, which may be several levels deep.
 
-We also need the field names for the actual data object, not the schema itself. `z.infer<T>` is used for that. And it's wrapped in `FormPathLeaves`, the type for a nested path, so we can reach into the data structure at any depth.
+We also need the fields for the actual data object, not the schema itself. `z.infer<T>` is used for that. And it's wrapped in `FormPathLeaves`, the type for a nested path, so we can use [nested data](/concepts/nested-data).
 
-> Nested data requires the `dataType` option to be set to `'json'`. Read more about it [here](/concepts/nested-data).
+> The `FormPathLeaves` type prevents using a field that isn't at the end of the schema (the "leaves" of the schema tree). This means that arrays and objects cannot be used in `formFieldProxy`.
 
 ## A minor issue: Checkboxes
 
@@ -301,6 +301,8 @@ But to show off some super proxy power, let's recreate the tags example above wi
 </form>
 ```
 
-We can now produce a text field for any object inside our data, which will update the `$form` store. This example even works without `use:enhance` and `dataType = 'json'`, since arrays of primitive values are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
+We can now produce a text field for any object inside our data, which will update the `$form` store. 
+
+In general, nested data requires the `dataType` option to be set to `'json'`, but this example works without it, even without `use:enhance`, since arrays of primitive values are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
 
 I hope you now feel under your fingers the superpowers that Superforms bring! 💥

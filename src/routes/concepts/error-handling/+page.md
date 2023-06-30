@@ -60,20 +60,51 @@ export const actions = {
 
 `setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. See [the API](/api#seterrorform-field-error-options) for more options.
 
-If you have nested data, you'll use a string path to specify where in the data structure the error is:
+If you have nested data, a string path is used to specify where in the data structure the error is:
 
 ```ts
-setError(form, 'post.tags[3].name', 'Invalid tag name.');
+setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 ```
 
 ## Initial form errors
 
 The default data in an empty form is usually invalid, but displaying lots of errors upon page load doesn't look good. Superforms handles it like this:
 
-- If no data was posted or sent to `superValidate`, **no errors will be returned** unless the `errors` option is `true`. This is the "load function" scenario.
-- If data was sent to `superValidate`, either posted or populated with data, errors **will** be returned unless the `errors` option is `false`. This is the "form action" scenario.
+If no data was posted or sent to `superValidate`, **no errors will be returned** unless the `errors` option in `superValidate` is `true`. This is what happens in load functions, when the only parameter sent to `superValidate` is the schema.
 
-In some cases you may populate the form with invalid data, but still don't want to display these. Setting `errors` to `false` will remove them initially, until the user interacts with the form.
+```ts
+export const load = async () => {
+  // No errors set, since no data is sent to superValidate
+  const form = await superValidate(schema);
+
+  // No data, but errors can still be added
+  const form2 = await superValidate(schema, { errors: true });
+}
+```
+
+If data was sent to `superValidate`, either posted or populated with data, **errors will be returned** unless the `errors` option is `false`. This happens in form actions or when the form is initially populated.
+
+```ts
+export const load = async () => {
+  const initialData = { test: 123 }
+
+  // Form is populated, so errors will be set if validation fails
+  const form = await superValidate(initialData, schema);
+
+  // No errors will be set, even if validation fails
+  const form2 = await superValidate(initialData, schema, { errors: false });
+}
+
+export const actions = {
+  default: async ({ request }) => {
+    // Data is posted, so form.errors will be populated
+    const form = await superValidate(request, schema);
+
+    // Unless we turn them off (which is rare in form actions)
+    const form2 = await superValidate(request, schema, { errors: false });
+  }
+};
+```
 
 > The `errors` option does not affect the `valid` property of the `SuperValidated` object, which always indicates whether validation succeeded or not.
 
