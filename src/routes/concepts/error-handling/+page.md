@@ -32,7 +32,7 @@ By deconstructing `errors` from `superForm`, you'll get an object with form erro
 
 The `aria-invalid` attribute is used to automatically focus on the first error field, see the [errorSelector](/concepts/error-handling#errorselector) option further below.
 
-> To track touched fields, the `$errors` object doesn't remove any fields from itself when there are no errors, it sets them to `undefined`. A truthy/falsy check should be made for each field when checking for errors.
+> To track touched fields, `$errors` doesn't remove any fields from itself when there are no errors, it sets them to `undefined`. A truthy/falsy check should be made for each field when checking for errors.
 
 ## setError
 
@@ -65,6 +65,12 @@ If you have nested data, a string path is used to specify where in the data stru
 ```ts
 setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 ```
+
+## Throwing server errors
+
+If something goes wrong beyond validation, instead of returning `fail(400, { form })` you can also `throw error(5xx)`, which can then be handled with the [onError](/concepts/events#onerror) event, or, if the custom [use:enhance](/concepts/enhance) doesn't exist on the form, the nearest +error.svelte page will be rendered. 
+
+To avoid data loss even for non-javascript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
 
 ## Initial form errors
 

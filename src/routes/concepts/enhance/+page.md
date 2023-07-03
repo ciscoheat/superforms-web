@@ -24,7 +24,7 @@ Now all form submissions will happen on the client, and we unlock a ton of extra
 
 The `use:enhance` action takes no arguments, instead events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
-> Without `use:enhance` on the form, the client will be static. You'll get no events, no timers, no client-side validation except for `constraints`, no error focus, etc.<br><br>Also note that SvelteKit's own `use:enhance` cannot be used, you must use the one returned from `superForm`. The [events](/concepts/events) contains all you need to replace it.
+> Without `use:enhance` on the form, the client will be static. You'll get no events, no timers, no client-side validation except for `constraints`, no error focus, etc.<br><br>Also note that SvelteKit's own `use:enhance` cannot be used, you must use the one returned from `superForm`. The [events](/concepts/events) have all you need as a replacement.
 
 ## Differences from SvelteKit's use:enhance
 

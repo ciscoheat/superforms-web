@@ -58,15 +58,15 @@ This was previously an undocumented function called `defaultData`. If you've use
 
 ## superValidateSync
 
-When using `superValidate` on the client, you previously had to use a `+page.ts` file to call `superValidate`, since it is asynchronous. Now you can import `superValidateSync` and use it in components directly (which assumes that there is no async validation in the schema). Can be very convenient in SPA:s.
+When using `superValidate` on the client, you previously had to use a `+page.ts` file to call `superValidate`, since it is asynchronous. Now you can import `superValidateSync` and use it in components directly (which assumes that there is no async validation in the schema). Can be very convenient in SPA:s, just be aware that the client bundle size will increase a bit compared to using `superValidate` only on the server.
 
 ```svelte
 <script lang="ts">
   import { schema } from '$lib/schemas';
   import { superValidateSync, superForm } from 'sveltekit-superforms/client';
 
-  const validated = superValidateSync(schema);
-  const form = superForm(validated);
+  // Same as returning { form } in a load function
+  const form = superForm(superValidateSync(schema));
 </script>
 ```
 
