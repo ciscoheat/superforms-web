@@ -19,10 +19,10 @@ const { form, errors, enhance } = superForm(data.form, {
   syncFlashMessage: false,
   flashMessage: {
     module: flashModule,
-    onError?: ({error, message}) => {
+    onError?: ({result, message}) => {
       // Error handling for the flash message
-      // - error is the ActionResult
-      // - message is the flash store
+      // - result is the ActionResult
+      // - message is the flash store      
     }
   }
 }
