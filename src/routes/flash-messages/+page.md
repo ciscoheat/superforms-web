@@ -16,19 +16,21 @@ If you want to integrate the flash message more closely with a form, you can do 
 import * as flashModule from 'sveltekit-flash-message/client';
 
 const { form, errors, enhance } = superForm(data.form, {
-  syncFlashMessage: false,
   flashMessage: {
     module: flashModule,
     onError?: ({result, message}) => {
       // Error handling for the flash message
       // - result is the ActionResult
-      // - message is the flash store      
+      // - message is the flash store (not the status message store)
+      const errorMessage = result.error.message
+      message.set(/* Your flash message type */);
     }
-  }
+  },
+  syncFlashMessage: false
 }
 ```
 
-Then you have access to the following options:
+Then the following options are available:
 
 ### syncFlashMessage
 
@@ -36,4 +38,4 @@ If set to `true`, when `form.message` is updated, the flash message will be sync
 
 ### flashMessage.onError
 
-If a form error occurs (an `ActionResult` is returned with type `error`), the `flashMessage.onError` callback can be used to transform it into your flash message type, so you can display the error at the flash message instead of in `form.message`.
+If a form error occurs, which happens when `throw error(...)` is thrown in a form action, which results in an `ActionResult` returned with type `error`, the `flashMessage.onError` callback can be used to transform it into your flash message type, so you can display the error at the flash message instead of in `form.message`.
