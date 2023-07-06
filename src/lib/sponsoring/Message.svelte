@@ -25,7 +25,7 @@
     </p>
   {:else if success}
     <p>
-      Thank you so much for donating to improved support and the continued
+      Thank you so much for donating to improve support and the continued
       development of Superforms!
     </p>
   {/if}

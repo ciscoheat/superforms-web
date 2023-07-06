@@ -20,4 +20,4 @@ To them and all of you that have donated a one-time amount - **Thank you**, it's
 
 <Sponsor />
 
-Any $10 or more monthly donation will be listed on this page with picture and link.
+Any $10 or more monthly donation will be listed on this page with a picture and link.

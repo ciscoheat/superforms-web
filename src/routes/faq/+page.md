@@ -8,16 +8,16 @@ The most common mistake is to forget the `name` attribute on the input field. If
 
 ---
 
-### How can I return additional data together with the form?
+### How can I return additional data along with the form?
 
-You're not limited to just `return { form }` in load functions and form actions, you can return anything else together with the form variables (which can also be called anything you'd like).
+You're not limited to just `return { form }` in load functions and form actions; you can return anything else together with the form variables (which can also be called anything you'd like).
 
 ```ts
-const loginForm = await superValidate(request, loginSchema)
-const registerForm = await superValidate(request, registerSchema)
-const userName = locals.currentUser.name
+const loginForm = await superValidate(request, loginSchema);
+const registerForm = await superValidate(request, registerSchema);
+const userName = locals.currentUser.name;
 
-return { loginForm, registerForm, userName }
+return { loginForm, registerForm, userName };
 ```
 
 If you return this in a load function, it can be accessed in `PageData` in `+page.svelte`. By returning it in a form action, it can be accessed in `ActionData` instead.
@@ -26,7 +26,7 @@ If you return this in a load function, it can be accessed in `PageData` in `+pag
 
 ### What about the other way around, posting additional data to the server?
 
-Conversely, you can add additional form fields not included in the schema, including files (see next question), and also add form data in [onSubmit](/concepts/events#onsubmit), to send extra data to the server. They can then be accessed with `request.formData()` in the form action:
+Conversely, you can add additional form fields not included in the schema, including files (see the next question), and also add form data in [onSubmit](/concepts/events#onsubmit), to send extra data to the server. They can then be accessed with `request.formData()` in the form action:
 
 ```ts
 export const actions = {
@@ -36,20 +36,20 @@ export const actions = {
 
     if (!form.valid) return fail(400, { form });
 
-    if(formData.has('extra')) {
+    if (formData.has('extra')) {
       // Do something with the extra data
     }
 
     return { form };
   }
-}
+};
 ```
 
 ---
 
-### How to handle file uploads?
+### How do I handle file uploads?
 
-File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation, so they need to have names that doesn't conflict with the fields in the schema. 
+File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation, so they need to have names that don't conflict with the fields in the schema.
 
 The recommended way to handle files is to grab the `FormData` and extract the files from there, after validation:
 
@@ -68,7 +68,7 @@ export const actions = {
 
     return { form };
   }
-}
+};
 ```
 
 ---
@@ -85,7 +85,7 @@ Yes - this question now has its own [article page here](/components).
 
 ---
 
-### I want to reuse common options, how to do that easily?
+### I want to reuse common options, how do I do that easily?
 
 When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
 
@@ -94,9 +94,9 @@ import type { ZodValidation } from 'sveltekit-superforms';
 import { superForm as realSuperForm } from 'sveltekit-superforms/client';
 import type { AnyZodObject } from 'zod';
 
-export type Message = { 
-  status: 'success' | 'error' | 'warning'; 
-  text: string 
+export type Message = {
+  status: 'success' | 'error' | 'warning';
+  text: string;
 };
 
 export function superForm<T extends ZodValidation<AnyZodObject>>(

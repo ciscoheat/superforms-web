@@ -11,7 +11,7 @@
 
 <svelte:head><title>Proxy objects</title></svelte:head>
 
-Sometimes the form data must be proxied, which could happen when you get a `string` value from an input field, third-party library, etc, and want it to be automatically converted and updating a non-string value in your schema. There are a number of functions available for that:
+Sometimes the form data must be proxied, which could happen when you get a `string` value from an input field, third-party library, etc. and want it to be automatically converted and updated with a non-string value in your schema. There are a number of functions available for that:
 
 ## Usage
 

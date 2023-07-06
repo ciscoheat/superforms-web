@@ -6,7 +6,7 @@ After a lot of work, Superforms 1.0 has been released! Here are the most importa
 
 ## Automatic form id
 
-Setting a form `id` for multiple forms on the same page is not required anymore, when using `use:enhance`.
+Setting a form `id` for multiple forms on the same page is not required anymore when using `use:enhance`.
 
 ```diff
 const loginForm = await superValidate(loginSchema, {
@@ -29,7 +29,7 @@ const form2 = await superValidate(schema, { id: 'form2' });
 return { form1, form2 };
 ```
 
-Multiple forms without `use:enhance` works as well, but an id must be manually specified, either as an option, or in a hidden form field called `__superform_id`.
+Multiple forms without `use:enhance` work as well, but an id must be manually specified, either as an option, or in a hidden form field called `__superform_id`.
 
 For extra safety, a warning will be emitted if identical id's are detected.
 
@@ -44,21 +44,21 @@ import { z } from 'zod';
 const schema = z.object({
   name: z.string().min(2),
   tags: z.string().min(1).array().default(['a', 'b'])
-})
+});
 
 // Returns { name: '', tags: ['a', 'b'] }
-const defaults = defaultValues(schema)
+const defaults = defaultValues(schema);
 
 // Which is the same as form.data in superValidate
 // when called with only the schema:
-const form = await superValidate(schema)
+const form = await superValidate(schema);
 ```
 
 This was previously an undocumented function called `defaultData`. If you've used it, rename it to `defaultValues`.
 
 ## superValidateSync
 
-When using `superValidate` on the client, you previously had to use a `+page.ts` file to call `superValidate`, since it is asynchronous. Now you can import `superValidateSync` and use it in components directly (which assumes that there is no async validation in the schema). Can be very convenient in SPA:s, just be aware that the client bundle size will increase a bit compared to using `superValidate` only on the server.
+When using `superValidate` on the client, you previously had to use a `+page.ts` file to call `superValidate`, since it is asynchronous. Now you can import `superValidateSync` and use it in components directly (which assumes that there is no async validation in the schema). It can be very convenient in SPA's, just be aware that the client bundle size will increase a bit compared to using `superValidate` only on the server.
 
 ```svelte
 <script lang="ts">
@@ -102,7 +102,7 @@ You can now use the `data` and `id` options when calling reset, to reset the for
 
 ## Better empty value support for proxies
 
-`intProxy`, `numberProxy`, `dateProxy` and `stringProxy` now have an `empty` option, so empty values can be automatically set to `null` or `undefined`.
+`intProxy`, `numberProxy`, `dateProxy`, and `stringProxy` now have an `empty` option, so empty values can be automatically set to `null` or `undefined`.
 
 ## Validate the whole form on the client
 
@@ -115,7 +115,7 @@ Previously, it wasn't possible to handle errors for arrays in the schema, like a
 ```ts
 const schema = z.object({
   tags: z.string().array().max(3)
-})
+});
 
 const { form, errors } = superForm(data.form);
 ```
@@ -126,4 +126,4 @@ const { form, errors } = superForm(data.form);
 {/if}
 ```
 
-The [1.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v1.0.0) has a full list of changes for 1.0, and as usual, let me know on Github or Discord if something is unclear or not working.
+The [1.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v1.0.0) have a full list of changes for 1.0, and as usual, let me know on Github or Discord if something is unclear or not working.

@@ -11,7 +11,7 @@
 </p>
 <p>
   If you're using Superforms in non-profit circumstances, the library is
-  completely free, a star on Github is more than enough if you want to give your
+  completely free; a star on Github is more than enough if you want to give your
   support. But if you are using Superforms in a commercial project, would you or
   the company you work for consider donating?
 </p>

@@ -34,7 +34,7 @@ Then the following options are available:
 
 ### syncFlashMessage
 
-If set to `true`, when `form.message` is updated, the flash message will be synchronized with it. In this case it's important that the flash and form message types are matching.
+If set to `true`, when `form.message` is updated, the flash message will be synchronized with it. In this case, it's important that the flash and form message types matching.
 
 ### flashMessage.onError
 

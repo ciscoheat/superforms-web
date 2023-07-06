@@ -30,9 +30,9 @@ By deconstructing `errors` from `superForm`, you'll get an object with form erro
 </form>
 ```
 
-The `aria-invalid` attribute is used to automatically focus on the first error field, see the [errorSelector](/concepts/error-handling#errorselector) option further below.
+The `aria-invalid` attribute is used to automatically focus on the first error field; see the [errorSelector](/concepts/error-handling#errorselector) option further below.
 
-> To track touched fields, `$errors` doesn't remove any fields from itself when there are no errors, it sets them to `undefined`. A truthy/falsy check should be made for each field when checking for errors.
+> To track touched fields, `$errors` doesn't remove any fields from itself when there are no errors; it sets them to `undefined`. A truthy/falsy check should be made for each field when checking for errors.
 
 ## setError
 
@@ -70,7 +70,7 @@ setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 
 ## Throwing server errors
 
-If something goes wrong beyond validation, instead of returning `fail(400, { form })` you can also `throw error(5xx)`, which can then be handled with the [onError](/concepts/events#onerror) event, or, if the custom [use:enhance](/concepts/enhance) doesn't exist on the form, the nearest +error.svelte page will be rendered. 
+If something goes wrong beyond validation, instead of returning `fail(400, { form })`, you can also `throw error(5xx)`, which can then be handled with the [onError](/concepts/events#onerror) event, or, if the custom [use:enhance](/concepts/enhance) doesn't exist on the form, the nearest +error.svelte page will be rendered.
 
 To avoid data loss even for non-javascript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
 
@@ -78,7 +78,7 @@ To avoid data loss even for non-javascript users, returning a [status message](/
 
 The default data in an empty form is usually invalid, but displaying lots of errors upon page load doesn't look good. Superforms handles it like this:
 
-If no data was posted or sent to `superValidate`, **no errors will be returned** unless the `errors` option in `superValidate` is `true`. This is what happens in load functions, when the only parameter sent to `superValidate` is the schema.
+If no data was posted or sent to `superValidate`, **no errors will be returned** unless the `errors` option in `superValidate` is `true`. This is what happens in load functions when the only parameter sent to `superValidate` is the schema.
 
 ```ts
 export const load = async () => {
@@ -87,21 +87,21 @@ export const load = async () => {
 
   // No data, but errors can still be added
   const form2 = await superValidate(schema, { errors: true });
-}
+};
 ```
 
 If data was sent to `superValidate`, either posted or populated with data, **errors will be returned** unless the `errors` option is `false`. This happens in form actions or when the form is initially populated.
 
 ```ts
 export const load = async () => {
-  const initialData = { test: 123 }
+  const initialData = { test: 123 };
 
   // Form is populated, so errors will be set if validation fails
   const form = await superValidate(initialData, schema);
 
   // No errors will be set, even if validation fails
   const form2 = await superValidate(initialData, schema, { errors: false });
-}
+};
 
 export const actions = {
   default: async ({ request }) => {
@@ -118,9 +118,9 @@ export const actions = {
 
 ## Usage (client)
 
-As said, errors are available in the `$errors` store. It gives you a high flexibility, since you can place error messages anywhere on the page.
+As said, errors are available in the `$errors` store. It gives you high flexibility, since you can place error messages anywhere on the page.
 
-In larger forms, the submit button may be far away from the error, so it's nice showing the user where the first error is. There are a couple of options for that:
+In larger forms, the submit button may be far away from the error, so it's nice to show the user where the first error is. There are a couple of options for that:
 
 ```ts
 const { form, enhance, errors, allErrors } = superForm(data.form, {
@@ -150,7 +150,7 @@ The `scrollToError` options determines how to scroll to the first error message 
 
 ### autoFocusOnError
 
-When `autoFocusOnError` is set to its default value `detect`, it checks if the user is on a mobile device, **if not** it will automatically focus on the first error input field. It's prevented on mobile devices since focusing will open the on-screen keyboard, causing the viewport to shift and could also hide the validation error.
+When `autoFocusOnError` is set to its default value `detect`, it checks if the user is on a mobile device; **if not**, it will automatically focus on the first error input field. It's prevented on mobile devices since focusing will open the on-screen keyboard, causing the viewport to shift,which could also hide the validation error.
 
 ### stickyNavbar
 

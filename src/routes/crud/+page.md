@@ -33,11 +33,11 @@ Instead of the text version below, here's the video version.
 
 ### Stackblitz
 
-The code is available on [Stackblitz](https://stackblitz.com/edit/sveltekit-superforms-1-crud?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte), just click the link and you're up and running in the browser in 15 seconds!
+The code is available on [Stackblitz](https://stackblitz.com/edit/sveltekit-superforms-1-crud?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte); just click the link, and you're up and running in the browser in 15 seconds!
 
 ### New SvelteKit project
 
-Start from scratch in a new SvelteKit project, by executing one of the following commands in your project directory:
+Start from scratch in a new SvelteKit project by executing one of the following commands in your project directory:
 
 ```
 npm create svelte@latest
@@ -58,7 +58,7 @@ Select **Skeleton project** and **Typescript syntax** at the prompts, the rest i
 
 ## Start - Creating a test database
 
-When you have the code up and running, we need a data storage for testing. Refer to the [Zod schema reference](https://zod.dev/?id=primitives) for help with building a schema.
+When you have the code up and running, we need data storage for testing. Refer to the [Zod schema reference](https://zod.dev/?id=primitives) for help with building a schema.
 
 **src/lib/users.ts**
 
@@ -96,9 +96,9 @@ This user database in the shape of an array will be helpful for testing our CRUD
 
 ## Form vs. database schemas
 
-When starting on the server page, we'll encounter a thing about validation schemas. The `userSchema` is for the **database integrity**, so an `id` **must** exist there. But we want to create an entity, and must therefore allow `id` not to exist when creating users.
+When starting on the server page, we'll encounter a thing about validation schemas. The `userSchema` is for **database integrity**, so an `id` **must** exist there. But we want to create an entity, and must therefore allow `id` not to exist when creating users.
 
-Fortunately, Zod makes it quite easy to append a modifier to a field without duplicating the whole schema, by extending it:
+Fortunately, Zod makes it quite easy to append a modifier to a field without duplicating the whole schema by extending it:
 
 **src/routes/users/[[id]]/+page.server.ts**
 
@@ -115,7 +115,7 @@ const crudSchema = userSchema.extend({
 
 (Of course, the original `userSchema` is kept intact.)
 
-With this, **Create** and **Update** can now use the same schema, which means that they can share the same user interface. This is a fundamental idea in Superforms, you can pass either empty data or an entity partially matching the schema to `superValidate`, and it will generate default values for any non-specified fields, ensuring type safety.
+With this, **Create** and **Update** can now use the same schema, which means that they can share the same user interface. This is a fundamental idea in Superforms: you can pass either empty data or an entity partially matching the schema to `superValidate`, and it will generate default values for any non-specified fields, ensuring type safety.
 
 ## Reading a user from the database
 
@@ -124,7 +124,7 @@ Let's add a load function to the page, using the SvelteKit route parameters to l
 **src/routes/+page.server.ts**
 
 ```ts
-export const load = (async ({ url }) => {
+export const load = async ({ url }) => {
   // READ user
   const user = users.find((u) => u.id == params.id);
 
@@ -133,14 +133,14 @@ export const load = (async ({ url }) => {
   // If user is null, default values for the schema will be returned.
   const form = await superValidate(user, crudSchema);
   return { form, users };
-})
+};
 ```
 
-Some simple logic is used to find the user, and then detect if a 404 should be displayed. At the end we're returning `form` as usual, but also `users`, so they can be displayed as a list. 
+Some simple logic is used to find the user, and then detect if a 404 should be displayed. At the end, we're returning `form` as usual, but also `users`, so they can be displayed as a list.
 
 (Sometimes, CRUDL is used as an acronym, since listing is also fundamental to data management.)
 
-Now when we have loaded the data, let's display it in a page component:
+Now that we have loaded the data, let's display it in a page component:
 
 **src/routes/users/[[id]]/+page.svelte**
 
@@ -152,7 +152,9 @@ Now when we have loaded the data, let's display it in a page component:
 
   export let data: PageData;
 
-  const { form, errors, constraints, enhance, delayed, message } = superForm(data.form);
+  const { form, errors, constraints, enhance, delayed, message } = superForm(
+    data.form
+  );
 </script>
 
 {#if $message}
@@ -162,9 +164,9 @@ Now when we have loaded the data, let's display it in a page component:
 <h2>{!$form.id ? 'Create' : 'Update'} user</h2>
 ```
 
-There are plenty of variables extracted from `superForm`, refer to the [API reference](/api#superform-return-type) for a complete list.
+There are plenty of variables extracted from `superForm`; refer to the [API reference](/api#superform-return-type) for a complete list.
 
-Apart from getting the data ready to be displayed, we've prepared a status message, using `$page.status` to test for success or failure, and we're using `$form.id` to display a "Create user" or "Update user" title. Now lets add the form itself:
+Apart from getting the data ready to be displayed, we've prepared a status message, using `$page.status` to test for success or failure, and we're using `$form.id` to display a "Create user" or "Update user" title. Now let's add the form itself:
 
 **src/routes/users/[[id]]/+page.svelte**
 
@@ -193,7 +195,8 @@ Apart from getting the data ready to be displayed, we've prepared a status messa
     {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
   </label>
 
-  <button>Submit</button> {#if $delayed}Working...{/if}
+  <button>Submit</button>
+  {#if $delayed}Working...{/if}
 </form>
 
 <style>
@@ -232,16 +235,16 @@ export const actions = {
 
     return { form };
   }
-}
+};
 ```
 
 This is where you should access your database API. In our case, we're only doing some array manipulations.
 
-With this, we have 3 out of 4 letters of CRUD in about 150 lines of code, half of it html!
+With this, we have 3 out of 4 letters of CRUD in about 150 lines of code, half of it HTML!
 
 ## Deleting a user
 
-To delete a user, we can make use of the html `button` element, which can have a name and a value that will be passed only if that specific button was used to post the form. Add this at the end of the form:
+To delete a user, we can make use of the HTML `button` element, which can have a name and a value that will be passed only if that specific button was used to post the form. Add this at the end of the form:
 
 **src/routes/users/[[id]]/+page.svelte**
 
@@ -294,13 +297,13 @@ export const actions: Actions = {
 };
 ```
 
-Now all four CRUD operations are completed! An issue however is that we have to redirect after deleting to avoid a 404, so we cannot use `form.message` to show "User deleted", since the validation data won't exist after redirecting.
+Now all four CRUD operations are complete! An issue, however, is that we have to redirect after deleting to avoid a 404, so we cannot use `form.message` to show "User deleted", since the validation data won't exist after redirecting.
 
-Redirecting with a message is a general problem, for example maybe we'd like to redirect to the newly created user after it's been created. Fortunately there is a solution, the sister library to Superforms handles this. [Read more about it here](/flash-messages).
+Redirecting with a message is a general problem; for example, maybe we'd like to redirect to the newly created user after it's been created. Fortunately, there is a solution; the sister library to Superforms handles this. [Read more about it here](/flash-messages).
 
 ## Listing the users
 
-The last loose thread is to display a list of the users. It'll be quite trivial, add this to the top of `+page.svelte`:
+The last loose thread is to display a list of the users. It'll be quite trivial; add this to the top of `+page.svelte`:
 
 **src/routes/+page.svelte**
 
@@ -337,6 +340,6 @@ And some styling for everything at the end:
 </style>
 ```
 
-That's it! Thank you for following along, the code is [available here](https://stackblitz.com/edit/sveltekit-superforms-1-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte). 
+That's it! Thank you for following along. The code is [available here](https://stackblitz.com/edit/sveltekit-superforms-1-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte).
 
-If you have any questions, post in the [discussion forum](https://github.com/ciscoheat/sveltekit-superforms/discussions) or ask on [the Discord server](https://discord.gg/AptebvVuhB).
+If you have any questions, post them in the [discussion forum](https://github.com/ciscoheat/sveltekit-superforms/discussions) or ask them on [the Discord server](https://discord.gg/AptebvVuhB).
