@@ -29,9 +29,9 @@ It is used to display the message on the client, like any other store:
 {/if}
 ```
 
-First, we want to send it from the server. Using the `message` helper function makes this quite  easy.
+First, we want to send it from the server. Using the `message` helper function makes this quite easy.
 
-However, we need to send it from the server first. Using the'message' auxiliary function makes this rather simple.
+However, we need to send it from the server first. Using the `message` auxiliary function makes this rather simple.
 
 ## The message helper
 
@@ -61,7 +61,7 @@ export const actions = {
 };
 ```
 
-> Note that a successful form action in SvelteKit can only return status code `200`, so the status property for `message` must be in the range `400-599`, otherwise `{ form }` will be returned with a status of `200`, no matter what the status option is set to.
+> Note that a successful form action in SvelteKit can only return status code `200`, so the status option for `message` must be in the range `400-599`, otherwise `{ form }` will be returned with a status of `200`, no matter what the status option is set to.
 
 ## Strongly typed message
 

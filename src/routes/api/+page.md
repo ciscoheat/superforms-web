@@ -244,7 +244,7 @@ This corresponds to the `form.data` returned from `const form = await superValid
 
 ### actionResult(type, data?, options? | status?)
 
-When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you **must** return an `ActionResult`, `throw redirect(...)` won't work. For example, `superForm` expects an `ActionResult`.
+When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you **must** return an `ActionResult`, for example `throw redirect(...)` won't work, `superForm` expects an `ActionResult`.
 
 This method helps you construct one in a `Response` object, so you can return a validation object from your API/endpoints.
 

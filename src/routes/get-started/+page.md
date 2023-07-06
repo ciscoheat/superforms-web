@@ -78,11 +78,11 @@ The Superform server API is called `superValidate`. You can call it in two ways 
 
 **1. Empty form**
 
-If you want the client-side form to be initially empty, just pass the schema as in the example above, and it will be filled with default values based on the schema. For example, a `z.string()` field results in an empty string, unless you have set a default.
+If you want the form to be initially empty, just pass the schema as in the example above, and it will be filled with default values based on the schema. For example, a `z.string()` field results in an empty string, unless you have set a default.
 
 **2. Populate from database**
 
-If you want to populate the client-side form, you can call the database and send the data to the form as the first parameter, schema second, like this:
+If you want to populate the form, you can call the database and send the data to the form as the first parameter, schema second, like this:
 
 ```ts
 export const load = async ({ params }) => {

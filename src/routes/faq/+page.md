@@ -8,7 +8,7 @@ The most common mistake is to forget the `name` attribute on the input field. If
 
 ---
 
-### How can I return additional data along with the form?
+### How can I return additional data together with the form?
 
 You're not limited to just `return { form }` in load functions and form actions; you can return anything else together with the form variables (which can also be called anything you'd like).
 
@@ -47,7 +47,7 @@ export const actions = {
 
 ---
 
-### How do I handle file uploads?
+### How to handle file uploads?
 
 File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation, so they need to have names that don't conflict with the fields in the schema.
 
@@ -85,7 +85,7 @@ Yes - this question now has its own [article page here](/components).
 
 ---
 
-### I want to reuse common options, how do I do that easily?
+### I want to reuse common options, how to do that easily?
 
 When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
 
