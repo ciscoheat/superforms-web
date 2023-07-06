@@ -124,9 +124,9 @@ In larger forms, the submit button may be far away from the error, so it's nice 
 
 ```ts
 const { form, enhance, errors, allErrors } = superForm(data.form, {
-  errorSelector: string | undefined = '[aria-invalid="true"],[data-invalid]'
-  scrollToError: 'smooth' | 'auto' | 'off' = 'smooth'
-  autoFocusOnError: boolean | 'detect' = 'detect'
+  errorSelector: string | undefined = '[aria-invalid="true"],[data-invalid]',
+  scrollToError: 'auto' | 'smooth' | 'off' | boolean | ScrollIntoViewOptions = 'smooth',
+  autoFocusOnError: boolean | 'detect' = 'detect',
   stickyNavbar: string | undefined = undefined,
   onError: (({ result, message }) => void) | 'apply'
 })
@@ -146,7 +146,7 @@ This is the CSS selector used to locate the invalid input fields after form subm
 
 ### scrollToError
 
-The `scrollToError` options determines how to scroll to the first error message in the form. `smooth` and `auto` are values from [Window.scroll()](https://developer.mozilla.org/en-US/docs/Web/API/Window/scroll).
+The `scrollToError` options determines how to scroll to the first error message in the form. `smooth` and `auto` are values from [Window.scroll](https://developer.mozilla.org/en-US/docs/Web/API/Window/scroll). If the non-string options are used, [Element.scrollIntoView](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView) will be called with the option. This is mostly used with nested scrollbars, in which case Window.scroll won't work.
 
 ### autoFocusOnError
 
