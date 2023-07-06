@@ -12,7 +12,7 @@
 
 <svelte:head><title>Timers</title></svelte:head>
 
-As said in the previous section, the user should understand that things are happening when they submit the form. Timers gives us a way of providing feedback, based upon human perception research, when there is a response delay.
+As said in the previous section, the user should understand that things are happening when they submit the form. Timers give us a way of providing feedback based upon human perception research, when there is a response delay.
 
 ## Usage
 
@@ -40,11 +40,11 @@ A perfect use for these timers is to show a loading indicator while the form is 
 ```svelte
 <script lang="ts">
   const { form, errors, enhance, delayed } = superForm(data.form);
-  import spinner from '$lib/assets/spinner.svg'
+  import spinner from '$lib/assets/spinner.svg';
 </script>
 
 <div>
-  <button>Submit</button> 
+  <button>Submit</button>
   {#if $delayed}<img src={spinner} />{/if}
 </div>
 ```

@@ -32,9 +32,9 @@ Nested<S, string[] | undefined> // Errors for each field in S
 
 /**
  * FormPath and FormPathLeaves are string paths that points to a
- * field in the schema. FormPathLeaves can only be used at the 
+ * field in the schema. FormPathLeaves can only be used at the
  * end nodes of the schema.
- * 
+ *
  * z.object({
  *   tags: z.object({
  *     name: z.string().min(1)
@@ -54,7 +54,7 @@ import {
   actionResult,
   defaultValues,
   message,
-  setError,
+  setError
 } from 'sveltekit-superforms/server';
 ```
 
@@ -69,7 +69,7 @@ superValidate<T, M = any>(
 ): Promise<SuperValidated<T, M>>
 ```
 
-If you want to populate the form, for example from a database or `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter, the schema second:
+If you want to populate the form, for example, from a database, `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter and the schema second:
 
 ```ts
 superValidate<T, M = any>(
@@ -160,7 +160,7 @@ InputConstraints = Partial<{
   pattern: string; // z.string().regex(r)
   min: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
   max: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
-  step: number | "any"; // z.number().step(n)
+  step: number | 'any'; // z.number().step(n)
   minlength: number; // z.string().min(n)
   maxlength: number; // z.string().max(n)
 }>;
@@ -225,7 +225,7 @@ Note that the `status` option must be in the range `400-599`.
 
 ### defaultValues(schema)
 
-Returns the default values for a schema, either the [Superforms defaults](/default-values), or the ones you set on the schema yourself.
+Returns the default values for a schema, either the [Superforms defaults](/default-values) or the ones you set on the schema yourself.
 
 ```ts
 import { defaultValues } from 'sveltekit-superforms/server';
@@ -234,17 +234,17 @@ import { z } from 'zod';
 const schema = z.object({
   name: z.string().min(2),
   tags: z.string().min(1).array().default(['a', 'b'])
-})
+});
 
 // Returns { name: '', tags: ['a', 'b'] }
-const defaults = defaultValues(schema)
+const defaults = defaultValues(schema);
 ```
 
 This corresponds to the `form.data` returned from `const form = await superValidate(schema)`.
 
 ### actionResult(type, data?, options? | status?)
 
-When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you **must** return an `ActionResult`, `throw redirect(...)` won't work for example, `superForm` expects an `ActionResult`.
+When using [endpoints](https://kit.svelte.dev/docs/routing#server) instead of form actions, you **must** return an `ActionResult`, `throw redirect(...)` won't work. For example, `superForm` expects an `ActionResult`.
 
 This method helps you construct one in a `Response` object, so you can return a validation object from your API/endpoints.
 
@@ -427,7 +427,7 @@ SuperForm<T extends AnyZodObject, M = any> = {
     onSubmit, onResult, onError, onUpdate, onUpdated
   }) => ReturnType<typeof $app/forms/enhance>;
 
-  reset: (options?: { 
+  reset: (options?: {
     keepMessage?: boolean;
     id?: string;
     data?: Partial<S>;
@@ -458,13 +458,13 @@ The general way of creating a proxy is like this:
 
 ```svelte
 <script lang="ts">
-  import { superForm, intProxy } from 'sveltekit-superforms/client'
+  import { superForm, intProxy } from 'sveltekit-superforms/client';
   import type { PageData } from './$types';
 
   export let data: PageData;
 
   const { form, enhance } = superForm(data.form);
-  
+
   // All proxies are of type Writable<string>
   const proxy = intProxy(form, 'field', { options });
 </script>
@@ -472,7 +472,7 @@ The general way of creating a proxy is like this:
 <input name="field" bind:value={$proxy} />
 ```
 
-Changes in either the proxy store, or the corresponding `$form` field, will reflect in the other.
+Changes in either the proxy store or the corresponding `$form` field will reflect in the other.
 
 ### intProxy(form, fieldName, options?)
 
@@ -529,12 +529,14 @@ Creates a string store for a **Date** schema field. The option can be used to ch
 
 ### stringProxy(form, fieldName, options)
 
-Creates a string store for a **string** schema field. It may look redundant, but the option can make it useful if you need to convert an empty string to `null` or `undefined`.
+Creates a string store for a **string** schema field. It may look redundant, but the option can be useful if you need to convert an empty string to `null` or `undefined`.
 
 **Options:**
 
 ```ts
-{ empty: 'null' | 'undefined'; }
+{
+  empty: 'null' | 'undefined';
+}
 ```
 
 ### fieldProxy, formFieldProxy
@@ -551,17 +553,17 @@ const schema = z.object({
 });
 ```
 
-A proxy for a [html date field](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date) can be used like this:
+A proxy for a [HTML date field](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date) can be used like this:
 
 ```svelte
 <script lang="ts">
-  import { superForm, dateProxy } from 'sveltekit-superforms/client'
+  import { superForm, dateProxy } from 'sveltekit-superforms/client';
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  const { form, enhance } = superForm(data.form)
-  const date = dateProxy(form, 'date', { format: 'date', empty: 'undefined' })
+  const { form, enhance } = superForm(data.form);
+  const date = dateProxy(form, 'date', { format: 'date', empty: 'undefined' });
 </script>
 
 <input name="date" type="date" bind:value={$date} />
@@ -590,16 +592,16 @@ import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 #### Props
 
-| Prop               | Type           | Default value | Description                                                                                                                                       |
-| ------------------ | -------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **data**           | any            | `undefined`   | Data to be displayed by SuperDebug                                                                                                                |
-| **display**        | Boolean        | `true`        | Whether to show or hide SuperDebug                                                                                                                |
-| **label**          | String         | `""`          | Add useful label to SuperDebug, useful when using multiple instances of SuperDebug in a page                                                      |
-| **promise**        | Boolean        | `false`       | When true, SuperDebug uses svelte's await block to load the data. Data is assumed to be async but can also load non-async data using await block! |
-| **status**         | Boolean        | `true`        | Whether to show or hide status code.                                                                                                              |
-| **stringTruncate** | Number         | `120`         | Truncate long string in output.                                                                                                                   |
-| **ref**            | HTMLPreElement | `undefined`   | Binds pre tag to ref.                                                                                                                             |
+| Prop               | Type           | Default value | Description                                                                                                                                                |
+| ------------------ | -------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **data**           | any            | `undefined`   | Data to be displayed by SuperDebug                                                                                                                         |
+| **display**        | Boolean        | `true`        | Whether to show or hide SuperDebug                                                                                                                         |
+| **label**          | String         | `""`          | Add a useful label to SuperDebug, useful when using multiple instances of SuperDebug in a page                                                             |
+| **promise**        | Boolean        | `false`       | When true, SuperDebug uses Svelte's await block to load the data. Data is assumed to be async, but you can also load non-async data using the await block! |
+| **status**         | Boolean        | `true`        | Whether to show or hide status code.                                                                                                                       |
+| **stringTruncate** | Number         | `120`         | Truncate long string field values of the data prop                                                                                                         |
+| **ref**            | HTMLPreElement | `undefined`   | Binds pre tag to ref.                                                                                                                                      |
 
 #### Usage
 
-Please see the `+page.svelte` file in [src/routes/super-debug](https://github.com/ciscoheat/sveltekit-superforms/tree/main/src/routes/super-debug) on common usage of SuperDebug.
+Please see the `+page.svelte` file in [src/routes/super-debug](https://github.com/ciscoheat/sveltekit-superforms/tree/main/src/routes/super-debug) for common usage of SuperDebug.

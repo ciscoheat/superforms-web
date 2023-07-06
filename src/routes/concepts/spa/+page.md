@@ -11,7 +11,7 @@
 
 # Single-page applications (SPA)
 
-Even though validation has its place on the server, it's possible to use the whole Superforms library on the client in single page applications. A SPA is easy to create with SvelteKit, [fully documented here](https://kit.svelte.dev/docs/single-page-apps).
+Even though validation has its place on the server, it's possible to use the whole Superforms library on the client in single page applications. A SPA is easy to create with SvelteKit, as [fully documented here](https://kit.svelte.dev/docs/single-page-apps).
 
 ## Usage
 
@@ -24,7 +24,7 @@ const { form, enhance } = superForm(data, {
 })
 ```
 
-By setting the `SPA` option to `true`, the form will not send anything to the server. Instead the client-side [validators](/concepts/client-validation) option will determine the success or failure of the "client-posted" form, which will trigger the [event chain](/concepts/events), and the result will be most conveniently consumed in `onUpdate`.
+By setting the `SPA` option to `true`, the form will not send anything to the server. Instead, the client-side [validators](/concepts/client-validation) option will determine the success or failure of the "client-posted" form, which will trigger the [event chain](/concepts/events), and the result will be most conveniently consumed in `onUpdate`.
 
 > Remember that `use:enhance` must be added to the form for SPA to work!
 
@@ -126,7 +126,7 @@ The validation in `onUpdate` is almost the same as validating in a form action o
 
 ## Using superValidate in +page.svelte
 
-Since you can't use top-level await in Svelte components, you can't use `superValidate` directly in `+page.svelte`, but you can import `superValidateSync` instead, to avoid having a `+page.ts` if you just want the default values for a schema:
+Since you can't use top-level await in Svelte components, you can't use `superValidate` directly in `+page.svelte`, but you can import `superValidateSync` instead to avoid having a `+page.ts` if you just want the default values for a schema:
 
 ```svelte
 <script lang="ts">

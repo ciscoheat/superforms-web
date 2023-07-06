@@ -11,7 +11,7 @@ To update, change your `package.json` entry for `sveltekit-superforms` to `^1.0.
 ```json
 {
   "devDependencies": {
-    "sveltekit-superforms": "^1.0.0",
+    "sveltekit-superforms": "^1.0.0"
   }
 }
 ```
@@ -22,22 +22,22 @@ The guide is written with the affected methods in the headlines, so you can scan
 
 ### superForm
 
-For type safety reasons, you cannot pass `null`, `undefined` or arbitrary data to `superForm` anymore. Instead you should be using `superValidate` to get the initial form object, by returning `{ form }` from a load function and passing it to `superForm`.
+For type safety reasons, you cannot pass `null`, `undefined`, or arbitrary data to `superForm` anymore. Instead, you should be using `superValidate` to get the initial form object, by returning `{ form }` from a load function and passing it to `superForm`.
 
 Not doing this will result in the following warning:
 
 ```
-No form data sent to superForm, schema type safety cannot be guaranteed. Also, no constraints will exist for the form. 
+No form data sent to superForm, schema type safety cannot be guaranteed. Also, no constraints will exist for the form.
 Set the warnings.noValidationAndConstraints option to false to disable this warning.
 ```
 
-When this happens you need to check the call to `superForm` and apply the above fix.
+When this happens, you need to check the call to `superForm` and apply the above fix.
 
-In client-only scenarios, especially in SPA:s, you must use `superValidate` or `superValidateSync` before calling `superForm`. Read more on the [SPA page](/concepts/spa) about this.
+In client-only scenarios, especially in SPA's, you must use `superValidate` or `superValidateSync` before calling `superForm`. Read more on the [SPA page](/concepts/spa) about this.
 
 ### valid, empty, firstError
 
-The `$valid`, `$empty` and `$firstError` stores are removed from the client, they weren't that useful. `$allErrors` can be used instead, together with the new `$posted` store (which shows if the form has been previously posted or not).
+The `$valid`, `$empty`, and `$firstError` stores are removed from the client; they weren't that useful. `$allErrors` can be used instead, together with the new `$posted` store (which shows if the form has been previously posted or not).
 
 `empty` is removed from the object returned from `superValidate`, which type was previously called `Validation` but is now called `SuperValidated`.
 
@@ -45,7 +45,7 @@ The `$valid`, `$empty` and `$firstError` stores are removed from the client, the
 
 The `setError` function works as before, except that you must use an empty string instead of `null` for form-level errors.
 
-**Note however** that `setError` conflicts with client-side validation, the errors will be removed when a Zod schema is used for validation. Therefore, rely on the schema for most validation, if you're using it client-side.
+**Note, however**, that `setError` conflicts with client-side validation, the errors will be removed when a Zod schema is used for validation. Therefore, rely on the schema for most validation, if you're using it client-side.
 
 ```ts
 const schema = z
@@ -147,7 +147,7 @@ The signature for `allErrors` has changed, to make it easier to group related me
 + { path: string; messages: string[] }
 ```
 
-The path follows the same format as the above described string accessor path. If you want to display all messages grouped:
+The path follows the same format as the above-described string accessor path. If you want to display all messages grouped:
 
 ```svelte
 {#if $allErrors.length}
@@ -170,7 +170,8 @@ Or as before, separate for each error:
     {#each $allErrors as error}
       {#each error.messages as message}
         <li>
-          <b>{error.path}:</b> {message}.
+          <b>{error.path}:</b>
+          {message}.
         </li>
       {/each}
     {/each}
@@ -191,7 +192,7 @@ See [the API](/api#defaultvaluesschema) for documentation.
 
 ### message, setMessage
 
-The `valid` option is removed from `message/setMessage`, any status >= 400 will return a fail. As with `setError`, the status code must be in the `400-599` range.
+The `valid` option is removed from `message/setMessage`; any status >= 400 will return a fail. As with `setError`, the status code must be in the `400-599` range.
 
 ### meta
 
@@ -233,4 +234,4 @@ The following `superValidate` options have changed:
 const form = await superValidate(schema, { errors: true });
 ```
 
-The [1.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v1.0.0) has a full list of changes, and as usual, let me know on Github or Discord if something is unclear or not working.
+The [1.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v1.0.0) have a full list of changes, and as usual, let me know on Github or Discord if something is unclear or not working.

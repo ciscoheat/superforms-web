@@ -34,7 +34,7 @@ Let's gradually build up a Superform containing a name and an email address.
 
 ### Creating a validation schema
 
-The main thing required to create a Superform is a Zod validation schema. It has a quite simple syntax:
+The main thing required to create a Superform is a Zod validation schema. It has quite simple syntax:
 
 ```ts
 import { z } from 'zod';
@@ -78,11 +78,11 @@ The Superform server API is called `superValidate`. You can call it in two ways 
 
 **1. Empty form**
 
-If you want to the form to be initially empty, just pass the schema as in the example above, and it will be filled with default values based on the schema. For example, a `z.string()` field results in an empty string, unless you have set a default.
+If you want the client-side form to be initially empty, just pass the schema as in the example above, and it will be filled with default values based on the schema. For example, a `z.string()` field results in an empty string, unless you have set a default.
 
 **2. Populate from database**
 
-If you want to populate the form, you can call the database and send the data to the form as the first parameter, schema second, like this:
+If you want to populate the client-side form, you can call the database and send the data to the form as the first parameter, schema second, like this:
 
 ```ts
 export const load = async ({ params }) => {
@@ -99,15 +99,15 @@ export const load = async ({ params }) => {
 };
 ```
 
-As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is very useful for backend interfaces, where the form usually should be populated based on an url like `/users/123`.
+As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is very useful for backend interfaces, where the form usually should be populated based on a url like `/users/123`.
 
 ### Important note about return values
 
-At the end of the load function we return `{ form }`. Unless you redirect or throw an error, you should **always** return the validation object to the client in this manner, either directly or through a helper function. The name of the variable doesn't matter, you can call it `{ loginForm }` or anything else, but it needs to be returned in all code paths, both in load functions and form actions, encapsulated in an object.
+At the end of the load function, we return `{ form }`. Unless you redirect or throw an error, you should **always** return the validation object to the client in this manner, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned in all code paths, both in load functions and form actions, encapsulated in an object.
 
 ### Displaying the form
 
-Now when we have sent the validation data to the client, we will retrieve it using the client part of the API:
+Now that we have sent the validation data to the client, we will retrieve it using the client part of the API:
 
 **src/routes/+page.svelte**
 
@@ -135,7 +135,7 @@ Now when we have sent the validation data to the client, we will retrieve it usi
 
 > Don't forget the `name` attribute on the form fields! Unless you are using [nested data](/concepts/nested-data), they are required.
 
-`superForm` is used on the client to display the data, that we just sent from the server in `data.form`.
+`superForm` is used on the client to display the data that we just sent from the server in `data.form`.
 
 This is what the form should look like now:
 
@@ -143,7 +143,7 @@ This is what the form should look like now:
 
 ### Debugging
 
-Now we can see that the form is populated. But to get deeper insight, let's add the Superform Debugging Svelte Component called `SuperDebug`:
+We can now see that the form has been populated. However, let's add the Superform Debugging Svelte Component called ["SuperDebug"](/api#superdebug) to gain more insight:
 
 **src/routes/+page.svelte**
 
@@ -220,21 +220,21 @@ POST {
 
 This is the validation object returned from `superValidate`, containing all you need to handle the rest of the logic:
 
-| Field              | Purpose                                                                                                                                           |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **id**             | Id for the schema, to handle [multiple forms](/concepts/multiple-forms) on the same page.                                                          |
-| **valid**          | Tells you whether the validation succeeded or not, used mostly in [events](/concepts/events). |
-| **posted**         | Tells you if the data was posted (in a form action) or not (in a load function).                                                                                                                |
-| **data**           | The posted data, which should be returned to the client using `fail` if not valid. |
-| **errors**         | An object with all validation errors, in a structure reflecting the data.                                                  |
-| **message**        | A field that can be set as a [status message](/concepts/messages).  |
-| **constraints**    | An object with [html validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation), that can be spread on input fields. |
+| Field           | Purpose                                                                                                                                                                                |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **id**          | Id for the schema, to handle [multiple forms](/concepts/multiple-forms) on the same page.                                                                                              |
+| **valid**       | Tells you whether the validation succeeded or not, used mostly in [events](/concepts/events).                                                                                          |
+| **posted**      | Tells you if the data was posted (in a form action) or not (in a load function).                                                                                                       |
+| **data**        | The posted data, which should be returned to the client using `fail` if not valid.                                                                                                     |
+| **errors**      | An object with all validation errors, in a structure reflecting the data.                                                                                                              |
+| **message**     | A field that can be set as a [status message](/concepts/messages).                                                                                                                     |
+| **constraints** | An object with [HTML validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation), that can be spread on input fields. |
 
-There is nothing magical about this data structure, you can modify any of its values, and they will be updated on the client when you `return { form }`. There are a couple of helper functions for making this more convenient, like [message](/concepts/messages) and [setError](/concepts/error-handling).
+There is nothing magical about this data structure; you can modify any of its values, and they will be updated on the client when you `return { form }`. There are a couple of helper functions for making this more convenient, like [message](/concepts/messages) and [setError](/concepts/error-handling).
 
 ### Displaying errors
 
-Now we know that validation has failed, and there are some errors being sent to the client. So how do we display them?
+Now we know that validation has failed and there are some errors being sent to the client. So how do we display them?
 
 We do that by adding properties to the destructuring assignment of `superForm`:
 
@@ -275,17 +275,17 @@ We do that by adding properties to the destructuring assignment of `superForm`:
 </style>
 ```
 
-As you see, by including `errors` we can display errors where it's appropriate, and through `constraints` we get browser validation even without javascript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
+As you see, by including `errors`, we can display errors where it's appropriate, and through `constraints`, we get browser validation even without javascript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
 
-We now have a fully working form, with convenient handling of data and validation both on client and server! 
+We now have a fully working form, with convenient handling of data and validation both on the client and server!
 
-There are no hidden DOM manipulations or other behind the scenes secrets, it's just html attributes and Svelte stores.
+There are no hidden DOM manipulations or other behind-the-scenes secrets; it's just HTML attributes and Svelte stores.
 
 ## Next steps
 
 This concludes the tutorial (full source code below), but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring.
 
-To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. Most pages there contain interactive examples that helps you use the library to its fullest.
+To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. Most pages there contain interactive examples that help you use the library to its fullest.
 
 > If you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) section carefully.
 

@@ -18,7 +18,7 @@
 
 <svelte:head><title>Snapshots</title></svelte:head>
 
-A nice SvelteKit feature is [snapshots](https://kit.svelte.dev/docs/snapshots), which saves and restores data when the user navigates in the browser history. This is perfect for saving the form state, and with Superforms you can take advantage of this in one line of code:
+A nice SvelteKit feature is [snapshots](https://kit.svelte.dev/docs/snapshots), which save and restore data when the user navigates in the browser history. This is perfect for saving the form state, and with Superforms, you can take advantage of this in one line of code:
 
 ## Usage
 

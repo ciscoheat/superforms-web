@@ -11,8 +11,7 @@ Just by looking at the rather simple [get started tutorial](/get-started), it's 
   name="name"
   aria-invalid={$errors.name ? 'true' : undefined}
   bind:value={$form.name}
-  {...$constraints.name} 
-/>
+  {...$constraints.name} />
 {#if $errors.name}
   <span class="invalid">{$errors.name}</span>
 {/if}
@@ -29,27 +28,27 @@ And it also gets bad in the script part when you have more than a couple of form
 
   const { form, errors, enhance, ... } = superForm(data.form);
 
-  const { 
-    form: loginForm, 
-    errors: loginErrors, 
-    enhance: loginEnhance, 
-    ... 
+  const {
+    form: loginForm,
+    errors: loginErrors,
+    enhance: loginEnhance,
+    ...
   } = superForm(data.loginForm);
 
-  const { 
-    form: registerForm, 
-    errors: registerErrors, 
-    enhance: registerEnhance, 
-    ... 
+  const {
+    form: registerForm,
+    errors: registerErrors,
+    enhance: registerEnhance,
+    ...
   } = superForm(data.registerForm);
 </script>
 ```
 
-This leads to the question if a form and its fields can be factored out into components?
+This leads to the question of whether a form and its fields can be factored out into components?
 
 ## Factoring out a form
 
-To do this, you need the type of the schema, which can be defined as such:
+To do this, you need the type of the schema, which can be defined as follows:
 
 **src/lib/schemas.ts**
 
@@ -120,8 +119,7 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
     bind:value
     aria-invalid={errors ? 'true' : undefined}
     {...constraints}
-    {...$$restProps}
-  />
+    {...$$restProps} />
 </label>
 {#if errors}<span class="invalid">{errors}</span>{/if}
 
@@ -141,8 +139,7 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
     label="name"
     bind:value={$form.name}
     errors={$errors.name}
-    constraints={$constraints.name}
-  />
+    constraints={$constraints.name} />
 
   <h4>Tags</h4>
 
@@ -152,13 +149,12 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
       label="Name"
       bind:value={$form.tags[i].name}
       errors={$errors.tags?.[i]?.name}
-      constraints={$constraints.tags?.name}
-    />
+      constraints={$constraints.tags?.name} />
   {/each}
 </form>
 ```
 
-It's a little bit better, and will certainly help when the components requires some styling, but there are still plenty of attributes. Can we do even better?
+It's a little bit better and will certainly help when the components require some styling, but there are still plenty of attributes. Can we do even better?
 
 ### Using a fieldProxy
 
@@ -167,7 +163,7 @@ You may have used [proxy objects](/concepts/proxy-objects) for converting an inp
 ```svelte
 <script lang="ts">
   import type { PageData } from './$types';
-  import { superForm, fieldProxy } from 'sveltekit-superforms/client'
+  import { superForm, fieldProxy } from 'sveltekit-superforms/client';
 
   export let data: PageData;
 
@@ -177,21 +173,21 @@ You may have used [proxy objects](/concepts/proxy-objects) for converting an inp
 </script>
 
 <div>Name: {$name}</div>
-<button on:click={() => $name = ''}>Clear name</button>
+<button on:click={() => ($name = '')}>Clear name</button>
 ```
 
-Any updates to `$name` will reflect in `$form.name`. Note that this will also [taint](/concepts/tainted) that field, so if this not intended, you may want to use the `$tainted` store and undefine its `name` field.
+Any updates to `$name` will reflect in `$form.name`. Note that this will also [taint](/concepts/tainted) that field, so if this is not intended, you may want to use the `$tainted` store and undefine its `name` field.
 
-A `fieldProxy` isn't enough here however. We'd still have to make three proxies for `form`, `errors` and `constraints`, and then we're back to the same problem again.
+A `fieldProxy` isn't enough here, however. We'd still have to make three proxies for `form`, `errors`, and `constraints`, and then we're back to the same problem again.
 
 ### Using a formFieldProxy
 
-The solution is to use a `formFieldProxy`, which is a helper function for producing the above three proxies from a form. To do this, we cannot immediately deconstruct what we need from `superForm`, since `formFieldProxy` takes the form itself as an argument:
+The solution is to use a `formFieldProxy`, which is a helper function for producing the above three proxies from a form. To do this, we cannot immediately deconstruct what we need from `superForm` since `formFieldProxy` takes the form itself as an argument:
 
 ```svelte
 <script lang="ts">
   import type { PageData } from './$types';
-  import { superForm, formFieldProxy } from 'sveltekit-superforms/client'
+  import { superForm, formFieldProxy } from 'sveltekit-superforms/client';
 
   export let data: PageData;
 
@@ -207,7 +203,7 @@ But we didn't want to pass all those proxies, so let's imagine a component that 
 <TextField {form} field="name" />
 ```
 
-How nice would this be? This can actually be pulled of in a typesafe way with a bit of Svelte magic:
+How nice would this be? This can actually be pulled off in a typesafe way with a bit of Svelte magic:
 
 **TextField.svelte**
 
@@ -233,8 +229,7 @@ How nice would this be? This can actually be pulled of in a typesafe way with a 
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
     {...$constraints}
-    {...$$restProps}
-  />
+    {...$$restProps} />
 </label>
 {#if $errors}<span class="invalid">{$errors}</span>{/if}
 
@@ -245,7 +240,7 @@ How nice would this be? This can actually be pulled of in a typesafe way with a 
 </style>
 ```
 
-Some explanations are definitiely at hand! First, `type T = $$Generic<AnyZodObject>` is a way of defining generic arguments in components. Having defined `T` as `AnyZodObject` (a schema type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop are used. Unfortunately this takes a bit of knowledge of the types, but that's what examples are for, right?
+Some explanations are definitely at hand! First, `type T = $$Generic<AnyZodObject>` is a way of defining generic arguments in components. Having defined `T` as `AnyZodObject` (a schema type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used. Unfortunately, this takes a bit of knowledge of the types, but that's what examples are for, right?
 
 What may look strange is `ZodValidation<T>`, this is required because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type, so it's not a `AnyZodObject` anymore. The `ZodValidation` type will extract the actual object, which may be several levels deep.
 
@@ -275,8 +270,7 @@ Because our component is generic, `value` returned from `formFieldProxy` can't b
   class="checkbox"
   bind:checked={$boolValue}
   {...$constraints}
-  {...$$restProps}
-/>
+  {...$$restProps} />
 ```
 
 ## Using the componentized field in awesome ways
@@ -301,7 +295,7 @@ But to show off some super proxy power, let's recreate the tags example above wi
 </form>
 ```
 
-We can now produce a text field for any object inside our data, which will update the `$form` store. 
+We can now produce a text field for any object inside our data, which will update the `$form` store.
 
 In general, nested data requires the `dataType` option to be set to `'json'`, but this example works without it, even without `use:enhance`, since arrays of primitive values are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
 

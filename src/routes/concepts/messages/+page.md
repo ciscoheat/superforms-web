@@ -29,7 +29,9 @@ It is used to display the message on the client, like any other store:
 {/if}
 ```
 
-First we want to sent it from the server though. This is quite easy using the `message` helper function.
+First, we want to send it from the server. Using the `message` helper function makes this quite  easy.
+
+However, we need to send it from the server first. Using the'message' auxiliary function makes this rather simple.
 
 ## The message helper
 
@@ -59,17 +61,17 @@ export const actions = {
 };
 ```
 
-> Note that a successful form action in SvelteKit can only return status code `200`, so the status option for `message` must be in the range `400-599`, otherwise `{ form }` will be returned with a status of `200`, no matter what the status option is set to.
+> Note that a successful form action in SvelteKit can only return status code `200`, so the status property for `message` must be in the range `400-599`, otherwise `{ form }` will be returned with a status of `200`, no matter what the status option is set to.
 
 ## Strongly typed message
 
-The `message` is of type `any` as default, but you can type it with type parameters in `superValidate`:
+The `message` is of type `any` by default, but you can type it with type parameters in `superValidate`:
 
 ```ts
 const form = await superValidate<typeof schema, string>(event, schema);
 ```
 
-A string can be a bit limiting though, more realistically there will some kind of status as well, so making a `Message` type can be useful for consistency.
+A string can be a bit limiting, though; more realistically, there will be some kind of status as well, so making a `Message` type can be useful for consistency.
 
 ```ts
 type Message = { status: 'error' | 'success' | 'warning'; text: string };
@@ -94,6 +96,6 @@ Though if you want to keep it simple with a string, you can use `$page.status` t
 
 Naturally, redirects will cause the message to be lost. Since it's common to redirect after a successful post, the `message` property isn't a general solution for displaying status messages.
 
-The library [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message#readme) is a complete solution that works with redirects however. It can be directly integrated into superforms, [documented here](/flash-messages).
+The library [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message#readme) is a complete solution that works with redirects, however. It can be directly integrated into Superforms, [documented here](/flash-messages).
 
 <Next section={concepts} />

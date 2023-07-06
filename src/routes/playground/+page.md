@@ -6,4 +6,4 @@ If you have gone through the Concepts section of this site, maybe you want to te
 
 [https://stackblitz.com/edit/sveltekit-superforms-1-testing](https://stackblitz.com/edit/sveltekit-superforms-1-testing?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte)
 
-It gives you a starting point that you can use for experimenting, bug reporting or more advanced support questions.
+It gives you a starting point that you can use for experimenting, bug reporting, or more advanced support questions.

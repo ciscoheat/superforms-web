@@ -11,9 +11,9 @@
 
 <svelte:head><title>Tainted form fields</title></svelte:head>
 
-When the form data is modified, that piece of data, and in turn the form, is considered _tainted_, also known as "dirty" in other form libraries. 
+When the form data is modified, that piece of data, and in turn the form, is considered _tainted_, also known as "dirty" in other form libraries.
 
-A Superforms feature is to prevent the user from losing data, when accidentaly navigating away from a tainted form.
+A Superforms feature is to prevent the user from losing data when accidentally navigating away from a tainted form.
 
 ## Usage
 
@@ -23,7 +23,7 @@ const { form, enhance, tainted } = superForm(data.form, {
 })
 ```
 
-> For the user's sake, the tainted message is on as default, but if you're certain you don't want an alert to appear for a particular form, set the option to `null`. This can be necessary for login and registration forms, where password managers can taint the form when inserting saved usernames and passwords.
+> For the user's sake, the tainted message is set by default, but if you're certain you don't want an alert to appear for a particular form, set the option to `null`. This can be necessary for login and registration forms, where password managers can taint the form when inserting saved usernames and passwords.
 
 ## Example
 
@@ -33,9 +33,9 @@ Try to modify the form below, then close the tab or hit the back button. A confi
 
 ## Tainted store
 
-You can access the exact fields that are tainted through the `$tainted` store, returned from `superForm`. When you modify the form fields above you'll see how the `$tainted` store reacts.
+You can access the exact fields that are tainted through the `$tainted` store returned from `superForm`. When you modify the form fields above, you'll see how the `$tainted` store reacts.
 
-> Any direct assignment to `$form` will taint the affected field(s)! The tainted check is made on the `form` store, not the html input fields. In general, don't modify the `$tainted` store directly, instead see below for how to set form data without tainting the form.
+> Any direct assignment to `$form` will taint the affected field(s)! The tainted check is made on the `form` store, not the HTML input fields. In general, don't modify the `$tainted` store directly; instead, see below for how to set form data without tainting the form.
 
 ## Untainting the form
 
@@ -46,12 +46,15 @@ Try that by posting the form with valid values. The tainted message should not a
 If you're assigning to `$form` and don't want it to be tainted, you can instead update it with an extra option:
 
 ```ts
-const { form } = superForm(data.form)
+const { form } = superForm(data.form);
 
-form.update($form => {
-  $form.name = data.name
-  return $form
-}, { taint: false }) // boolean | 'untaint' | 'untaint-all'
+form.update(
+  ($form) => {
+    $form.name = data.name;
+    return $form;
+  },
+  { taint: false }
+); // boolean | 'untaint' | 'untaint-all'
 ```
 
 <Next section={concepts} />
