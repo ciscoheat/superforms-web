@@ -66,6 +66,8 @@ If you have nested data, a string path is used to specify where in the data stru
 setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 ```
 
+> Errors added with `setError` will be removed when a Zod schema is used in [client-side validation](/concepts/client-validation) and the first validation occurs (such as modifying a field).
+
 ## Throwing server errors
 
 If something goes wrong beyond validation, instead of returning `fail(400, { form })`, you can also `throw error(5xx)`, which can then be handled with the [onError](/concepts/events#onerror) event, or, if the custom [use:enhance](/concepts/enhance) doesn't exist on the form, the nearest +error.svelte page will be rendered.
@@ -122,9 +124,9 @@ In larger forms, the submit button may be far away from the error, so it's nice 
 
 ```ts
 const { form, enhance, errors, allErrors } = superForm(data.form, {
-  errorSelector: string | undefined = '[aria-invalid="true"],[data-invalid]'
-  scrollToError: 'smooth' | 'auto' | 'off' = 'smooth'
-  autoFocusOnError: boolean | 'detect' = 'detect'
+  errorSelector: string | undefined = '[aria-invalid="true"],[data-invalid]',
+  scrollToError: 'auto' | 'smooth' | 'off' | boolean | ScrollIntoViewOptions = 'smooth',
+  autoFocusOnError: boolean | 'detect' = 'detect',
   stickyNavbar: string | undefined = undefined,
   onError: (({ result, message }) => void) | 'apply'
 })
@@ -144,7 +146,7 @@ This is the CSS selector used to locate the invalid input fields after form subm
 
 ### scrollToError
 
-The `scrollToError` options determines how to scroll to the first error message in the form. `smooth` and `auto` are values from [Window.scroll()](https://developer.mozilla.org/en-US/docs/Web/API/Window/scroll).
+The `scrollToError` options determines how to scroll to the first error message in the form. `smooth` and `auto` are values from [Window.scroll](https://developer.mozilla.org/en-US/docs/Web/API/Window/scroll). If the non-string options are used, [Element.scrollIntoView](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView) will be called with the option. This is mostly used with nested scrollbars, in which case Window.scroll won't work.
 
 ### autoFocusOnError
 
@@ -188,7 +190,7 @@ export const actions = {
 
 ## Form-level and array errors
 
-It's possible to set form-level errors by refining the schema:
+It's possible to set form-level errors by refining the schema, which works better with [client-side validation](/concepts/client-validation), as `setError` won't persist longer than the first validation of the schema on the client.
 
 ```ts
 const refined = z.object({
@@ -201,7 +203,7 @@ const refined = z.object({
 
 These can be accessed on the client through `$errors?._errors`. The same goes for array errors, which in the above case can be accessed through `$errors.tags?._errors`.
 
-> The form-level and array errors will be added and removed during [client-side validation](/concepts/client-validation). If you would like a message to persist until the next submission, use a [status message](/concepts/messages) instead.
+> If you would like a message to persist until the next form submission regardless of validation, use a [status message](/concepts/messages) instead.
 
 ## Listing errors
 
