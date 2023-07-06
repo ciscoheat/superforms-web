@@ -66,6 +66,8 @@ If you have nested data, a string path is used to specify where in the data stru
 setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 ```
 
+> Errors added with `setError` will be removed when a Zod schema is used in [client-side validation](/concepts/client-validation) and the first validation occurs (such as modifying a field).
+
 ## Throwing server errors
 
 If something goes wrong beyond validation, instead of returning `fail(400, { form })` you can also `throw error(5xx)`, which can then be handled with the [onError](/concepts/events#onerror) event, or, if the custom [use:enhance](/concepts/enhance) doesn't exist on the form, the nearest +error.svelte page will be rendered. 
@@ -188,7 +190,7 @@ export const actions = {
 
 ## Form-level and array errors
 
-It's possible to set form-level errors by refining the schema:
+It's possible to set form-level errors by refining the schema, which works better with [client-side validation](/concepts/client-validation), as `setError` won't persist longer than the first validation of the schema on the client.
 
 ```ts
 const refined = z.object({
@@ -201,7 +203,7 @@ const refined = z.object({
 
 These can be accessed on the client through `$errors?._errors`. The same goes for array errors, which in the above case can be accessed through `$errors.tags?._errors`.
 
-> The form-level and array errors will be added and removed during [client-side validation](/concepts/client-validation). If you would like a message to persist until the next submission, use a [status message](/concepts/messages) instead.
+> If you would like a message to persist until the next form submission regardless of validation, use a [status message](/concepts/messages) instead.
 
 ## Listing errors
 

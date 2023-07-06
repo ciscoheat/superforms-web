@@ -181,7 +181,7 @@ For setting errors on the form after validation. It returns a `fail(status, { fo
 
 Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400` (which must be in the range 400-599).
 
-- To set form-level errors, use an empty string as field.
+- To set form-level errors, the `field` argument can be skipped, or set to an empty string.
 - To set array-level errors, append `._errors` to the field, like `tags._errors`.
 
 ### message(form, message, options?)
@@ -334,7 +334,7 @@ FormOptions<T, M> = Partial<{
   applyAction: boolean;
   invalidateAll: boolean;
   resetForm: boolean | (() => boolean);
-  scrollToError: 'auto' | 'smooth' | 'off';
+  scrollToError: 'auto' | 'smooth' | 'off' | boolean | ScrollIntoViewOptions;
   autoFocusOnError: boolean | 'detect';
   errorSelector: string;
   selectErrorText: boolean;
