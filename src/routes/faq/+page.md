@@ -49,7 +49,7 @@ export const actions = {
 
 ### How to handle file uploads?
 
-File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation, so they need to have names that don't conflict with the fields in the schema.
+File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation.
 
 The recommended way to handle files is to grab the `FormData` and extract the files from there, after validation:
 
@@ -70,6 +70,8 @@ export const actions = {
   }
 };
 ```
+
+If you still want errors for the file field, you can add an optional field to the schema with the same name, and use [setError](/concepts/error-handling#seterror) to set and display an error message.
 
 ---
 
