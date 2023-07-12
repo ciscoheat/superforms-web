@@ -63,19 +63,21 @@ export const actions = {
 
 ## Strongly typed message
 
-The `message` is of type `any` by default, but you can type it with type parameters in `superValidate`:
+The `message` is of type `any` by default, but you can type it using `superValidate` type parameters:
 
 ```ts
 const form = await superValidate<typeof schema, string>(event, schema);
 ```
 
-A string can be a bit limiting, though; more realistically, there will be some kind of status as well, so making a `Message` type can be useful for consistency.
+A string can be a bit limiting though; more realistically, there will be some kind of status for the form submission, so making a `Message` type can be useful for consistency.
 
 ```ts
 type Message = { status: 'error' | 'success' | 'warning'; text: string };
+
+const form = await superValidate<typeof schema, Message>(event, schema);
 ```
 
-Though if you want to keep it simple with a string, you can use `$page.status` to style the message appropriately:
+Though if you want to keep it simple with a string/any, you can use `$page.status` to style the message appropriately:
 
 ```svelte
 <script lang="ts">
