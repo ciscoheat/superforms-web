@@ -273,6 +273,8 @@ Because our component is generic, `value` returned from `formFieldProxy` can't b
   {...$$restProps} />
 ```
 
+Checkboxes, especially grouped ones, can be difficult to handle. Read the Svelte tutorial about [bind:group](https://svelte.dev/tutorial/group-inputs), and see the [Ice cream example](https://stackblitz.com/edit/sveltekit-superforms-group-inputs?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) on Stackblitz if you're having trouble with it.
+
 ## Using the componentized field in awesome ways
 
 As mentioned, using this field component is now as simple as:
