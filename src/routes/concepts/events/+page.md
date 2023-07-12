@@ -112,7 +112,9 @@ const { form, enhance } = superForm(data.form, {
 onError: (({ result, message }) => void) | 'apply'
 ```
 
-Finally, the `onError` event allows you to act on `ActionResult` errors. `result` is the ActionResult with the `error` property casted to [App.Error](https://kit.svelte.dev/docs/types#app-error), and the `message` parameter is the same as the `$message` store, so you can conveniently set it to the error value here.
+When the SvelteKit [error](https://kit.svelte.dev/docs/errors#expected-errors) helper is thrown on the server, you can use the `onError` event to catch it.
+
+`result` is the error ActionResult, with the `error` property casted to [App.Error](https://kit.svelte.dev/docs/types#app-error), and the `message` parameter is the same as the `$message` store, so you can conveniently set it to the error value here.
 
 ```ts
 const { form, enhance } = superForm(data.form, {
@@ -122,8 +124,8 @@ const { form, enhance } = superForm(data.form, {
 });
 ```
 
-You can also set `onError` to the string value `'apply'`, in which case the SvelteKit `applyAction` error behaviour will be used, which is to render the nearest `+error` boundary (while wiping out the form, so be careful).
+You can also set `onError` to the string value `'apply'`, in which case the SvelteKit `applyAction` error behaviour will be used, which is to render the nearest [+error](https://kit.svelte.dev/docs/routing#error) page (while wiping out the form, so be careful).
 
-> If you're unsure what event to use, start with `onUpdated`; unless your app is a [SPA](/concepts/spa), then `onUpdate` is most likely the one you should be using to validate the form data.
+> If you're unsure what event to use, start with `onUpdated`; unless your app is a [SPA](/concepts/spa), then `onUpdate` is the one you should be using to validate the form data.
 
 <Next section={concepts} />
