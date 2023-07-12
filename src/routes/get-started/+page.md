@@ -225,7 +225,7 @@ This is the validation object returned from `superValidate`, containing all you 
 | Field           | Purpose                                                                                                                                                                                |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **id**          | Id for the schema, to handle [multiple forms](/concepts/multiple-forms) on the same page.                                                                                              |
-| **valid**       | Tells you whether the validation succeeded or not, used mostly in [events](/concepts/events).                                                                                          |
+| **valid**       | Tells you whether the validation succeeded or not. Used on the server and in [events](/concepts/events)                                                                                |
 | **posted**      | Tells you if the data was posted (in a form action) or not (in a load function).                                                                                                       |
 | **data**        | The posted data, which should be returned to the client using `fail` if not valid.                                                                                                     |
 | **errors**      | An object with all validation errors, in a structure reflecting the data.                                                                                                              |
