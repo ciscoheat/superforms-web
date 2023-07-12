@@ -1,6 +1,10 @@
+<script lang="ts">
+  import Head from '$lib/Head.svelte'
+</script>
+
 # v1.0 - What's new?
 
-<svelte:head><title>What's new in 1.0</title></svelte:head>
+<Head title="What's new in 1.0" />
 
 After a lot of work, Superforms 1.0 has been released! Here are the most important new features and improvements.
 

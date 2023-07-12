@@ -1,6 +1,10 @@
+<script lang="ts">
+  import Head from '$lib/Head.svelte'
+</script>
+
 # Migration guide
 
-<svelte:head><title>Migration guide from 0.x to 1.0</title></svelte:head>
+<Head title="Migration guide from 0.x to 1.0" />
 
 Lists the breaking changes that you need to address to upgrade from v0.x to v1.0.
 

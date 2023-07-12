@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Head from '$lib/Head.svelte'
 	import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
@@ -9,7 +10,7 @@
 
 # Multiple forms on the same page
 
-<svelte:head><title>Multiple forms on the same page</title></svelte:head>
+<Head title="Multiple forms on the same page" />
 
 Since there is only one `page` store, multiple forms on the same page, for example, a register and login form, can cause problems since form actions will update the single `$page.form`, possibly affecting both forms.
 

@@ -1,4 +1,8 @@
-<svelte:head><title>Forms and fields in components</title></svelte:head>
+<script lang="ts">
+  import Head from '$lib/Head.svelte'
+</script>
+
+<Head title="Forms and fields in components" />
 
 # Forms and fields in components
 

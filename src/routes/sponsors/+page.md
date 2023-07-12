@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Head from '$lib/Head.svelte'
   import Sponsor from '$lib/sponsoring/Sponsor.svelte'
   import Message from '$lib/sponsoring/Message.svelte'
   import Sponsors from './Sponsors.svelte'
@@ -6,7 +7,7 @@
 
 <Message />
 
-<svelte:head><title>Super Sponsors</title></svelte:head>
+<Head title="Super Sponsors" />
 
 # Super Sponsors
 

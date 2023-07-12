@@ -80,7 +80,7 @@ async function index(file: string) {
   let fileContent = await fs.readFile(file, { encoding: 'utf-8' });
 
   const parsedTitle = fileContent.match(
-    /<svelte:head>.*<title>([^<]+)<\/title>.*<\/svelte:head>/
+    /<Head.*title="([^"]+)"/
   );
 
   if (!parsedTitle) {

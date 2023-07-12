@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Head from '$lib/Head.svelte'
   import Next from '$lib/Next.svelte'
   import { concepts } from '$lib/navigation/sections'
 
@@ -7,7 +8,7 @@
 
 # Progressive enhancement
 
-<svelte:head><title>Progressive enhancement with use:enhance</title></svelte:head>
+<Head title="Progressive enhancement with use:enhance" />
 
 By using `enhance` returned from `superForm`, we'll get the client-side enhancement expected from a modern website or app:
 

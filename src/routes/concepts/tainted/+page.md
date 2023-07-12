@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from './Form.svelte'
+  import Head from '$lib/Head.svelte'
+  import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
@@ -9,7 +10,7 @@
 
 # Tainted fields
 
-<svelte:head><title>Tainted form fields</title></svelte:head>
+<Head title="Tainted form fields" />
 
 When the form data is modified, that piece of data, and in turn the form, is considered _tainted_, also known as "dirty" in other form libraries.
 

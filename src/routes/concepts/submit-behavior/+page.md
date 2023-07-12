@@ -1,11 +1,12 @@
 <script lang="ts">
+  import Head from '$lib/Head.svelte'
   import Next from '$lib/Next.svelte'
   import { concepts } from '$lib/navigation/sections'
 </script>
 
 # Submit behavior
 
-<svelte:head><title>Submit behavior</title></svelte:head>
+<Head title="Submit behavior" />
 
 When the user submits a form, it's important for the user experience to show that things are processing. Superforms provides you with timers (see next section) and the following options for handling this:
 

@@ -1,6 +1,10 @@
+<script lang="ts">
+  import Head from '$lib/Head.svelte'
+</script>
+
 # Rate limiting
 
-<svelte:head><title>Rate limiting with sveltekit-rate-limiter</title></svelte:head>
+<Head title="Rate limiting with sveltekit-rate-limiter" />
 
 Superforms has a basic [client-side prevention](/concepts/submit-behavior#multiplesubmits) of multiple form submissions. But you may want to limit the rate of form submissions on the server as well, to prevent misuse and spamming. 
 

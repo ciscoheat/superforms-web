@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from './Form.svelte'
+  import Head from '$lib/Head.svelte'
+  import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
@@ -9,7 +10,7 @@
 
 # Status messages
 
-<svelte:head><title>Status messages</title></svelte:head>
+<Head title="Status messages" />
 
 So far, almost every feature has been on the client! That's where the action is, but you may have noticed that a status message like "Form posted" is displayed when submitting the forms in the examples.
 

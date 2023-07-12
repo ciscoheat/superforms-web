@@ -1,6 +1,10 @@
+<script lang="ts">
+  import Head from '$lib/Head.svelte'
+</script>
+
 # API reference
 
-<svelte:head><title>API reference</title></svelte:head>
+<Head title="API reference" />
 
 Throughout the reference, the following types are represented:
 

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from './Form.svelte'
+  import Head from '$lib/Head.svelte'
+  import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
   import Timers from '$lib/Timers.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
@@ -10,7 +11,7 @@
 
 # Timers
 
-<svelte:head><title>Timers</title></svelte:head>
+<Head title="Timers" />
 
 As said in the previous section, the user should understand that things are happening when they submit the form. Timers give us a way of providing feedback based upon human perception research, when there is a response delay.
 

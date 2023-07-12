@@ -1,6 +1,10 @@
+<script lang="ts">
+  import Head from '$lib/Head.svelte'
+</script>
+
 # Default values
 
-<svelte:head><title>Default values</title></svelte:head>
+<Head title="Default values" />
 
 When `superValidate` encounters a schema field that isn't optional, or when a `FormData` field is empty, a default value is returned to the form, to ensure that the type is correct:
 

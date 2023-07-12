@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from './Form.svelte'
+  import Head from '$lib/Head.svelte'
+  import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
@@ -9,7 +10,7 @@
 
 # Error handling
 
-<svelte:head><title>Error handling</title></svelte:head>
+<Head title="Error handling" />
 
 By deconstructing `errors` from `superForm`, you'll get an object with form errors that you can display where it's appropriate:
 

@@ -1,10 +1,11 @@
 <script lang="ts">
+  import Head from '$lib/Head.svelte'
   import Youtube from '$lib/Youtube.svelte'
 </script>
 
 # Designing a CRUD interface
 
-<svelte:head><title>CRUD tutorial</title></svelte:head>
+<Head title="CRUD tutorial" />
 
 An excellent use case for Superforms is a backend interface, commonly used as in the acronym **CRUD** (Create, Read, Update, Delete):
 

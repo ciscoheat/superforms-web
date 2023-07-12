@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from './Form.svelte'
+  import Head from '$lib/Head.svelte'
+  import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
@@ -9,7 +10,7 @@
 
 # Client-side validation
 
-<svelte:head><title>Client-side validation</title></svelte:head>
+<Head title="Client-side validation" />
 
 ## Built-in browser validation
 

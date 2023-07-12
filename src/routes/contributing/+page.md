@@ -1,11 +1,12 @@
 <script lang="ts">
+  import Head from '$lib/Head.svelte'
   import Sponsor from '$lib/sponsoring/Sponsor.svelte'
   import Message from '$lib/sponsoring/Message.svelte'
 </script>
 
 <Message />
 
-<svelte:head><title>Contributing and sponsoring</title></svelte:head>
+<Head title="Contributing and sponsoring" />
 
 # Contributing
 

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from './Form.svelte'
+  import Head from '$lib/Head.svelte'
+  import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
@@ -9,7 +10,7 @@
 
 # Nested data
 
-<svelte:head><title>Nested data</title></svelte:head>
+<Head title="Nested data" />
 
 HTML forms are inherently one-dimensional, in the sense that the input fields can only handle string values. There is no native way to represent a nested data structure or more complex values like dates. Fortunately, this can be handled by Superforms!
 

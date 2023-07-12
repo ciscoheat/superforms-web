@@ -1,6 +1,10 @@
+<script lang="ts">
+  import Head from '$lib/Head.svelte'
+</script>
+
 # Superforms playground
 
-<svelte:head><title>Superforms playground</title></svelte:head>
+<Head title="Superforms playground" />
 
 If you have gone through the Concepts section of this site, maybe you want to test out some things. The easiest way to do that is to use this Stackblitz repo:
 

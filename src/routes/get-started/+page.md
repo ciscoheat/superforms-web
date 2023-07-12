@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from './Form.svelte'
+  import Head from '$lib/Head.svelte'
+  import Form from './Form.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
 
 	export let data;
@@ -8,7 +9,7 @@
 	$: form = formComponent && formComponent.formData()
 </script>
 
-<svelte:head><title>Get started - Tutorial for Superforms</title></svelte:head>
+<Head title="Get started - Tutorial for Superforms" />
 
 ## Installation
 

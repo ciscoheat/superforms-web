@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from './Form.svelte'
+  import Head from '$lib/Head.svelte'
+  import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
@@ -16,7 +17,7 @@
 
 # Snapshots
 
-<svelte:head><title>Snapshots</title></svelte:head>
+<Head title="Snapshots" />
 
 A nice SvelteKit feature is [snapshots](https://kit.svelte.dev/docs/snapshots), which save and restore data when the user navigates in the browser history. This is perfect for saving the form state, and with Superforms, you can take advantage of this in one line of code:
 

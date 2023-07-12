@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Head from '$lib/Head.svelte'
   import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
   import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
@@ -7,7 +8,7 @@
   export let data;
 </script>
 
-<svelte:head><title>Single-page application (SPA) mode</title></svelte:head>
+<Head title="Single-page application (SPA) mode" />
 
 # Single-page applications (SPA)
 

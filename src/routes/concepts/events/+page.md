@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Form from './Form.svelte'
+  import Head from '$lib/Head.svelte'
+  import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
   import Flowchart from './Flowchart.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
@@ -10,7 +11,7 @@
 
 # Events
 
-<svelte:head><title>Events</title></svelte:head>
+<Head title="Events" />
 
 > Events are only available when JavaScript is enabled in the browser and the custom [use:enhance](/concepts/enhance) is added to the form.
 

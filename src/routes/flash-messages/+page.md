@@ -1,6 +1,10 @@
+<script lang="ts">
+  import Head from '$lib/Head.svelte'
+</script>
+
 # Flash messages
 
-<svelte:head><title>Integrate Superforms with sveltekit-flash-message</title></svelte:head>
+<Head title="Integrate Superforms with sveltekit-flash-message" />
 
 [Status messages](/concepts/messages) are useful, but redirects will cause them to be lost, because they need to be returned in `{ form }`, usually as a response from a POST request.
 

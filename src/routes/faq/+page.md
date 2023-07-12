@@ -1,6 +1,10 @@
+<script lang="ts">
+  import Head from '$lib/Head.svelte'
+</script>
+
 # FAQ
 
-<svelte:head><title>FAQ</title></svelte:head>
+<Head title="FAQ" />
 
 ### I see the data in $form, but it's not posted to the server?
 
