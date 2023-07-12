@@ -24,7 +24,9 @@ Now all form submissions will happen on the client, and we unlock a ton of extra
 
 The `use:enhance` action takes no arguments; instead, events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
-> Without `use:enhance`, the form will be static. You'll get no events, no timers, no client-side validation except for `constraints`, no error focus, etc.<br><br>Also note that SvelteKit's own `use:enhance` cannot be used; you must use the one returned from `superForm`. The [events](/concepts/events) have all you need as a replacement.
+> Without `use:enhance`, the form will be static. You'll get no events, no timers, no error focus, etc. The only things that will work are [constraints](/concepts/client-validation#constraints) and [resetForm](/concepts/enhance#resetform).
+
+> Also note that SvelteKits own `use:enhance` cannot be used; you must use the one returned from `superForm`. The [events](/concepts/events) have all you need as a replacement.
 
 ## Differences from SvelteKit's use:enhance
 
@@ -36,7 +38,9 @@ Any [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) 
 
 ### 2. The form isn't resetted by default
 
-Resetting the form is disabled as default to avoid accidental data loss. It's not always wanted as well, for example in backend interfaces, where the form data should be kept after updating. It's easy to enable though, read further down at the `resetForm` option for details. For custom resets, you can use the [reset](/api#superform-return-type) method returned from `superForm`.
+Resetting the form is disabled as default to avoid accidental data loss. It's not always wanted as well, for example in backend interfaces, where the form data should be kept after updating. 
+
+It's easy to enable though, read further down at the `resetForm` option for details.
 
 ### 3. A tainted form warning is added
 
@@ -54,7 +58,7 @@ const { form, enhance, reset } = superForm(data.form, {
 });
 ```
 
-These three superForm options are the most technical ones; if you're dealing with a single form per page, you can most likely skip this section.
+`applyAction` and `invalidateAll` are the most technical ones; if you're dealing with a single form per page, you can most likely skip them.
 
 ### applyAction
 
