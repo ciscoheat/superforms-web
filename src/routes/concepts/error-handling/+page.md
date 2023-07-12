@@ -58,7 +58,7 @@ export const actions = {
 };
 ```
 
-`setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. See [the API](/api#seterrorform-field-error-options) for more options.
+`setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. Check [the API](/api#seterrorform-field-error-options) for more options.
 
 If you have nested data, a string path is used to specify where in the data structure the error is:
 
@@ -201,7 +201,9 @@ const refined = z.object({
 .refine((data) => data.password == data.confirm, "Passwords didn't match.");
 ```
 
-These can be accessed on the client through `$errors?._errors`. The same goes for array errors, which in the above case can be accessed through `$errors.tags?._errors`.
+These can be accessed on the client through `$errors?._errors`. The same goes for array errors, which in the above case can be accessed through `$errors.tags?._errors`. 
+
+If you need to set the errors after validation, `setError` can be used to set the form- and array-level errors, check [the API](/api#seterrorform-field-error-options) for details.
 
 > If you would like a message to persist until the next form submission regardless of validation, use a [status message](/concepts/messages) instead.
 
