@@ -6,6 +6,7 @@
   import Input from './Input.svelte'
   import { onMount } from 'svelte'
   import { page } from '$app/stores'
+  import { dev } from '$app/environment'
 
   const form = writable({
     name: 'Gaspar Soiaga',
@@ -119,6 +120,18 @@ A label is useful when using multiple instance of SuperDebug.
 ```
 
 <SuperDebug data={$form} status={false} />
+
+### Display only in dev mode
+
+```svelte
+<script lang="ts">
+  import { dev } from '$app/environment';
+</script>
+
+<SuperDebug data={$form} display={dev} />
+```
+
+<SuperDebug data={$form} display={dev} />
 
 ### Promise support
 
