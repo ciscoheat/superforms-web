@@ -45,11 +45,17 @@ It's not limited to the Superforms data, other use cases includes debugging plai
 
 ## Usage
 
-```svelte
-<script lang="ts">
-  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-</script>
+```ts
+import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+```
 
+```svelte
+<SuperDebug data={$form} />
+```
+
+## Props reference
+
+```svelte
 <SuperDebug
   data={any}
   display?={true}
@@ -63,8 +69,6 @@ It's not limited to the Superforms data, other use cases includes debugging plai
   ref?={HTMLPreElement} 
 />
 ```
-
-## Props reference
 
 | Prop               | Type           | Default value | Description |
 | ------------------ | -------------- | ------------- | ----------- |
