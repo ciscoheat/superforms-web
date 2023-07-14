@@ -26,6 +26,8 @@ return { loginForm, registerForm, userName };
 
 If you return this in a load function, it can be accessed in `PageData` in `+page.svelte`. By returning it in a form action, it can be accessed in `ActionData` instead.
 
+Returning extra data in `ActionData` is usually more convenient with a strongly typed [status message](/concepts/messages) though.
+
 ---
 
 ### What about the other way around, posting additional data to the server?
