@@ -575,37 +575,8 @@ A proxy for a [HTML date field](https://developer.mozilla.org/en-US/docs/Web/HTM
 
 ## Components
 
-```ts
-import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-```
-
 ### SuperDebug
 
-`SuperDebug` is a debugging component that gives you colorized and nicely formatted output for any data structure, usually `$form`.
+`SuperDebug` is a must-have debugging component that gives you colorized and nicely formatted output for any data structure, usually `$form`. 
 
-```svelte
-<SuperDebug
-  data={any}
-  display?={true}
-  label?={''}
-  promise?={false}
-  status?={true}
-  stringTruncate?={120}
-  ref?={HTMLPreElement} />
-```
-
-#### Props
-
-| Prop               | Type           | Default value | Description                                                                                                                                                |
-| ------------------ | -------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **data**           | any            | `undefined`   | Data to be displayed by SuperDebug                                                                                                                         |
-| **display**        | Boolean        | `true`        | Whether to show or hide SuperDebug                                                                                                                         |
-| **label**          | String         | `""`          | Add a useful label to SuperDebug, useful when using multiple instances of SuperDebug in a page                                                             |
-| **promise**        | Boolean        | `false`       | When true, SuperDebug uses Svelte's await block to load the data. Data is assumed to be async, but you can also load non-async data using the await block! |
-| **status**         | Boolean        | `true`        | Whether to show or hide status code.                                                                                                                       |
-| **stringTruncate** | Number         | `120`         | Truncate long string field values of the data prop                                                                                                         |
-| **ref**            | HTMLPreElement | `undefined`   | Binds pre tag to ref.                                                                                                                                      |
-
-#### Usage
-
-Please see the `+page.svelte` file in [src/routes/super-debug](https://github.com/ciscoheat/sveltekit-superforms/tree/main/src/routes/super-debug) for common usage of SuperDebug.
+More information and usage examples can be found [on the SuperDebug page](/super-debug).

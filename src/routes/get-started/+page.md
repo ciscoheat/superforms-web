@@ -146,7 +146,7 @@ This is what the form should look like now:
 
 ### Debugging
 
-We can now see that the form has been populated. However, let's add the Superform Debugging Svelte Component called ["SuperDebug"](/api#superdebug) to gain more insight:
+We can now see that the form has been populated. However, let's add the Superform debugging component called [SuperDebug](/super-debug) to gain more insight:
 
 **src/routes/+page.svelte**
 

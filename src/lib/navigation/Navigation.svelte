@@ -50,12 +50,16 @@
       <li><A href={concept[0]}>{concept[1]}</A></li>
     {/each}
 
-    <Title id="concepts">Other topics</Title>
+    <Title id="concepts">Guides</Title>
 
     <li><A href="/components">Componentization</A></li>
-    <li><A href="/contributing">Contribute</A></li>
     <li><A href="/crud">CRUD tutorial</A></li>
     <li><A href="/default-values">Default values</A></li>
+    <li><A href="/super-debug">SuperDebug</A></li>
+
+    <Title id="concepts">Other topics</Title>
+
+    <li><A href="/contributing">Contribute</A></li>
     <li><A href="/faq">FAQ</A></li>
     <li><A href="/flash-messages">Flash messages</A></li>
     <li><A href="/playground">Playground</A></li>

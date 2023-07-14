@@ -69,7 +69,7 @@
   }
 
   const noToC = ['/'];
-  $: displayToC = !noToC.includes($page.url.pathname);
+  $: displayToC = $page.status == 200 && !noToC.includes($page.url.pathname);
 
   beforeNavigate((nav) => {
     if (nav.type == 'form') return;
