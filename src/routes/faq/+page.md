@@ -55,9 +55,9 @@ export const actions = {
 
 ### How to handle file uploads?
 
-File uploads are not handled by Superforms. Fields containing files will be `undefined` in `form.data` after validation.
+File uploads are not directly handled by Superforms. They can be posted as usual, but schema fields containing files will be `undefined` in `form.data` after validation.
 
-The recommended way to handle files is to grab the `FormData` and extract the files from there, after validation:
+The recommended way to handle files is to grab `FormData` from the request and extract the files from there, after validation:
 
 ```ts
 export const actions = {
