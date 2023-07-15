@@ -13,14 +13,14 @@
 
 <Head title="Timers" />
 
-As said in the previous section, the user should understand that things are happening when they submit the form. Timers give us a way of providing feedback based upon human perception research, when there is a response delay.
+As said in the previous section, the user should understand that things are happening when they submit the form. Timers give us a way of providing feedback when there is a response delay, based upon human perception research.
 
 ## Usage
 
 ```ts
 const { form, enhance, submitting, delayed, timeout } = superForm(data.form, {
-  delayMs: number = 500
-  timeoutMs: number = 8000
+  delayMs?: 500
+  timeoutMs?: 8000
 })
 ```
 
@@ -50,7 +50,7 @@ A perfect use for these timers is to show a loading indicator while the form is 
 </div>
 ```
 
-The reason for using `delayed` instead of `submitting` is based on the article [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/), which states that for short waiting periods, no feedback is required except to display the result. Therefore, `delayed` is used to show a loading indicator after a little while.
+The reason for using `delayed` instead of `submitting` is based on the article [Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/), which states that for short waiting periods, no feedback is required except to display the result. Therefore, `delayed` is used to show a loading indicator after a little while, not instantly.
 
 ## Visualizing the timers
 
