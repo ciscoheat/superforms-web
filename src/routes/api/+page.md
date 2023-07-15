@@ -266,7 +266,7 @@ Additionally, the `redirect` version can send a flash message as a third paramet
 ```ts
 actionResult('redirect', '/', {
   message: App.PageData['flash'],
-  status = 303
+  status?: 303
 });
 ```
 
