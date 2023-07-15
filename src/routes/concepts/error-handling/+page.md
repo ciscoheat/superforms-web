@@ -151,7 +151,7 @@ The `scrollToError` options determines how to scroll to the first error message 
 
 ### autoFocusOnError
 
-When `autoFocusOnError` is set to its default value `detect`, it checks if the user is on a mobile device; **if not**, it will automatically focus on the first error input field. It's prevented on mobile devices since focusing will open the on-screen keyboard, causing the viewport to shift,which could also hide the validation error.
+When `autoFocusOnError` is set to its default value `detect`, it checks if the user is on a mobile device; **if not**, it will automatically focus on the first error input field. It's prevented on mobile devices since focusing will open the on-screen keyboard, causing the viewport to shift, which could also hide the validation error.
 
 ### stickyNavbar
 
@@ -174,11 +174,13 @@ onError({ result, message }) {
 Errors can be thrown server-side with the SvelteKit `error` helper:
 
 ```ts
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 export const actions = {
   default: async ({ request }) => {
     const form = await superValidate(request, schema);
+
+    if(!form.valid) return fail(400, { form });
 
     try {
       db.insert(form.data);
@@ -191,7 +193,7 @@ export const actions = {
 
 ## Form-level and array errors
 
-It's possible to set form-level errors by refining the schema, which works better with [client-side validation](/concepts/client-validation), as `setError` won't persist longer than the first validation of the schema on the client.
+It's possible to set form-level errors by refining the schema, which works better together with [client-side validation](/concepts/client-validation), as `setError` won't persist longer than the first validation of the schema on the client.
 
 ```ts
 const refined = z.object({
@@ -204,7 +206,7 @@ const refined = z.object({
 
 These can be accessed on the client through `$errors?._errors`. The same goes for array errors, which in the above case can be accessed through `$errors.tags?._errors`. 
 
-If you need to set the errors after validation, `setError` can be used to set the form- and array-level errors, check [the API](/api#seterrorform-field-error-options) for details.
+When you need to set errors after validation, `setError` can be used to set the form- and array-level errors, check [the API](/api#seterrorform-field-error-options) for details.
 
 > If you would like a message to persist until the next form submission regardless of validation, use a [status message](/concepts/messages) instead.
 
