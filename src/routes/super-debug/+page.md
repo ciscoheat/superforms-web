@@ -73,7 +73,7 @@ import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 | Prop               | Type           | Default value | Description |
 | ------------------ | -------------- | ------------- | ----------- |
-| **data**           | any            | `undefined`   | Data to be displayed by SuperDebug. |
+| **data**           | any            |               | Data to be displayed by SuperDebug. |
 | **display**        | boolean        | `true`        | Whether to show or hide SuperDebug. |
 | **status**         | boolean        | `true`        | Whether to show or hide the HTTP status code of the current page. |
 | **label**          | string         | `""`          | Add a label to SuperDebug, useful when using multiple instances on a page. |
