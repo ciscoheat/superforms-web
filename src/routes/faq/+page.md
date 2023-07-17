@@ -16,16 +16,19 @@ The most common mistake is to forget the `name` attribute on the input field. If
 
 You're not limited to just `return { form }` in load functions and form actions; you can return anything else together with the form variables (which can also be called anything you'd like).
 
-```ts
-// +page.server.ts
-const loginForm = await superValidate(request, loginSchema);
-const registerForm = await superValidate(request, registerSchema);
-const userName = locals.currentUser.name;
+#### From a load function
 
-return { loginForm, registerForm, userName };
+```ts
+export const load = (async ({ locals }) => {
+  const loginForm = await superValidate(loginSchema);
+  const userName = locals.currentUser.name;
+  
+  return { loginForm, userName };
+})
+
 ```
 
-If you return it in a load function, it can be accessed in `PageData` in `+page.svelte`:
+It can then be accessed in `PageData` in `+page.svelte`:
 
 ```svelte
 <script lang="ts">
@@ -33,12 +36,31 @@ If you return it in a load function, it can be accessed in `PageData` in `+page.
   export let data: PageData;
 
   const { form, errors, enhance } = superForm(data.loginForm);
-
-  console.log(data.userName);
 </script>
+
+<p>Currently logged in as {data.userName}</p>
 ```
 
-By returning it in a form action, it can be accessed in `ActionData` instead:
+#### From a form action
+
+Returning extra data from a form action is usually most convenient with a strongly typed status message. See the [status message](/concepts/messages#strongly-typed-message) page for an example.
+
+But you can also return it directly, in which case it can be accessed in `ActionData`:
+
+```ts
+export const actions = {
+  default: async ({ request, locals }) => {
+    const form = await superValidate(request, schema);
+
+    if (!form.valid) return fail(400, { form });
+
+    // TODO: Do something with the validated data
+
+    const userName = locals.currentUser.name;
+    return { form, userName };
+  }
+};
+```
 
 ```svelte
 <script lang="ts">
@@ -48,16 +70,16 @@ By returning it in a form action, it can be accessed in `ActionData` instead:
   export let data: PageData;
   export let form: ActionData;
 
-  // Need to rename form here, since it's take by ActionData.
+  // Need to rename form here, since it's used by ActionData.
   const { form: loginForm, errors, enhance } = superForm(data.loginForm);
 </script>
 
 {#if form?.userName}
-  <p>{form.userName}</p>
+  <p>Currently logged in as {form.userName}</p>
 {/if}
 ```
 
-**Note however** that returning extra data from a form action is usually more convenient with a strongly typed status message, to avoid having to import `ActionData` and rename the `form` store. See the [status message](/concepts/messages#strongly-typed-message) page for an example.
+Using a [status message](/concepts/messages#strongly-typed-message) instead avoids having to import `ActionData` and rename the `form` store.
 
 ---
 

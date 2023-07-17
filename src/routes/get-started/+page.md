@@ -66,13 +66,13 @@ const schema = z.object({
   email: z.string().email()
 });
 
-export const load = async () => {
+export const load = (async () => {
   // Server API:
   const form = await superValidate(schema);
 
   // Always return { form } in load and form actions.
   return { form };
-};
+});
 ```
 
 The Superform server API is called `superValidate`. You can call it in two ways in the load function:
@@ -83,7 +83,7 @@ If you want the form to be initially empty, just pass the schema as in the examp
 
 **2. Populate from database**
 
-If you want to populate the form, you can call the database and send the data to the form as the first parameter, schema second, like this:
+If you want to populate the form, you can call a database and send the data to the form as the first parameter, schema second, like this:
 
 ```ts
 export const load = async ({ params }) => {
@@ -102,7 +102,7 @@ export const load = async ({ params }) => {
 
 As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is especially useful for backend interfaces, where the form usually should be populated based on a url like `/users/123`.
 
-> Errors will be displayed as default when the form is populated, but not when empty. You can modify that [with this option](/concepts/error-handling#initial-form-errors).
+> Errors will be displayed as default when the form is populated, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
 
 ### Important note about return values
 
