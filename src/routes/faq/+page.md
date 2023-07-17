@@ -17,6 +17,7 @@ The most common mistake is to forget the `name` attribute on the input field. If
 You're not limited to just `return { form }` in load functions and form actions; you can return anything else together with the form variables (which can also be called anything you'd like).
 
 ```ts
+// +page.server.ts
 const loginForm = await superValidate(request, loginSchema);
 const registerForm = await superValidate(request, registerSchema);
 const userName = locals.currentUser.name;
@@ -24,15 +25,45 @@ const userName = locals.currentUser.name;
 return { loginForm, registerForm, userName };
 ```
 
-If you return this in a load function, it can be accessed in `PageData` in `+page.svelte`. By returning it in a form action, it can be accessed in `ActionData` instead.
+If you return it in a load function, it can be accessed in `PageData` in `+page.svelte`:
 
-Returning extra data in `ActionData` is usually more convenient with a strongly typed [status message](/concepts/messages) though.
+```svelte
+<script lang="ts">
+  import type { PageData } from './$types';
+  export let data: PageData;
+
+  const { form, errors, enhance } = superForm(data.loginForm);
+
+  console.log(data.userName);
+</script>
+```
+
+By returning it in a form action, it can be accessed in `ActionData` instead:
+
+```svelte
+<script lang="ts">
+  import type { PageData, ActionData } from './$types';
+  import { superForm } from 'sveltekit-superforms/client'
+
+  export let data: PageData;
+  export let form: ActionData;
+
+  // Need to rename form here, since it's take by ActionData.
+  const { form: loginForm, errors, enhance } = superForm(data.loginForm);
+</script>
+
+{#if form?.userName}
+  <p>{form.userName}</p>
+{/if}
+```
+
+**Note however** that returning extra data from a form action is usually more convenient with a strongly typed status message, to avoid having to import `ActionData` and rename the `form` store. See the [status message](/concepts/messages#strongly-typed-message) page for an example.
 
 ---
 
 ### What about the other way around, posting additional data to the server?
 
-Conversely, you can add additional form fields not included in the schema, including files (see the next question), and also add form data in [onSubmit](/concepts/events#onsubmit), to send extra data to the server. They can then be accessed with `request.formData()` in the form action:
+You can add additional input fields to the form that aren't part of the schema, including files (see the next question), to send extra data to the server. They can then be accessed with `request.formData()` in the form action:
 
 ```ts
 export const actions = {
@@ -50,6 +81,18 @@ export const actions = {
   }
 };
 ```
+
+You can also add form data programmatically in the [onSubmit](/concepts/events#onsubmit) event:
+
+```ts
+const { form, errors, enhance } = superForm(data.loginForm, {
+  onSubmit({ formData }) {
+    formData.set('extra', 'value')
+  }
+})
+```
+
+The onSubmit event is also a good place to modify `$form`, in case you're using [nested data](/concepts/nested-data) with `dataType: 'json'`.
 
 ---
 
@@ -77,7 +120,7 @@ export const actions = {
 };
 ```
 
-If you still want errors for the file field, you can add an optional field to the schema with the same name, and use [setError](/concepts/error-handling#seterror) to set and display an error message.
+If you want errors for the file field, you can add an optional field to the schema with the same name, and use [setError](/concepts/error-handling#seterror) to set and display an error message.
 
 ---
 

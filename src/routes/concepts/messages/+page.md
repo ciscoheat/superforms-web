@@ -78,6 +78,21 @@ type Message = { status: 'error' | 'success' | 'warning'; text: string };
 const form = await superValidate<typeof schema, Message>(event, schema);
 ```
 
+```svelte
+<script lang="ts">
+  const { form, message } = superForm(data.form);
+</script>
+
+{#if $message}
+  <div 
+    class:success={$message.status == 'success'} 
+    class:error={$message.status == 'error'}
+  >
+    {$message.text}
+  </div>
+{/if}
+```
+
 Though if you want to keep it simple with a string/any, you can use `$page.status` to style the message appropriately:
 
 ```svelte
@@ -91,6 +106,23 @@ Though if you want to keep it simple with a string/any, you can use `$page.statu
     {$message}
   </div>
 {/if}
+```
+
+### Using the message data programmatically
+
+If you return data that you want to use programmatically instead of just displaying it, you can do that in the [onUpdated](/concepts/events#onupdated) event:
+
+```ts
+const { form, message, enhance } = superForm(data.form, {
+  onUpdated() {
+    if ($message) {
+      // Display the message using a toast library
+      toast($message.text, {
+        icon: $message.status == 'success' ? '✅' : '❌'
+      });
+    }
+  }
+});
 ```
 
 ## Limitations
