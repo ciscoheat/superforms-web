@@ -43,7 +43,7 @@ It can then be accessed in `PageData` in `+page.svelte`:
 
 #### From a form action
 
-Returning extra data from a form action is usually most convenient with a strongly typed status message. See the [status message](/concepts/messages#strongly-typed-message) page for an example.
+Returning extra data from a form action is usually most convenient with a strongly typed status message. See the [status message](/concepts/messages) page for an example.
 
 But you can also return it directly, in which case it can be accessed in `ActionData`:
 
@@ -79,7 +79,7 @@ export const actions = {
 {/if}
 ```
 
-Using a [status message](/concepts/messages#strongly-typed-message) instead avoids having to import `ActionData` and rename the `form` store.
+Using a [status message](/concepts/messages) instead avoids having to import `ActionData` and rename the `form` store.
 
 ---
 

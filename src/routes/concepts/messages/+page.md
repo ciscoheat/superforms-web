@@ -80,6 +80,9 @@ const form = await superValidate<typeof schema, Message>(event, schema);
 
 ```svelte
 <script lang="ts">
+  import type { PageData } from './$types';
+  export let data: PageData;
+
   const { form, message } = superForm(data.form);
 </script>
 
@@ -98,6 +101,10 @@ Though if you want to keep it simple with a string/any, you can use `$page.statu
 ```svelte
 <script lang="ts">
   import { page } from '$app/stores';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+
   const { form, message } = superForm(data.form);
 </script>
 
