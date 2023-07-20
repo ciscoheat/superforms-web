@@ -12,9 +12,7 @@
 
 <Head title="Status messages" />
 
-So far, almost every feature has been on the client! That's where the action is, but you may have noticed that a status message like "Form posted" is displayed when submitting the forms in the examples.
-
-The validation object contains a `message` property used for this:
+You may have noticed that a status message like "Form posted" is displayed when submitting the forms in the examples. The validation object contains a `message` property used for this:
 
 ## Usage
 
@@ -117,15 +115,15 @@ Though if you want to keep it simple with a string/any, you can use `$page.statu
 
 ### Using the message data programmatically
 
-If you return data that you want to use programmatically instead of just displaying it, you can do that in the [onUpdated](/concepts/events#onupdated) event:
+If you return data that you want to use programmatically instead of just displaying it, like in a toast message, you can do that in the [onUpdated](/concepts/events#onupdated) event:
 
 ```ts
-const { form, message, enhance } = superForm(data.form, {
-  onUpdated() {
-    if ($message) {
+const { form, enhance } = superForm(data.form, {
+  onUpdated({ form }) {
+    if (form.message) {
       // Display the message using a toast library
-      toast($message.text, {
-        icon: $message.status == 'success' ? '✅' : '❌'
+      toast(form.message.text, {
+        icon: form.message.status == 'success' ? '✅' : '❌'
       });
     }
   }

@@ -128,8 +128,7 @@ const { form, enhance, errors, allErrors } = superForm(data.form, {
   errorSelector: string | undefined = '[aria-invalid="true"],[data-invalid]',
   scrollToError: 'auto' | 'smooth' | 'off' | boolean | ScrollIntoViewOptions = 'smooth',
   autoFocusOnError: boolean | 'detect' = 'detect',
-  stickyNavbar: string | undefined = undefined,
-  onError: (({ result, message }) => void) | 'apply'
+  stickyNavbar: string | undefined = undefined
 })
 ```
 
@@ -156,40 +155,6 @@ When `autoFocusOnError` is set to its default value `detect`, it checks if the u
 ### stickyNavbar
 
 If you have a sticky navbar, set its selector here and it won't hide any errors due to its height and z-index.
-
-### onError
-
-This option is an event, explained more in detail [on the event page](/concepts/events#onerror), but it's mentioned here since you should usually implement this to display server errors in a user-friendly way. It can be as simple as this:
-
-```ts
-/**
- * result is an ActionResult with type error
- * message is the $message store
- */
-onError({ result, message }) {
-  message.set(result.error.message);
-}
-```
-
-Errors can be thrown server-side with the SvelteKit `error` helper:
-
-```ts
-import { error, fail } from '@sveltejs/kit';
-
-export const actions = {
-  default: async ({ request }) => {
-    const form = await superValidate(request, schema);
-
-    if(!form.valid) return fail(400, { form });
-
-    try {
-      db.insert(form.data);
-    } catch (e) {
-      throw error(500, 'Something went wrong, please try again.');
-    }
-  }
-};
-```
 
 ## Form-level and array errors
 

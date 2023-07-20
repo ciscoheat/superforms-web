@@ -26,7 +26,7 @@ import {
 } from 'sveltekit-superforms/client';
 ```
 
-> See [the API](/api#proxy-objects) for a detailed description of each kind of proxy.
+> See [the API](/api#proxy-objects) for a detailed description of each kind of proxy. intProxy and numberProxy are rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`.
 
 ## Usage
 

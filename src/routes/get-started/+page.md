@@ -290,9 +290,9 @@ This concludes the tutorial (full source code below), but you'd probably want to
 
 To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. Most pages there contain interactive examples that help you use the library to its fullest.
 
-> If you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) section carefully.
+> If you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) page carefully. The same goes if you're having [multiple forms on the same page](/concepts/multiple-forms).
 
-If you're ready for a more advanced tutorial, check out [Designing a CRUD interface](/crud), which shows how to make a fully working backend in about 150 lines of code.
+When you're ready for something more advanced, check out the [CRUD tutorial](/crud), which shows how to make a fully working backend in about 150 lines of code.
 
 ## Complete example code
 
