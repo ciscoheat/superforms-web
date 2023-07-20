@@ -144,11 +144,11 @@ const { form, enhance, formId } = superForm(data.form, {
 });
 ```
 
-You can also change the `id` dynamically with the `$formId` store.
+You can also change the id dynamically with the `$formId` store, or set it directly in the form with the following method.
 
 ### Without use:enhance
 
-Multiple forms work without `use:enhance`, though in this case you must add a hidden form field called `__superform_id` with the `$formId` value:
+Multiple forms also work without `use:enhance`, though in this case you must add a hidden form field called `__superform_id` with the `$formId` value:
 
 ```svelte
 <script lang="ts">
@@ -164,6 +164,8 @@ Multiple forms work without `use:enhance`, though in this case you must add a hi
   <input type="hidden" name="__superform_id" bind:value={$formId} />
 </form>
 ```
+
+(You can add this field even with `use:enhance` added, it works in both cases.)
 
 ## Configuration and troubleshooting
 
