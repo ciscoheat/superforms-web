@@ -359,6 +359,19 @@ And some styling for everything at the end:
     background-color: lightblue;
   }
 
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: flex-start;
+    margin-bottom: 2em;
+  }
+
+  hr {
+    width: 100%;
+    margin-block: 2em;
+  }
+
   .users {
     columns: 3 150px;
   }
