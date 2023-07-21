@@ -68,7 +68,7 @@ import { z } from 'zod';
 
 // See https://zod.dev/?id=primitives for schema syntax
 export const userSchema = z.object({
-  id: z.string().regex(/^\d+$/),
+  id: z.string().regex(/^\\d+$/),
   name: z.string().min(2),
   email: z.string().email()
 });
@@ -122,10 +122,10 @@ With this, **Create** and **Update** can now use the same schema, which means th
 
 Let's add a load function to the page, using the SvelteKit route parameters to look up the requested user:
 
-**src/routes/+page.server.ts**
+**src/routes/users/[[id]]/+page.server.ts**
 
 ```ts
-export const load = async ({ url }) => {
+export const load = async ({ url, params }) => {
   // READ user
   const user = users.find((u) => u.id == params.id);
 
@@ -207,16 +207,31 @@ Apart from getting the data ready to be displayed, we've prepared a status messa
 </style>
 ```
 
+Remember to use [SuperDebug](/super-debug) if you want to see your form data live!
+
+```svelte
+<script>
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+  // ...
+</script>
+
+<SuperDebug data={$form} />
+
+<hr>
+
+<!-- ... -->
+```
+
 ## Creating and Updating a user
 
 With this, the form should be ready for creating a user. Let's add the form action for that:
 
-**src/routes/+page.server.ts**
+**src/routes/users/[[id]]/+page.server.ts**
 
 ```ts
 export const actions = {
   default: async ({ request }) => {
-    const form = await superValidate(request, schema);
+    const form = await superValidate(request, crudSchema);
     if (!form.valid) return fail(400, { form });
 
     if (!form.data.id) {
@@ -258,13 +273,24 @@ To delete a user, we can make use of the HTML `button` element, which can have a
 {/if}
 ```
 
-In the form action, we now use the `FormData` from the request to check if the delete button was pressed. We shouldn't use the schema since `delete` is not a part of the user, but it's not a big change:
+In the form action, we now use the `FormData` from the request to check if the delete button was pressed.
 
-**src/routes/+page.server.ts**
+We can also add a `Delayed` button to mimick the behavior of a network call :
+
+```svelte
+  <button
+  name="delay"
+  class="delay">Delayed</button>
+```
+
+We shouldn't use the schema since `delete` and `delayed` are not a part of the user, but it's not a big change:
+
+**src/routes/users/[[id]]/+page.server.ts**
 
 ```ts
 export const actions: Actions = {
   default: async ({ request }) => {
+    // get formData here before validating
     const formData = await request.formData();
     const form = await superValidate(formData, crudSchema);
 
@@ -327,6 +353,10 @@ And some styling for everything at the end:
 
   .danger {
     background-color: brown;
+  }
+
+  .delay {
+    background-color: lightblue;
   }
 
   .users {
