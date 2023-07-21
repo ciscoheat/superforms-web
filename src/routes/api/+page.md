@@ -185,8 +185,8 @@ For setting errors on the form after validation. It returns a `fail(status, { fo
 
 Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400` (which must be in the range 400-599).
 
-- To set form-level errors, the `field` argument can be skipped, or set to an empty string.
-- To set array-level errors, append `._errors` to the field, like `tags._errors`.
+- To set a form-level error, the `field` argument can be skipped, or set to an empty string.
+- To set an array-level error, append `._errors` to the field parameter, like `"tags._errors"`.
 
 ### message(form, message, options?)
 
