@@ -246,9 +246,9 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 
 Some explanations are definitely at hand! First, `type T = $$Generic<AnyZodObject>` is a way of defining generic arguments in components. Having defined `T` as `AnyZodObject` (a schema type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used. Unfortunately, this takes a bit of knowledge of the types, but that's what examples are for, right?
 
-What may look strange is `ZodValidation<T>`, this is required because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type, so it's not a `AnyZodObject` anymore. The `ZodValidation` type will extract the actual object, which may be several levels deep.
+The `ZodValidation<T>` type is required because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type, so it's not a `AnyZodObject` anymore. The `ZodValidation` type will unwrap the actual object, which may be several levels deep.
 
-We also need the fields for the actual data object, not the schema itself. `z.infer<T>` is used for that. And it's wrapped in `FormPathLeaves`, the type for a nested path, so we can use [nested data](/concepts/nested-data).
+We also need the fields for the actual schema data, not the schema object itself. `z.infer<T>` is used for that. And it's wrapped in `FormPathLeaves`, listing the valid string paths of an object, so we can use [nested data](/concepts/nested-data).
 
 > The `FormPathLeaves` type prevents using a field that isn't at the end of the schema (the "leaves" of the schema tree). This means that arrays and objects cannot be used in `formFieldProxy`.
 

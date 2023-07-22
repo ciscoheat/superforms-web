@@ -14,23 +14,11 @@
 
 ## Built-in browser validation
 
-There is already a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation) that is virtually effortless to use with Superforms. For more advanced cases, you can use a Zod schema or the Superforms validation object, for a complete realtime client-side validation.
-
-## Usage
-
-```ts
-const { form, enhance, constraints, validate } = superForm(data.form, {
-  validators: AnyZodObject | {
-    field: (value) => string | string[] | null | undefined;
-  },
-  validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only',
-  defaultValidator: 'keep' | 'clear' = 'keep'
-})
-```
+There is already a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which is virtually effortless to use with Superforms. For more advanced cases, read further down about how you can use a Zod schema or a Superforms validation object, for a complete realtime client-side validation.
 
 ### constraints
 
-To use the built-in browser constraints, simply spread the `$constraints` store for a field on its input field:
+To use the built-in browser constraints, just spread the `$constraints` store for a field on its input field:
 
 ```svelte
 <input
@@ -50,11 +38,11 @@ The constraints is an object with validation properties mapped from the schema:
   maxlength?: number;    // z.string().max(n)
   min?: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
   max?: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
-  required?: true;       // Not nullable(), nullish() or optional()
+  required?: true;       // true if not nullable(), nullish() or optional()
 }
 ```
 
-For some input fields like `date`, you need to modify some constraint fields. For example, if you want to limit the date to today or after:
+For some input types, you need to modify the constraints to be in the correct format. For example with `date` fields, if you want to limit the date to today or after, it needs to be in `YYYY-MM-DD` format:
 
 ```svelte
 <input
@@ -68,9 +56,19 @@ For some input fields like `date`, you need to modify some constraint fields. Fo
 
 Check the validation attributes and their valid values at [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation#validation-related_attributes).
 
-## Realtime validators
+## Usage
 
-The built-in browser validation can be a bit constrained (pun intended); for example, you can't easily control the position and appearance of the error messages. Instead, you can set the `validators` option.
+The built-in browser validation can be a bit constrained (pun intended); for example, you can't easily control the position and appearance of the error messages. Instead, you can set some options for custom real-time validation.
+
+```ts
+const { form, enhance, constraints, validate } = superForm(data.form, {
+  validators: AnyZodObject | {
+    field: (value) => string | string[] | null | undefined;
+  },
+  validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only' = 'auto',
+  defaultValidator: 'keep' | 'clear' = 'keep'
+})
+```
 
 ### validators
 
@@ -80,9 +78,9 @@ validators: AnyZodObject | {
 }
 ```
 
-Setting it to the same Zod schema as on the server is the most convenient and recommended, but it increases the size of the client bundle a bit. A lightweight alternative is to use a custom validation object.
+Setting the `validators` option to the same Zod schema as on the server is the most convenient and recommended, but it increases the size of the client bundle a bit. 
 
-It's an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as a validation failed message, or `null | undefined` if the field is valid.
+A lightweight alternative is to use a Superforms validation object. It's an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as a "validation failed" message, or `null | undefined` if the field is valid.
 
 Here's how to validate a string length, for example:
 

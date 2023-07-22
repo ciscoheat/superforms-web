@@ -158,7 +158,7 @@ If you have a sticky navbar, set its selector here and it won't hide any errors 
 
 ## Form-level and array errors
 
-It's possible to set form-level errors by refining the schema, which works better together with [client-side validation](/concepts/client-validation), as `setError` won't persist longer than the first validation of the schema on the client.
+It's possible to set form-level errors by refining the schema, which works better together with [client-side validation](/concepts/client-validation), as errors added with [setError](/api#seterrorform-field-error-options) won't persist longer than the first validation of the schema on the client.
 
 ```ts
 const refined = z.object({
@@ -171,7 +171,23 @@ const refined = z.object({
 
 These can be accessed on the client through `$errors?._errors`. The same goes for array errors, which in the above case can be accessed through `$errors.tags?._errors`. 
 
-When you need to set errors after validation, `setError` can be used to set the form- and array-level errors, check [the API](/api#seterrorform-field-error-options) for details.
+### Setting field errors with refine
+
+You may want to set the error on the password or the confirm field instead of a form-level error. In that case you can add a path to the Zod [refine](https://zod.dev/?id=refine) option:
+
+```ts
+const refined = z.object({
+  tags: z.string().array().max(3)
+  password: z.string().min(8),
+  confirm: z.string().min(8)
+})
+.refine((data) => data.password == data.confirm, {
+  message: "Passwords didn't match",
+  path: ["confirm"]
+});
+```
+
+As said, setting errors on the schema like this is preferred, but it may not always be possible. When you need to set errors after validation, use the [setError](/api#seterrorform-field-error-options) function.
 
 > If you would like a message to persist until the next form submission regardless of validation, use a [status message](/concepts/messages) instead.
 
