@@ -25,7 +25,7 @@ const { form, enhance } = superForm(data, {
 })
 ```
 
-By setting the `SPA` option to `true`, the form will not send anything to the server. Instead, the client-side [validators](/concepts/client-validation) option will determine the success or failure of the "client-posted" form, which will trigger the [event chain](/concepts/events), and the result will be most conveniently consumed in `onUpdate`.
+By setting the `SPA` option to `true`, the form won't be sent to the server when submitted. Instead, the client-side [validators](/concepts/client-validation) option will determine the success or failure of the form, which will trigger the [event chain](/concepts/events), and the result will be most conveniently consumed in `onUpdate`.
 
 > Remember that `use:enhance` must be added to the form for SPA to work!
 
@@ -87,7 +87,7 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
         if (form.data.email.includes('spam')) {
           setError(form, 'email', 'Suspicious email address.');
         } else if (form.valid) {
-          // TODO: Do something with the validated data
+          // TODO: Do something with the validated form.data
           setMessage(form, 'Valid data!');
         }
       }
@@ -139,7 +139,9 @@ Since you can't use top-level await in Svelte components, you can't use `superVa
       SPA: true,
       validators: loginSchema,
       onUpdate({ form }) {
-        // TODO: Form validation
+        if (form.valid) {
+          // TODO: Do something with the validated form.data
+        }
       }
     }
   );
@@ -154,7 +156,7 @@ The following form has `SPA: true` set, and is using `+page.ts` for loading the 
 
 ## Trimming down the bundle size
 
-In the above example, we're adding both Zod and the Superforms server part to the client. This adds about 65 Kb to the client output size, which hopefully is negligible, but if you're hunting bytes, you can optimize by skipping the `superValidate` part in `+page.ts`, and in `+page.svelte`, construct your own `SuperValidated` response and use the Superforms validators:
+In the above example, we're adding both Zod and the Superforms server part to the client. This adds about 65 Kb to the client output size, which hopefully is negligible, but if you're hunting bytes, you can optimize by skipping the `superValidate` part in `+page.ts`, construct your own [SuperValidated](/api#supervalidate-return-type) object, and use the Superforms validators in `+page.svelte`:
 
 **src/lib/schemas.ts**
 
@@ -173,6 +175,8 @@ export type UserSchema = typeof _userSchema;
 **src/routes/user/[id]/+page.ts**
 
 ```ts
+import type { SuperValidated } from 'sveltekit-superforms';
+import type { UserSchema } from '$lib/schemas';
 import { error } from '@sveltejs/kit';
 
 export const load = async ({ params, fetch }) => {
@@ -183,9 +187,19 @@ export const load = async ({ params, fetch }) => {
   );
   if (request.status >= 400) throw error(request.status);
 
-  // No validation, just return the data.
   const user = await request.json();
-  return { user };
+
+  // Validate data here if required
+
+  const form : SuperValidated<UserSchema> = {
+    valid: false, // Or true, depending on validation
+    posted: false,
+    data: user,
+    errors: {},
+    constraints: {}
+  }
+
+  return { form };
 };
 ```
 
@@ -194,21 +208,11 @@ export const load = async ({ params, fetch }) => {
 ```svelte
 <script lang="ts">
   import type { PageData } from './$types';
-  import type { SuperValidated } from 'sveltekit-superforms';
   import { superForm } from 'sveltekit-superforms/client';
-  import type { UserSchema } from '$lib/schemas';
 
   export let data: PageData;
 
-  const validated : SuperValidated<UserSchema> = {
-    valid: false, // Or true, if you trust the data
-    posted: false,
-    data: data.user,
-    errors: {},
-    constraints: {}
-  }
-
-  const { form, errors, enhance } = superForm(validated, {
+  const { form, errors, enhance } = superForm(data.form, {
     SPA: true,
     validators: {
       name: (name) => (name.length <= 2 ? 'Name is too short' : null),
@@ -224,6 +228,6 @@ export const load = async ({ params, fetch }) => {
 </script>
 ```
 
-This will reduce the added size to just the client-side part of Superforms, around 25 Kb. The downside is that you won't get any [constraints](/concepts/client-validation#constraints), the initial data won't be validated, and you have to rely on the Superforms validator scheme, instead of the much more powerful Zod.
+This will reduce the size to just the client-side part of Superforms, around 25 Kb. The downside is that you won't get any [constraints](/concepts/client-validation#constraints), the initial data won't be validated, and you have to rely on the Superforms validator scheme, instead of the much more powerful Zod.
 
 <Next section={concepts} />

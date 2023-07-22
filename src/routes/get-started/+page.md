@@ -288,9 +288,9 @@ There are no hidden DOM manipulations or other behind-the-scenes secrets; it's j
 
 This concludes the tutorial (full source code below), but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring.
 
-To do that, take a look at [use:enhance](/concepts/enhance) under the Concepts section in the navigation. Most pages there contain interactive examples that help you use the library to its fullest.
+To do that, start by reading [use:enhance](/concepts/enhance) under the Concepts section in the navigation. It lists some important differences between Superforms and the SvelteKit default form behavior.
 
-> If you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) page carefully. The same goes if you're having [multiple forms on the same page](/concepts/multiple-forms).
+> Also important, if you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) page carefully. The same goes for having [multiple forms on the same page](/concepts/multiple-forms).
 
 When you're ready for something more advanced, check out the [CRUD tutorial](/crud), which shows how to make a fully working backend in about 150 lines of code.
 
