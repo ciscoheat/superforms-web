@@ -1,6 +1,7 @@
 <script lang="ts">
   import Head from '$lib/Head.svelte'
   import Form from './Form.svelte'
+  import CustomValidity from './CustomValidity.svelte'
   import Next from '$lib/Next.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
@@ -33,8 +34,6 @@ By deconstructing `errors` from `superForm`, you'll get an object with form erro
 
 The `aria-invalid` attribute is used to automatically focus on the first error field; see the [errorSelector](/concepts/error-handling#errorselector) option further below.
 
-> To track touched fields, `$errors` doesn't remove any fields from itself when there are no errors; it sets them to `undefined`. A truthy/falsy check should be made for each field when checking for errors.
-
 ## setError
 
 Most errors will be set automatically when the data is validated, but you may want to add errors after determining that the data is valid. This is easily done with the `setError` helper function.
@@ -61,13 +60,13 @@ export const actions = {
 
 `setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. Check [the API](/api#seterrorform-field-error-options) for more options.
 
-If you have nested data, a string path is used to specify where in the data structure the error is:
+If you have [nested data](/concepts/nested-data), a string path is used to specify where in the data structure the error is:
 
 ```ts
 setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 ```
 
-> Errors added with `setError` will be removed when a Zod schema is used in [client-side validation](/concepts/client-validation) and the first validation occurs (such as modifying a field).
+> All errors added with `setError` will be removed when a Zod schema is used in [client-side validation](/concepts/client-validation) and the first validation occurs (such as modifying a field).
 
 ## Throwing server errors
 
@@ -79,19 +78,19 @@ To avoid data loss even for non-javascript users, returning a [status message](/
 
 The default data in an empty form is usually invalid, but displaying lots of errors upon page load doesn't look good. Superforms handles it like this:
 
-If no data was posted or sent to `superValidate`, **no errors will be returned** unless the `errors` option in `superValidate` is `true`. This is what happens in load functions when the only parameter sent to `superValidate` is the schema.
+If no data was posted or sent to `superValidate`, **no errors will be returned** unless the `errors` option in `superValidate` is `true`. This is what happens in load functions when the only the schema is sent to `superValidate`:
 
 ```ts
 export const load = async () => {
   // No errors set, since no data is sent to superValidate
   const form = await superValidate(schema);
 
-  // No data, but errors can still be added
+  // No data, but errors can still be added with an option
   const form2 = await superValidate(schema, { errors: true });
 };
 ```
 
-If data was sent to `superValidate`, either posted or populated with data, **errors will be returned** unless the `errors` option is `false`. This happens in form actions or when the form is initially populated.
+If data was sent to `superValidate`, either posted or populated with data, **errors will be returned** unless the `errors` option is `false`.
 
 ```ts
 export const load = async () => {
@@ -128,7 +127,8 @@ const { form, enhance, errors, allErrors } = superForm(data.form, {
   errorSelector: string | undefined = '[aria-invalid="true"],[data-invalid]',
   scrollToError: 'auto' | 'smooth' | 'off' | boolean | ScrollIntoViewOptions = 'smooth',
   autoFocusOnError: boolean | 'detect' = 'detect',
-  stickyNavbar: string | undefined = undefined
+  stickyNavbar: string | undefined = undefined,
+  customValidity: boolean = false
 })
 ```
 
@@ -146,15 +146,31 @@ This is the CSS selector used to locate the invalid input fields after form subm
 
 ### scrollToError
 
-The `scrollToError` options determines how to scroll to the first error message in the form. `smooth` and `auto` are values from [Window.scroll](https://developer.mozilla.org/en-US/docs/Web/API/Window/scroll). If the non-string options are used, [Element.scrollIntoView](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView) will be called with the option. This is mostly used with nested scrollbars, in which case Window.scroll won't work.
+The `scrollToError` option determines how to scroll to the first error message in the form. `smooth` and `auto` are values from [Window.scroll](https://developer.mozilla.org/en-US/docs/Web/API/Window/scroll). If the non-string options are used, [Element.scrollIntoView](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView) will be called with the option. This is mostly used with nested scrollbars, in which case Window.scroll won't work.
 
 ### autoFocusOnError
 
-When `autoFocusOnError` is set to its default value `detect`, it checks if the user is on a mobile device; **if not**, it will automatically focus on the first error input field. It's prevented on mobile devices since focusing will open the on-screen keyboard, causing the viewport to shift, which could also hide the validation error.
+When `autoFocusOnError` is set to its default value `detect`, it checks if the user is on a mobile device; **if not**, it will automatically focus on the first error input field. It's prevented on mobile devices since focusing will open the on-screen keyboard, causing the viewport to shift, which could hide the validation error.
 
 ### stickyNavbar
 
-If you have a sticky navbar, set its selector here and it won't hide any errors due to its height and z-index.
+If you have a sticky navbar, set its CSS selector here and it won't hide any errors due to its height and z-index.
+
+### customValidity
+
+This uses the [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#the_constraint_validation_api) to report validation errors. By enabling this, with `use:enhance` added to the form, instead of the standard messages, the Zod validation errors will now be displayed in the browser validation pop-up. Submit this form without entering any data to see it in action:
+
+<CustomValidity {data} />
+
+Since validation is handled by Superforms, there is no need for spreading `$constraints` on the field either, making for a minimal html, not even requiring `$errors` on the page:
+
+```svelte
+<input type="text" name="name" bind:value={$form.name} />
+```
+
+If you want to exclude a field from this behavior, add a `data-no-custom-validity` attribute to it.
+
+> Just be aware that since `use:enhance` is needed, it's a "JS required" option. Also, some browsers require the `novalidate` attribute on the form itself, to prevent displaying the default constraint messages.
 
 ## Form-level and array errors
 
@@ -208,11 +224,11 @@ You may also want to list the errors above the form. The `$allErrors` store can 
 {/if}
 ```
 
-`$allErrors` can also be useful to disable the submit button if there are any errors.
+`$allErrors.length` can also be useful to disable the submit button if there are any errors.
 
 ## Test it out
 
-This form has `aria-invalid` set on erroneous fields, and lists all errors on top of the form using `$allErrors`. Try to submit and see that the first error field gets focus automatically, unless on mobile.
+This form has `aria-invalid` set on erroneous fields, and lists all errors on top of the form using `$allErrors`. Try to submit and see that the first error field gets focus automatically (unless on mobile).
 
 <Form {data} />
 

@@ -22,6 +22,6 @@ export const actions = {
 
     if (form.data.delay >= 10000) throw error(504, 'Request timeout');
 
-    return message(form, 'Form posted!');
+    return message(form, 'Form posted successfully!');
   }
 }

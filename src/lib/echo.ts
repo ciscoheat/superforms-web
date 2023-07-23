@@ -21,7 +21,7 @@ export function echo<
       return fail(400, { form });
     }
 
-    return message(form, 'Form posted!');
+    return message(form, 'Form posted successfully!');
   };
 }
 
