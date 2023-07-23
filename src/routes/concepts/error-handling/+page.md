@@ -164,6 +164,13 @@ This uses the [Constraint Validation API](https://developer.mozilla.org/en-US/do
 
 Since validation is handled by Superforms, there is no need for spreading `$constraints` on the field either, making for a minimal html, not even requiring `$errors` on the page:
 
+```ts
+const { form, enhance } = superForm(data.form, {
+  customValidity: true,
+  validators: schema // Not required, but gives real-time display of errors
+});
+```
+
 ```svelte
 <input type="text" name="name" bind:value={$form.name} />
 ```

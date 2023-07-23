@@ -1,19 +1,14 @@
-import { z } from 'zod';
 import { echoActions } from '$lib/echo';
 import { superValidate } from 'sveltekit-superforms/server';
-
-const _schema = z.object({
-  name: z.string().min(2),
-  email: z.string().email()
-});
+import { schema } from './schema.js';
 
 export const load = (async () => {
-  const form = await superValidate(_schema)
-  const customValidity = await superValidate(_schema, {
+  const form = await superValidate(schema)
+  const customValidity = await superValidate(schema, {
     id: 'customValidity'
   })
 
   return {form, customValidity}
 });
 
-export const actions = echoActions(_schema);
+export const actions = echoActions(schema);

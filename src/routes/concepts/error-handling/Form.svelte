@@ -8,17 +8,19 @@
   }
 
   export let data: PageData;
-  const { form, errors, allErrors, enhance, tainted, message, constraints } =
-    superForm(data.form, {
+  const { form, errors, allErrors, enhance, message, constraints } = superForm(
+    data.form,
+    {
       taintedMessage: null,
       clearOnSubmit: 'none'
-    });
+    }
+  );
 </script>
 
 <form
   method="POST"
   action={$page.url.pathname}
-  class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
+  class="space-y-4 rounded-xl border-2 border-dashed border-primary-900 bg-slate-900 p-5"
   use:enhance>
   {#if $allErrors.length}
     <ul class="list m-0 p-0">
@@ -30,7 +32,7 @@
     </ul>
   {/if}
   {#if $message}
-    <h3 class="rounded p-2 bg-green-700">{$message}</h3>
+    <h3 class="rounded bg-green-700 p-2">{$message}</h3>
   {/if}
   <label class="label">
     <span

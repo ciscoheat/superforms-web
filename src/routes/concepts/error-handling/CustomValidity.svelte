@@ -2,12 +2,14 @@
   import type { PageData } from './$types';
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
+  import { schema } from './schema';
 
   export let data: PageData;
 
   const { form, errors, allErrors, enhance, tainted, message, constraints } =
     superForm(data.customValidity, {
       taintedMessage: null,
+      validators: schema,
       customValidity: true
     });
 </script>
