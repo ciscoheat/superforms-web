@@ -486,11 +486,14 @@ Creates a string store for an **integer** field in the schema.
 
 ```ts
 { 
-  empty?: 'null' | 'undefined'; 
+  empty?: 'null' | 'undefined';
+  emptyIfZero?: boolean = true;
 }
 ```
 
-An intProxy is rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. Note that the `empty` option includes the number zero.
+An intProxy is rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
+
+Note that the `empty` option includes the number zero, unless `emptyIfZero` is set to `false`.
 
 ### numberProxy(form, fieldName, options?)
 
@@ -500,12 +503,15 @@ Creates a string store for a **number** field in the schema.
 
 ```ts
 { 
-  empty?: 'null' | 'undefined'; 
+  empty?: 'null' | 'undefined';
+  emptyIfZero?: boolean = true;
   delimiter?: '.' | ',';
 }
 ```
 
-A numberProxy is rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. Note that `empty` option includes the number zero.
+A numberProxy is rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
+
+Note that the `empty` option includes the number zero, unless `emptyIfZero` is set to `false`.
 
 ### booleanProxy(form, fieldName, options?)
 
