@@ -216,10 +216,6 @@ Remember to use [SuperDebug](/super-debug) if you want to see your form data liv
 </script>
 
 <SuperDebug data={$form} />
-
-<hr>
-
-<!-- ... -->
 ```
 
 ## Creating and Updating a user
@@ -275,12 +271,10 @@ To delete a user, we can make use of the HTML `button` element, which can have a
 
 In the form action, we now use the `FormData` from the request to check if the delete button was pressed.
 
-We can also add a `Delayed` button to mimick the behavior of a network call :
+We can also add a Delayed button to mimick the behavior of a slow network call:
 
 ```svelte
-  <button
-  name="delay"
-  class="delay">Delayed</button>
+<button name="delay" class="delay">Delayed</button>
 ```
 
 We shouldn't use the schema since `delete` and `delayed` are not a part of the user, but it's not a big change:
@@ -290,7 +284,6 @@ We shouldn't use the schema since `delete` and `delayed` are not a part of the u
 ```ts
 export const actions: Actions = {
   default: async ({ request }) => {
-    // get formData here before validating
     const formData = await request.formData();
     const form = await superValidate(formData, crudSchema);
 
@@ -384,6 +377,6 @@ And some styling for everything at the end:
 </style>
 ```
 
-That's it! Thank you for following along. The code is [available here](https://stackblitz.com/edit/sveltekit-superforms-1-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte).
+That's it! Thank you for following along, the code is [available here](https://stackblitz.com/edit/sveltekit-superforms-1-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte) on Stackblitz.
 
-If you have any questions, post them in the [discussion forum](https://github.com/ciscoheat/sveltekit-superforms/discussions) or ask them on [the Discord server](https://discord.gg/AptebvVuhB).
+If you have any questions, post them in the [discussion forum](https://github.com/ciscoheat/sveltekit-superforms/discussions) or ask on [the Discord server](https://discord.gg/AptebvVuhB).
