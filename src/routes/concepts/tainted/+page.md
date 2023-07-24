@@ -32,30 +32,38 @@ Try to modify the form below, then close the tab or hit the back button. A confi
 
 <Form {data} />
 
-## Tainted store
-
-You can access the exact fields that are tainted through the `$tainted` store returned from `superForm`. When you modify the form fields above, you'll see how the `$tainted` store reacts.
-
-> Any direct assignment to `$form` will taint the affected field(s)! The tainted check is made on the `form` store, not the HTML input fields. In general, don't modify the `$tainted` store directly; instead, see below for how to set form data without tainting the form.
-
 ## Untainting the form
 
 When a validation result is returned for the form with a `valid` status set to `true`, the form is automatically marked as untainted by setting the `$tainted` store to `undefined`.
 
 Try that by posting the form with valid values. The tainted message should not appear when browsing away from the page.
 
-If you're assigning to `$form` and don't want it to be tainted, you can instead update it with an extra option:
+## Tainted store
+
+You can access the fields that are tainted through the `$tainted` store returned from `superForm`. When you modify the form fields above, you'll see how the `$tainted` store reacts.
+
+> Any direct assignment to `$form` will taint the affected field(s)! The tainted check is made against `$form`, not the HTML input fields. In general, don't modify the `$tainted` store directly; instead, see below for how to set form data without tainting the form.
+
+If you want to modify the `form` store without tainting any fields, you can update it with an extra option:
 
 ```ts
 const { form } = superForm(data.form);
 
 form.update(
   ($form) => {
-    $form.name = data.name;
+    $form.name = "New name";
     return $form;
   },
   { taint: false }
-); // boolean | 'untaint' | 'untaint-all'
+);
 ```
+
+The `taint` options are:
+
+```ts
+{ taint: boolean | 'untaint' | 'untaint-all' }
+```
+
+Which can be used to not only prevent tainting, but also untaint the modified field(s), or the whole form.
 
 <Next section={concepts} />
