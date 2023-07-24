@@ -3,10 +3,10 @@
   import Form from './Form.svelte'
   import CustomValidity from './CustomValidity.svelte'
   import Next from '$lib/Next.svelte'
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
 
-	export let data;
+  export let data;
 </script>
 
 # Error handling
@@ -170,12 +170,11 @@ const { form, enhance } = superForm(data.form, {
   validators: schema // Not required, but gives real-time display of errors
 });
 ```
-
 ```svelte
 <input type="text" name="name" bind:value={$form.name} />
 ```
 
-If you want to exclude a field from this behavior, add a `data-no-custom-validity` attribute to it.
+The `name` attribute is required. If you want to exclude a field from this behavior, add a `data-no-custom-validity` attribute to it.
 
 > Just be aware that since `use:enhance` is needed, it's a "JS required" option. Also, some browsers require the `novalidate` attribute on the form itself, to prevent displaying the default constraint messages.
 
