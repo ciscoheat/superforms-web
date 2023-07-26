@@ -78,7 +78,7 @@ validators: AnyZodObject | {
 }
 ```
 
-Setting the `validators` option to the same Zod schema as on the server is the most convenient and recommended, but it increases the size of the client bundle a bit. 
+Setting the `validators` option to the same Zod schema as on the server is the most convenient and recommended way, but it increases the size of the client bundle a bit. 
 
 A lightweight alternative is to use a Superforms validation object. It's an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as a "validation failed" message, or `null | undefined` if the field is valid.
 
@@ -116,26 +116,24 @@ const { form, errors, enhance } = superForm(data.form, {
 validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only',
 ```
 
-The validation is triggered when **a value is changed**, not just when tabbing through a field. The default validation method is based on the "reward early, validate late" pattern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for high user satisfaction:
+The validation is triggered when **a value is changed**, not just when tabbing through a field. The default validation method is based on the "reward early, validate late" pattern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
 
 - If no field error, validate on `blur`
 - If field error exists, validate on `input`
 
 But you can also use the `oninput` or `onblur` setting to always validate on one of these events instead, or `submit-only` to only validate on submit.
 
-> If you're using a Zod schema as `validators`, be aware that the whole schema will be validated, not just the validator for the modified field.<br><br>This is because the effects can add errors to any field in the schema, so everything must be validated to know the final result.
+> If you're using a Zod schema in the [validators](/concepts/client-validation#validators) option, be aware that the whole schema will be validated, not just the validator for the modified field.<br><br>This is because errors can be added to any field in the schema during validation, so the whole schema must be validated to know the final result.
 
 ### defaultValidator
 
-There is one additional option for specifying the validation behavior for fields when no validation exists for a field:
+This is an option for specifying the validation behavior for fields when no validation exists for a specific field. In other words, if [validators](/concepts/client-validation#validators) is set, this option won't have any effect for any fields included there.
 
 ```ts
 defaultValidator: 'keep' | 'clear' = 'keep'
 ```
 
-The default value `keep` means that validation errors will be displayed until the form submits (given that it is set to [clear errors on submit](/concepts/submit-behavior#clearonsubmit)).
-
-The other option, `clear`, will remove the error as soon as the field value is modified.
+The default value `keep` means that validation errors will be displayed until the form submits. The other option, `clear`, will remove the error as soon as the field value is modified.
 
 ### validate
 

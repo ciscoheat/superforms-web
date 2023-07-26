@@ -12,7 +12,7 @@
 
 <Head title="Nested data" />
 
-HTML forms are inherently one-dimensional, in the sense that the input fields can only handle string values. There is no native way to represent a nested data structure or more complex values like dates. Fortunately, this can be handled by Superforms!
+Basic HTML forms can only handle string values, and the `<form>` element cannot nest other forms, so there is no native way to represent a nested data structure or more complex values like dates. Fortunately, Superforms has a few solutions for this!
 
 ## Usage
 
@@ -24,9 +24,31 @@ const { form, errors, constraints } = superForm(data.form, {
 
 ### dataType
 
-By simply setting `dataType` to `'json'`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the form, and you don't have to worry about failed coercion, converting arrays to strings and back, etc! You don't even have to set names for the form fields anymore, since the data in the `$form` store is now posted, not the fields in the HTML. They are now just UI components for modifying a data model.
+By simply setting `dataType` to `'json'`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the `form` store, and you don't have to worry about failed coercion, converting arrays to strings and back, etc.
 
-> When `dataType` is set to `'json'`, the `onSubmit` event contains `formData`, but it cannot be used to modify the posted data. You need to set or update the `$form` store.<br><br>It also means that the `disabled` attribute, which normally prevents fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
+You don't even have to set names for the form fields anymore, since the actual data in `$form` is now posted, not the fields in the HTML. They are now merely UI components for modifying a data model.
+
+> When `dataType` is set to `'json'`, the `onSubmit` event contains `formData`, but it cannot be used to modify the posted data. You need to set or update the `form` store.<br><br>It also means that the `disabled` attribute, which normally prevents fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
+
+Modifying the `form` store programmatically is simple, you can either assign `$form.field = ...` directly, which will taint the affected fields. If you don't want to taint anything, you can use `update` with an extra option:
+
+```ts
+form.update(
+  ($form) => {
+    $form.name = "New name";
+    return $form;
+  },
+  { taint: false }
+);
+```
+
+The `taint` options are:
+
+```ts
+{ taint: boolean | 'untaint' | 'untaint-all' }
+```
+
+Which can be used to not only prevent tainting, but also untaint the modified field(s), or the whole form.
 
 ## Requirements
 
