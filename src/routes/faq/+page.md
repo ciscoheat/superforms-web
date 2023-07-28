@@ -166,6 +166,27 @@ Yes - this question now has its own [article page here](/components).
 
 ---
 
+### Why am I'm getting TypeError: The body has already been consumed?
+
+This happens if you access the form data of the request several times, which could happen when calling `superValidate` multiple times during the same request.
+
+To fix that problem, extract the formData before calling superValidate, and use that as an argument instead of `request` or `event`:
+
+```ts
+export const actions = {
+  default: async ({ request }) => {
+    const formData = await request.formData();
+
+    const form = await superValidate(formData, schema);
+    const form2 = await superValidate(formData, anotherSchema);
+
+    // Business as usual
+  }
+};
+```
+
+---
+
 ### I want to reuse common options, how to do that easily?
 
 When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
