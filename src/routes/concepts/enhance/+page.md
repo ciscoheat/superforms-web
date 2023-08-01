@@ -25,9 +25,7 @@ Now all form submissions will happen on the client, and we unlock a ton of extra
 
 The `use:enhance` action takes no arguments; instead, events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
-> Without `use:enhance`, the form will be static. You'll get no events, no timers, no error focus, etc. The only things that will work are [constraints](/concepts/client-validation#constraints) and [resetForm](/concepts/enhance#resetform).
-
-> Also note that SvelteKits own `use:enhance` cannot be used; you must use the one returned from `superForm`. The [events](/concepts/events) have all you need as a replacement.
+> Without `use:enhance`, the form will be static. You'll get no events, no timers, no error focus, etc. The only things that will work are [constraints](/concepts/client-validation#constraints) and [resetForm](/concepts/enhance#resetform).<br><br>Also note that SvelteKits own `use:enhance` cannot be used; you must use the one returned from `superForm`. The [events](/concepts/events) are all you need as a replacement.
 
 ## Differences from SvelteKit's use:enhance
 
@@ -73,7 +71,7 @@ When `invalidateAll` is `true` (the default) and a successful validation result 
 
 ### resetForm
 
-Since we're binding the fields to `$form`, a HTML form reset (clearing all fields in the DOM) won't have any effect, so in Superforms, resetting means **going back to the initial state of the form data**, usually what you initially sent to the client in `PageData`. If this isn't what you want, you can use the [events](/concepts/events) and the [reset](/api#superform-return-type) function instead.
+Since we're binding the fields to `$form`, a HTML form reset (clearing all fields in the DOM) won't have any effect, so in Superforms, resetting means **going back to the initial state of the form data**, usually what you sent to the client in the load function. If this isn't what you want, you can use the [events](/concepts/events) and the [reset](/api#superform-return-type) function instead.
 
 ## When to change the defaults?
 
@@ -86,12 +84,12 @@ For multiple forms on the same page, you have to experiment with these three opt
 You can remove the differences described above by setting the following options. Use with care, since the purpose of the changes is to protect the user from data loss.
 
 ```ts
-const { form, enhance, reset } = superForm(data.form, {
+const { form, enhance } = superForm(data.form, {
   // Reset the form by default
   resetForm: true,
   // On ActionResult error, render the nearest +error.svelte page
   onError: 'apply',
-  // No tainted message when the form is modified
+  // No message when navigating away from a modified form
   taintedMessage: null
 });
 ```
