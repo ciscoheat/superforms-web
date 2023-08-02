@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Head from '$lib/Head.svelte'
+  import Head from 'sveltekit-superforms/Head.svelte'
 </script>
 
 # Migration guide
@@ -93,8 +93,8 @@ This also applies to generic components. The types have been simplified, so you 
 ```svelte
 <script lang="ts">
   import type { z, AnyZodObject } from 'zod';
-  import type { ZodValidation, FormPathLeaves } from '$lib';
-  import { formFieldProxy, type SuperForm } from '$lib/client';
+  import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms';
+  import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
 
   type T = $$Generic<AnyZodObject>;
 
