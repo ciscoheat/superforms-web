@@ -66,7 +66,8 @@ const { form, enhance, constraints, validate } = superForm(data.form, {
     field: (value) => string | string[] | null | undefined;
   },
   validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only' = 'auto',
-  defaultValidator: 'keep' | 'clear' = 'keep'
+  defaultValidator: 'keep' | 'clear' = 'keep',
+  customValidity: boolean = false
 })
 ```
 
@@ -134,6 +135,10 @@ defaultValidator: 'keep' | 'clear' = 'keep'
 ```
 
 The default value `keep` means that validation errors will be displayed until the form submits. The other option, `clear`, will remove the error as soon as the field value is modified.
+
+### customValidity
+
+This option uses the browser built-in "tooltip" to report validation errors, so neither `$errors` nor `$constraints` are required on the form. See the [error handling](/concepts/error-handling#customvalidity) page for details and an example.
 
 ### validate
 

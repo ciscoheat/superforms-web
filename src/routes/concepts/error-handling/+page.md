@@ -158,11 +158,11 @@ If you have a sticky navbar, set its CSS selector here and it won't hide any err
 
 ### customValidity
 
-This uses the [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#the_constraint_validation_api) to report validation errors. By enabling this, with `use:enhance` added to the form, instead of the standard messages, the Zod validation errors will now be displayed in the browser validation pop-up. Submit this form without entering any data to see it in action:
+This option uses the [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#the_constraint_validation_api) to report validation errors. By enabling this, with `use:enhance` added to the form, instead of the standard messages, the Zod validation errors will now be displayed in the browser validation "tooltip". Submit the following form without entering any data to see it in action:
 
 <CustomValidity {data} />
 
-Since validation is handled by Superforms, there is no need for spreading `$constraints` on the field either, making for a minimal html, not even requiring `$errors` on the page:
+Since validation is handled by Superforms, there is no need for spreading `$constraints` on the field. Neither is displaying `$errors`, making for a minimal html:
 
 ```ts
 const { form, enhance } = superForm(data.form, {
