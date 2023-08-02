@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Head from 'sveltekit-superforms/Head.svelte'
+  import Head from '$lib/Head.svelte'
 </script>
 
 # Migration guide
