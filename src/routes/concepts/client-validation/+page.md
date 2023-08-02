@@ -138,7 +138,7 @@ The default value `keep` means that validation errors will be displayed until th
 
 ### customValidity
 
-This option uses the browser built-in "tooltip" to report validation errors, so neither `$errors` nor `$constraints` are required on the form. See the [error handling](/concepts/error-handling#customvalidity) page for details and an example.
+This option uses the browser built-in "tooltip" to display validation errors, so neither `$errors` nor `$constraints` are required on the form. See the [error handling page](/concepts/error-handling#customvalidity) for details and an example.
 
 ### validate
 
