@@ -8,7 +8,7 @@
 
 <Head title="Submit behavior" />
 
-When the user submits a form, it's important for the user experience to show that things are processing. Superforms provides you with timers (see next section) and the following options for handling this:
+When the user submits a form, it's important for the user experience to show that things are processing. Superforms provides you with [timers](/concepts/timers) and the following options for this:
 
 ## Usage
 
@@ -27,9 +27,9 @@ If you don't want any jumping content, which could occur when error messages are
 
 ### multipleSubmits
 
-This one is more for the sake of the server than the user.
+This one handles the occurence of multiple form submissions, before a result has been returned.
 
-- When set to `prevent`, the form cannot be submitted again until a result is received, or the `timeout` state is reached (see the next section about timers).
+- When set to `prevent`, the form cannot be submitted again until a result is returned, or the `timeout` state is reached (see the section about [timers](/concepts/timers)).
 - `abort` is the next sensible approach, which will cancel the previous request before submitting again.
 - Finally, `allow` will pass through any number of frenetic clicks on the submit button!
 

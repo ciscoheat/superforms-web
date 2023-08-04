@@ -12,7 +12,7 @@
 
 <Head title="Status messages" />
 
-You may have noticed that a status message like "Form posted" is displayed when submitting the forms in the examples. The validation object contains a `message` property used for this:
+A status message like "Form posted" can be displayed after submitting a form. The validation object contains a `message` property used for this:
 
 ## Usage
 

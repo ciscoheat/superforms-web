@@ -187,6 +187,12 @@ export const actions = {
 
 ---
 
+### Can some other validation library than Zod be used?
+
+Most other popular validation libraries don't allow schema introspection on Zod's level, which makes it difficult to generate default values and constraints. The issue is discussed [here](https://github.com/ciscoheat/sveltekit-superforms/issues/120).
+
+---
+
 ### I want to reuse common options, how to do that easily?
 
 When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
