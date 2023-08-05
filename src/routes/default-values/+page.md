@@ -6,7 +6,7 @@
 
 <Head title="Default values" />
 
-When `superValidate` encounters a schema field that isn't optional, or when a `FormData` field is empty, a default value is returned to the form, to ensure that the type is correct:
+When `superValidate` encounters a schema field that isn't optional, or when a `FormData` field is falsy, a default value is returned to the form, to ensure that the type is correct:
 
 | type    | value       |
 | ------- | ----------- |
@@ -27,12 +27,12 @@ const schema = z.object({
   age: z
     .number()
     .positive()
-    .default('' as number),
+    .default('' as unknown as number),
   agree: z.literal(true).default(false as true)
 });
 ```
 
-This looks a bit strange, but will ensure that an age isn't set to 0 as default (which will hide placeholder text in the input field), but also that the agree checkbox is unchecked as default, and will only accept true (checked) as a value.
+This looks a bit strange, but will ensure that the age isn't set to 0 as default (which will hide placeholder text in the input field), and also ensure that the agree checkbox is unchecked as default while also only accepting `true` (checked) as a value.
 
 > The type system is bypassed with this, so the default value will not correspond to the type, but this will usually not be a problem since `form.valid` will be `false` if these values are posted, and that should be the main determinant of whether the data is trustworthy.
 
