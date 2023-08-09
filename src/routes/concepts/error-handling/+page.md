@@ -158,23 +158,24 @@ If you have a sticky navbar, set its CSS selector here and it won't hide any err
 
 ### customValidity
 
-This option uses the [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#the_constraint_validation_api) to report validation errors. By enabling this, with `use:enhance` added to the form, instead of the standard messages, the Zod validation errors will now be displayed in the browser validation "tooltip". Submit the following form without entering any data to see it in action:
+This option uses the [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#the_constraint_validation_api) to display validation errors. By enabling this, with `use:enhance` added to the form, instead of the standard messages, the Zod validation errors will now be displayed in the browser validation "tooltip". Submit the following form without entering any data to see it in action:
 
 <CustomValidity {data} />
 
-Since validation is handled by Superforms, there is no need for spreading `$constraints` on the field. Neither is displaying `$errors`, making for a minimal html:
+Since validation is handled by Superforms, there is no need for spreading `$constraints` on the field. They *can* be added as well, but will prevent the schema error message from being displayed. But the biggest win is that there is no need to display `$errors`, making for a minimal html:
 
 ```ts
 const { form, enhance } = superForm(data.form, {
   customValidity: true,
-  validators: schema // Not required, but gives real-time display of errors
+  // Not required, but will use client-side validation for real-time error display:
+  validators: schema
 });
 ```
 ```svelte
 <input type="text" name="name" bind:value={$form.name} />
 ```
 
-The `name` attribute is required. If you want to exclude a field from this behavior, add a `data-no-custom-validity` attribute to it.
+The `name` attribute is required on the input fields. If you want to exclude a field from displaying the tooltip, add a `data-no-custom-validity` attribute to it.
 
 > Just be aware that since `use:enhance` is needed, it's a "JS required" option. Also, some browsers require the `novalidate` attribute on the form itself, to prevent displaying the default constraint messages.
 
