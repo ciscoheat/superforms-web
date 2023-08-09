@@ -81,20 +81,20 @@ validators: AnyZodObject | {
 
 Setting the `validators` option to the same Zod schema as on the server is the most convenient and recommended way, but it increases the size of the client bundle a bit. 
 
-A lightweight alternative is to use a Superforms validation object. It's an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as a "validation failed" message, or `null | undefined` if the field is valid.
+A lightweight alternative is to use a Superforms validation object. It's an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as an error message, or `null | undefined` if the field is valid.
 
 Here's how to validate a string length, for example:
 
 ```ts
 const { form, errors, enhance } = superForm(data.form, {
   validators: {
-    name: (value) =>
-      value.length < 3 ? 'Name must be at least 3 characters' : null
+    name: (name) =>
+      name.length < 3 ? 'Name must be at least 3 characters' : null
   }
 });
 ```
 
-For nested data, just keep building on the `validators` structure. Note that arrays have a single validator for the whole array:
+For nested data, just keep building on the `validators` structure. Note that arrays have a single validator that will be applied to each value in the array:
 
 ```ts
 const schema = z.object({
@@ -122,7 +122,7 @@ The validation is triggered when **a value is changed**, not just when tabbing t
 - If no field error, validate on `blur`
 - If field error exists, validate on `input`
 
-But you can also use the `oninput` or `onblur` setting to always validate on one of these events instead, or `submit-only` to only validate on submit.
+But you can instead use the `oninput` or `onblur` setting to always validate on one of these respective events, or `submit-only` to validate only on submit.
 
 > If you're using a Zod schema in the [validators](/concepts/client-validation#validators) option, be aware that the whole schema will be validated, not just the validator for the modified field.<br><br>This is because errors can be added to any field in the schema during validation, so the whole schema must be validated to know the final result.
 
