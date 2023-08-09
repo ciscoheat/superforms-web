@@ -77,7 +77,9 @@ When `invalidateAll` is `true` (the default) and a successful validation result 
 
 When `true`, reset the form upon a successful validation result.
 
-Note however, that since we're using `bind:value` on the input fields, a HTML form reset (clearing all fields in the DOM) won't have any effect, so in Superforms, **resetting means going back to the initial state of the form data**, usually what was sent to the client in the load function. If this isn't what you want, you can use the [events](/concepts/events) together with the [reset](/api#superform-return-type) function instead.
+Note however, that since we're using `bind:value` on the input fields, a HTML form reset (clearing all fields in the DOM) won't have any effect. So in Superforms, **resetting means going back to the initial state of the form data**, effectively setting `$form` to what was initially sent to `superForm`. Usually, this is what is returned in the load function, [default values](/default-values) if only the schema was passed to `superValidate`.
+
+For a custom reset, you can instead modify the `data` field returned from `superValidate` on the server, or use the [events](/concepts/events) together with the [reset](/api#superform-return-type) function on the client.
 
 ## Making the form behave like the SvelteKit default
 
