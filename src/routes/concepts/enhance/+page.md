@@ -75,7 +75,9 @@ When `invalidateAll` is `true` (the default) and a successful validation result 
 
 ### resetForm
 
-Since we're binding the fields to `$form`, a HTML form reset (clearing all fields in the DOM) won't have any effect, so in Superforms, resetting means **going back to the initial state of the form data**, usually what you sent to the client in the load function. If this isn't what you want, you can use the [events](/concepts/events) and the [reset](/api#superform-return-type) function instead.
+When `true`, reset the form upon a successful validation result.
+
+Note however, that since we're using `bind:value` on the input fields, a HTML form reset (clearing all fields in the DOM) won't have any effect, so in Superforms, **resetting means going back to the initial state of the form data**, usually what was sent to the client in the load function. If this isn't what you want, you can use the [events](/concepts/events) together with the [reset](/api#superform-return-type) function instead.
 
 ## Making the form behave like the SvelteKit default
 
@@ -83,7 +85,7 @@ You can remove the differences described above by setting the following options.
 
 ```ts
 const { form, enhance } = superForm(data.form, {
-  // Reset the form by default
+  // Reset the form upon a successful result
   resetForm: true,
   // On ActionResult error, render the nearest +error.svelte page
   onError: 'apply',
