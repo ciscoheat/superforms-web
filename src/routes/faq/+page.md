@@ -187,6 +187,14 @@ export const actions = {
 
 ---
 
+### Why does the form get tainted without any changes, when I use a select element?
+
+If the schema field for the select menu doesn't have an empty string as default value, and you have an empty first option, like a "Please choose item" text, the field will be set to the empty string, tainting the form.
+
+It can be fixed by setting the default field value to an empty string, even if it's not its proper type. See [this section](http://localhost:5173/default-values#changing-a-default-value) for an example.
+
+---
+
 ### Can some other validation library than Zod be used?
 
 Most other popular validation libraries don't allow schema introspection on Zod's level, which makes it difficult to generate default values and constraints. The issue is discussed [here](https://github.com/ciscoheat/sveltekit-superforms/issues/120).
