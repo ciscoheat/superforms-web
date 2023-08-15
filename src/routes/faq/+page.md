@@ -191,7 +191,7 @@ export const actions = {
 
 If the schema field for the select menu doesn't have an empty string as default value, and you have an empty first option, like a "Please choose item" text, the field will be set to the empty string, tainting the form.
 
-It can be fixed by setting the default field value to an empty string, even if it's not its proper type. See [this section](https://superforms.rocks/default-values#changing-a-default-value) for an example.
+It can be fixed by setting the default field value to an empty string, even if it's not its proper type. See [this section](/default-values#changing-a-default-value) for an example.
 
 ---
 
