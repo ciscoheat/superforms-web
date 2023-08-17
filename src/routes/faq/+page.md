@@ -189,9 +189,9 @@ export const actions = {
 
 ### Why does the form get tainted without any changes, when I use a select element?
 
-If the schema field for the select menu doesn't have an empty string as default value, and you have an empty first option, like a "Please choose item" text, the field will be set to the empty string, tainting the form.
+If the schema field for the select menu doesn't have an empty string as default value, for example when it's optional, *and* you have an empty first option, like a "Please choose item" text, the field will be set to the empty string, tainting the form.
 
-It can be fixed by setting the default field value to an empty string, even if it's not its proper type. See [this section](/default-values#changing-a-default-value) for an example.
+It can be fixed by setting the option and the default schema value to an empty string, even if it's not its proper type. See [this section](/default-values#changing-a-default-value) for an example.
 
 ---
 
