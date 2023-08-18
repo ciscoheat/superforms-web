@@ -77,6 +77,7 @@ import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 | **display**        | boolean        | `true`        | Whether to show or hide SuperDebug. |
 | **status**         | boolean        | `true`        | Whether to show or hide the HTTP status code of the current page. |
 | **label**          | string         | `""`          | Add a label to SuperDebug, useful when using multiple instances on a page. |
+| **collapsible**    | boolean        | `false`       | Makes the component collapsible on a per-route basis. |
 | **stringTruncate** | number         | `120`         | Truncate long string field valuns of the data prop. Set to `0` to disable truncating. |
 | **raw**            | boolean        | `false`       | Skip promise and store detection when `true`. |
 | **functions**      | boolean        | `false`       | Enables the display of fields of the data prop that are functions. |
@@ -213,14 +214,14 @@ Note that styling the component produces the side-effect described in the [Svelt
 
 ### Page data
 
-Debugging Svelte's `$page` data, when the going gets tough.
+Debugging Svelte's `$page` data, when the going gets tough. Since it can contain a lot of data, using the `collapsible` prop is convenient.
 
 ```svelte
 <script lang="ts">
   import { page } from '$app/stores';
 </script>
 
-<SuperDebug label="$page data" data={$page} />
+<SuperDebug label="$page data" data={$page} collapsible />
 ```
 
-<SuperDebug label="$page data" data={$page} />
+<SuperDebug label="$page data" data={$page} collapsible />

@@ -255,18 +255,20 @@ The `actionResult` function helps you construct one in a `Response` object, so y
 ```ts
 import { actionResult } from 'sveltekit-superforms/server';
 
-actionResult('success', { form }, (status = 200));
-actionResult('failure', { form }, (status = 400));
-actionResult('redirect', '/', (status = 303));
-actionResult('error', 'Error message', (status = 500));
+actionResult('success', { form }, 200);
+actionResult('failure', { form }, 400);
+actionResult('redirect', '/', 303);
+actionResult('error', 'Error message', 500);
 ```
 
-Additionally, the `redirect` version can send a flash message as a third parameter, in case you're using [flash messages](/flash-messages):
+The default status codes for each result type are shown, so you don't need to include them if they're the same.
+
+Additionally, the `redirect` version can send a flash message as a third parameter, in case you're using [flash messages](/flash-messages). It can also set options for the flash cookie that's being set.
 
 ```ts
 actionResult('redirect', '/', {
-  message: App.PageData['flash'],
-  status?: 303
+  message: { type: 'success', text: 'Posted successfully!' },
+  cookieOptions: { sameSite: 'lax' }
 });
 ```
 

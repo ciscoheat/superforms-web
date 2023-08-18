@@ -284,6 +284,8 @@ We now have a fully working form, with convenient handling of data and validatio
 
 There are no hidden DOM manipulations or other behind-the-scenes secrets; it's just HTML attributes and Svelte stores.
 
+> Just a quick note about Zod schemas: Using `coerce` on schema fields is generally not needed, since Superforms has its own coercion of form data.
+
 ## Next steps
 
 This concludes the tutorial (full source code below), but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring.
