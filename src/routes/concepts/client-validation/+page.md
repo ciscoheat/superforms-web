@@ -117,10 +117,10 @@ const { form, errors, enhance } = superForm(data.form, {
 validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only',
 ```
 
-The validation is triggered when **a value is changed**, not just when tabbing through a field. The default validation method is based on the "reward early, validate late" pattern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
+The validation is triggered when **a value is changed**, not just when focusing on, or tabbing through a field. The default validation method is based on the "reward early, validate late" pattern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
 
-- If no field error, validate on `blur`
-- If field error exists, validate on `input`
+- If entering data in a field that has or previously had errors, validate on `input`
+- Otherwise, validate on `blur`.
 
 But you can instead use the `oninput` or `onblur` setting to always validate on one of these respective events, or `submit-only` to validate only on submit.
 
