@@ -50,9 +50,29 @@ Note that this will usually happen automatically with `bind:value`, so check out
 
 You can use a proxy for nested data, like `'user.profile.email'`, but you must ensure that all parent objects exist for the proxy to be able to access the "final" field. In this case, if `user` or `profile` is optional and `undefined`, it won't work. The easiest way to prevent this is to not make any parent objects optional or nullable in the schema.
 
-## Test it out
+## Date input issues
 
-Change the value of the date picker to see it reflect in the date field of the schema. We're also taking advantage of the `min` constraint to automatically limit the date selection to current and future dates only.
+The `date` input type is a bit special, it doesn't handle all dates even though they are valid. Since the proxies updates immediately, you cannot bind directly to it on a `date` input field, the date will be rejected as soon as you enter a valid, but not supported date, like `01/01/1`.
+
+The workaround is to use events that checks for a valid format, and using `value`, not `bind:value`:
+
+```svelte
+<input
+  type="date"
+  name="date"
+  aria-invalid={$errors.date ? 'true' : undefined}
+  value={$proxyDate}
+  on:blur={(e) => ($proxyDate = e.currentTarget.value)}
+  on:input={(e) => {
+    const value = e.currentTarget.value;
+    if (/^[1-9]\\d{3}-\\d\\d-\\d\\d$/.test(value)) $proxyDate = value;
+  }}
+  {...$constraints.date}
+  min={$constraints.date?.min?.toString().slice(0, 10)} />
+/>
+```
+
+We're also taking advantage of the `min` constraint to automatically limit the date selection to current and future dates only. Since the date constraints are expressed as an ISO date, we need to extract the format that the date input expects (yyyy-mm-dd). Here's the result:
 
 <Form {data} />
 
