@@ -131,7 +131,7 @@ Note that we're using the index of the loop, so the value can be bound directly 
 
 ## Arrays with primitive values
 
-Since you can post multiple HTML elements with the same name, you could, but **don't have to** use `dataType: 'json'` for arrays of primitive values like numbers and strings. Just add the input fields, all **with the same name** as the schema field, which can only be on the top level of the schema, of course. Superforms will handle the type coercion to array automatically (just remember the name attribute):
+Since you can post multiple HTML elements with the same name, you could, but don't have to use `dataType: 'json'` for arrays of primitive values like numbers and strings. Just add the input fields, **all with the same name as the schema field**, which can only be at the top level of the schema, of course. Superforms will handle the type coercion to array automatically (just remember the name attribute):
 
 ```ts
 export const schema = z.object({

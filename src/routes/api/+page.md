@@ -336,18 +336,24 @@ superForm<T, M = any>(
 
 ```ts
 FormOptions<T, M> = Partial<{
+  // Basics
   id: string;
   applyAction: boolean;
   invalidateAll: boolean;
   resetForm: boolean | (() => boolean);
+  taintedMessage: string | false | null;
+  dataType: 'form' | 'json';
+  multipleSubmits: 'prevent' | 'allow' | 'abort';
+  SPA: true | { failStatus?: number };
+
+  // Error handling
   scrollToError: 'auto' | 'smooth' | 'off' | boolean | ScrollIntoViewOptions;
   autoFocusOnError: boolean | 'detect';
   errorSelector: string;
   selectErrorText: boolean;
   stickyNavbar: string;
-  taintedMessage: string | false | null;
-  SPA: true | { failStatus?: number };
 
+  // Events
   onSubmit: (
     ...params: Parameters<SubmitFunction>
   ) => MaybePromise<unknown | void>;
@@ -374,14 +380,16 @@ FormOptions<T, M> = Partial<{
         };
         message: Writable<SuperValidated<T, M>['message']>;
       }) => MaybePromise<unknown | void>);
-  dataType: 'form' | 'json';
+
+  // Client-side validation
   validators: T | false | Validators<T>;
   validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only';
   defaultValidator: 'keep' | 'clear';
   clearOnSubmit: 'errors' | 'message' | 'errors-and-message' | 'none';
   delayMs: number;
   timeoutMs: number;
-  multipleSubmits: 'prevent' | 'allow' | 'abort';
+
+  // Flash message integration
   syncFlashMessage?: boolean;
   flashMessage: {
     module: import * as flashModule from 'sveltekit-flash-message/client';
@@ -396,12 +404,16 @@ FormOptions<T, M> = Partial<{
     cookiePath?: string;
     cookieName?: string;
   };
+
+  // Disable warnings
   warnings: {
     duplicateId?: boolean;
     noValidationAndConstraints?: boolean;
   };
 }>;
 ```
+
+See [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) for details about the `onSubmit` arguments, and [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) for `onResult`.
 
 ### superForm return type
 
@@ -412,24 +424,23 @@ SuperForm<T extends AnyZodObject, M = any> = {
     set: (value: S, options?: { taint?: boolean | 'untaint' | 'untaint-all' }) => void
     update: (updater: (S) => S, options?: { taint?: boolean | 'untaint' | 'untaint-all' }) => void
   };
-  formId: Writable<string | undefined>;
   errors: Writable<Nested<S, string[] | undefined>>;
   constraints: Writable<Nested<S, InputConstraints | undefined>>;
   message: Writable<M | undefined>;
   tainted: Writable<Nested<S, boolean | undefined> | undefined>;
-  meta: Readable<{ types: Record<keyof S, string> | undefined }>;
 
   submitting: Readable<boolean>;
   delayed: Readable<boolean>;
   timeout: Readable<boolean>;
   posted: Readable<boolean>;
 
+  formId: Writable<string | undefined>;
   fields: Record<keyof S, FormField<T>>;
   allErrors: Readable<{ path: string; messages: string[] }[]>;
 
   options: FormOptions<T, M>;
 
-  enhance: (el: HTMLFormElement, {
+  enhance: (el: HTMLFormElement, events?: {
     onSubmit, onResult, onError, onUpdate, onUpdated
   }) => ReturnType<typeof $app/forms/enhance>;
 
