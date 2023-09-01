@@ -27,7 +27,7 @@ A number of events, triggered on form submission, give you full control over the
 
 ```ts
 const { form, enhance } = superForm(data.form, {
-  onSubmit: ({ action, data, form, controller, cancel }) => void
+  onSubmit: ({ action, formData, formElement, controller, submitter, cancel }) => void
   onResult: ({ result, formEl, cancel }) => void
   onUpdate: ({ form, cancel }) => void
   onUpdated: ({ form }) => void
