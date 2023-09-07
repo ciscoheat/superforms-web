@@ -212,12 +212,15 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 **TextField.svelte**
 
 ```svelte
-<script lang="ts">
-  import type { z, AnyZodObject } from 'zod';
+<script lang="ts" context="module">
+  import type { AnyZodObject } from 'zod';
+  type T = AnyZodObject;
+</script>
+
+<script lang="ts" generics="T extends AnyZodObject">
+  import type { z } from 'zod';
   import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms';
   import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
-
-  type T = $$Generic<AnyZodObject>;
 
   export let form: SuperForm<ZodValidation<T>, unknown>;
   export let field: FormPathLeaves<z.infer<T>>;
