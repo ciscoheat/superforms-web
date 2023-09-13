@@ -138,7 +138,7 @@ Now that we have sent the validation data to the client, we will retrieve it usi
 
 > Don't forget the `name` attribute on the form fields! Unless you are using [nested data](/concepts/nested-data), they are required.
 
-`superForm` is used on the client to display the data that we just sent from the server in `data.form`.
+The `superForm` function is used on the client to display the data that we just sent from the server in `data.form`. Note that there should be one `superForm` instance per form - its methods should not be used in multiple forms!
 
 This is what the form should look like now:
 
@@ -146,7 +146,7 @@ This is what the form should look like now:
 
 ### Debugging
 
-We can now see that the form has been populated. However, let's add the Superform debugging component called [SuperDebug](/super-debug) to gain more insight:
+We can see that the form has been populated. However, let's add the Superform debugging component called [SuperDebug](/super-debug) to gain more insight:
 
 **src/routes/+page.svelte**
 
@@ -162,11 +162,11 @@ This should be displayed:
 
 <SuperDebug data={$form} />
 
-Edit the form fields and see how the data is automatically updated. The component also displays the current page status in the right corner.
+When editing the form fields, the data is automatically updated. The component also displays the current page status in the right corner.
 
 ### Posting data
 
-In form actions, we'll use the same `superValidate` function, but now it should be populated with `FormData`. This can be done in several ways:
+In form actions, we'll also use the `superValidate` function, but now it should be populated with `FormData`. This can be done in several ways:
 
 - Use `request` parameter (which contains `FormData`)
 - Use the `event` object (which contains the request)
@@ -196,7 +196,7 @@ export const actions = {
       return fail(400, { form });
     }
 
-    // TODO: Do something with the validated data
+    // TODO: Do something with the validated form.data
 
     // Yep, return { form } here too
     return { form };
@@ -237,9 +237,9 @@ There is nothing magical about this data structure; you can modify any of its va
 
 ### Displaying errors
 
-Now we know that validation has failed and there are some errors being sent to the client. So how do we display them?
+Now we know that validation has failed and there are some errors being sent to the client. So how do we display them? 
 
-We do that by adding properties to the destructuring assignment of `superForm`:
+That's done by adding properties to the destructuring assignment of `superForm`:
 
 **src/routes/+page.svelte**
 
@@ -282,7 +282,7 @@ As you see, by including `errors`, we can display errors where it's appropriate,
 
 We now have a fully working form, with convenient handling of data and validation both on the client and server!
 
-There are no hidden DOM manipulations or other behind-the-scenes secrets; it's just HTML attributes and Svelte stores.
+There are no hidden DOM manipulations or other behind-the-scenes secrets; it's just HTML attributes and Svelte stores. No JS is needed for the basics.
 
 > Just a quick note about Zod schemas: Using `coerce` on schema fields is generally not needed, since Superforms has its own coercion of form data.
 
