@@ -6,7 +6,7 @@
 
 # Forms and fields in components
 
-Just by looking at the rather simple [get started tutorial](/get-started), it's obvious that quite a bit of boilerplate code adds up when building a Superform:
+By looking at the rather simple [get started tutorial](/get-started), it's obvious that quite a bit of boilerplate code adds up for a Superform:
 
 ```svelte
 <label for="name">Name</label>
@@ -15,7 +15,8 @@ Just by looking at the rather simple [get started tutorial](/get-started), it's 
   name="name"
   aria-invalid={$errors.name ? 'true' : undefined}
   bind:value={$form.name}
-  {...$constraints.name} />
+  {...$constraints.name} 
+/>
 {#if $errors.name}
   <span class="invalid">{$errors.name}</span>
 {/if}
@@ -65,7 +66,7 @@ export const loginSchema = z.object({
 export type LoginSchema = typeof loginSchema;
 ```
 
-Now you can import and use this type in a separate component by using:
+Now you can import and use this type in a separate component:
 
 **src/routes/LoginForm.svelte**
 
@@ -85,7 +86,7 @@ Now you can import and use this type in a separate component by using:
 </form>
 ```
 
-Use it by passing the data from `+page.svelte` to the component, making it much less cluttered:
+Use it by passing the form data from `+page.svelte` to the component, making it much less cluttered:
 
 **+page.svelte**
 
@@ -123,15 +124,10 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
     bind:value
     aria-invalid={errors ? 'true' : undefined}
     {...constraints}
-    {...$$restProps} />
+    {...$$restProps} 
+  />
 </label>
 {#if errors}<span class="invalid">{errors}</span>{/if}
-
-<style lang="scss">
-  .invalid {
-    color: indianred;
-  }
-</style>
 ```
 
 **+page.svelte**
@@ -143,7 +139,8 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
     label="name"
     bind:value={$form.name}
     errors={$errors.name}
-    constraints={$constraints.name} />
+    constraints={$constraints.name} 
+  />
 
   <h4>Tags</h4>
 
@@ -153,7 +150,8 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
       label="Name"
       bind:value={$form.tags[i].name}
       errors={$errors.tags?.[i]?.name}
-      constraints={$constraints.tags?.name} />
+      constraints={$constraints.tags?.name} 
+    />
   {/each}
 </form>
 ```
@@ -162,7 +160,7 @@ It's a little bit better and will certainly help when the components require som
 
 ### Using a fieldProxy
 
-You may have used [proxy objects](/concepts/proxy-objects) for converting an input field string like `"2023-04-12"` into a `Date`, but this is just a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:
+You may have used [proxy objects](/concepts/proxy-objects) for converting an input field string like `"2023-04-12"` into a `Date`, but that is just a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:
 
 ```svelte
 <script lang="ts">
@@ -254,9 +252,9 @@ We also need the fields for the actual schema data, not the schema object itself
 
 ## A minor issue: Checkboxes
 
-One thing that needs a workaround are checkboxes, since they don't bind with `bind:value` but with `bind:checked`, which requires a `boolean`.
+A workaround is required for checkboxes, since they don't bind with `bind:value`, rather with `bind:checked`, which requires a `boolean`.
 
-Because our component is generic, `value` returned from `formFieldProxy` can't be `boolean` specifically, so we need to make a specific checkbox component to use it, or cast it with a dynamic declaration.
+Because our component is generic, `value` returned from `formFieldProxy` can't be `boolean` specifically, so we need to make a specific checkbox component to use it, or cast it with a dynamic declaration:
 
 ```svelte
 <script lang="ts">
@@ -277,11 +275,11 @@ Because our component is generic, `value` returned from `formFieldProxy` can't b
   {...$$restProps} />
 ```
 
-Checkboxes, especially grouped ones, can be difficult to handle. Read the Svelte tutorial about [bind:group](https://svelte.dev/tutorial/group-inputs), and see the [Ice cream example](https://stackblitz.com/edit/sveltekit-superforms-group-inputs?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) on Stackblitz if you're having trouble with it.
+Checkboxes, especially grouped ones, can be tricky to handle. Read the Svelte tutorial about [bind:group](https://svelte.dev/tutorial/group-inputs), and see the [Ice cream example](https://stackblitz.com/edit/sveltekit-superforms-group-inputs?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) on Stackblitz if you're having trouble with it.
 
 ## Using the componentized field in awesome ways
 
-As mentioned, using this field component is now as simple as:
+As said, using this component is now as simple as:
 
 ```svelte
 <TextField {form} field="name" />
