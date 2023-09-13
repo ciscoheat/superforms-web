@@ -1,5 +1,6 @@
 <script lang="ts">
   import Head from '$lib/Head.svelte'
+  import Generics from './Generics.svelte'
 </script>
 
 <Head title="Forms and fields in components" />
@@ -207,7 +208,43 @@ But we didn't want to pass all those proxies, so let's imagine a component that 
 
 How nice would this be? This can actually be pulled off in a typesafe way with a bit of Svelte magic:
 
-**TextField.svelte**
+<Generics>
+<span slot="svelte4">
+
+```svelte
+<script lang="ts" context="module">
+  import type { AnyZodObject } from 'zod';
+  type T = AnyZodObject;
+</script>
+
+<script lang="ts" generics="T extends AnyZodObject">
+  import type { z } from 'zod';
+  import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms';
+  import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
+
+  export let form: SuperForm<ZodValidation<T>, unknown>;
+  export let field: FormPathLeaves<z.infer<T>>;
+
+  const { value, errors, constraints } = formFieldProxy(form, field);
+</script>
+
+<label>
+  {field}<br />
+  <input
+    name={field}
+    type="text"
+    aria-invalid={$errors ? 'true' : undefined}
+    bind:value={$value}
+    {...$constraints}
+    {...$$restProps} />
+</label>
+{#if $errors}<span class="invalid">{$errors}</span>{/if}
+```
+
+The Svelte 4 syntax requires `AnyZodObject` to be defined before its used in the `generics` attribute, so we have to import it in a module context. Now when `T` is defined as `AnyZodObject` (the schema object type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used.
+
+</span>
+<span slot="svelte3">
 
 ```svelte
 <script lang="ts">
@@ -234,21 +271,20 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
     {...$$restProps} />
 </label>
 {#if $errors}<span class="invalid">{$errors}</span>{/if}
-
-<style lang="scss">
-  .invalid {
-    color: orangered;
-  }
-</style>
 ```
 
-Some explanations are definitely at hand! First, `type T = $$Generic<AnyZodObject>` is a way of defining generic arguments in components. Having defined `T` as `AnyZodObject` (a schema type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used. Unfortunately, this takes a bit of knowledge of the types, but that's what examples are for, right?
+`type T = $$Generic<AnyZodObject>` is the Svelte 3 way of defining generic arguments in components. Having defined `T` as `AnyZodObject` (the schema object type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used.
+
+</span>
+</Generics>
+
+### Type explanations
 
 The `ZodValidation<T>` type is required because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type, so it's not a `AnyZodObject` anymore. The `ZodValidation` type will unwrap the actual object, which may be several levels deep.
 
-We also need the fields for the actual schema data, not the schema object itself. `z.infer<T>` is used for that. And it's wrapped in `FormPathLeaves`, listing the valid string paths of an object, so we can use [nested data](/concepts/nested-data).
+We also need the actual schema data, not the schema object itself. `z.infer<T>` is used for that. And it's wrapped in `FormPathLeaves`, that produces the valid paths of an object as strings, so we can use [nested data](/concepts/nested-data) in a type-safe manner.
 
-> The `FormPathLeaves` type prevents using a field that isn't at the end of the schema (the "leaves" of the schema tree). This means that arrays and objects cannot be used in `formFieldProxy`.
+> The `FormPathLeaves` type prevents using a field that isn't at the end of the schema (the "leaves" of the schema tree). This means that arrays and objects cannot be used in `formFieldProxy`. Array-level errors are handled [like this](/concepts/error-handling#form-level-and-array-errors).
 
 ## A minor issue: Checkboxes
 
