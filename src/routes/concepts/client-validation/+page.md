@@ -12,15 +12,28 @@
 
 <Head title="Client-side validation" />
 
+There are three ways of handling client-side validation with Superforms: 
+
+* The built-in browser validation, that doesn't require JavaScript
+* Using a Zod schema, usually the same one as on the server
+* Using a Superforms validators object.
+
+The last two are mutually exclusive, but the browser validation can be combined with any of them.
+
 ## Built-in browser validation
 
-There is already a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which is virtually effortless to use with Superforms. For more advanced cases, read further down about how you can use a Zod schema or a Superforms validation object, for a complete realtime client-side validation.
+There is a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which is virtually effortless to use with Superforms:
 
 ### constraints
 
-To use the built-in browser constraints, just spread the `$constraints` store for a field on its input field:
+To use the built-in browser constraints, just spread the `$constraints` store for a schema field on its input field:
 
 ```svelte
+<script lang="ts">
+  export let data;
+  const { form, constraints } = superForm(data.form);
+</script>
+
 <input
   name="email"
   type="email"
@@ -42,7 +55,7 @@ The constraints is an object with validation properties mapped from the schema:
 }
 ```
 
-For some input types, you need to modify the constraints to be in the correct format. For example with `date` fields, if you want to limit the date to today or after, it needs to be in `YYYY-MM-DD` format:
+For some input types, you'll need to modify the constraints to be in the correct format. For example with `date` fields, if you want to limit the date to today or after, it needs to be in `YYYY-MM-DD` format. By adding attributes after the constraints spread, they will take precedence:
 
 ```svelte
 <input
@@ -79,9 +92,11 @@ validators: AnyZodObject | {
 }
 ```
 
-Setting the `validators` option to the same Zod schema as on the server is the most convenient and recommended way, but it increases the size of the client bundle a bit. 
+Setting the `validators` option to the same Zod schema as on the server is the most convenient and recommended way. Just put the schema in a shared directory, `$lib/schemas` for example, and import it on the client as well as on the server. 
 
-A lightweight alternative is to use a Superforms validation object. It's an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as an error message, or `null | undefined` if the field is valid.
+This will increase the size of the client bundle a bit however, since Zod now has to be imported on the client. If you're highly concerned about a few extra kilobytes, a lightweight alternative is to use a Superforms validation object. 
+
+It's an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as an error message, or `null | undefined` if the field is valid. 
 
 Here's how to validate a string length, for example:
 
