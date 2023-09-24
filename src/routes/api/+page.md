@@ -111,9 +111,10 @@ superValidateSync<T, M = any>(
 
 ```ts
 SuperValidateOptions = {
-  errors?: boolean;   // Add or remove errors from output (valid status is always preserved)
-  id?: string;        // Form id, for multiple forms support
-  warnings?: {        // Disable warnings
+  errors?: boolean;          // Add or remove errors from output (valid status is always preserved)
+  id?: string;               // Form id, for multiple forms support
+  preprocessed?: (keyof S)[] // Bypass superValidate data coercion for posted fields in this array
+  warnings?: {               // Disable warnings
     multipleRegexps?: boolean;
     multipleSteps?: boolean;
   };
