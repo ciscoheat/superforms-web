@@ -22,7 +22,7 @@ The last two are mutually exclusive, but the browser validation can be combined 
 
 ## Built-in browser validation
 
-There is a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which is virtually effortless to use with Superforms:
+There is a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which doesn't require JavaScript and is virtually effortless to use with Superforms:
 
 ### constraints
 
@@ -153,7 +153,7 @@ The default value `keep` means that validation errors will be displayed until th
 
 ### customValidity
 
-This option uses the browser built-in "tooltip" to display validation errors, so neither `$errors` nor `$constraints` are required on the form. See the [error handling page](/concepts/error-handling#customvalidity) for details and an example.
+This option uses the browser built-in tooltip to display validation errors, so neither `$errors` nor `$constraints` are required on the form. See the [error handling page](/concepts/error-handling#customvalidity) for details and an example.
 
 ### validate
 

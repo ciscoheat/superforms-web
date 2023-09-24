@@ -77,11 +77,11 @@ export const load = (async () => {
 
 The Superform server API is called `superValidate`. You can call it in two ways in the load function:
 
-**1. Empty form**
+### Empty form
 
 If you want the form to be initially empty, just pass the schema as in the example above, and it will be filled with default values based on the schema. For example, a `z.string()` field results in an empty string, unless you have set a default.
 
-**2. Populate from database**
+### Populate form from database
 
 If you want to populate the form, you can call a database and send the data to the form as the first parameter, schema second, like this:
 
@@ -166,7 +166,7 @@ When editing the form fields, the data is automatically updated. The component a
 
 ### Posting data
 
-In form actions, we'll also use the `superValidate` function, but now it should be populated with `FormData`. This can be done in several ways:
+In form actions, we'll also use the `superValidate` function, but now it should handle `FormData`. This can be done in several ways:
 
 - Use `request` parameter (which contains `FormData`)
 - Use the `event` object (which contains the request)

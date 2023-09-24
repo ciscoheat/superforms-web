@@ -32,4 +32,4 @@ Any $10 or more monthly donation will be listed on the [Sponsors](/sponsors) pag
 
 ## Voting on new features
 
-You can give a thumbs up on the [Github issues](https://github.com/ciscoheat/sveltekit-superforms/issues) marked with "enhancement", and I will prioritize the most popular ones for the next feature release.
+You can give a thumbs up on the [Github issues](https://github.com/ciscoheat/sveltekit-superforms/issues) marked with "enhancement", and I will prioritize the ones with highest votes for the next feature release.

@@ -16,10 +16,10 @@ export const GET = (async ({ url, fetch }) => {
   const result = await search(engine, {
     term,
     properties: ['title', 'content', 'code'],
-    tolerance: 4,
+    tolerance: 3,
     limit: 8,
     boost: {
-      title: 4,
+      title: 6,
       content: 3
     }
   });

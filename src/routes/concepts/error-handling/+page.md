@@ -158,7 +158,7 @@ If you have a sticky navbar, set its CSS selector here and it won't hide any err
 
 ### customValidity
 
-This option uses the [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#the_constraint_validation_api) to display validation errors. By enabling this, with `use:enhance` added to the form, instead of the standard messages, the Zod validation errors will now be displayed in the browser validation "tooltip". Submit the following form without entering any data to see it in action:
+This option uses the [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#the_constraint_validation_api) to display validation errors. By enabling this, with `use:enhance` added to the form, instead of the standard messages, the Zod validation errors will now be displayed in the browser validation tooltip. Submit the following form without entering any data to see it in action:
 
 <CustomValidity {data} />
 
@@ -177,7 +177,7 @@ const { form, enhance } = superForm(data.form, {
 
 The `name` attribute is required on the input fields. If you want to exclude a field from displaying the tooltip, add a `data-no-custom-validity` attribute to it.
 
-> Just be aware that since `use:enhance` is needed, it's a "JS required" option. Also, some browsers require the `novalidate` attribute on the form itself, to prevent displaying the default constraint messages.
+> Just be aware that since `use:enhance` is needed, `customValidity` requires JavaScript to be enabled, unlike browser [constraints](/concepts/client-validation#built-in-browser-validation). Also, some browsers require the `novalidate` attribute on the form itself, to prevent displaying the default constraint messages.
 
 ## Form-level and array errors
 
