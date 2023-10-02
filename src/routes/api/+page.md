@@ -574,7 +574,24 @@ Creates a string store for a **string** schema field. It may look redundant, but
 
 ### fieldProxy, formFieldProxy
 
-See the dedicated article for documentation about [fieldProxy](/components#using-a-fieldproxy) and [formFieldProxy](/components#using-a-formfieldproxy).
+```svelte
+<script lang="ts">
+  import { superForm, fieldProxy, formFieldProxy } from 'sveltekit-superforms/client';
+
+  export let data;
+
+  const form = superForm(data.form);
+  const { form: formData } = form;
+
+  // Proxy any field in an object
+  const nameProxy = fieldProxy(formData, 'name');
+
+  // Proxy a form field, with stores similar to superForm but for one field
+  const { path, value, errors, constraints, tainted } = formFieldProxy(form, 'name');
+</script>
+```
+
+For more details, see the dedicated article about [fieldProxy](/components#using-a-fieldproxy) and [formFieldProxy](/components#using-a-formfieldproxy).
 
 ## Proxy example
 

@@ -181,11 +181,11 @@ You may have used [proxy objects](/concepts/proxy-objects) for converting an inp
 
 Any updates to `$name` will reflect in `$form.name`. Note that this will also [taint](/concepts/tainted) that field, so if this is not intended, you may want to use the `$tainted` store and undefine its `name` field.
 
-A `fieldProxy` isn't enough here, however. We'd still have to make three proxies for `form`, `errors`, and `constraints`, and then we're back to the same problem again.
+A `fieldProxy` isn't enough here, however. We'd still have to make proxies for `form`, `errors`, and `constraints`, and then we're back to the same problem again.
 
 ### Using a formFieldProxy
 
-The solution is to use a `formFieldProxy`, which is a helper function for producing the above three proxies from a form. To do this, we cannot immediately deconstruct what we need from `superForm` since `formFieldProxy` takes the form itself as an argument:
+The solution is to use a `formFieldProxy`, which is a helper function for producing the above proxies from a form. To do this, we cannot immediately deconstruct what we need from `superForm` since `formFieldProxy` takes the form itself as an argument:
 
 ```svelte
 <script lang="ts">
