@@ -14,7 +14,7 @@ It gives you a starting point that you can use for experimenting, bug reporting,
 
 ## Other examples
 
-There is a whole collection of examples on Stackblitz, how to use grouped radio buttons, checkboxes, etc. Check it out here:
+There is a whole collection of examples on Stackblitz, how to use select/drop menus, grouped radio buttons, checkboxes, etc. Check it out here:
 
 https://stackblitz.com/@ciscoheat/collections/superforms
 
