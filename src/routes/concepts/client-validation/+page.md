@@ -14,11 +14,11 @@
 
 There are three ways of handling client-side validation with Superforms: 
 
-* The built-in browser validation, that doesn't require JavaScript
+* The built-in browser validation, which doesn't require JavaScript
 * Using a Zod schema, usually the same one as on the server
 * Using a Superforms validators object.
 
-The last two are mutually exclusive, but the browser validation can be combined with any of them.
+The last two are mutually exclusive, but the browser validation can be combined with any of them. Here's how it works:
 
 ## Built-in browser validation
 
@@ -55,14 +55,14 @@ The constraints is an object with validation properties mapped from the schema:
 }
 ```
 
-For some input types, you'll need to modify the constraints to be in the correct format. For example with `date` fields, if you want to limit the date to today or after, it needs to be in `YYYY-MM-DD` format. By adding attributes after the constraints spread, they will take precedence:
+For some input types, a correct format is required. For example with `date` fields, both the underlying data and the constraint needs to be in `yyyy-mm-dd` format, which can be handled by [using a proxy](/concepts/proxy-objects#date-input-issues) and adding attributes after the constraints spread, in which case they will take precedence:
 
 ```svelte
 <input
   name="date"
   type="date"
   aria-invalid={$errors.date ? 'true' : undefined}
-  bind:value={$form.date}
+  bind:value={$proxyDate}
   {...$constraints.date}
   min={$constraints.date?.min?.toString().slice(0, 10)} />
 ```
