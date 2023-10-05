@@ -52,27 +52,25 @@ You can use a proxy for nested data, like `'user.profile.email'`, but you must e
 
 ## Date input issues
 
-The `date` input type is a bit special, it doesn't handle all dates even though they are valid. Since the proxies updates immediately, you cannot bind directly to it on a `date` input field, the date will be rejected as soon as you enter a valid, but not supported date, like `01/01/1`.
+The `date` input type is a bit special, its underlying data is a string in `yyyy-mm-dd` format, and the `dateProxy` returns an ISO date string as default, so you need to use the `format` option to return the date part only:
 
-The workaround is to use events that checks for a valid format, and using `value`, not `bind:value`:
+```ts
+const proxyDate = dateProxy(form, 'date', { format: 'date' });
+```
 
 ```svelte
 <input
-  type="date"
   name="date"
+  type="date"
+  bind:value={$proxyDate}
   aria-invalid={$errors.date ? 'true' : undefined}
-  value={$proxyDate}
-  on:blur={(e) => ($proxyDate = e.currentTarget.value)}
-  on:input={(e) => {
-    const value = e.currentTarget.value;
-    if (/^[1-9]\\d{3}-\\d\\d-\\d\\d$/.test(value)) $proxyDate = value;
-  }}
   {...$constraints.date}
-  min={$constraints.date?.min?.toString().slice(0, 10)} />
+  min={$constraints.date?.min?.toString().slice(0, 10)}
+  max={$constraints.date?.max?.toString().slice(0, 10)} 
 />
 ```
 
-We're also taking advantage of the `min` constraint to automatically limit the date selection to current and future dates only. Since the date constraints are expressed as an ISO date, we need to extract the format that the date input expects (yyyy-mm-dd). Here's the result:
+We're also taking advantage of the `min` and `max` constraints to limit the date picker selection. The following example limits the date from today and forward, and also uses the `empty` option of the proxy, to set an invalid date to `undefined`:
 
 <Form {data} />
 

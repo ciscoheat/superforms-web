@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { superForm, dateProxy } from 'sveltekit-superforms/client';
+  import { dateProxy, superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
 
@@ -12,8 +12,10 @@
   const { form, errors, enhance, message, constraints } = superForm(data.form, {
     taintedMessage: null
   });
-
-  const proxyDate = dateProxy(form, 'date', { format: 'date-local' });
+  const proxyDate = dateProxy(form, 'date', {
+    format: 'date',
+    empty: 'undefined'
+  });
 </script>
 
 <Debug open={true} data={$form} />
@@ -33,16 +35,10 @@
       type="date"
       name="date"
       aria-invalid={$errors.date ? 'true' : undefined}
-      value={$proxyDate}
-      on:blur={(e) => ($proxyDate = e.currentTarget.value)}
-      on:input={(e) => {
-        const value = e.currentTarget.value;
-        if (/^[1-9]\d{3}-\d\d-\d\d$/.test(value)) {
-          $proxyDate = value;
-        }
-      }}
+      bind:value={$proxyDate}
       {...$constraints.date}
-      min={$constraints.date?.min?.toString().slice(0, 10)} />
+      min={$constraints.date?.min?.toString().slice(0, 10)}
+      max={$constraints.date?.max?.toString().slice(0, 10)} />
 
     {#if $errors.date}
       <span class="text-red-500" data-invalid>{$errors.date}</span>
