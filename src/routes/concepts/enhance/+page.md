@@ -25,7 +25,7 @@ Now all form submissions will happen on the client, and we unlock lots of client
 
 The `use:enhance` action takes no arguments; instead, events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
-> Without `use:enhance`, the form will be static. The only things that will work are [constraints](/concepts/client-validation#constraints) and [resetForm](/concepts/enhance#resetform). Also note that SvelteKits own `use:enhance` cannot be used; you must use the one returned from `superForm`.
+> Without `use:enhance`, the form will be static. The only things that will work are [constraints](/concepts/client-validation#constraints) and [resetForm](/concepts/enhance#resetform). Also note that SvelteKit's own `use:enhance` cannot be used; you must use the one returned from `superForm`.
 
 ## Differences from SvelteKit's use:enhance
 
@@ -67,7 +67,7 @@ Quite rarely! If you have a single form on the page and nothing else is causing 
 
 When `applyAction` is `true`, the form will have the default SvelteKit behavior of both updating and reacting on `$page.form` and `$page.status`, and also redirecting automatically.
 
-Turning this behavior off can be useful when you want to isolate the form from other sources updating the page, for example, Supabase events, a known source of confusing form behavior. Read more about `applyAction` [in the SvelteKit docs](https://kit.svelte.dev/docs/form-actions#progressive-enhancement-applyaction).
+Turning this behavior off can be useful when you want to isolate the form from other sources updating the page, for example Supabase events, a known source of confusing form behavior. Read more about `applyAction` [in the SvelteKit docs](https://kit.svelte.dev/docs/form-actions#progressive-enhancement-applyaction).
 
 ### invalidateAll
 
@@ -77,7 +77,7 @@ When `invalidateAll` is `true` (the default) and a successful validation result 
 
 When `true`, reset the form upon a successful validation result.
 
-Note however, that since we're using `bind:value` on the input fields, a HTML form reset (clearing all fields in the DOM) won't have any effect. So in Superforms, **resetting means going back to the initial state of the form data**, effectively setting `$form` to what was initially sent to `superForm`. Usually, this is what is returned in the load function, [default values](/default-values) if only the schema was passed to `superValidate`.
+Note however, that since we're using `bind:value` on the input fields, a HTML form reset (clearing all fields in the DOM) won't have any effect. So in Superforms, **resetting means going back to the initial state of the form data**, basically setting `$form` to what was initially sent to `superForm`.
 
 For a custom reset, you can instead modify the `data` field returned from `superValidate` on the server, or use the [events](/concepts/events) together with the [reset](/api#superform-return-type) function on the client.
 
