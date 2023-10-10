@@ -70,7 +70,7 @@ export const load = (async () => {
   // Server API:
   const form = await superValidate(schema);
 
-  // Always return { form } in load and form actions.
+  // Unless you throw, always return { form } in load and form actions.
   return { form };
 });
 ```
@@ -95,7 +95,7 @@ export const load = async ({ params }) => {
 
   const form = await superValidate(user, schema);
 
-  // Always return { form } in load and form actions.
+  // Unless you throw, always return { form } in load and form actions.
   return { form };
 };
 ```
@@ -106,7 +106,7 @@ As long as the data partially matches the schema, you can pass it directly to `s
 
 ### Important note about return values
 
-At the end of the load function, we return `{ form }`. Unless you redirect or throw an error, you should **always** return the validation object to the client in this manner, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned in all code paths, both in load functions and form actions, encapsulated in an object.
+At the end of the load function, we return `{ form }`. **Unless you throw a redirect or an error**, you should **always** return the validation object to the client in this manner, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned like this in all code paths that returns, both in load functions and form actions.
 
 ### Displaying the form
 
@@ -192,7 +192,7 @@ export const actions = {
 
     // Convenient validation check:
     if (!form.valid) {
-      // Again, always return { form } and things will just work.
+      // Again, return { form } and things will just work.
       return fail(400, { form });
     }
 
@@ -316,7 +316,7 @@ export const load = async () => {
   // Server API:
   const form = await superValidate(schema);
 
-  // Always return { form } in load and form actions.
+  // Unless you throw, always return { form } in load and form actions.
   return { form };
 };
 
@@ -329,7 +329,7 @@ export const actions = {
       return fail(400, { form });
     }
 
-    // TODO: Do something with the validated data
+    // TODO: Do something with the validated form.data
 
     return { form };
   }
