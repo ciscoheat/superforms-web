@@ -288,7 +288,7 @@ There are no hidden DOM manipulations or other behind-the-scenes secrets; it's j
 
 ## Next steps
 
-This concludes the tutorial (full source code below), but you'd probably want to enable client-side functionality, to take full advantage of the features and enhancements that Superforms bring.
+This concludes the tutorial (full source code below), but you'd probably want to enable client-side functionality, which is required to use for example client-side validation and events, and of course for not reloading the page when the form is posted.
 
 To do that, start by reading [use:enhance](/concepts/enhance) under the Concepts section in the navigation. It lists some important differences between Superforms and the SvelteKit default form behavior.
 
