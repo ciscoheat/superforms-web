@@ -152,17 +152,23 @@ Yes, there is a helper function for constructing an `ActionResult` that can be r
 
 ---
 
-### I'm getting JSON.parse errors as response when submitting a form, why?
+### How to submit the form programmatically?
 
-This is related to the previous question. You must always return an `ActionResult` as a response to a form submission, either through a form action, where it's done automatically, or by constructing one with the [actionResult](/api#actionresulttype-data-options--status) helper. 
-
-If for some reason a html page or plain text is returned, for example when a proxy server fails to handle the request and returns its own error page, the parsing of the result will fail with the slightly cryptic JSON error message.
+Use the [requestSubmit](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit) method on the form element.
 
 ---
 
 ### Can a form be factored out into a separate component?
 
 Yes - this question now has its own [article page here](/components).
+
+---
+
+### I'm getting JSON.parse errors as response when submitting a form, why?
+
+This is related to the previous question. You must always return an `ActionResult` as a response to a form submission, either through a form action, where it's done automatically, or by constructing one with the [actionResult](/api#actionresulttype-data-options--status) helper. 
+
+If for some reason a html page or plain text is returned, for example when a proxy server fails to handle the request and returns its own error page, the parsing of the result will fail with the slightly cryptic JSON error message.
 
 ---
 
