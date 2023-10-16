@@ -14,9 +14,9 @@
 
 There are three ways of handling client-side validation with Superforms: 
 
-* The built-in browser validation, which doesn't require JavaScript
-* Using a Zod schema, usually the same one as on the server
-* Using a Superforms validators object.
+* The built-in browser validation, which doesn't require JavaScript to be enabled in the browser.
+* Using a Zod schema, usually the same one as on the server. Requires JavaScript and [use:enhance](/concepts/enhance).
+* Using a Superforms validators object. Requires JavaScript and [use:enhance](/concepts/enhance).
 
 The last two are mutually exclusive, but the browser validation can be combined with any of them. Here's how it works:
 
@@ -71,7 +71,9 @@ Check the validation attributes and their valid values at [MDN](https://develope
 
 ## Usage
 
-The built-in browser validation can be a bit constrained (pun intended); for example, you can't easily control the position and appearance of the error messages. Instead, you can set some options for custom real-time validation.
+The built-in browser validation can be a bit constrained (pun intended); for example, you can't easily control the position and appearance of the error messages. Instead, you can customize the validation with a number of options, so [$errors](/concepts/error-handling) will be displayed in real-time.
+
+> As with most client-side functionality, [use:enhance](/concepts/enhance) is required for real-time validation.
 
 ```ts
 const { form, enhance, constraints, validate } = superForm(data.form, {
