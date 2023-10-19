@@ -34,7 +34,7 @@ const schema = z.object({
 
 This looks a bit strange, but will ensure that the age isn't set to 0 as default (which will hide placeholder text in the input field), and also ensure that the agree checkbox is unchecked as default while also only accepting `true` (checked) as a value.
 
-> The type system is bypassed with this, so the default value will not correspond to the type, but this will usually not be a problem since `form.valid` will be `false` if these values are posted, and that should be the main determinant of whether the data is trustworthy.
+> Since the default value will not correspond to the type, this will not work when using Zod's [refine](https://zod.dev/?id=refine) on the whole schema. Validation itself is no problem though, `form.valid` will be `false` if these values are posted, which should be the main determinant of whether the data is trustworthy.
 
 ## optional vs. nullable
 
