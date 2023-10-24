@@ -6,43 +6,73 @@
   import Timers from '$lib/Timers.svelte';
   import spinner from '$lib/assets/spinner.svg?raw';
   import dots from '$lib/assets/three-dots-loading.svg?raw';
-  import { get } from 'svelte/store';
+  import { tick } from 'svelte';
 
   export let data: PageData;
 
   let prevented = 0;
 
-  const { form, enhance, message, submitting, delayed, timeout } = superForm(
-    data.form,
-    {
+  const { form, enhance, message, submitting, delayed, timeout, options } =
+    superForm(data.form, {
       taintedMessage: null,
       onSubmit() {
         prevented = 0;
       },
       onError({ message, result }) {
         message.set(result.error.message);
-      }
-    }
-  );
+      },
+      timeoutMs: 2000
+    });
 </script>
 
-<Timers {submitting} {delayed} {timeout} />
+<Timers
+  bind:delayMs={options.delayMs}
+  bind:timeoutMs={options.timeoutMs}
+  {submitting}
+  {delayed}
+  {timeout} />
 
 <form
   method="POST"
   action={$page.url.pathname}
-  class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4 mb-3"
+  class="mb-3 space-y-4 rounded-xl border-2 border-dashed border-primary-900 bg-slate-900 p-5"
   use:enhance>
   <label for="delay" class="label">
-    <RangeSlider name="delay" bind:value={$form.delay} max={15000} step={100}
-      >Response delay: {$form.delay} ms</RangeSlider>
+    <RangeSlider name="delay" bind:value={$form.delay} max={9900} step={100}
+      >Server response delay: {$form.delay} ms</RangeSlider>
+  </label>
+
+  <label for="delayed" class="label">
+    <RangeSlider
+      name="delay"
+      bind:value={options.delayMs}
+      max={9900}
+      step={100}
+      on:change={async () => {
+        await tick();
+        if (
+          options.delayMs &&
+          options.timeoutMs &&
+          options.delayMs > options.timeoutMs
+        ) {
+          options.delayMs = options.timeoutMs;
+        }
+      }}>delayMs option: {options.delayMs} ms</RangeSlider>
+  </label>
+
+  <label for="timeout" class="label">
+    <RangeSlider
+      name="timeout"
+      bind:value={options.timeoutMs}
+      max={9900}
+      step={100}>timeoutMs option: {options.timeoutMs} ms</RangeSlider>
   </label>
 
   <div class="flex items-center gap-x-3">
     <button
       type="submit"
       on:click={() => ++prevented}
-      class="btn variant-filled">Submit</button>
+      class="variant-filled btn">Submit</button>
     <div class="spinner">
       {#if $message}<div
           class="rounded p-2 {$page.status == 200

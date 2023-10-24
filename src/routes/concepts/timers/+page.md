@@ -54,12 +54,12 @@ The reason for using `delayed` instead of `submitting` is based on the article [
 
 ## Visualizing the timers
 
-Submit the following form and see how different response times affect the timers. Loading spinners are set to display when `delayed` and `timeout` are true. The request itself is set to timeout with an error after 10 seconds.
+Submit the following form and play around with the different settings. Different loading spinners are set to display when `delayed` and `timeout` are true respectively. 
 
-Click multiple times to see the effect of `multipleSubmits = 'prevent'` as well.
+Submit multiple times to see the effect of `multipleSubmits = 'prevent'` as well.
 
 <Form {data} />
 
-By experimenting with these three timers and the delay between them, it's certainly possible to prevent the feeling of unresponsiveness. Please share your results on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms/discussions), if you do!
+By experimenting with the timers and the delay between them, it's certainly possible to prevent the feeling of unresponsiveness. Please share your results on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms/discussions), if you do!
 
 <Next section={concepts} />
