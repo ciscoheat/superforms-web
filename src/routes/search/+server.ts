@@ -6,7 +6,7 @@ import { dev } from '$app/environment';
 
 let engine: Orama;
 
-export const GET = (async ({ url, fetch }) => {
+export const GET = (async ({ url }) => {
   if (!engine) {
     const dbUrl = new URL('/oramadb.json', url)
     const data = await fetch(dbUrl.toString());
