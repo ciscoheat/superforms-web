@@ -7,9 +7,11 @@ import { dev } from '$app/environment';
 let engine: Orama;
 
 export const GET = (async ({ url, fetch }) => {
-  const data = await fetch('/oramadb.json');
-  if (!engine)
+  if (!engine) {
+    const dbUrl = new URL('/oramadb.json', url)
+    const data = await fetch(dbUrl.toString());
     engine = (await restore('json', await data.text())) as unknown as Orama;
+  }
 
   const term = url.searchParams.get('q');
   if (!term || term.length == 1) return json({});
