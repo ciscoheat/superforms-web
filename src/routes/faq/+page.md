@@ -219,6 +219,12 @@ You can add them as parameters to most schema methods. [Here's an example](/conc
 
 ---
 
+### Can you use Superforms without any data, for example with a delete button on each row in a table?
+
+That's possible with an empty schema `z.object({})`, or using the `$formId` store with the button to set the form id dynamically. See [this Stackblitz repo](https://stackblitz.com/edit/sveltekit-superforms-list-actions?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) for an example.
+
+---
+
 ### I want to reuse common options, how to do that easily?
 
 When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:

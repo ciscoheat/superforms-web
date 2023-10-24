@@ -30,15 +30,15 @@
 
 <Debug data={{ $register, $login }} />
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
   <form
     method="POST"
     action="{$page.url.pathname}?/register"
-    class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
+    class="space-y-4 rounded-xl border-2 border-dashed border-primary-900 bg-slate-900 p-5"
     use:enhance1>
-    <h3>Register user</h3>
+    <h3 data-toc-ignore class="mt-0">Register user</h3>
     {#if $message1}
-      <h4 class="rounded p-2 bg-green-700">{$message1}</h4>
+      <h4 data-toc-ignore class="rounded bg-green-700 p-2">{$message1}</h4>
     {/if}
     <label class="label">
       <span>Name</span>
@@ -72,17 +72,17 @@
       {#if $errors1.pwd}<span class="text-red-500">{$errors1.pwd}</span>{/if}
     </label>
 
-    <button type="submit" class="btn variant-filled">Submit</button>
+    <button type="submit" class="variant-filled btn">Submit</button>
   </form>
 
   <form
     method="POST"
     action="{$page.url.pathname}?/login"
-    class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
+    class="space-y-4 rounded-xl border-2 border-dashed border-primary-900 bg-slate-900 p-5"
     use:enhance2>
-    <h3>Login</h3>
+    <h3 data-toc-ignore class="mt-0">Login</h3>
     {#if $message2}
-      <h4 class="rounded p-2 bg-green-700">{$message2}</h4>
+      <h4 data-toc-ignore class="rounded bg-green-700 p-2">{$message2}</h4>
     {/if}
 
     <label class="label">
@@ -109,6 +109,6 @@
       {#if $errors2.pwd}<span class="text-red-500">{$errors2.pwd}</span>{/if}
     </label>
 
-    <button type="submit" class="btn variant-filled">Submit</button>
+    <button type="submit" class="variant-filled btn">Submit</button>
   </form>
 </div>

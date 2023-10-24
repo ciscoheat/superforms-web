@@ -12,9 +12,9 @@
 
 <Head title="Multiple forms on the same page" />
 
-Since there is only one `page` store, multiple forms on the same page, for example, a register and login form, can cause problems since form actions will update the single `$page.form`, possibly affecting both forms.
+Since there is only one `page` store, multiple forms on the same page, like a register and login form, can cause problems since form actions will both update `$page.form`, possibly affecting the incorrect form.
 
-With Superforms, though, multiple forms on the same page are handled transparently **if you are using `use:enhance`, and the forms have different schema types**. If you're using the same schema for the forms, you need to use the `id` option:
+With Superforms, multiple forms on the same page are handled transparently **if you are using `use:enhance`, and the forms have different schema types**. When using the same schema for multiple forms, you need to set the `id` option:
 
 ```ts
 const form = await superValidate(schema, {
@@ -128,7 +128,7 @@ The code above uses [named form actions](https://kit.svelte.dev/docs/form-action
 
 This works well with forms that only post to its dedicated form action. But for more dynamic scenarios, let's say a database table where rows can be edited, the form id should correspond to the row id, and you'd want to communicate to the server which id was sent. This can be done by modifying the `$formId` store, to let the server know what `id` was posted, and what it should respond with.
 
-### Setting id on the client
+## Setting id on the client
 
 On the client, the id is picked up automatically when you pass `data.form` to `superForm`, so in general, you don't have to add it on the client.
 
@@ -144,7 +144,7 @@ const { form, enhance, formId } = superForm(data.form, {
 });
 ```
 
-You can also change the id dynamically with the `$formId` store, or set it directly in the form with the following method.
+You can also change the id dynamically with the `$formId` store, or set it directly in the form with the following method:
 
 ### Without use:enhance
 
