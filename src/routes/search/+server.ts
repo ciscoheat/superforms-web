@@ -16,7 +16,7 @@ export const GET = (async ({ url, fetch }) => {
   const result = await search(engine, {
     term,
     properties: ['title', 'content', 'code'],
-    tolerance: 3,
+    tolerance: 1,
     limit: 8,
     boost: {
       title: 6,
