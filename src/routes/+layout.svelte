@@ -151,9 +151,9 @@
     <AppBar>
       <svelte:fragment slot="lead">
         <div class="flex shrink-0 items-center">
-          <button class="lg:hidden btn btn-sm mr-4" on:click={drawerOpen}>
+          <button class="btn btn-sm mr-4 lg:hidden" on:click={drawerOpen}>
             <span>
-              <svg viewBox="0 0 100 80" class="hamburger w-4 h-4">
+              <svg viewBox="0 0 100 80" class="hamburger h-4 w-4">
                 <rect width="100" height="20" />
                 <rect y="30" width="100" height="20" />
                 <rect y="60" width="100" height="20" />
@@ -164,7 +164,7 @@
             class="logo mr-3 hidden lg:block"
             src={logo}
             alt="Superforms logo" />
-          <strong class="text-lg md:text-xl truncate">Superforms</strong>
+          <strong class="truncate text-lg md:text-xl">Superforms</strong>
         </div>
       </svelte:fragment>
       <svelte:fragment slot="trail">
@@ -186,7 +186,7 @@
         </a>
         <a
           href="https://github.com/ciscoheat/sveltekit-superforms"
-          class="md:pr-2 w-7 md:w-8 text-primary-500"
+          class="w-7 text-primary-500 md:w-8 md:pr-2"
           target="_blank"
           rel="noreferrer"
           >{@html github}
@@ -206,20 +206,20 @@
                 fill="currentColor"
                 d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35Z" /></svg
             ></span>
-          <span class="hidden md:inline">Sponsor</span>
+          <span class="hidden md:inline">Donate</span>
         </button>
       </svelte:fragment>
     </AppBar>
     {#if !hideSponsor}
       <div
         transition:fade={{ duration: 150 }}
-        class="sponsor card absolute p-4 flex flex-col justify-end gap-3 h-50 md:h-64"
+        class="sponsor h-50 card absolute flex flex-col justify-end gap-3 p-4 md:h-64"
         use:clickOutside={{
           event: () => (hideSponsor = !hideSponsor),
           ignore: '.sponsor.btn'
         }}>
-        <div class="relative -left-5 -top-1 w-28 md:hidden text-center">
-          Sponsor
+        <div class="relative -left-5 -top-1 w-28 text-center md:hidden">
+          Donate
         </div>
         <a
           href="https://github.com/sponsors/ciscoheat"

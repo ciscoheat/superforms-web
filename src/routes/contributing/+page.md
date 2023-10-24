@@ -6,7 +6,7 @@
 
 <Message />
 
-<Head title="Contributing and sponsoring" />
+<Head title="Contributing, donating and sponsoring" />
 
 # Contributing
 
@@ -24,7 +24,7 @@ pnpm dev
 
 If you find a typo on the website, you can make a quick PR directly in its [Github repository](https://github.com/ciscoheat/superforms-web/tree/main/src/routes).
 
-## Sponsoring
+## Donations
 
 <Sponsor />
 

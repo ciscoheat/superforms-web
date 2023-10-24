@@ -26,17 +26,17 @@
 <div class="sponsoring">
   <a href="https://github.com/sponsors/ciscoheat" target="_blank">
     <div class="w-9"><div class="w-8">{@html github}</div></div>
-    <div class="btn variant-ghost">Sponsor Superforms on Github</div>
+    <div class="btn variant-ghost">Donate on Github</div>
   </a>
 
   <a href="https://ko-fi.com/ciscoheat" target="_blank">
     <div class="w-9">{@html kofi}</div>
-    <div class="btn variant-ghost">Sponsor Superforms on Ko-fi</div>
+    <div class="btn variant-ghost">Donate on Ko-fi</div>
   </a>
 
   <a href="https://buymeacoffee.com/ciscoheat" target="_blank">
     <div class="w-9">{@html buymeacoffee}</div>
-    <div class="btn variant-ghost">Sponsor Superforms on Buymeacoffee</div>
+    <div class="btn variant-ghost">Donate on Buymeacoffee</div>
   </a>
 
   <form
@@ -47,7 +47,7 @@
     <input type="hidden" name="hosted_button_id" value="NY7F5ALHHSVQS" />
     <button type="submit" class="w-9 text-primary-500">{@html paypal}</button>
     <button type="submit" class="btn variant-ghost text-primary-500"
-      >Sponsor Superforms with Paypal</button>
+      >Donate with Paypal</button>
   </form>
 </div>
 
