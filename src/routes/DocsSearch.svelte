@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { modalStore, drawerStore } from '@skeletonlabs/skeleton';
+  import { getModalStore, getDrawerStore } from '@skeletonlabs/skeleton';
   import magnify from '$lib/assets/magnify.svg?raw';
   import { debounce } from 'throttle-debounce';
   import { onDestroy, onMount, tick } from 'svelte';
   import type { Writable } from 'svelte/store';
+
+  const drawerStore = getDrawerStore();
+  const modalStore = getModalStore();
 
   // Classes
   const cBase =
@@ -115,7 +118,7 @@
 <div bind:this={docSearch} class="modal-search {cBase}">
   <!-- Header -->
   <header class="modal-search-header {cHeader}">
-    <span class="text-xl ml-4 w-8">{@html magnify}</span>
+    <span class="ml-4 w-8 text-xl">{@html magnify}</span>
     <input
       id="search-input"
       class={cSearchInput}

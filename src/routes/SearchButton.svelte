@@ -1,11 +1,13 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+  import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import magnify from '$lib/assets/magnify.svg?raw';
 
   export let cls = '';
   export let width = '';
   export let buttonStyle = '';
+
+  const modalStore = getModalStore();
 
   function triggerSearch(): void {
     const d: ModalSettings = {
@@ -27,10 +29,10 @@
 <div class={cls}>
   <button
     id="search-button"
-    class="btn p-2 px-4 space-x-4 variant-soft variant-soft-primary {width} {buttonStyle}"
+    class="variant-soft-primary variant-soft btn space-x-4 p-2 px-4 {width} {buttonStyle}"
     on:click={triggerSearch}>
     <span class="w-6">{@html magnify}</span>
-    <span class="inline-block badge variant-soft"
+    <span class="variant-soft badge inline-block"
       >{isOsMac ? '⌘' : 'Ctrl'}+K</span>
   </button>
 </div>

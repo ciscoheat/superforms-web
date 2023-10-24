@@ -5,8 +5,10 @@
   import tainted from '$lib/assets/gallery/tainted.png';
   import clientvalidation from '$lib/assets/gallery/clientvalidation.png';
   import nesteddata from '$lib/assets/gallery/nesteddata.png';
-  import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+  import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import { beforeNavigate } from '$app/navigation';
+
+  const modalStore = getModalStore();
 
   const images = [
     [
@@ -57,7 +59,7 @@
   });
 </script>
 
-<div class="grid grid-cols-2 md:grid-cols-3 gap-y-8 md:gap-x-4 mb-12">
+<div class="mb-12 grid grid-cols-2 gap-y-8 md:grid-cols-3 md:gap-x-4">
   {#each images as image, i}
     <figure class="m-0 flex flex-col justify-end">
       <button type="button" on:click={() => showImage(i)}>

@@ -2,13 +2,22 @@
   // The ordering of these imports is critical to your app working properly
   import '../theme.postcss';
   // If you have source.organizeImports set to true in VSCode, then it will auto change this ordering
-  import '@skeletonlabs/skeleton/styles/all.css';
+  //import '@skeletonlabs/skeleton/styles/all.css';
   // Most of your app wide CSS should be put in this file
   import '../app.postcss';
-  import { AppShell, AppBar, TableOfContents } from '@skeletonlabs/skeleton';
+  import {
+    getDrawerStore,
+    getModalStore,
+    initializeStores
+  } from '@skeletonlabs/skeleton';
+  import {
+    AppShell,
+    AppBar,
+    TableOfContents,
+    Drawer,
+    Modal
+  } from '@skeletonlabs/skeleton';
   import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
-  import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
-  import { Modal, modalStore } from '@skeletonlabs/skeleton';
 
   import Navigation from '$lib/navigation/Navigation.svelte';
   import { page } from '$app/stores';
@@ -28,6 +37,11 @@
   import { tick } from 'svelte';
   import { writable } from 'svelte/store';
   import copy from 'clipboard-copy';
+
+  initializeStores();
+
+  const drawerStore = getDrawerStore();
+  const modalStore = getModalStore();
 
   // Local
   let hideSponsor = true;
@@ -194,7 +208,7 @@
         <SearchButton cls="hidden md:inline" />
         <button
           type="button"
-          class="sponsor btn btn-sm variant-ghost relative"
+          class="sponsor variant-ghost btn btn-sm relative"
           on:click={() => (hideSponsor = !hideSponsor)}>
           <span
             ><svg
@@ -224,21 +238,21 @@
         <a
           href="https://github.com/sponsors/ciscoheat"
           target="_blank"
-          class="btn btn-sm variant-ghost">
+          class="variant-ghost btn btn-sm">
           <span class="w-7 p-1 text-primary-500">{@html github}</span>
           <span>Github</span>
         </a>
         <a
           href="https://ko-fi.com/ciscoheat"
           target="_blank"
-          class="btn btn-sm variant-ghost">
+          class="variant-ghost btn btn-sm">
           <span class="w-6 p-0 text-primary-500">{@html kofi}</span>
           <span>Ko-fi</span>
         </a>
         <a
           href="https://buymeacoffee.com/ciscoheat"
           target="_blank"
-          class="btn btn-sm variant-ghost">
+          class="variant-ghost btn btn-sm">
           <span class="w-6 p-0 text-primary-500">{@html buymeacoffee}</span>
           <span>Buymeacoffee</span>
         </a>
@@ -248,7 +262,7 @@
           method="POST"
           target="_top">
           <input type="hidden" name="hosted_button_id" value="NY7F5ALHHSVQS" />
-          <button type="submit" class="btn btn-sm variant-ghost w-full">
+          <button type="submit" class="variant-ghost btn btn-sm w-full">
             <span class="w-6 p-0 text-primary-500">{@html paypal}</span>
             <span class="pr-3">Paypal</span>
           </button>

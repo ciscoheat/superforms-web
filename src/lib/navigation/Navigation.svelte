@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { drawerStore } from '@skeletonlabs/skeleton';
+  import { getDrawerStore } from '@skeletonlabs/skeleton';
   import A from './A.svelte';
   import Title from './Title.svelte';
   import { page } from '$app/stores';
@@ -8,6 +8,8 @@
   import skeleton from '$lib/assets/skeleton.svg?raw';
   import mdsvex from '$lib/assets/mdsvex.svg?raw';
   import SearchButton from '../../routes/SearchButton.svelte';
+
+  const drawerStore = getDrawerStore();
 
   function drawerClose(): void {
     drawerStore.close();
@@ -67,17 +69,17 @@
   </ul>
 
   <div class="p-4 text-gray-600">
-    <hr class="mt-5 mb-2" />
+    <hr class="mb-2 mt-5" />
     Built with<br />
     <a
       href="https://www.skeleton.dev/"
       target="_blank"
-      class="mt-1 !p-0 text-gray-400 hover:text-gray-300 hover:!bg-transparent"
+      class="mt-1 !p-0 text-gray-400 hover:!bg-transparent hover:text-gray-300"
       >{@html skeleton}</a>
     <a
       href="https://mdsvex.com/"
       target="_blank"
-      class="w-20 mt-0 !p-0 text-gray-400 hover:text-gray-300 hover:!bg-transparent"
+      class="mt-0 w-20 !p-0 text-gray-400 hover:!bg-transparent hover:text-gray-300"
       >{@html mdsvex}</a>
   </div>
 </nav>
