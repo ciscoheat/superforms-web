@@ -233,6 +233,19 @@ You may also want to list the errors above the form. The `$allErrors` store can 
 
 `$allErrors.length` can also be useful to disable the submit button if there are any errors.
 
+## Customizing error messages in the schema
+
+Most methods in the Zod schema has a parameter for a custom error message, so you can just add them there.
+
+```ts
+const schema = z.object({
+  name: z.string().min(2, "Name is too short."),
+  email: z.string().email("That's a strange email.")
+});
+```
+
+This is also a good place for translation strings.
+
 ## Test it out
 
 This form has `aria-invalid` set on erroneous fields, and lists all errors on top of the form using `$allErrors`. Try to submit and see that the first error field gets focus automatically (unless on mobile).

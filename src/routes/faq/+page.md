@@ -152,6 +152,12 @@ Yes, there is a helper function for constructing an `ActionResult` that can be r
 
 ---
 
+### Can I post to an external API?
+
+If the API doesn't return an [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) with the form data, you cannot post to it directly. Instead you can use the [SPA mode](/concepts/spa) of Superforms and call the API with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) in the `onUpdate` event.
+
+---
+
 ### How to submit the form programmatically?
 
 Use the [requestSubmit](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit) method on the form element.
@@ -204,6 +210,12 @@ It can be fixed by setting the option and the default schema value to an empty s
 ### Can some other validation library than Zod be used?
 
 Most other popular validation libraries don't allow schema introspection on Zod's level, which makes it difficult to generate default values and constraints. The issue is discussed [here](https://github.com/ciscoheat/sveltekit-superforms/issues/120).
+
+---
+
+### How to customize error messages directly in the Zod schema?
+
+You can add them as parameters to most schema methods. [Here's an example](/concepts/error-handling#customizing-error-messages-in-the-schema).
 
 ---
 

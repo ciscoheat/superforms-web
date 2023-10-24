@@ -25,7 +25,7 @@ const { form, enhance } = superForm(data, {
 })
 ```
 
-By setting the `SPA` option to `true`, the form won't be sent to the server when submitted. Instead, the client-side [validators](/concepts/client-validation#validators) option will determine the success or failure of the form, which will trigger the [event chain](/concepts/events), and the result will be most conveniently consumed in `onUpdate`.
+By setting the `SPA` option to `true`, the form won't be sent to the server when submitted. Instead, the client-side [validators](/concepts/client-validation#validators) option will determine the success or failure of the form, which will trigger the [event chain](/concepts/events), and the result will be most conveniently consumed in [onUpdate](/concepts/events#onupdate).
 
 > Remember that `use:enhance` must be added to the form for SPA to work!
 

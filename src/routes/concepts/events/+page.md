@@ -83,7 +83,9 @@ Also, if `applyAction` is `false`, which means that `$page.status` won't update,
 onUpdate: ({ form, formEl, cancel }) => void
 ```
 
-If you don't care about the details of the `ActionResult` but rather the validation result, `onUpdate` is triggered just before the form update is being applied, and gives you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formEl`.
+If you don't care about the details of the `ActionResult` but rather the validation result, `onUpdate` is triggered just before the form update is being applied, and gives you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formEl`. 
+
+If your app is a [SPA](/concepts/spa), `onUpdate` is the event you should be using to validate the form data.
 
 ### onUpdated
 
@@ -91,7 +93,7 @@ If you don't care about the details of the `ActionResult` but rather the validat
 onUpdated: ({ form }) => void
 ```
 
-If you just want the default behaviour and want to do something after a valid update, like showing a toast notification, `onUpdated` is the easiest way.
+If you just want the default behaviour and do something after a valid update, like showing a toast notification, `onUpdated` is the easiest way.
 
 `form` contains the validation result, and is read-only here, since the stores have updated at this point.
 
@@ -127,6 +129,6 @@ const { form, enhance, message } = superForm(data.form, {
 
 You can also set `onError` to the string value `'apply'`, in which case the SvelteKit `applyAction` error behaviour will be used, which is to render the nearest [+error](https://kit.svelte.dev/docs/routing#error) page, while wiping out the form. To avoid data loss even for non-javascript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
 
-> If you're unsure what event to use, start with `onUpdated`; unless your app is a [SPA](/concepts/spa), then `onUpdate` is the one you should be using to validate the form data.
+> If you're unsure what event to use, start with `onUpdated`; unless your app is a [SPA](/concepts/spa), then `onUpdate` should be used to validate the form data.
 
 <Next section={concepts} />
