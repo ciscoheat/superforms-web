@@ -21,7 +21,7 @@
   class="space-y-4 rounded-xl border-2 border-dashed border-primary-900 bg-slate-900 p-5"
   use:enhance>
   {#if $message}
-    <h3 class="rounded bg-green-700 p-2">{$message}</h3>
+    <h3 data-toc-ignore class="mt-0 rounded bg-green-700 p-2">{$message}</h3>
   {/if}
   <label class="label">
     <span>Name</span>
@@ -33,5 +33,5 @@
     <input class="input" type="text" name="email" bind:value={$form.email} />
   </label>
 
-  <button type="submit" class="btn variant-filled">Submit</button>
+  <button type="submit" class="variant-filled btn">Submit</button>
 </form>

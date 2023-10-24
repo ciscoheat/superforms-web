@@ -32,7 +32,7 @@
     </ul>
   {/if}
   {#if $message}
-    <h3 class="rounded bg-green-700 p-2">{$message}</h3>
+    <h3 data-toc-ignore class="mt-0 rounded bg-green-700 p-2">{$message}</h3>
   {/if}
   <label class="label">
     <span
@@ -56,5 +56,5 @@
       aria-invalid={$errors.email ? 'true' : undefined} />
   </label>
 
-  <button type="submit" class="btn variant-filled">Submit</button>
+  <button type="submit" class="variant-filled btn">Submit</button>
 </form>

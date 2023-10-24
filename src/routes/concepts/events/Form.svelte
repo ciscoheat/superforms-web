@@ -19,10 +19,10 @@
 <form
   method="POST"
   action={$page.url.pathname}
-  class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
+  class="space-y-4 rounded-xl border-2 border-dashed border-primary-900 bg-slate-900 p-5"
   use:enhance>
   {#if $message}
-    <h3 class="rounded p-2 bg-green-700">{$message}</h3>
+    <h3 data-toc-ignore class="mt-0 rounded bg-green-700 p-2">{$message}</h3>
   {/if}
   <label class="label">
     <span
@@ -38,5 +38,5 @@
     {#if $errors.email}<span class="text-red-500">{$errors.email}</span>{/if}
   </label>
 
-  <button type="submit" class="btn variant-filled">Submit</button>
+  <button type="submit" class="variant-filled btn">Submit</button>
 </form>

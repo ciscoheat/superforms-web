@@ -19,12 +19,12 @@
 <form
   method="POST"
   action={$page.url.pathname}
-  class="p-5 border-dashed bg-slate-900 border-2 border-primary-900 rounded-xl space-y-4"
+  class="space-y-4 rounded-xl border-2 border-dashed border-primary-900 bg-slate-900 p-5"
   use:enhance>
   {#if $message}
-    <h3 class="rounded p-2 bg-green-700">{$message}</h3>
+    <h3 data-toc-ignore class="mt-0 rounded bg-green-700 p-2">{$message}</h3>
   {/if}
-  <div class="grid gap-3 grid-cols-[20%_80%]">
+  <div class="grid grid-cols-[20%_80%] gap-3">
     {#each $form.tags as _, i}
       <div class="input-group grid-cols-[auto_1fr_auto]">
         <div class="input-group-shim">Id</div>
@@ -41,16 +41,16 @@
           bind:value={$form.tags[i].name} />
       </div>
       {#if $errors.tags?.[i]?.id && $errors.tags?.[i]?.name}
-        <div class="ml-4 text-red-500 col-start-1">{$errors.tags?.[i]?.id}</div>
-        <div class="ml-4 text-red-500 col-start-2">
+        <div class="col-start-1 ml-4 text-red-500">{$errors.tags?.[i]?.id}</div>
+        <div class="col-start-2 ml-4 text-red-500">
           {$errors.tags?.[i]?.name}
         </div>
       {:else if $errors.tags?.[i]?.id}
-        <div class="ml-4 text-red-500 col-span-full">
+        <div class="col-span-full ml-4 text-red-500">
           {$errors.tags?.[i]?.id}
         </div>
       {:else if $errors.tags?.[i]?.name}
-        <div class="ml-4 text-red-500 col-start-2">
+        <div class="col-start-2 ml-4 text-red-500">
           {$errors.tags?.[i]?.name}
         </div>
       {/if}
@@ -58,6 +58,6 @@
   </div>
 
   <div>
-    <button type="submit" class="btn variant-filled">Submit</button>
+    <button type="submit" class="variant-filled btn">Submit</button>
   </div>
 </form>
