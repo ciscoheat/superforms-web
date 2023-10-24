@@ -14,6 +14,7 @@
     AppShell,
     AppBar,
     TableOfContents,
+    tocCrawler,
     Drawer,
     Modal
   } from '@skeletonlabs/skeleton';
@@ -83,7 +84,7 @@
   }
 
   const noToC = ['/'];
-  $: displayToC = $page.status == 200 && !noToC.includes($page.url.pathname);
+  $: displayToC = !noToC.includes($page.url.pathname);
 
   beforeNavigate((nav) => {
     if (nav.type == 'form') return;
@@ -274,14 +275,17 @@
     <Navigation />
   </svelte:fragment>
   <!-- Page Route Content -->
-  <slot />
+  <div
+    use:tocCrawler={{
+      mode: 'generate',
+      scrollTarget: '#page',
+      key: $page.url.pathname
+    }}>
+    <slot />
+  </div>
   <svelte:fragment slot="sidebarRight">
-    {#key $page.url.pathname}
-      <TableOfContents
-        width="w-56"
-        class="{displayToC ? 'hidden md:block' : 'hidden'} p-4"
-        target="#page" />
-    {/key}
+    <TableOfContents
+      class="w-56 {displayToC ? 'hidden md:block' : 'hidden'} p-4" />
   </svelte:fragment>
 </AppShell>
 
