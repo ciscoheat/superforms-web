@@ -25,7 +25,7 @@ Now all form submissions will happen on the client, and we unlock lots of client
 
 The `use:enhance` action takes no arguments; instead, events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
-> Without `use:enhance`, the form will be static. The only things that will work are [constraints](/concepts/client-validation#constraints) and [resetForm](/concepts/enhance#resetform). Also note that SvelteKit's own `use:enhance` cannot be used; you must use the one returned from `superForm`.
+> Without `use:enhance`, the form will be static. The only things that will work are [constraints](/concepts/client-validation#constraints) and [resetForm](/concepts/enhance#resetform).<br><br>Also note that SvelteKit's own `use:enhance` cannot be used; you must use the one returned from `superForm`, and it should only be used on a single form element - you cannot share it between forms (one `superForm` instance per form).
 
 ## Differences from SvelteKit's use:enhance
 

@@ -126,7 +126,9 @@ The code above uses [named form actions](https://kit.svelte.dev/docs/form-action
 </form>
 ```
 
-This works well with forms that only post to its dedicated form action. But for more dynamic scenarios, let's say a database table where rows can be edited, the form id should correspond to the row id, and you'd want to communicate to the server which id was sent. This can be done by modifying the `$formId` store, to let the server know what `id` was posted, and what it should respond with.
+> Note that there is a separate `use:enhance` for each form - you cannot share the enhance action between forms.
+
+The above works well with forms that posts to a dedicated form action. But for more dynamic scenarios, let's say a database table where rows can be edited, the form id should correspond to the row id, and you'd want to communicate to the server which id was sent. This can be done by modifying the `$formId` store, to let the server know what `id` was posted, and what it should respond with.
 
 ## Setting id on the client
 
