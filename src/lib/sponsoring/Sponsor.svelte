@@ -6,14 +6,11 @@
 </script>
 
 <p>
-  Now that version 1.0 is released, there will be bug fixes, more support
-  questions on the Discord server, future features to work on, and so on.
-</p>
-<p>
   If you're using Superforms in non-profit circumstances, the library is
-  completely free; a star on Github is more than enough if you want to give your
-  support. But if you are using Superforms in a commercial project, would you or
-  the company you work for consider donating?
+  completely free; a star on <a
+    href="https://github.com/ciscoheat/sveltekit-superforms">Github</a> is more than
+  enough if you want to give your support. But if you are using Superforms in a commercial
+  project, would you or the company you work for consider donating?
 </p>
 <p>
   If you have appreciated my support on <a href="https://discord.gg/AptebvVuhB"
@@ -26,17 +23,17 @@
 <div class="sponsoring">
   <a href="https://github.com/sponsors/ciscoheat" target="_blank">
     <div class="w-9"><div class="w-8">{@html github}</div></div>
-    <div class="btn variant-ghost">Donate on Github</div>
+    <div class="variant-ghost btn">Donate on Github</div>
   </a>
 
   <a href="https://ko-fi.com/ciscoheat" target="_blank">
     <div class="w-9">{@html kofi}</div>
-    <div class="btn variant-ghost">Donate on Ko-fi</div>
+    <div class="variant-ghost btn">Donate on Ko-fi</div>
   </a>
 
   <a href="https://buymeacoffee.com/ciscoheat" target="_blank">
     <div class="w-9">{@html buymeacoffee}</div>
-    <div class="btn variant-ghost">Donate on Buymeacoffee</div>
+    <div class="variant-ghost btn">Donate on Buymeacoffee</div>
   </a>
 
   <form
@@ -46,7 +43,7 @@
     target="_top">
     <input type="hidden" name="hosted_button_id" value="NY7F5ALHHSVQS" />
     <button type="submit" class="w-9 text-primary-500">{@html paypal}</button>
-    <button type="submit" class="btn variant-ghost text-primary-500"
+    <button type="submit" class="variant-ghost btn text-primary-500"
       >Donate with Paypal</button>
   </form>
 </div>
