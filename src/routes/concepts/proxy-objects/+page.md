@@ -26,11 +26,7 @@ import {
 } from 'sveltekit-superforms/client';
 ```
 
-> See [the API](/api#proxy-objects) for a detailed description of each kind of proxy. intProxy and numberProxy are rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`.
-
-## Usage
-
-The usage for all of them is the same:
+The basic usage for all of them is the same:
 
 ```ts
 // Assume the following schema:
@@ -45,6 +41,8 @@ const idProxy = intProxy(form, 'id');
 Now if you bind to `$idProxy` instead of directly to `$form.id`, the value will be converted to and from an integer, and `$form.id` will be updated automatically.
 
 Note that this will usually happen automatically with `bind:value`, so check out all the possible [Svelte bindings](https://svelte.dev/tutorial/text-inputs) first, to avoid complicating the code!
+
+> See [the API](/api#proxy-objects) for more details and options for each kind of proxy. intProxy and numberProxy are rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`.
 
 ## Nested proxies
 
