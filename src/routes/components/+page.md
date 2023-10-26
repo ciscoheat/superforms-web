@@ -131,6 +131,8 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 {#if errors}<span class="invalid">{errors}</span>{/if}
 ```
 
+> The `type` attribute on input elements must be hard-coded in Svelte, [explained here](https://stackoverflow.com/a/66191989/70894). Especially important for `type="number"`.
+
 **+page.svelte**
 
 ```svelte
