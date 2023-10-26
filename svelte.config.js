@@ -3,6 +3,7 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 //import addClasses from 'rehype-add-classes';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -27,7 +28,18 @@ const config = {
             }
           }
         ],
-        [rehypeSlug, {}]
+        [rehypeSlug, {}],
+        [rehypeAutolinkHeadings, {
+          behavior: 'append', 
+          content: {
+            type: 'element',
+            tagName: 'img',
+            properties: {
+              src: '/link.svg',
+              className: ['icon', 'icon-link']
+            }
+          }
+        }]
       ]
     })
   ],

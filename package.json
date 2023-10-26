@@ -43,6 +43,7 @@
     "prettier-plugin-svelte": "^2.10.1",
     "prettier-plugin-tailwindcss": "^0.2.8",
     "rehype-add-classes": "^1.0.0",
+    "rehype-autolink-headings": "^7.0.0",
     "rehype-external-links": "^2.1.0",
     "rehype-slug": "^5.1.0",
     "sass": "^1.69.4",

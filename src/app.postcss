@@ -16,11 +16,18 @@ h3,
 h4,
 h5 {
   display: flex;
+  align-items: center;
   a {
-    margin-left: 4px;
+    margin-left: 6px;
     font-size: 1.3rem;
-    display: none;
+    //display: none;
     text-decoration: none;
+
+    .icon.icon-link {
+      height: 18px;
+      width: 18px;
+      margin: 0;
+    }  
   }
 }
 
@@ -35,6 +42,10 @@ h5 {
       text-decoration: none;
     }
   }
+}
+
+h1 a .icon.icon-link {
+  display: none !important;
 }
 
 .md-list {
