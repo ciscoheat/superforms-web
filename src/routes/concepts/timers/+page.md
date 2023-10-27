@@ -13,7 +13,7 @@
 
 <Head title="Timers" />
 
-As said in the previous section, the user should understand that things are happening when they submit the form. Timers give us a way of providing feedback when there is a response delay, based upon human perception research.
+As said in the previous section, the user should understand that things are happening when they submit the form. Loading timers give us a way of providing feedback when there is a response delay, based upon human perception research.
 
 ## Usage
 
@@ -56,7 +56,7 @@ The reason for using `delayed` instead of `submitting` is based on the article [
 
 Submit the following form and play around with the different settings. Different loading spinners are set to display when `delayed` and `timeout` are true respectively. 
 
-Submit multiple times to see the effect of `multipleSubmits = 'prevent'` as well.
+Submit multiple times to see the effect of the [multipleSubmits](/concepts/submit-behavior#multiplesubmits) option as well.
 
 <Form {data} />
 

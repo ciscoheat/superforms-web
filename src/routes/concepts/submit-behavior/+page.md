@@ -29,7 +29,7 @@ If you don't want any jumping content, which could occur when error messages are
 
 This one handles the occurence of multiple form submissions, before a result has been returned.
 
-- When set to `prevent`, the form cannot be submitted again until a result is returned, or the `timeout` state is reached (see the section about [timers](/concepts/timers)).
+- When set to `prevent`, the form cannot be submitted again until a result is returned, or the `timeout` state is reached (see the section about [loading timers](/concepts/timers)).
 - `abort` is the next sensible approach, which will cancel the previous request before submitting again.
 - Finally, `allow` will pass through any number of frenetic clicks on the submit button!
 
