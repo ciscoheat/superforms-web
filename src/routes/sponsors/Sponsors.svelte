@@ -3,11 +3,13 @@
   import careswitch from './img/careswitch.png';
   import nicholas from './img/nicholas.png';
   import torwent from './img/torwent.jpg';
+  import matus from './img/matus.png';
 
   const sponsors = [
     [careswitch, 'Careswitch', 'https://www.careswitch.com/', 'rounded-none'],
     [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
-    [torwent, 'Torwent', 'https://github.com/Torwent']
+    [torwent, 'Torwent', 'https://github.com/Torwent'],
+    [matus, 'Vicente Matus', 'https://github.com/vicentematus']
   ];
 </script>
 
