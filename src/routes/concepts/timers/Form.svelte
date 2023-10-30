@@ -51,8 +51,8 @@
       on:change={async () => {
         await tick();
         if (
-          options.delayMs &&
-          options.timeoutMs &&
+          options.delayMs !== undefined &&
+          options.timeoutMs !== undefined &&
           options.delayMs > options.timeoutMs
         ) {
           options.delayMs = options.timeoutMs;
@@ -65,7 +65,17 @@
       name="timeout"
       bind:value={options.timeoutMs}
       max={9900}
-      step={100}>timeoutMs option: {options.timeoutMs} ms</RangeSlider>
+      step={100}
+      on:change={async () => {
+        await tick();
+        if (
+          options.delayMs !== undefined &&
+          options.timeoutMs !== undefined &&
+          options.delayMs > options.timeoutMs
+        ) {
+          options.timeoutMs = options.delayMs;
+        }
+      }}>timeoutMs option: {options.timeoutMs} ms</RangeSlider>
   </label>
 
   <div class="flex items-center gap-x-3">

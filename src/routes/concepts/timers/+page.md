@@ -13,7 +13,7 @@
 
 <Head title="Timers" />
 
-As said in the previous section, the user should understand that things are happening when they submit the form. Loading timers give us a way of providing feedback when there is a response delay, based upon human perception research.
+It's important that the users understand that things are happening when they submit a form. Loading timers give us a way of providing feedback when there is a server response delay, for example by displaying a spinner icon.
 
 ## Usage
 
@@ -24,13 +24,15 @@ const { form, enhance, submitting, delayed, timeout } = superForm(data.form, {
 })
 ```
 
+`delayMs` should be positive and always smaller than or equal to `timeoutMs`, otherwise the timer behavior will be undefined.
+
 ## Submit state
 
 After a certain time when the form is submitted, determined by `delayMs` and `timeoutMs`, the timers changes state. The states are:
 
 <Timers />
 
-These states affect the readable stores `submitting`, `delayed` and `timeout` returned from `superForm`. They are not mutually exclusive, so `submitting` won't change to `false` when `delayed` becomes `true`.
+These states affect the readable stores `submitting`, `delayed` and `timeout`, returned from `superForm`. They are not mutually exclusive, so `submitting` won't change to `false` when `delayed` becomes `true`.
 
 ## Loading indicators
 
