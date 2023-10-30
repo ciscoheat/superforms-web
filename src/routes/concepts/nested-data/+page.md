@@ -2,35 +2,35 @@
   import Head from '$lib/Head.svelte'
   import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
 
-	export let data;
+  export let data;
 </script>
 
 # Nested data
 
 <Head title="Nested data" />
 
-Basic HTML forms can only handle string values, and the `<form>` element cannot nest other forms, so there is no native way to represent a nested data structure or more complex values like dates. Fortunately, Superforms has a few solutions for this!
+Basic HTML forms can only handle string values, and the `<form>` element cannot nest other forms, so there is no standardized way to represent a nested data structure or more complex values like dates. Fortunately, Superforms has a few solutions for this!
 
 ## Usage
 
 ```ts
-const { form, errors, constraints } = superForm(data.form, {
+const { form, enhance } = superForm(data.form, {
   dataType: 'form' | 'json' = 'form'
 })
 ```
 
 ### dataType
 
-By simply setting `dataType` to `'json'`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the `form` store, and you don't have to worry about failed coercion, converting arrays to strings and back, etc.
+By simply setting `dataType` to `'json'`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the `form` store, and you don't have to worry about failed coercion, converting strings to objects and arrays, etc.
 
-You don't even have to set names for the form fields anymore, since the actual data in `$form` is now posted, not the fields in the HTML. They are now merely UI components for modifying a data model.
+You don't even have to set a name on the form fields anymore, since the actual data in `$form` is now posted, not the fields in the HTML. They are now simply UI components for modifying a data model ([as they should be](https://blog.encodeart.dev/rediscovering-mvc)).
 
 > When `dataType` is set to `'json'`, the `onSubmit` event contains `formData`, but it cannot be used to modify the posted data. You need to set or update the `form` store.<br><br>It also means that the `disabled` attribute, which normally prevents fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
 
-Modifying the `form` store programmatically is simple, you can either assign `$form.field = ...` directly, which will taint the affected fields. If you don't want to taint anything, you can use `update` with an extra option:
+Modifying the `form` store programmatically is easy, you can either assign `$form.field = ...` directly, which will taint the affected fields. If you don't want to taint anything, you can use `update` with an extra option:
 
 ```ts
 form.update(
@@ -55,7 +55,7 @@ Which can be used to not only prevent tainting, but also untaint the modified fi
 The requirements for nested data to work are as follows:
 
 1. **JavaScript is enabled in the browser.**
-2. **The form has use:enhance applied.**
+2. **The form has the Superforms [use:enhance](/concepts/enhance) applied.**
 
 ## Nested errors and constraints
 
@@ -92,7 +92,6 @@ You can build up a HTML form for these tags using an `{#each}` loop:
 ```svelte
 <script lang="ts">
   const { form, errors, enhance } = superForm(data.form, {
-    // This is a requirement when the schema contains nested objects:
     dataType: 'json'
   });
 </script>
