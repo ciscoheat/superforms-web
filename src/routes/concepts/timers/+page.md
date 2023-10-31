@@ -24,7 +24,7 @@ const { form, enhance, submitting, delayed, timeout } = superForm(data.form, {
 })
 ```
 
-`delayMs` should be positive and always smaller than or equal to `timeoutMs`, otherwise the timer behavior will be undefined.
+`delayMs` should be positive and always smaller than or equal to `timeoutMs`, otherwise the timer behavior will be undefined. And of course, the Superforms [use:enhance](/concepts/enhance) must be added to the form element, since this is client-side behavior.
 
 ## Submit state
 
