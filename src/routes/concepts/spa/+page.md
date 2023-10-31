@@ -12,7 +12,7 @@
 
 # Single-page applications (SPA)
 
-Even though validation has its place on the server, it's possible to use the whole Superforms library on the client in single page applications. A SPA is easy to create with SvelteKit, as [fully documented here](https://kit.svelte.dev/docs/single-page-apps).
+Even though validation has its given place on the server, it's possible to use the whole Superforms library on the client in single page applications. A SPA is easy to create with SvelteKit, [fully documented here](https://kit.svelte.dev/docs/single-page-apps).
 
 ## Usage
 
@@ -25,9 +25,9 @@ const { form, enhance } = superForm(data, {
 })
 ```
 
-By setting the `SPA` option to `true`, the form won't be sent to the server when submitted. Instead, the client-side [validators](/concepts/client-validation#validators) option will determine the success or failure of the form, which will trigger the [event chain](/concepts/events), and the result will be most conveniently consumed in [onUpdate](/concepts/events#onupdate).
+By setting the `SPA` option to `true`, the form won't be sent to the server when submitted. Instead, the client-side [validators](/concepts/client-validation#validators) option will determine the success or failure of the form, which will trigger the [event chain](/concepts/events), and the validation result will be most conveniently consumed in the [onUpdate](/concepts/events#onupdate) event.
 
-> Remember that `use:enhance` must be added to the form for SPA to work!
+> Remember that the Superforms [use:enhance](/concepts/enhance) must be added to the form for SPA to work!
 
 ## Using +page.ts instead of +page.server.ts
 
@@ -61,7 +61,7 @@ export const load = async ({ params, fetch }) => {
 };
 ```
 
-> If no data should be loaded from `+page.ts`, or you simply don't want to have such a page, see further down on how to use `superValidate` in a page or component.
+> If no data should be loaded from `+page.ts`, or you simply don't want to have this page, see further down on how to use `superValidate` in a page or component.
 
 ## Displaying the form
 

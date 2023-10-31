@@ -62,6 +62,8 @@ If the submission isn't cancelled, the form is posted to the server, which respo
 
 `result` contains the ActionResult. You can modify it; changes will be applied further down the event chain. `formEl` is the `HTMLFormElement` of the form. `cancel()` is a function which will cancel the rest of the event chain and any form updates.
 
+#### Common usage
+
 `onResult` is useful when you have set `applyAction = false` and still want to redirect, since the form doesn't do that automatically in that case. Then you can do:
 
 ```ts
@@ -77,15 +79,38 @@ const { form, enhance } = superForm(data.form, {
 
 Also, if `applyAction` is `false`, which means that `$page.status` won't update, you'll find the status code for the request in `result`.
 
+#### Strongly typed ActionResult
+
+Usually, you check the *result* status, as described above, not the form *validation* status, which is more conveniently handled in `onUpdate` (see below). But if you want to access the result data even here, for example if you return additional data in the form action, there is a helper type called `FormResult` that you can use to make the data strongly typed:
+
+```svelte
+<script lang="ts">
+  import { superForm, type FormResult } from 'sveltekit-superforms/client';
+  import type { PageData, ActionData } from './$types';
+
+  export let data: PageData;
+
+  const { form, enhance } = superForm(data.form, {
+    onResult: (event) => {
+      const result = event.result as FormResult<ActionData>;
+      if (result.type == 'failure') {
+        // Strongly typed now:
+        console.log(result.data?.form.data.name);
+      }
+    }
+  });
+</script>
+```
+
 ### onUpdate
 
 ```ts
 onUpdate: ({ form, formEl, cancel }) => void
 ```
 
-If you don't care about the details of the `ActionResult` but rather the validation result, `onUpdate` is triggered just before the form update is being applied, and gives you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formEl`. 
+If you don't care about the details of the `ActionResult` but rather the validation result, `onUpdate` is triggered just before the form update is being applied, giving you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formEl`. 
 
-If your app is a [SPA](/concepts/spa), `onUpdate` is the event you should be using to validate the form data.
+If your app is a single-page application, `onUpdate` is the event you should be using to validate the form data. See the [SPA](/concepts/spa) page for more details.
 
 ### onUpdated
 
@@ -93,9 +118,9 @@ If your app is a [SPA](/concepts/spa), `onUpdate` is the event you should be usi
 onUpdated: ({ form }) => void
 ```
 
-If you just want the default behaviour and do something after a valid update, like showing a toast notification, `onUpdated` is the easiest way.
+If you just want to validate the form as usual and do something extra afterwards, `onUpdated` is the easiest way.
 
-`form` contains the validation result, and is read-only here, since the stores have updated at this point.
+The `form` parameter contains the validation result, and is read-only here, since the stores have updated at this point, making this event best for things like showing a toast notification.
 
 **Example:**
 
@@ -103,7 +128,9 @@ If you just want the default behaviour and do something after a valid update, li
 const { form, enhance } = superForm(data.form, {
   onUpdated({ form }) {
     if (form.valid) {
-      // Successful post! Do some more client-side stuff.
+      // Successful post! Do some more client-side stuff,
+      // like showing a toast notification.
+      toast(form.message, { icon: '✅' });
     }
   }
 });

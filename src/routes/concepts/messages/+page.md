@@ -76,6 +76,28 @@ type Message = { status: 'error' | 'success' | 'warning'; text: string };
 const form = await superValidate<typeof schema, Message>(event, schema);
 ```
 
+To simplify this even further, if you have the same type for all status messages across the project, you can add a `Message` type to the `App.Superforms` namespace in src/app.d.ts, and it will be automatically set, no need for generic type parameters:
+
+**src/app.d.ts**
+
+```ts
+declare global {
+  namespace App {
+    // interface Error {}
+    // interface Locals {}
+    // interface PageData {}
+    // interface Platform {}
+    namespace Superforms {
+      type Message = {
+        type: 'error' | 'success', text: string
+      }
+    }
+  }
+}
+```
+
+**src/routes/+page.svelte**
+
 ```svelte
 <script lang="ts">
   import type { PageData } from './$types';
@@ -94,7 +116,7 @@ const form = await superValidate<typeof schema, Message>(event, schema);
 {/if}
 ```
 
-Though if you want to keep it simple with a string/any, you can use `$page.status` to style the message appropriately:
+Though if you want to keep it simple with a string or the default `any`, you can use `$page.status` to style the message appropriately:
 
 ```svelte
 <script lang="ts">
@@ -107,7 +129,10 @@ Though if you want to keep it simple with a string/any, you can use `$page.statu
 </script>
 
 {#if $message}
-  <div class:success={$page.status == 200} class:error={$page.status >= 400}>
+  <div 
+    class:success={$page.status == 200} 
+    class:error={$page.status >= 400}
+  >
     {$message}
   </div>
 {/if}
@@ -115,7 +140,7 @@ Though if you want to keep it simple with a string/any, you can use `$page.statu
 
 ### Using the message data programmatically
 
-If you return data that you want to use programmatically instead of just displaying it, like in a toast message, you can do that in the [onUpdated](/concepts/events#onupdated) event:
+If you return data that you want to use programmatically instead of just displaying it, like in a toast message, you can do that in the [onUpdate](/concepts/events#onupdate) or [onUpdated](/concepts/events#onupdated) event:
 
 ```ts
 const { form, enhance } = superForm(data.form, {
@@ -130,10 +155,12 @@ const { form, enhance } = superForm(data.form, {
 });
 ```
 
+The difference between the two events is that you can modify and cancel the update in `onUpdate`, compared to `onUpdated`, where the form data, errors, etc have already updated, making it best for non-store-related things like displaying a toast.
+
 ## Limitations
 
-Naturally, redirects will cause the message to be lost. Since it's common to redirect after a successful post, the `message` property isn't a general solution for displaying status messages.
+Since there is no form data sent when redirecting, in that case the message will be lost. Since it's common to redirect after a successful post, the `message` property isn't a general solution for displaying status messages.
 
-The library [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message#readme) is a complete solution that works with redirects, however. It can be directly integrated into Superforms, [documented here](/flash-messages).
+The library [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message) is a complete solution that works with redirects, however. It can be directly integrated into Superforms, [documented here](/flash-messages).
 
 <Next section={concepts} />
