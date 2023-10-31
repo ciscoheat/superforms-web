@@ -59,21 +59,22 @@ import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 ```svelte
 <SuperDebug
   data={any}
-  display?={true}
-  label?=''
-  promise?={false}
-  status?={true}
-  stringTruncate?={120}
-  raw?={false}
-  functions?={false}
-  theme?='default'
-  ref?={HTMLPreElement} 
+  display={true}
+  status={true}
+  label=''
+  collapsible={false}
+  collapsed={false}
+  stringTruncate={120}
+  raw={false}
+  functions={false}
+  theme='default'
+  ref={HTMLPreElement} 
 />
 ```
 
 | Prop               | Type           | Default value | Description |
 | ------------------ | -------------- | ------------- | ----------- |
-| **data**           | any            |               | Data to be displayed by SuperDebug. |
+| **data**           | any            |               | Data to be displayed by SuperDebug. The only required prop. |
 | **display**        | boolean        | `true`        | Whether to show or hide SuperDebug. |
 | **status**         | boolean        | `true`        | Whether to show or hide the HTTP status code of the current page. |
 | **label**          | string         | `""`          | Add a label to SuperDebug, useful when using multiple instances on a page. |
