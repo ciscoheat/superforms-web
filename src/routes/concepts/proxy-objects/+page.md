@@ -12,23 +12,31 @@
 
 <Head title="Proxy objects" />
 
-Sometimes the form data must be proxied, which could happen when you get a `string` value from an input field, third-party library, etc. and want it to be automatically converted and updated with a non-string value in your schema. There are a number of functions available for that:
-
-## Usage
+Sometimes the form data must be proxied, which could happen when you get a `string` value from an input field, third-party library, etc. and want it to be automatically converted and updated with a non-string value in your schema.
 
 ```ts
 import {
-  intProxy,
-  numberProxy,
+  // The first ones uses the $form store
+  // and is always a Writable<string>:
   booleanProxy,
   dateProxy,
-  stringProxy
+  intProxy,
+  numberProxy,
+  stringProxy,
+  // Uses the whole object returned from superForm.
+  // Type depends on the field.
+  formFieldProxy,
+  arrayProxy,
+  // Can use any object. Type depends on the field.
+  fieldProxy      
 } from 'sveltekit-superforms/client';
 ```
 
-The basic usage for all of them is the same:
+The usage for all of them is practically the same, only the initial argument will differ, according to above:
 
 ```ts
+import { superForm, intProxy } from 'sveltekit-superforms/client';
+
 // Assume the following schema:
 // z.object({ id: z.number().int() })
 
@@ -40,17 +48,17 @@ const idProxy = intProxy(form, 'id');
 
 Now if you bind to `$idProxy` instead of `$form.id`, the value will be converted to and from an integer, and `$form.id` will be updated automatically.
 
-Note that this kind of conversion will usually happen automatically with `bind:value`. `intProxy` and `numberProxy` are rarely needed, as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs). But proxies may still be useful if you want to set the value to `undefined` or `null` when the value is empty/falsy, in which case you can use the `empty` option.
+Note that this kind of conversion will usually happen automatically with `bind:value`. `intProxy` and `numberProxy` are rarely needed, as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs). But proxies may still be useful if you want to set the value to `undefined` or `null` when the value is falsy, in which case you can use the `empty` option.
 
 > See [the API](/api#proxy-objects) for more details and options for each kind of proxy.
 
 ## Nested proxies
 
-You can use a proxy for nested data, like `'user.profile.email'`, but you must ensure that all parent objects exist for the proxy to be able to access the "final" field. In this case, if `user` or `profile` is optional and `undefined`, it won't work. The easiest way to prevent this is to not make any parent objects optional or nullable in the schema.
+You can use a proxy for nested data, like `'user.profile.email'`, but you must ensure that all parent objects exist for the proxy to be able to access the final field. In this case, if `user` or `profile` is `undefined`, it won't work. The easiest way to prevent this is to not make any parent objects optional or nullable in the schema.
 
 ## Date input issues
 
-The `date` input type is a bit special, its underlying data is a string in `yyyy-mm-dd` format, and the `dateProxy` returns an ISO date string as default, so you need to use the `format` option to return the date part only:
+The `date` input type is a bit special. Its underlying data is a string in `yyyy-mm-dd` format, but the `dateProxy` returns an ISO date string as default, so you need to use the `format` option to return the date part only:
 
 ```ts
 const proxyDate = dateProxy(form, 'date', { format: 'date' });

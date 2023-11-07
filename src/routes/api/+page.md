@@ -299,16 +299,7 @@ export const POST = async ({ request }) => {
 ## Client API
 
 ```ts
-import {
-  superForm,
-  booleanProxy,
-  dateProxy,
-  intProxy,
-  numberProxy,
-  stringProxy,
-  fieldProxy,
-  formFieldProxy
-} from 'sveltekit-superforms/client';
+import { superForm } from 'sveltekit-superforms/client';
 ```
 
 The server part of the API can also be imported, for [single-page app](/concepts/spa) usage:
@@ -472,29 +463,37 @@ FormField<S, Prop extends keyof S> = {
 
 ## Proxy objects
 
-The general way of creating a proxy is like this:
-
-```svelte
-<script lang="ts">
-  import { superForm, intProxy } from 'sveltekit-superforms/client';
-  import type { PageData } from './$types';
-
-  export let data: PageData;
-
-  const { form, enhance } = superForm(data.form);
-
-  // All proxies are of type Writable<string>
-  const proxy = intProxy(form, 'field', { options });
-</script>
-
-<input name="field" bind:value={$proxy} />
+```ts
+import {
+  // The first ones uses the $form store
+  // and is always a Writable<string>:
+  booleanProxy,
+  dateProxy,
+  intProxy,
+  numberProxy,
+  stringProxy,
+  // Uses the whole object returned from superForm.
+  // Type depends on the field.
+  formFieldProxy,
+  arrayProxy,
+  // Can use any object. Type depends on the field.
+  fieldProxy      
+} from 'sveltekit-superforms/client';
 ```
 
-Changes in either the proxy store or the corresponding `$form` field will reflect in the other.
+A proxy handles bi-directional updates and data transformation of a corresponding form field. Updates in either the proxy or data it points to, will reflect in the other.
 
 ### intProxy(form, fieldName, options?)
 
-Creates a string store for an **integer** field in the schema.
+Creates a string store for an **integer** field in the schema. It's rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
+
+```ts
+import { superForm, intProxy } from 'sveltekit-superforms/client';
+export let data;
+
+const { form } = superForm(data.form);
+const proxy = intProxy(form, 'field', { options });
+```
 
 **Options:**
 
@@ -505,13 +504,19 @@ Creates a string store for an **integer** field in the schema.
 }
 ```
 
-An intProxy is rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
-
-Note that the `empty` option includes the number zero, unless `emptyIfZero` is set to `false`.
+Use the `empty` option to set the field to `null` or `undefined` if the value is falsy. (Which includes the number zero, unless `emptyIfZero` is set to `false`.)
 
 ### numberProxy(form, fieldName, options?)
 
-Creates a string store for a **number** field in the schema.
+Creates a string store for a **number** field in the schema. It's rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
+
+```ts
+import { superForm, numberProxy } from 'sveltekit-superforms/client';
+export let data;
+
+const { form } = superForm(data.form);
+const proxy = numberProxy(form, 'field', { options });
+```
 
 **Options:**
 
@@ -523,11 +528,19 @@ Creates a string store for a **number** field in the schema.
 }
 ```
 
-A numberProxy is rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
-
-Note that the `empty` option includes the number zero, unless `emptyIfZero` is set to `false`.
+Use the `empty` option to set the field to `null` or `undefined` if the value is falsy. (Which includes the number zero, unless `emptyIfZero` is set to `false`.)
 
 ### booleanProxy(form, fieldName, options?)
+
+Creates a string store for a **boolean** schema field. The option can be used to change what string value should represent `true`. An empty string always represents `false`.
+
+```ts
+import { superForm, booleanProxy } from 'sveltekit-superforms/client';
+export let data;
+
+const { form } = superForm(data.form);
+const proxy = booleanProxy(form, 'field', { options });
+```
 
 **Options:**
 
@@ -537,11 +550,17 @@ Note that the `empty` option includes the number zero, unless `emptyIfZero` is s
 }
 ```
 
-Creates a string store for a **boolean** schema field. The option can be used to change what string value should represent `true`. An empty string represents `false`.
-
 ### dateProxy(form, fieldName, options?)
 
 Creates a string store for a **Date** schema field. The option can be used to change the proxied string format of the date.
+
+```ts
+import { superForm, dateProxy } from 'sveltekit-superforms/client';
+export let data;
+
+const { form } = superForm(data.form);
+const proxy = dateProxy(form, 'field', { options });
+```
 
 **Options:**
 
@@ -564,6 +583,14 @@ Creates a string store for a **Date** schema field. The option can be used to ch
 
 Creates a string store for a **string** schema field. It may look redundant, but the option can be useful if you need to convert an empty string to `null` or `undefined`.
 
+```ts
+import { superForm, stringProxy } from 'sveltekit-superforms/client';
+export let data;
+
+const { form } = superForm(data.form);
+const proxy = stringProxy(form, 'field', { options });
+```
+
 **Options:**
 
 ```ts
@@ -572,26 +599,83 @@ Creates a string store for a **string** schema field. It may look redundant, but
 }
 ```
 
-### fieldProxy, formFieldProxy
+### formFieldProxy(superForm, fieldName, options)
+
+Proxies a form field, returning stores similar to `superForm` but for a single field. For arrays in the schema, see below for how to create an `arrayProxy`.
+
+> The whole object returned from `superForm` is required here, not just the `$form` store.
 
 ```svelte
 <script lang="ts">
-  import { superForm, fieldProxy, formFieldProxy } from 'sveltekit-superforms/client';
+  import { superForm, formFieldProxy } from 'sveltekit-superforms/client';
 
   export let data;
 
-  const form = superForm(data.form);
-  const { form: formData } = form;
+  const theForm = superForm(data.form); // The whole superForm object is required
+  const { form } = theForm; // Deconstruct as usual here
 
-  // Proxy any field in an object
-  const nameProxy = fieldProxy(formData, 'name');
-
-  // Proxy a form field, with stores similar to superForm but for one field
-  const { path, value, errors, constraints, tainted } = formFieldProxy(form, 'name');
+  const { path, value, errors, constraints, tainted } = formFieldProxy(theForm, 'name');
 </script>
 ```
 
-For more details, see the dedicated article about [fieldProxy](/components#using-a-fieldproxy) and [formFieldProxy](/components#using-a-formfieldproxy).
+**Options:**
+
+```ts
+{
+  taint: boolean | 'untaint' | 'untaint-all' = true;
+}
+```
+
+The option can be used to prevent tainting the form when modifying the proxy.
+
+For more details about formFieldProxy, see the [components page](/components#using-a-formfieldproxy). 
+
+### arrayProxy(superForm, fieldName, options)
+
+Proxies an array in a form, returning stores similar to `superForm` but for the array.
+
+> The whole object returned from `superForm` is required here, not just the `$form` store.
+
+```svelte
+<script lang="ts">
+  import { superForm, arrayProxy } from 'sveltekit-superforms/client';
+
+  export let data;
+
+  const theForm = superForm(data.form); // The whole superForm object is required
+  const { form } = theForm; // Deconstruct as usual here
+
+  const { path, values, errors } = arrayProxy(theForm, 'tags');
+</script>
+```
+
+**Options:**
+
+```ts
+{
+  taint: boolean | 'untaint' | 'untaint-all' = true;
+}
+```
+
+The option can be used to prevent tainting the form when modifying the proxy.
+
+An example of how to use `arrayProxy` in a component is available [on Stackblitz](https://stackblitz.com/edit/sveltekit-superforms-multi-select?file=src%2Froutes%2F%2Bpage.svelte,src%2Froutes%2FMultiSelect.svelte).
+
+### fieldProxy(object, fieldName)
+
+Proxies field access in any object, usually in `$form`, but in that case `formFieldProxy` and `arrayProxy` are more convenient.
+
+```svelte
+<script lang="ts">
+  import { superForm, fieldProxy } from 'sveltekit-superforms/client';
+  export let data;
+
+  const { form } = superForm(data.form);
+
+  // Proxy any field in an object
+  const nameProxy = fieldProxy(form, 'name');
+</script>
+```
 
 ## Proxy example
 
