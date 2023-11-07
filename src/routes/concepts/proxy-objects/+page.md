@@ -32,7 +32,7 @@ import {
 } from 'sveltekit-superforms/client';
 ```
 
-The usage for all of them is practically the same, only the initial argument will differ, according to above:
+The usage for all of them is practically the same, only the initial argument will differ, as described above.
 
 ```ts
 import { superForm, intProxy } from 'sveltekit-superforms/client';
