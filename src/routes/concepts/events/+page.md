@@ -21,7 +21,7 @@ A number of events, triggered on form submission, give you full control over the
 
 <Flowchart />
 
-> In a single-page application (SPA), or if [client-side validation](/concepts/client-validation) fails, the validation result, usually returned from the server between `onSubmit` and `onResult`, is created on the client.
+> In a [single-page application](/concepts/spa), or if [client-side validation](/concepts/client-validation) fails, the validation result, usually returned from the server between `onSubmit` and `onResult`, is created on the client.
 
 ## Usage
 
