@@ -81,7 +81,7 @@ Also, if `applyAction` is `false`, which means that `$page.status` won't update,
 
 #### Strongly typed ActionResult
 
-Usually, you check the *result* status, as described above, not the form *validation* status, which is more conveniently handled in `onUpdate` (see below). But if you want to access the result data even here, for example if you return additional data in the form action, there is a helper type called `FormResult`, that you can use to make the data strongly typed:
+Usually, you check the ActionResult status in `onResult`, not the form validation result, which is more conveniently handled in `onUpdate` (see below). But if you return additional data in the form action, there is a helper type called `FormResult`, that you can use to make the ActionResult data strongly typed:
 
 ```svelte
 <script lang="ts">
