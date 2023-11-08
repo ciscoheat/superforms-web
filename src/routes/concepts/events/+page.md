@@ -15,13 +15,13 @@
 
 > Events are only available when JavaScript is enabled in the browser and the custom [use:enhance](/concepts/enhance) is added to the form.
 
-A number of events, triggered on form submission, give you full control over the submit process.
+A number of events, triggered on form submission, give you full control over the submit process. They are triggered every time the form is submitted.
 
 ## Event flowchart
 
 <Flowchart />
 
-> In a single-page application (SPA), the events are triggered as usual, but the validation result, usually returned from the server between `onSubmit` and `onResult`, is created on the client. You should use `onUpdate` for validating it. See [the SPA page](/concepts/spa) for details.
+> In a single-page application (SPA), or if [client-side validation](/concepts/client-validation) fails, the validation result, usually returned from the server between `onSubmit` and `onResult`, is created on the client.
 
 ## Usage
 
@@ -48,7 +48,7 @@ onSubmit: ({
 }) => void;
 ```
 
-The `onSubmit` event is the first one triggered, hooking you into SvelteKit's `use:enhance` function and also giving you a chance to cancel the submission altogether. See the SvelteKit docs for the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature.
+The `onSubmit` event is the first one triggered, hooking you into SvelteKit's own `use:enhance` function, and also giving you a chance to cancel the submission altogether. See the SvelteKit docs for the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature.
 
 ### onResult
 
@@ -56,11 +56,11 @@ The `onSubmit` event is the first one triggered, hooking you into SvelteKit's `u
 onResult: ({ result, formEl, cancel }) => void
 ```
 
-If the submission isn't cancelled, the form is posted to the server, which responds with a SvelteKit [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult), triggering the `onResult` event.
-
-> If you just want to check if the form validation succeeded, use [onUpdated](/concepts/events#onupdated) instead.
+If the submission isn't cancelled, the form is posted to the server. It then responds with a SvelteKit [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult), triggering the `onResult` event.
 
 `result` contains the ActionResult. You can modify it; changes will be applied further down the event chain. `formEl` is the `HTMLFormElement` of the form. `cancel()` is a function which will cancel the rest of the event chain and any form updates.
+
+> Usually, you don't have to care about the `ActionResult` itself. To check if the form validation succeeded, use [onUpdated](/concepts/events#onupdated) instead, or [onUpdate](/concepts/events#onupdate) if you want to modify or cancel the result before it's displayed.
 
 #### Common usage
 
@@ -77,11 +77,11 @@ const { form, enhance } = superForm(data.form, {
 });
 ```
 
-Also, if `applyAction` is `false`, which means that `$page.status` won't update, you'll find the status code for the request in `result`.
+Also, if `applyAction` is `false`, which means that `$page.status` won't update, you'll find the status code for the request in `result.status`.
 
 #### Strongly typed ActionResult
 
-Usually, you check the *result* status, as described above, not the form *validation* status, which is more conveniently handled in `onUpdate` (see below). But if you want to access the result data even here, for example if you return additional data in the form action, there is a helper type called `FormResult` that you can use to make the data strongly typed:
+Usually, you check the *result* status, as described above, not the form *validation* status, which is more conveniently handled in `onUpdate` (see below). But if you want to access the result data even here, for example if you return additional data in the form action, there is a helper type called `FormResult`, that you can use to make the data strongly typed:
 
 ```svelte
 <script lang="ts">
@@ -108,9 +108,11 @@ Usually, you check the *result* status, as described above, not the form *valida
 onUpdate: ({ form, formEl, cancel }) => void
 ```
 
-If you don't care about the details of the `ActionResult` but rather the validation result, `onUpdate` is triggered just before the form update is being applied, giving you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formEl`. 
+The `onUpdate` event is triggered just before the form update is being applied, giving you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formEl`. 
 
-If your app is a single-page application, `onUpdate` is the event you should be using to validate the form data. See the [SPA](/concepts/spa) page for more details.
+> If your app is a single-page application, you should use `onUpdate` to process the form data. See the [SPA](/concepts/spa) page for more details.
+
+When you don't want to modify or cancel the validation result, the last event is the most convenient to use:
 
 ### onUpdated
 
@@ -118,11 +120,11 @@ If your app is a single-page application, `onUpdate` is the event you should be 
 onUpdated: ({ form }) => void
 ```
 
-If you just want to validate the form as usual and do something extra afterwards, `onUpdated` is the easiest way.
+When you just want to ensure that the form is validated and do something extra afterwards, like showing a toast notification, `onUpdated` is the easiest way.
 
-The `form` parameter contains the validation result, and is read-only here, since the stores have updated at this point, making this event best for things like showing a toast notification.
+The `form` parameter contains the validation result, and is read-only here, since the stores have updated at this point.
 
-**Example:**
+**Example**
 
 ```ts
 const { form, enhance } = superForm(data.form, {
@@ -142,7 +144,7 @@ const { form, enhance } = superForm(data.form, {
 onError: (({ result }) => void) | 'apply'
 ```
 
-When the SvelteKit [error](https://kit.svelte.dev/docs/errors#expected-errors) helper is thrown on the server, you can use the `onError` event to catch it.
+When the SvelteKit [error](https://kit.svelte.dev/docs/errors#expected-errors) function is thrown on the server, you can use the `onError` event to catch it.
 
 `result` is the error ActionResult, with the `error` property casted to [App.Error](https://kit.svelte.dev/docs/types#app-error). In this simple example, the message store is set to the error:
 
@@ -154,7 +156,7 @@ const { form, enhance, message } = superForm(data.form, {
 });
 ```
 
-You can also set `onError` to the string value `'apply'`, in which case the SvelteKit `applyAction` error behaviour will be used, which is to render the nearest [+error](https://kit.svelte.dev/docs/routing#error) page, while wiping out the form. To avoid data loss even for non-javascript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
+You can also set `onError` to the string value `'apply'`, in which case the SvelteKit `applyAction` error behaviour will be used, which is to render the nearest [+error](https://kit.svelte.dev/docs/routing#error) page, also wiping out the form. To avoid data loss even for non-javascript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
 
 > If you're unsure what event to use, start with `onUpdated`; unless your app is a [SPA](/concepts/spa), then `onUpdate` should be used to validate the form data.
 
