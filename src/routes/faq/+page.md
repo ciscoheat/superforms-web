@@ -160,7 +160,7 @@ If the API doesn't return an [ActionResult](https://kit.svelte.dev/docs/types#pu
 
 ### How to submit the form programmatically?
 
-Use the [requestSubmit](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit) method on the form element.
+Use the [requestSubmit](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit) method on the form element to submit it manually.
 
 ---
 
