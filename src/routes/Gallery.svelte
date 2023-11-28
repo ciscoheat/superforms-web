@@ -19,7 +19,7 @@
     [
       multipleforms,
       'Multiple forms on the same page',
-      'Superforms handles multiple forms in a straightforward manner, without you having to worry about collisions in <code>page</code> and <code>ActionData</code>.'
+      'Superforms handles multiple forms in a straightforward manner, without you having to worry about collisions in <code>PageData</code> and <code>ActionData</code>.'
     ],
     [
       tainted,
@@ -34,7 +34,7 @@
     [
       spinner,
       'Loading spinners',
-      'Adding a loading spinner is literally <a href="/concepts/timers#loading-indicators">one line of code</a>. No more hacky <code>setTimeout</code> solutions, Superforms handles all this for you.'
+      'Adding a loading spinner is literally <a href="/concepts/timers#loading-indicators">one line of code</a>. No need for extra variables or custom solutions, Superforms handles it for you.'
     ],
     [
       api,
@@ -80,5 +80,10 @@
       //height: 200px;
       object-fit: contain;
     }
+  }
+
+  :global(.modal-body a) {
+    text-decoration: underline;
+    color: rgb(var(--color-primary-500));
   }
 </style>
