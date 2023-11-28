@@ -126,6 +126,7 @@
       bind:value={$results.term}
       on:input={search}
       type="search"
+      autocomplete="off"
       placeholder="Search..." />
   </header>
   <!-- Results -->
@@ -157,3 +158,10 @@
     <div><kbd>Enter</kbd> to select</div>
   </footer>
 </div>
+
+<style>
+  #search-input {
+    outline-style: none;
+    outline-color: transparent;
+  }
+</style>
