@@ -141,7 +141,7 @@ The validation is triggered when **a value is changed**, not just when focusing 
 
 But you can instead use the `oninput` or `onblur` setting to always validate on one of these respective events, or `submit-only` to validate only on submit.
 
-> If you're using a Zod schema in the [validators](/concepts/client-validation#validators) option, be aware that the whole schema will be validated, not just the validator for the modified field.<br><br>This is because errors can be added to any field in the schema during validation, so the whole schema must be validated to know the final result.
+> If you're using a Zod schema in the [validators](/concepts/client-validation#validators) option, be aware that the whole schema will be validated, not just the modified field.<br><br>This is because errors can be added to any field in the schema during validation with [refine](https://zod.dev/?id=customize-error-path) or similar, so the whole schema must be validated to know the final result.
 
 ### defaultValidator
 

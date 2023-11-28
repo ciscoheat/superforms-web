@@ -158,11 +158,11 @@ If you have a sticky navbar, set its CSS selector here and it won't hide any err
 
 ### customValidity
 
-This option uses the [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#the_constraint_validation_api) to display validation errors. By enabling this, with `use:enhance` added to the form, instead of the standard messages, the Zod validation errors will now be displayed in the browser validation tooltip. Submit the following form without entering any data to see it in action:
+This option uses the [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#the_constraint_validation_api) to display validation errors. By enabling this, with [use:enhance](/concepts/enhance) added to the form, instead of the standard messages, the Zod validation errors will now be displayed in the browser validation tooltip. Submit the following form without entering any data to see it in action:
 
 <CustomValidity {data} />
 
-Since validation is handled by Superforms, there is no need for spreading `$constraints` on the field. They *can* be added as well, but will prevent the schema error message from being displayed. But the biggest win is that there is no need to display `$errors`, making for a minimal html:
+Since validation is handled by Superforms, there is no need for spreading `$constraints` on the field. But the biggest win is that there is no need to display `$errors`, making for a minimal html:
 
 ```ts
 const { form, enhance } = superForm(data.form, {
@@ -177,7 +177,7 @@ const { form, enhance } = superForm(data.form, {
 
 The `name` attribute is required on the input fields. If you want to exclude a field from displaying the tooltip, add a `data-no-custom-validity` attribute to it.
 
-> Just be aware that since `use:enhance` is needed, `customValidity` requires JavaScript to be enabled, unlike browser [constraints](/concepts/client-validation#built-in-browser-validation). Also, some browsers require the `novalidate` attribute on the form itself, to prevent displaying the default constraint messages.
+> Just be aware that since `use:enhance` is needed, `customValidity` requires JavaScript to be enabled, unlike browser [constraints](/concepts/client-validation#built-in-browser-validation).
 
 ## Form-level and array errors
 
@@ -192,7 +192,7 @@ const refined = z.object({
 .refine((data) => data.password == data.confirm, "Passwords didn't match.");
 ```
 
-These can be accessed on the client through `$errors?._errors`. The same goes for array errors, which in the above case can be accessed through `$errors.tags?._errors`. 
+These can be accessed on the client through `$errors?._errors`. The same goes for array errors, which in the above case can be accessed through `$errors.tags?._errors` (alternatively, use an [arrayProxy](/api#arrayproxysuperform-fieldname-options)).
 
 ### Setting field errors with refine
 

@@ -23,8 +23,8 @@ import {
   intProxy,
   numberProxy,
   stringProxy,
-  // Uses the whole object returned from superForm.
-  // Type depends on the field.
+  // These two uses the whole object returned from
+  // superForm. Type depends on the field.
   formFieldProxy,
   arrayProxy,
   // Can use any object. Type depends on the field.
@@ -54,7 +54,7 @@ Note that this kind of conversion will usually happen automatically with `bind:v
 
 ## Nested proxies
 
-You can use a proxy for nested data, like `'user.profile.email'`, but you must ensure that all parent objects exist for the proxy to be able to access the final field. In this case, if `user` or `profile` is `undefined`, it won't work. The easiest way to prevent this is to not make any parent objects optional or nullable in the schema.
+You can use a proxy for nested data, like `'user.profile.email'`, in which case parent objects will be created if they don't exist.
 
 ## Date input issues
 
