@@ -7,6 +7,8 @@
 
 <Head title="Superforms for SvelteKit" />
 
+> Superforms v2 development is about to start, with the goal of supporting all validation libraries! Please read the [introductory post](https://blog.encodeart.dev/superforms-v2-supporting-all-validation-libraries), feedback is welcome!
+
 <Header />
 
 Superforms is a SvelteKit library that gives you a comprehensive solution for **server and client validation**, and **client-side display** of forms.
