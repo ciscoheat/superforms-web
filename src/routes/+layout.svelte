@@ -83,7 +83,7 @@
     }
   }
 
-  const noToC = ['/'];
+  const noToC = ['/', '/sponsors'];
   $: displayToC = !noToC.includes($page.url.pathname);
 
   beforeNavigate((nav) => {
