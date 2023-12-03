@@ -4,12 +4,16 @@
   import nicholas from './img/nicholas.png';
   import torwent from './img/torwent.jpg';
   import matus from './img/matus.png';
+  import bradenw from './img/braden-w.jpg';
+  import saturnonearth from './img/saturnonearth.jpg';
 
   const sponsors = [
     [careswitch, 'Careswitch', 'https://www.careswitch.com/', 'rounded-none'],
     [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
     [torwent, 'Torwent', 'https://github.com/Torwent'],
-    [matus, 'Vicente Matus', 'https://github.com/vicentematus']
+    [matus, 'Vicente Matus', 'https://github.com/vicentematus'],
+    [bradenw, 'Braden Wong', 'https://github.com/braden-w'],
+    [saturnonearth, 'Cory Tyburski', 'https://github.com/saturnonearth']
   ];
 </script>
 
