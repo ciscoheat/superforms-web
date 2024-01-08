@@ -36,7 +36,7 @@ The biggest breaking change is that the options now follow the SvelteKit default
 - resetForm is now `true` as default
 - taintedMessage is now `false` as default
 
-But you don't have to update every form if you want to migrate. Instead, add a define in `vite.config.ts` to keep the old behavior:
+But don't worry, there's no need to change the options on every form to migrate. Instead, add the following define in `vite.config.ts` to keep the original behavior:
 
 ```diff
 export default defineConfig({
@@ -59,7 +59,6 @@ Instead of a Zod schema, you now use an adapter for your favorite validation lib
 | Ajv      | `import { ajv } from 'sveltekit-superforms/adapters'` | No |
 | Arktype  | `import { arktype } from 'sveltekit-superforms/adapters'` | Yes |
 | Joi      | `import { joi } from 'sveltekit-superforms/adapters'` | No |
-| Superforms<br>(client only) | `import { superform } from 'sveltekit-superforms/adapters'` | Yes |
 | TypeBox  | `import { typebox } from 'sveltekit-superforms/adapters'` | No |
 | Valibot  | `import { valibot } from 'sveltekit-superforms/adapters'` | Yes |
 | Zod      | `import { zod } from 'sveltekit-superforms/adapters'` | No |
@@ -75,22 +74,63 @@ import { zod } from 'sveltekit-superforms/adapters';
 const form = await superValidate(zod(schema));
 ```
 
-If you have used type parameters for a call to `superValidate` before, or have been using the `SuperValidated` type, you now need to wrap the schema parameter with `z.infer`:
+The libraries that requires defaults don't have full introspection capabilities (yet), in which case you need to supply the default values for the form data as an option:
 
 ```ts
+// Arktype schema, powerful stuff
+const schema = type({
+  name: 'string',
+  email: 'email',
+  tags: '(string>=2)[]>=3',
+  score: 'integer>=0'
+});
+
+const defaults = { name: '', email: '', tags: [], score: 0 };
+
+export const load = async () => {
+	const form = await superValidate(arktype(schema, { defaults }));
+	return { form };
+};
+```
+
+#### Schema caching
+
+In the example above, both the schema and the defaults are defined outside the load function, on the top level of the module. **This is very important to make caching work**. The adapter is memoized (cached) with its parameters, so they must be long-lived. Therefore, define the schema and options for the adapter on the top-level of a module.
+
+#### Type parameters
+
+If you have used type parameters for a call to `superValidate` before, or have been using the `SuperValidated` type, you now need to wrap the schema parameter with `Inferred`:
+
+```ts
+import type { Inferred } from 'sveltekit-superforms'
+
 type Message = { status: 'success' | 'failure', text: string }
 
-const form = await superValidate<z.infer<typeof schema>, Message>(zod(schema));
+const form = await superValidate<Inferred<typeof schema>, Message>(zod(schema));
 ```
 
 ```ts
 import { z } from 'zod';
 import type { LoginSchema } from '$lib/schemas';
+import type { Inferred } from 'sveltekit-superforms'
 
-export let data: SuperValidated<z.infer<LoginSchema>>;
+export let data: SuperValidated<Inferred<LoginSchema>>;
 ```
 
-For client-side validation, remember to import an adapter for the `validators` option as well. For the `superform` validation schema, the input parameter can now be `undefined`, be sure to check for that case. Hopefully, you can migrate to something better now.
+For client-side validation, remember to import an adapter for the `validators` option as well. For the `superform` validation schema, the input parameter can now be `undefined`, be sure to check for that case. 
+
+```ts
+import { superform } from 'sveltekit-superforms/adapters';
+
+const { form, errors, enhance } = superForm(data.form, {
+  validators: superform({
+    id: (id?) => { if(id === undefined || isNaN(id) || id < 3) return 'Id must be larger than 2' },
+    name: (name?) => { if(!name || name.length < 2) return 'Name must be at least two characters' }
+  })
+});
+```
+
+The superform adapter is only to be used on the client, it is **not** a replacement for any other validation library. Hopefully, you can switch to something better now.
 
 ### superValidateSync
 
@@ -155,22 +195,6 @@ form.errors = {}
 
 In hindsight, this should have been the default, given the forgiving nature of the data coercion and parsing. When a default value exists, the field is not required anymore. If that field isn't posted, the default value will be added to `form.data`.
 
-#### Unions must have a default value
-
-If a schema field can be more than one type, it's not possible to know what default value should be set for it. Therefore, you must specify a default value for unions explicitly:
-
-```ts
-const schema = z.object({
-  undecided: z.union([z.string(), z.number()]).default(0)
-})
-```
-
-#### Unions can only be used when dataType is 'json'
-
-Unions are also quite hard to make assumptions about in `FormData`. If `"123"` was posted (as all posted values are strings), should it be parsed as a string or a number, in the above case?
-
-There is no obvious solution, so schemas with unions can only be used when the `dataType` option is set to `'json'`, which will bypass the whole `FormData` parsing.
-
 ## Removed features
 
 ### superForm.fields is removed
@@ -230,6 +254,26 @@ return removeFiles({ form })
 Now that files are a feature, SuperDebug displays file objects properly:
 
 <img src={fileDebug} alt="SuperDebug displaying a File" />
+
+### Unions in schemas!
+
+A requested feature is support for unions, which has always been a bit difficult to handle with the `FormData` parsing and default values. It's one thing to have a type system that can define any kind of structure, and another to have a form validation library that is supposed to map posted string values to the types! But unions can now be used in schemas, with a few compromises:
+
+#### Unions must have a default value
+
+If a schema field can be more than one type, it's not possible to know what default value should be set for it. Therefore, you must specify a default value for unions explicitly:
+
+```ts
+const schema = z.object({
+  undecided: z.union([z.string(), z.number()]).default(0)
+})
+```
+
+#### Unions can only be used when dataType is 'json'
+
+As said, unions are also quite hard to make assumptions about in `FormData`. If `"123"` was posted (as all posted values are strings), should it be parsed as a string or a number, in the above case?
+
+There is no obvious solution, so schemas with unions can only be used when the `dataType` option is set to `'json'`, which will bypass the whole `FormData` parsing.
 
 ### superForm.isTainted
 
