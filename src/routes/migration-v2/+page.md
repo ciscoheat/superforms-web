@@ -132,21 +132,31 @@ const { form, errors, enhance } = superForm(data.form, {
 
 The superform adapter is only to be used on the client, it is **not** a replacement for any other validation library. Hopefully, you can switch to something better now.
 
-### superValidateSync
+### superValidateSync -> defaults
 
-The quite popular `superValidateSync` function has changed, since it's not possible to make a synchronous validation anymore. Fortunately, a [quick Github search](https://github.com/search?q=superValidateSync%28&type=code) reveals that most of its usages are with the schema only, which works just as usual, just wrap the schema with your adapter, and you're good to go:
+The quite popular `superValidateSync` function has changed, since it's not possible to make a synchronous validation anymore. So if you're validating data with `superValidateSync` (in the first parameter), be aware that **superValidateSync cannot do validation anymore**. You need to use a `+page.ts` to do proper validation, as described on the [SPA page](/concepts/spa#using-pagets-instead-of-pageserverts). 
+
+> Since this is a bit of a security issue, `superValidateSync` has been renamed to `defaults`.
+
+Fortunately though, a [quick Github search](https://github.com/search?q=superValidateSync%28&type=code) reveals that most of its usages are with the schema only, which requires no validation and no `+page.ts`. In that case, just call `defaults` with your adapter or default values, and you're good to go:
 
 ```ts
-const { form, errors, enhance } = superForm(superValidateSync(zod(schema)), {
+// Getting the default values from the schema:
+const { form, errors, enhance } = superForm(defaults(zod(schema)), {
   SPA: true,
   validators: zod(schema),
   // ...
 })
 ```
 
-**Important:** If you're validating data with `superValidateSync` (in the first parameter), be aware that **superValidateSync does no validation anymore**. You can supply a data object to it as before, but it won't be validated. You need to use a `+page.ts` to do proper validation, as described on the [SPA page](/concepts/spa#using-pagets-instead-of-pageserverts).
-
-Since this is a bit of a security issue, `superValidateSync` is deprecated and will be removed before 2.0 is released, a replacement method will be available soon.
+```ts
+// Supplying your own default values
+const { form, errors, enhance } = superForm(defaults({ name: 'New user', email: '' }), {
+  SPA: true,
+  validators: zod(schema),
+  // ...
+})
+```
 
 #### The id option
 
@@ -257,7 +267,7 @@ Now that files are a feature, SuperDebug displays file objects properly:
 
 ### Unions in schemas!
 
-A requested feature is support for unions, which has always been a bit difficult to handle with the `FormData` parsing and default values. It's one thing to have a type system that can define any kind of structure, and another to have a form validation library that is supposed to map posted string values to the types! But unions can now be used in schemas, with a few compromises:
+A requested feature is support for unions, which has always been a bit difficult to handle with `FormData` parsing and default values. It's one thing to have a type system that can define any kind of structure, and another to have a form validation library that is supposed to map a list of string values to the types! But unions can now be used in schemas, with a few compromises:
 
 #### Unions must have a default value
 
