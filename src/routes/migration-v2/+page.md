@@ -3,7 +3,7 @@
   import fileDebug from './file-debug.png'
 </script>
 
-# Superforms v2 - Alpha version
+# Superforms v2 - Next version
 
 <Head title="Test out Superforms version 2!" />
 
@@ -18,7 +18,7 @@ To update, change your `package.json` entry for `sveltekit-superforms` to `2.0.0
 ```json
 {
   "devDependencies": {
-    "sveltekit-superforms": "2.0.0-alpha.x"
+    "sveltekit-superforms": "2.0.0-alpha.1"
   }
 }
 ```
@@ -50,22 +50,25 @@ export default defineConfig({
 });
 ```
 
+You can do the same on a form-by-form basis by setting the `legacy` option on `superForm` to `true` as well.
+
 ### superValidate
 
 Instead of a Zod schema, you now use an adapter for your favorite validation library. The following are currently supported:
 
-| Library            | Adapter        | Requires defaults |
-| ------------------ | -------------- | ----------------- |
-| Ajv      | `import { ajv } from 'sveltekit-superforms/adapters'` | No |
+| Library  | Adapter                                                   | Requires defaults |
+| -------- | --------------------------------------------------------- | ----------------- |
+| Ajv      | `import { ajv } from 'sveltekit-superforms/adapters'`     | No  |
 | Arktype  | `import { arktype } from 'sveltekit-superforms/adapters'` | Yes |
-| Joi      | `import { joi } from 'sveltekit-superforms/adapters'` | No |
-| TypeBox  | `import { typebox } from 'sveltekit-superforms/adapters'` | No |
+| Joi      | `import { joi } from 'sveltekit-superforms/adapters'`     | No  |
+| TypeBox  | `import { typebox } from 'sveltekit-superforms/adapters'` | No  |
 | Valibot  | `import { valibot } from 'sveltekit-superforms/adapters'` | Yes |
-| Zod      | `import { zod } from 'sveltekit-superforms/adapters'` | No |
+| Yup      | `import { yup } from 'sveltekit-superforms/adapters'`     | No  |
+| Zod      | `import { zod } from 'sveltekit-superforms/adapters'`     | No  |
 
 Missing a library? No problem, writing new adapters is super-simple. Let me know on [Discord](https://discord.gg/AptebvVuhB) or [Twitter](https://twitter.com/encodeart).
 
-With the adapter imported, all you do now is wrap the schema with it:
+With the library installed and the adapter imported, all you need to do is wrap the schema with it:
 
 ```ts
 import { superValidate } from 'sveltekit-superforms';
@@ -74,7 +77,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 const form = await superValidate(zod(schema));
 ```
 
-The libraries that requires defaults don't have full introspection capabilities (yet), in which case you need to supply the default values for the form data as an option:
+The libraries in the list that requires defaults don't have full introspection capabilities (yet), in which case you need to supply the default values for the form data as an option:
 
 ```ts
 // Arktype schema, powerful stuff
@@ -95,29 +98,29 @@ export const load = async () => {
 
 #### Schema caching
 
-In the example above, both the schema and the defaults are defined outside the load function, on the top level of the module. **This is very important to make caching work**. The adapter is memoized (cached) with its parameters, so they must be long-lived. Therefore, define the schema and options for the adapter on the top-level of a module.
+In the example above, both the schema and the defaults are defined outside the load function, on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be long-lived. Therefore, define the schema and options for the adapter on the top level of a module, so they always refer to the same object.
 
 #### Type parameters
 
-If you have used type parameters for a call to `superValidate` before, or have been using the `SuperValidated` type, you now need to wrap the schema parameter with `Inferred`:
+If you have used type parameters for a call to `superValidate` before, or have been using the `SuperValidated` type, you now need to wrap the schema parameter with `Infer`:
 
 ```ts
-import type { Inferred } from 'sveltekit-superforms'
+import type { Infer } from 'sveltekit-superforms'
 
 type Message = { status: 'success' | 'failure', text: string }
 
-const form = await superValidate<Inferred<typeof schema>, Message>(zod(schema));
+const form = await superValidate<Infer<typeof schema>, Message>(zod(schema));
 ```
 
 ```ts
 import { z } from 'zod';
 import type { LoginSchema } from '$lib/schemas';
-import type { Inferred } from 'sveltekit-superforms'
+import type { Infer } from 'sveltekit-superforms'
 
-export let data: SuperValidated<Inferred<LoginSchema>>;
+export let data: SuperValidated<Infer<LoginSchema>>;
 ```
 
-For client-side validation, remember to import an adapter for the `validators` option as well. For the `superform` validation schema, the input parameter can now be `undefined`, be sure to check for that case. 
+For client-side validation, remember to import an adapter for the `validators` option as well. For the Superforms validation schema, the input parameter can now be `undefined`, be sure to check for that case:
 
 ```ts
 import { superform } from 'sveltekit-superforms/adapters';
@@ -130,9 +133,9 @@ const { form, errors, enhance } = superForm(data.form, {
 });
 ```
 
-The superform adapter is only to be used on the client, it is **not** a replacement for any other validation library. Hopefully, you can switch to something better now.
+> The superform adapter is only to be used on the client, it is **not** a replacement for any other validation library, especially not on the server. Hopefully, you can switch to something better now.
 
-### superValidateSync -> defaults
+### superValidateSync is renamed to defaults
 
 The quite popular `superValidateSync` function has changed, since it's not possible to make a synchronous validation anymore. So if you're validating data with `superValidateSync` (in the first parameter), be aware that **superValidateSync cannot do validation anymore**. You need to use a `+page.ts` to do proper validation, as described on the [SPA page](/concepts/spa#using-pagets-instead-of-pageserverts). 
 
@@ -141,6 +144,8 @@ The quite popular `superValidateSync` function has changed, since it's not possi
 Fortunately though, a [quick Github search](https://github.com/search?q=superValidateSync%28&type=code) reveals that most of its usages are with the schema only, which requires no validation and no `+page.ts`. In that case, just call `defaults` with your adapter or default values, and you're good to go:
 
 ```ts
+import { defaults } from 'sveltekit-superforms'
+
 // Getting the default values from the schema:
 const { form, errors, enhance } = superForm(defaults(zod(schema)), {
   SPA: true,
@@ -150,6 +155,8 @@ const { form, errors, enhance } = superForm(defaults(zod(schema)), {
 ```
 
 ```ts
+import { defaults } from 'sveltekit-superforms'
+
 // Supplying your own default values
 const { form, errors, enhance } = superForm(defaults({ name: 'New user', email: '' }), {
   SPA: true,
@@ -265,9 +272,9 @@ Now that files are a feature, SuperDebug displays file objects properly:
 
 <img src={fileDebug} alt="SuperDebug displaying a File" />
 
-### Unions in schemas!
+### Union support!
 
-A requested feature is support for unions, which has always been a bit difficult to handle with `FormData` parsing and default values. It's one thing to have a type system that can define any kind of structure, and another to have a form validation library that is supposed to map a list of string values to the types! But unions can now be used in schemas, with a few compromises:
+A requested feature is support for unions, which has always been a bit difficult to handle with `FormData` parsing and default values. It's one thing to have a type system that can define any kind of structure, but another to have a form validation library that is supposed to map a list of string values to the types! But unions can now be used in schemas, with a few compromises:
 
 #### Unions must have a default value
 
