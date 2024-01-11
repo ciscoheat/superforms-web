@@ -288,6 +288,18 @@ The `fields` object returned from `superForm` was an inferior version of [formFi
 
 You could previously choose what specific fields to untaint with a `fields` option, when updating `$form`. It was a rarely used feature that has now been removed.
 
+### onError "message" parameter is removed
+
+Previously, there was a `message` parameter in the onError event. It's gone now, since it was pointing to the message store, and you might as well just assign it directly:
+
+```ts
+const { form, message, enhance } = superForm(data.form, {
+  onError({ result }) {
+    $message = result.error.message
+  }
+})
+```
+
 ## New features
 
 Of course, there are some new features, so the migration will be worthwhile.
