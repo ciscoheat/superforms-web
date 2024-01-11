@@ -236,8 +236,7 @@ Generic components were previously using Zod types for type safety. It is simple
 </script>
 
 <script lang="ts" generics="T extends Record<string, unknown>">
-  import type { FormPathLeaves } from 'sveltekit-superforms';
-  import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
+  import { formFieldProxy, type SuperForm, type FormPathLeaves } from 'sveltekit-superforms';
 
   export let form: SuperForm<T, unknown>;
   export let field: FormPathLeaves<T>;
@@ -264,7 +263,7 @@ Generic components were previously using Zod types for type safety. It is simple
 
 ```svelte
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
   import TextInput from './TextInput.svelte';
 
   export let data;
@@ -357,7 +356,7 @@ const schema = z.object({
 
 As said, unions are also quite hard to make assumptions about in `FormData`. If `"123"` was posted (as all posted values are strings), should it be parsed as a string or a number, in the above case?
 
-There is no obvious solution, so schemas with unions can only be used when the `dataType` option is set to `'json'`, which will bypass the whole `FormData` parsing.
+There is no obvious solution, so schemas with unions can only be used when the `dataType` option is set to `'json'`, which will bypass the whole `FormData` parsing, as the form data is serialized instead.
 
 ### superForm.isTainted
 
@@ -366,6 +365,15 @@ A new `superForm` method is available, used to check whether any part of the for
 ### superForm.validate
 
 The `validate` method is very useful for validating the whole form, or a specific field. You can now also call `validate({ update: true })` to trigger a full client-side validation.
+
+### Simplified imports
+
+You may have noticed in the examples that `/client` and `/server` isn't needed anymore, just import everything except adapters from `sveltekit-superforms`. The same goes for `SuperDebug`, which is now the default export of the library:
+
+```ts
+import { superForm, superValidate, dateProxy } from 'sveltekit-superforms';
+import SuperDebug from 'sveltekit-superforms';
+```
 
 ## Testing help needed!
 
