@@ -28,7 +28,7 @@ Then you need to install your validation library of choice and their eventual de
 | Library  | Install these libraries
 | -------- | --------------------------------------------------------- |
 | Arktype  | `arktype` |
-| Joi      | `joi joi-to-json` |
+| Joi      | `joi` |
 | TypeBox  | `@sinclair/typebox` |
 | Valibot  | `valibot` |
 | Yup      | `yup @sodaru/yup-to-json-schema` |
@@ -299,6 +299,10 @@ const { form, message, enhance } = superForm(data.form, {
   }
 })
 ```
+
+### flashMessage.onError "message" parameter renamed to "flashMessage"
+
+To be more consistent with the message parameter, the rarely used `flashMessage` option in `superForm` has an `onError` event with a `message` parameter, but it is now renamed to `flashMessage` to signify which message can actually be updated.
 
 ## New features
 
