@@ -13,15 +13,28 @@ Not only that, the client validation part has been rewritten to be much more eff
 
 ## Test it out!
 
-To update, change your `package.json` entry for `sveltekit-superforms` to `2.0.0-alpha.x`, where `x` is the latest version (see the [Github releases](https://github.com/ciscoheat/sveltekit-superforms/releases) for the latest version):
+Install `sveltekit-superforms@alpha` with `npm` or `pnpm`:
 
-```json
-{
-  "devDependencies": {
-    "sveltekit-superforms": "2.0.0-alpha.1"
-  }
-}
+```bash
+pnpm i -D sveltekit-superforms@alpha
 ```
+
+```bash
+npm i -D sveltekit-superforms@alpha
+```
+
+Then you need to install your validation library of choice and their eventual dependencies:
+
+| Library  | Install these libraries
+| -------- | --------------------------------------------------------- |
+| Arktype  | `arktype` |
+| Joi      | `joi joi-to-json` |
+| TypeBox  | `@sinclair/typebox` |
+| Valibot  | `valibot` |
+| Yup      | `yup @sodaru/yup-to-json-schema` |
+| Zod      | `zod zod-to-json-schema` |
+
+Missing a library? No problem, writing new adapters is super-simple. Let me know on [Discord](https://discord.gg/AptebvVuhB) or [Twitter](https://twitter.com/encodeart).
 
 ## Migration and getting started
 
@@ -58,15 +71,12 @@ Instead of a Zod schema, you now use an adapter for your favorite validation lib
 
 | Library  | Adapter                                                   | Requires defaults |
 | -------- | --------------------------------------------------------- | ----------------- |
-| Ajv      | `import { ajv } from 'sveltekit-superforms/adapters'`     | No  |
 | Arktype  | `import { arktype } from 'sveltekit-superforms/adapters'` | Yes |
 | Joi      | `import { joi } from 'sveltekit-superforms/adapters'`     | No  |
 | TypeBox  | `import { typebox } from 'sveltekit-superforms/adapters'` | No  |
 | Valibot  | `import { valibot } from 'sveltekit-superforms/adapters'` | Yes |
 | Yup      | `import { yup } from 'sveltekit-superforms/adapters'`     | No  |
 | Zod      | `import { zod } from 'sveltekit-superforms/adapters'`     | No  |
-
-Missing a library? No problem, writing new adapters is super-simple. Let me know on [Discord](https://discord.gg/AptebvVuhB) or [Twitter](https://twitter.com/encodeart).
 
 With the library installed and the adapter imported, all you need to do is wrap the schema with it:
 
@@ -80,6 +90,8 @@ const form = await superValidate(zod(schema));
 The libraries in the list that requires defaults don't have full introspection capabilities (yet), in which case you need to supply the default values for the form data as an option:
 
 ```ts
+import { type } from 'arktype';
+
 // Arktype schema, powerful stuff
 const schema = type({
   name: 'string',
@@ -91,8 +103,8 @@ const schema = type({
 const defaults = { name: '', email: '', tags: [], score: 0 };
 
 export const load = async () => {
-	const form = await superValidate(arktype(schema, { defaults }));
-	return { form };
+  const form = await superValidate(arktype(schema, { defaults }));
+  return { form };
 };
 ```
 
@@ -211,6 +223,61 @@ form.errors = {}
 #### Default values aren't required fields anymore
 
 In hindsight, this should have been the default, given the forgiving nature of the data coercion and parsing. When a default value exists, the field is not required anymore. If that field isn't posted, the default value will be added to `form.data`.
+
+### Components
+
+Generic components were previously using Zod types for type safety. It is simpler now:
+
+**TextInput.svelte**
+
+```svelte
+<script lang="ts" context="module">
+  type T = Record<string, unknown>;
+</script>
+
+<script lang="ts" generics="T extends Record<string, unknown>">
+  import type { FormPathLeaves } from 'sveltekit-superforms';
+  import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
+
+  export let form: SuperForm<T, unknown>;
+  export let field: FormPathLeaves<T>;
+  export let label = '';
+
+  const { value, errors, constraints } = formFieldProxy(form, field);
+</script>
+
+<label>
+  {#if label}{label}<br />{/if}
+  <input
+    name={field}
+    type="text"
+    aria-invalid={$errors ? 'true' : undefined}
+    bind:value={$value}
+    {...$constraints}
+    {...$$restProps}
+  />
+  {#if $errors}<span class="invalid">{$errors}</span>{/if}
+</label>
+```
+
+**+page.svelte**
+
+```svelte
+<script lang="ts">
+  import { superForm } from 'sveltekit-superforms/client';
+  import TextInput from './TextInput.svelte';
+
+  export let data;
+
+  const supForm = superForm(data.form);
+  const { form, enhance } = supForm;
+</script>
+
+<form method="POST" use:enhance>
+  <TextInput form={supForm} field="name" />
+  <button>Submit</button>
+</form>
+```
 
 ## Removed features
 
