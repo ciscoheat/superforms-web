@@ -7,7 +7,7 @@
 
 <Head title="Superforms for SvelteKit" />
 
-> Superforms v2 development is about to start, with the goal of supporting all validation libraries! Please read the [introductory post](https://blog.encodeart.dev/superforms-v2-supporting-all-validation-libraries), feedback is welcome!
+> Superforms v2 alpha is released, supporting all possible validation libraries. [Test it out](/migration-v2), so we can reach an official release soon!
 
 <Header />
 
