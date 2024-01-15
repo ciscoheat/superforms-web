@@ -201,6 +201,22 @@ enum FetchStatus {
 
 For string enums, it works to post strings, of course.
 
+### Use isTainted to check tainted status
+
+A new `superForm.isTainted` method is available, to check whether any part of the form is tainted. Use it instead of checking the `$tainted` store, which may give unexpected results.
+
+```ts
+const { form, enhance, isTainted } = superForm(form.data);
+
+// Check the whole form
+if(isTainted())
+
+// Check a part of the form
+if(isTainted('name'))
+```
+
+Speaking of tainted, it now keeps track of the original data, so if you go back to a previous value, it's not considered tainted anymore.
+
 ### Schema/validation changes
 
 The underlying data model for Superforms is now [JSON Schema](https://json-schema.org/), which is what makes it possible to support all the validation libraries. Some changes had to be made for this to work:
@@ -373,10 +389,6 @@ const schema = z.object({
 As said, unions are also quite hard to make assumptions about in `FormData`. If `"123"` was posted (as all posted values are strings), should it be parsed as a string or a number, in the above case?
 
 There is no obvious solution, so schemas with unions can only be used when the `dataType` option is set to `'json'`, which will bypass the whole `FormData` parsing, as the form data is serialized instead.
-
-### superForm.isTainted
-
-A new `superForm` method is available, used to check whether any part of the form is tainted. Speaking of which, tainted now keeps track of the original data, so if you go back to a previous value, it's not considered tainted anymore.
 
 ### superForm.validate
 
