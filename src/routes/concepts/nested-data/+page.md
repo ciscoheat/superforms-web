@@ -124,7 +124,7 @@ You can build up a HTML form for these tags using an `{#each}` loop:
 
 > Take extra care with the [optional chaining operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) `?.`, it's easy to miss a question mark, which will lead to confusing errors.
 
-Note that we're using the index of the loop, so the value can be bound directly to `$form`. This is what it looks like:
+Note that we're using the index of the loop, so the value can be bound directly to `$form`. You can't use the each loop variable, hence the underscore. This is what it looks like:
 
 <Form {data} />
 
@@ -162,7 +162,7 @@ export const schema = z.object({
 </form>
 ```
 
-To summarize, the index `i` of the `#each` loop is used to access `$form.tags`, where the current values are, and then the `name` attribute is set to the schema field `tags`, so its array will be populated when posted.
+To summarize, the index `i` of the `#each` loop is used to access `$form.tags`, where the current values are (you cannot use the loop variable), and then the `name` attribute is set to the schema field `tags`, so its array will be populated when posted.
 
 This example, having a `max(3)` limitation of the number of tags, also shows how to display array-level errors with the `$errors.tags._errors` field.
 

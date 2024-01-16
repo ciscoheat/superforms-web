@@ -159,6 +159,8 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 </form>
 ```
 
+(Note that you must bind directly to `$form.tags` with the index, you cannot use the each loop variable, hence the underscore.)
+
 It's a little bit better and will certainly help when the components require some styling, but there are still plenty of attributes. Can we do even better?
 
 ### Using a fieldProxy
