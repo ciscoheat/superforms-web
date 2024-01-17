@@ -58,11 +58,19 @@ export const actions = {
 };
 ```
 
-> Note that a successful form action in SvelteKit can only return status code `200`, so the status option for `message` must be in the range `400-599`, otherwise `{ form }` will be returned with a status of `200`, no matter what the status option is set to.
+You can return any type with the message, like an object, if you want to send more information than a string:
+
+```ts
+return message(form, { text: 'User created', id: newId })
+```
+
+See right below for how to make this data strongly typed.
+
+> A successful form action in SvelteKit can only return status code `200`, so the status option for `message` must be in the range `400-599`, otherwise `{ form }` will be returned with a status of `200`, no matter what the status option is set to.
 
 ## Strongly typed message
 
-The `message` is of type `any` by default, but you can type it using `superValidate` type parameters:
+The message is of type `any` by default, but you can type it using `superValidate` type parameters:
 
 ```ts
 const form = await superValidate<typeof schema, string>(event, schema);
@@ -141,6 +149,10 @@ Though if you want to keep it simple with a string or the default `any`, you can
 ### Using the message data programmatically
 
 If you return data that you want to use programmatically instead of just displaying it, like in a toast message, you can do that in the [onUpdate](/concepts/events#onupdate) or [onUpdated](/concepts/events#onupdated) event:
+
+```ts
+return message(form, { status: 'success', text: 'All went well' });
+```
 
 ```ts
 const { form, enhance } = superForm(data.form, {
