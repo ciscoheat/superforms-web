@@ -23,7 +23,7 @@ pnpm i -D sveltekit-superforms@alpha
 npm i -D sveltekit-superforms@alpha
 ```
 
-Then you need to install your validation library of choice and their eventual dependencies:
+Then, with the same command, you need to install your validation library of choice and their eventual dependencies:
 
 | Library  | Install these libraries
 | -------- | --------------------------------------------------------- |
@@ -132,7 +132,22 @@ import type { Infer } from 'sveltekit-superforms'
 export let data: SuperValidated<Infer<LoginSchema>>;
 ```
 
-For client-side validation, remember to import an adapter for the `validators` option as well. For the Superforms validation schema, the input parameter can now be `undefined`, be sure to check for that case:
+#### Optimized client-side validation
+
+The client-side validation is using the smallest possible part of the adapter, to minimize the bundle size for the client. To use it, append `Client` to the adapter import, for example:
+
+```ts
+import { valibotClient } from 'sveltekit-superforms/adapters';
+import { schema } from './schema.js';
+
+const { form, errors, enhance } = superForm(data.form, {
+  validators: valibotClient(schema)
+});
+```
+
+> This works with the same schema as the one used on the server. If you need to switch schemas, you need the full adapter.
+
+For the built-in Superforms validation, import `superform` (note the lower case). The input parameter can now be `undefined`, be sure to check for that case:
 
 ```ts
 import { superform } from 'sveltekit-superforms/adapters';
@@ -145,7 +160,7 @@ const { form, errors, enhance } = superForm(data.form, {
 });
 ```
 
-> The superform adapter is only to be used on the client, it is **not** a replacement for any other validation library, especially not on the server. Hopefully, you can switch to something better now.
+The superform adapter can only to be used on the client, and is in general **not** a replacement for any other validation library. Hopefully, you can switch to something better now.
 
 ### superValidateSync is renamed to defaults
 
@@ -352,7 +367,7 @@ Validation even works on the client, with an `on:input` handler:
 The only caveat is that in form actions, you must use a special `failAndRemoveFiles` function instead of SvelteKit's `fail`, when you return a form containing files, or `removeFiles` when returning the form directly. This is because file objects cannot be serialized, so they must be removed before returning the form data to the client. But it's not a big change:
 
 ```ts
-import { removeFiles, failAndRemoveFiles } from 'sveltekit-superforms/server';
+import { removeFiles, failAndRemoveFiles } from 'sveltekit-superforms';
 
 // Instead of fail:
 if (!form.valid) return failAndRemoveFiles(400, { form });
