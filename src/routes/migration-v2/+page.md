@@ -355,6 +355,8 @@ const form = await superValidate(formData, zod(schema), { allowFiles: true });
 
 Validation even works on the client, with an `on:input` handler:
 
+**Single file input**
+
 ```svelte
 <input
   type="file"
@@ -364,19 +366,32 @@ Validation even works on the client, with an `on:input` handler:
 />
 ```
 
-The only caveat is that in form actions, you must use a special `failAndRemoveFiles` function instead of SvelteKit's `fail`, when you return a form containing files, or `removeFiles` when returning the form directly. This is because file objects cannot be serialized, so they must be removed before returning the form data to the client. But it's not a big change:
+**Multiple files(!)**
+
+```svelte
+<input
+  type="file"
+  multiple
+  name="images"
+  accept="image/png, image/jpeg"
+  on:input={(e) => ($form.images = Array.from(e.currentTarget.files ?? []))}
+/>
+```
+
+The only caveat is that in form actions, you must use a special `removeFiles` function when you return a form containing files. This is because file objects cannot be serialized, so they must be removed before returning the form data to the client. It's not a big change:
 
 ```ts
-import { removeFiles, failAndRemoveFiles } from 'sveltekit-superforms';
+import { fail } from '@sveltejs/kit';
+import { removeFiles } from 'sveltekit-superforms';
 
-// Instead of fail:
-if (!form.valid) return failAndRemoveFiles(400, { form });
+// When using fail
+if (!form.valid) return fail(400, removeFiles({ form }));
+
+// Vhen returning just the form:
+return removeFiles({ form })
 
 // message and setError works as usual:
 return message(form, 'Posted OK!');
-
-// Need removeFiles when returning just the form:
-return removeFiles({ form })
 ```
 
 ### SuperDebug
@@ -387,7 +402,7 @@ Now that files are a feature, SuperDebug displays file objects properly:
 
 ### Union support!
 
-A requested feature is support for unions, which has always been a bit difficult to handle with `FormData` parsing and default values. It's one thing to have a type system that can define any kind of structure, but another to have a form validation library that is supposed to map a list of string values to the types! But unions can now be used in schemas, with a few compromises:
+A requested feature is support for unions, which has always been a bit difficult to handle with `FormData` parsing and default values. It's one thing to have a type system that can define any kind of structure, another to have a form validation library that is supposed to map a list of string values to these types! But unions can now be used in schemas, with a few compromises:
 
 #### Unions must have a default value
 
