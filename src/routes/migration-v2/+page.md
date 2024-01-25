@@ -13,7 +13,7 @@ Not only that, the client validation part has been rewritten to be much more eff
 
 ## Test it out!
 
-Install `sveltekit-superforms@alpha` with `npm` or `pnpm`:
+Install `sveltekit-superforms@alpha` with `npm` or [pnpm](https://pnpm.io/) (recommended):
 
 ```bash
 pnpm i -D sveltekit-superforms@alpha
@@ -147,13 +147,13 @@ const { form, errors, enhance } = superForm(data.form, {
 
 > This works with the same schema as the one used on the server. If you need to switch schemas, you need the full adapter.
 
-For the built-in Superforms validation, import `superform` (note the lower case). The input parameter can now be `undefined`, be sure to check for that case:
+For the built-in Superforms validation, import `superformClient` (note the lower case). The input parameter can now be `undefined`, be sure to check for that case:
 
 ```ts
-import { superform } from 'sveltekit-superforms/adapters';
+import { superformClient } from 'sveltekit-superforms/adapters';
 
 const { form, errors, enhance } = superForm(data.form, {
-  validators: superform({
+  validators: superformClient({
     id: (id?) => { if(id === undefined || isNaN(id) || id < 3) return 'Id must be larger than 2' },
     name: (name?) => { if(!name || name.length < 2) return 'Name must be at least two characters' }
   })
@@ -164,7 +164,7 @@ The superform adapter can only to be used on the client, and is in general **not
 
 ### superValidateSync is renamed to defaults
 
-The quite popular `superValidateSync` function has changed, since it's not possible to make a synchronous validation anymore. So if you're validating data with `superValidateSync` (in the first parameter), be aware that **superValidateSync cannot do validation anymore**. You need to use a `+page.ts` to do proper validation, as described on the [SPA page](/concepts/spa#using-pagets-instead-of-pageserverts). 
+The quite popular `superValidateSync` function has changed, since it's not possible to make a synchronous validation anymore, because not all validation libaries are synchronous. So if you're validating data with `superValidateSync` (in the first parameter), be aware that **superValidateSync cannot do validation anymore**. You need to use a `+page.ts` to do proper validation, as described on the [SPA page](/concepts/spa#using-pagets-instead-of-pageserverts).
 
 > Since this is a bit of a security issue, `superValidateSync` has been renamed to `defaults`.
 
@@ -191,6 +191,8 @@ const { form, errors, enhance } = superForm(defaults({ name: 'New user', email: 
   // ...
 })
 ```
+
+Note that `superValidate` can be used anywhere but on the top-level of Svelte components, so it's not removed from the client and SPA usage. But client-side validation is more of a convenience than ensuring data integrity. Always let an external API or a server request do a proper validation of the data before it's stored or used somewhere.
 
 #### The id option
 
@@ -235,6 +237,22 @@ Speaking of tainted, it now keeps track of the original data, so if you go back 
 ### Schema/validation changes
 
 The underlying data model for Superforms is now [JSON Schema](https://json-schema.org/), which is what makes it possible to support all the validation libraries. Some changes had to be made for this to work:
+
+#### Enums must have an explicit default value
+
+Enums don't have a default "empty" value unlike other types, so it's not certain what the default value should be. Previously the first enum member was used, but v2 is a bit more strict. Therefore, you must specify a default value for enums explicitly:
+
+```ts
+export enum Foo {
+	A = 2,
+	B = 3
+}
+
+const schema = z.object({
+  foo: z.nativeEnum(Foo).default(Foo.A),
+  zodEnum: z.enum(['a', 'b', 'c']).default('a')
+})
+```
 
 #### No side-effects for default values.
 
@@ -341,7 +359,9 @@ Of course, there are some new features, so the migration will be worthwhile.
 
 ### File upload support!
 
-Finally, it's possible to handle files with Superforms. By setting the `allowFiles` option, they can be validated like any other value:
+Finally, it's possible to handle files with Superforms. Validation even works on the client, with an `on:input` handler:
+
+**Single file input**
 
 ```ts
 const schema = z.object({
@@ -350,12 +370,8 @@ const schema = z.object({
     .refine((f) => f instanceof File && f.size < 10000, 'Max 10Kb upload size.')
 });
 
-const form = await superValidate(formData, zod(schema), { allowFiles: true });
+const form = await superValidate(formData, zod(schema));
 ```
-
-Validation even works on the client, with an `on:input` handler:
-
-**Single file input**
 
 ```svelte
 <input
@@ -367,6 +383,17 @@ Validation even works on the client, with an `on:input` handler:
 ```
 
 **Multiple files(!)**
+
+```ts
+const schema = z.object({
+  images: z
+    .custom<File>()
+    .refine((f) => f instanceof File && f.size < 10000, 'Max 10Kb upload size.')
+    .array()
+});
+
+const form = await superValidate(formData, zod(schema));
+```
 
 ```svelte
 <input
@@ -394,6 +421,8 @@ return removeFiles({ form })
 return message(form, 'Posted OK!');
 ```
 
+If you want to prevent file uploads, you can do that with the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, which will also happen if you have defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important).
+
 ### SuperDebug
 
 Now that files are a feature, SuperDebug displays file objects properly:
@@ -404,7 +433,7 @@ Now that files are a feature, SuperDebug displays file objects properly:
 
 A requested feature is support for unions, which has always been a bit difficult to handle with `FormData` parsing and default values. It's one thing to have a type system that can define any kind of structure, another to have a form validation library that is supposed to map a list of string values to these types! But unions can now be used in schemas, with a few compromises:
 
-#### Unions must have a default value
+#### Unions must have an explicit default value
 
 If a schema field can be more than one type, it's not possible to know what default value should be set for it. Therefore, you must specify a default value for unions explicitly:
 
