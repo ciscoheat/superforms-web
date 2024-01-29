@@ -154,7 +154,7 @@ The quite popular `superValidateSync` function has changed, since it's not possi
 
 > Since this is a bit of a security issue, `superValidateSync` has been renamed to `defaults`.
 
-Fortunately though, a [quick Github search](https://github.com/search?q=superValidateSync%28&type=code) reveals that most of its usages are with the schema only, which requires no validation and no `+page.ts`. In that case, just call `defaults` with your adapter or default values, and you're good to go:
+Fortunately though, a [quick Github search](https://github.com/search?q=superValidateSync%28&type=code) reveals that most of its usages are with the schema only, which requires no validation and no `+page.ts`. In that case, just call `defaults` with your adapter and eventual initial data, and you're good to go:
 
 ```ts
 import { defaults } from 'sveltekit-superforms'
@@ -170,8 +170,9 @@ const { form, errors, enhance } = superForm(defaults(zod(schema)), {
 ```ts
 import { defaults } from 'sveltekit-superforms'
 
-// Supplying your own default values
-const { form, errors, enhance } = superForm(defaults({ name: 'New user', email: '' }), {
+// Supplying initial data (can be partial, won't be validated)
+const initialData = { name: 'New user' }
+const { form, errors, enhance } = superForm(defaults(initialData, zod(schema)), {
   SPA: true,
   validators: zod(schema),
   // ...
