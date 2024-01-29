@@ -5,13 +5,13 @@
 
 <div class="flex items-center gap-1">
   <span>I'm using</span>
-  <select class="select w-24" bind:value={packageManager}>
+  <select class="select w-24 max-w-24" bind:value={packageManager}>
     <option value="pnpm i -D">pnpm</option>
     <option value="npm i -D">npm</option>
     <option value="yarn add --dev">yarn</option>
   </select>
   <span>and my validation library is</span>
-  <select class="select w-28" bind:value={validator}>
+  <select class="select w-28 max-w-28" bind:value={validator}>
     <option value="">Choose:</option>
     <option value="arktype">Arktype</option>
     <option value="joi">Joi</option>
@@ -24,3 +24,9 @@
 
 <pre class="language-bash copy-visible"><code class="language-bash"
     >{packageManager} sveltekit-superforms@alpha {validator}</code></pre>
+
+<style lang="scss">
+  select {
+    max-width: 112px !important;
+  }
+</style>
