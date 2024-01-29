@@ -1,6 +1,7 @@
 <script lang="ts">
   import Head from '$lib/Head.svelte'
   import fileDebug from './file-debug.png'
+  import Installer from './Installer.svelte'
 </script>
 
 # Superforms v2 - Next version
@@ -13,26 +14,9 @@ Not only that, the client validation part has been rewritten to be much more eff
 
 ## Test it out!
 
-Install `sveltekit-superforms@alpha` with `npm` or [pnpm](https://pnpm.io/) (recommended):
+Install the v2 version with this command: 
 
-```bash
-pnpm i -D sveltekit-superforms@alpha
-```
-
-```bash
-npm i -D sveltekit-superforms@alpha
-```
-
-Then, with the same command, you need to install your validation library of choice and their eventual dependencies:
-
-| Library  | Install these libraries
-| -------- | --------------------------------------------------------- |
-| Arktype  | `arktype` |
-| Joi      | `joi` |
-| TypeBox  | `@sinclair/typebox` |
-| Valibot  | `valibot` |
-| Yup      | `yup @sodaru/yup-to-json-schema` |
-| Zod      | `zod zod-to-json-schema` |
+<Installer />
 
 Missing a library? No problem, writing new adapters is super-simple. Let me know on [Discord](https://discord.gg/AptebvVuhB) or [Twitter](https://twitter.com/encodeart).
 
@@ -74,7 +58,7 @@ Instead of a Zod schema, you now use an adapter for your favorite validation lib
 | Arktype  | `import { arktype } from 'sveltekit-superforms/adapters'` | Yes |
 | Joi      | `import { joi } from 'sveltekit-superforms/adapters'`     | No  |
 | TypeBox  | `import { typebox } from 'sveltekit-superforms/adapters'` | No  |
-| Valibot  | `import { valibot } from 'sveltekit-superforms/adapters'` | Yes |
+| Valibot  | `import { valibot } from 'sveltekit-superforms/adapters'` | No  |
 | Yup      | `import { yup } from 'sveltekit-superforms/adapters'`     | No  |
 | Zod      | `import { zod } from 'sveltekit-superforms/adapters'`     | No  |
 
@@ -112,7 +96,37 @@ export const load = async () => {
 
 In the example above, both the schema and the defaults are defined outside the load function, on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be long-lived. Therefore, define the schema and options for the adapter on the top level of a module, so they always refer to the same object.
 
-#### Type parameters
+#### Optimized client-side validation
+
+The client-side validation is using the smallest possible part of the adapter, to minimize the bundle size for the client. To use it, append `Client` to the adapter import, for example:
+
+```ts
+import { valibotClient } from 'sveltekit-superforms/adapters';
+import { schema } from './schema.js';
+
+const { form, errors, enhance } = superForm(data.form, {
+  validators: valibotClient(schema)
+});
+```
+
+> This works with the same schema as the one used on the server. If you need to switch schemas on the client, you need the full adapter.
+
+For the built-in Superforms validation, import `superformClient`. The input parameter can now be `undefined`, be sure to check for that case:
+
+```ts
+import { superformClient } from 'sveltekit-superforms/adapters';
+
+const { form, errors, enhance } = superForm(data.form, {
+  validators: superformClient({
+    id: (id?) => { if(id === undefined || isNaN(id) || id < 3) return 'Id must be larger than 2' },
+    name: (name?) => { if(!name || name.length < 2) return 'Name must be at least two characters' }
+  })
+});
+```
+
+The superform adapter can only to be used on the client, and is in general **not** a replacement for any other validation library. Hopefully, you can switch to something better now.
+
+### SuperValidated type parameters have changed
 
 If you have used type parameters for a call to `superValidate` before, or have been using the `SuperValidated` type, you now need to wrap the schema parameter with `Infer`:
 
@@ -132,35 +146,7 @@ import type { Infer } from 'sveltekit-superforms'
 export let data: SuperValidated<Infer<LoginSchema>>;
 ```
 
-#### Optimized client-side validation
-
-The client-side validation is using the smallest possible part of the adapter, to minimize the bundle size for the client. To use it, append `Client` to the adapter import, for example:
-
-```ts
-import { valibotClient } from 'sveltekit-superforms/adapters';
-import { schema } from './schema.js';
-
-const { form, errors, enhance } = superForm(data.form, {
-  validators: valibotClient(schema)
-});
-```
-
-> This works with the same schema as the one used on the server. If you need to switch schemas, you need the full adapter.
-
-For the built-in Superforms validation, import `superformClient` (note the lower case). The input parameter can now be `undefined`, be sure to check for that case:
-
-```ts
-import { superformClient } from 'sveltekit-superforms/adapters';
-
-const { form, errors, enhance } = superForm(data.form, {
-  validators: superformClient({
-    id: (id?) => { if(id === undefined || isNaN(id) || id < 3) return 'Id must be larger than 2' },
-    name: (name?) => { if(!name || name.length < 2) return 'Name must be at least two characters' }
-  })
-});
-```
-
-The superform adapter can only to be used on the client, and is in general **not** a replacement for any other validation library. Hopefully, you can switch to something better now.
+Also, `constraints` are now optional in the `SuperValidated` type, since they won't be returned when posting data anymore, only when loading data, to save some bandwidth. This is only relevant if you're changing the constraints before calling `superForm`.
 
 ### superValidateSync is renamed to defaults
 
@@ -196,7 +182,7 @@ Note that `superValidate` can be used anywhere but on the top-level of Svelte co
 
 #### The id option
 
-It's not possible to set the `id` option to `undefined` anymore, which is very rare anyway. The id is set automatically to a string hash of the schema by default.
+It's not possible to set the `id` option to `undefined` anymore, which is very rare anyway. By default, the id is automatically set to a string hash of the schema. It's only for multiple forms on the same page, or dynamically generated schemas, that you may want to change it.
 
 ### arrayProxy
 
@@ -218,6 +204,22 @@ enum FetchStatus {
 
 For string enums, it works to post strings, of course.
 
+#### Enums must have an explicit default value
+
+Enums don't have a default "empty" value unlike other types, so it's not certain what the default value should be. Previously the first enum member was used, but v2 is a bit more strict. Therefore, you must specify a default value for enums explicitly:
+
+```ts
+export enum Foo {
+	A = 2,
+	B = 3
+}
+
+const schema = z.object({
+  foo: z.nativeEnum(Foo).default(Foo.A),
+  zodEnum: z.enum(['a', 'b', 'c']).default('a')
+})
+```
+
 ### Use isTainted to check tainted status
 
 A new `superForm.isTainted` method is available, to check whether any part of the form is tainted. Use it instead of checking the `$tainted` store, which may give unexpected results.
@@ -237,22 +239,6 @@ Speaking of tainted, it now keeps track of the original data, so if you go back 
 ### Schema/validation changes
 
 The underlying data model for Superforms is now [JSON Schema](https://json-schema.org/), which is what makes it possible to support all the validation libraries. Some changes had to be made for this to work:
-
-#### Enums must have an explicit default value
-
-Enums don't have a default "empty" value unlike other types, so it's not certain what the default value should be. Previously the first enum member was used, but v2 is a bit more strict. Therefore, you must specify a default value for enums explicitly:
-
-```ts
-export enum Foo {
-	A = 2,
-	B = 3
-}
-
-const schema = z.object({
-  foo: z.nativeEnum(Foo).default(Foo.A),
-  zodEnum: z.enum(['a', 'b', 'c']).default('a')
-})
-```
 
 #### No side-effects for default values.
 
@@ -421,11 +407,11 @@ return removeFiles({ form })
 return message(form, 'Posted OK!');
 ```
 
-If you want to prevent file uploads, you can do that with the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, which will also happen if you have defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important).
+If you want to prevent file uploads, you can do that with the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, which will also happen if you have defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important). In that case, set `{ allowFiles: true }` to allow files.
 
 ### SuperDebug
 
-Now that files are a feature, SuperDebug displays file objects properly:
+Now that file uploads is a feature, SuperDebug displays file objects properly:
 
 <img src={fileDebug} alt="SuperDebug displaying a File" />
 
@@ -443,11 +429,11 @@ const schema = z.object({
 })
 ```
 
-#### Unions can only be used when dataType is 'json'
+#### Multi-type unions can only be used when dataType is 'json'
 
 As said, unions are also quite hard to make assumptions about in `FormData`. If `"123"` was posted (as all posted values are strings), should it be parsed as a string or a number, in the above case?
 
-There is no obvious solution, so schemas with unions can only be used when the `dataType` option is set to `'json'`, which will bypass the whole `FormData` parsing, as the form data is serialized instead.
+There is no obvious solution, so schemas with unions **that have more than one type** can only be used when the `dataType` option is set to `'json'` (which will bypass the whole `FormData` parsing, as the form data is serialized instead).
 
 ### superForm.validate
 
