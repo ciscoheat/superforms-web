@@ -120,29 +120,7 @@ The onSubmit event is also a good place to modify `$form`, in case you're using 
 
 ### How to handle file uploads?
 
-File uploads are not directly handled by Superforms. They can be posted as usual, but schema fields containing files will be `undefined` in `form.data` after validation.
-
-The recommended way to handle files is to grab `FormData` from the request and extract the files from there, after validation:
-
-```ts
-export const actions = {
-  default: async ({ request }) => {
-    const formData = await request.formData();
-    const form = await superValidate(formData, schema);
-
-    if (!form.valid) return fail(400, { form });
-
-    const file = formData.get('file');
-    if (file instanceof File) {
-      // Do something with the file.
-    }
-
-    return { form };
-  }
-};
-```
-
-If you want errors for the file field, you can add an optional field to the schema with the same name, and use [setError](/concepts/error-handling#seterror) to set and display an error message.
+From version 2, file uploads are handled by Superforms, read more about it on the [file uploads](/concepts/files) page.
 
 ---
 

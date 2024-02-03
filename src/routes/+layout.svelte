@@ -37,6 +37,7 @@
   import SearchButton from './SearchButton.svelte';
   import { writable } from 'svelte/store';
   import copy from 'clipboard-copy';
+  import { tick } from 'svelte';
 
   initializeStores();
 

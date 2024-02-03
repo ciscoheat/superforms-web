@@ -113,6 +113,30 @@ return setError(form, 'image', 'Could not process file.');
 
 This will remove the file objects from the form before returning it, so SvelteKit can serialize it properly.
 
+## Validating files manually
+
+If your validation library cannot validate files, you can obtain `FormData` from the request and extract the files from there, after validation:
+
+```ts
+export const actions = {
+  default: async ({ request }) => {
+    const formData = await request.formData();
+    const form = await superValidate(formData, schema);
+
+    if (!form.valid) return fail(400, { form });
+
+    const image = formData.get('image');
+    if (image instanceof File) {
+      // Validate and process the image.
+    }
+
+    return { form };
+  }
+};
+```
+
+If you want errors for such a field, you can add an optional field to the schema with the same name, and use [setError](/concepts/error-handling#seterror) to set and display an error message.
+
 ## Preventing file uploads
 
-If you want to prevent file uploads, you can do that with the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, which will also happen if you have defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important). With that defined, set `{ allowFiles: true }` to allow files.
+To prevent file uploads, set the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, so you don't have to use `withFiles`. This will also be `true` by default if you have defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important). In that case, set `{ allowFiles: true }` to allow files.
