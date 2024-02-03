@@ -128,6 +128,7 @@
     }
   }
 
+  // TODO: Factorize, since the tutorial will modify the boxes
   function copyBoxes() {
     document
       .querySelectorAll<HTMLElement>('pre:not(.super-debug--pre) > code')

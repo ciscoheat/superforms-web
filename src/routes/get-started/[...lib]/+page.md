@@ -19,7 +19,7 @@
 
 <Head title="Get started - Tutorial for Superforms" />
 
-## Get started
+# Get started
 
 <Installer />
 
@@ -27,12 +27,10 @@ Select your environment above and run the install command in your project folder
 
 If you're starting from scratch, create a new SvelteKit project with `npm create svelte@latest`. Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/sveltekit-superforms-1-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser.
 
-{#if !$settings.lib || $settings.lib == 'ajv'}
-<aside class="alert variant-ghost-primary mt-2">
-  <div class="alert-message">
-    Please select a validation library above before continuing, as the tutorial changes depending on that.
-  </div>
-</aside>
+{#if ['', 'ajv', 'superstruct'].includes($settings.lib)}
+
+> Please select a validation library above before continuing, as the tutorial changes depending on that.
+
 {/if}
 
 ## Creating a Superform
@@ -65,9 +63,13 @@ const schema = type({
 <p>*Under construction*</p>
 {/if}
 
+#### Schema caching
+
+The schema should be defined outside the load function, in this case on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be kept in memory. Therefore, define the schema, its options and eventual defaults on the top level of a module, so they always refer to the same object.
+
 ### Initializing the form in the load function
 
-To initialized the form, this schema should be used in a load function with the `superValidate` function:
+To initialize the form, the schema should be used in a load function with the `superValidate` function:
 
 **src/routes/+page.server.ts**
 
@@ -77,16 +79,16 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
+// Define outside the load function so the adapter can be cached
 const schema = z.object({
   name: z.string().default('Hello world!'),
   email: z.string().email()
 });
 
 export const load = (async () => {
-  // Server API:
   const form = await superValidate(zod(schema));
 
-  // Always return { form } in load and form actions.
+  // Always return { form } in load functions and form actions.
   return { form };
 });
 ```
@@ -96,17 +98,20 @@ import { superValidate } from 'sveltekit-superforms';
 import { arktype } from 'sveltekit-superforms/adapters';
 import { type } from 'arktype';
 
+// Define outside the load function so the adapter can be cached
 const schema = type({
   name: 'string',
   email: 'email'
 });
 
-export const load = (async () => {
-  // Server API:
-  // Arktype requires explicit default values for now
-  const form = await superValidate(arktype(schema, { name: 'Hello world!', email: '' }));
+// Defaults should also be defined outside the load function
+const defaults = { name: 'Hello world!', email: '' }
 
-  // Always return { form } in load and form actions.
+export const load = (async () => {
+  // Arktype requires explicit default values for now
+  const form = await superValidate(arktype(schema, { defaults }));
+
+  // Always return { form } in load functions and form actions.
   return { form };
 });
 ```
@@ -134,7 +139,7 @@ export const load = async ({ params }) => {
 
   const form = await superValidate(user, zod(schema));
 
-  // Always return { form } in load and form actions.
+  // Always return { form } in load functions and form actions.
   return { form };
 };
 ```
@@ -149,7 +154,7 @@ Unless you call `redirect` or `error`, you should **always** return the form obj
 
 ### Displaying the form
 
-The `superValidate` function returns the data required to instantiate the form on the client, which is now available in `+page.svelte` as `data.form`, as we did a `return { form }`. There, we'll use the client part of the API:
+The `superValidate` function returns the data required to instantiate a form on the client, which is now available in `+page.svelte` as `data.form`, as we did `return { form }`. There, we'll use the client part of the API:
 
 **src/routes/+page.svelte**
 
@@ -176,7 +181,7 @@ The `superValidate` function returns the data required to instantiate the form o
 
 The `superForm` function is used to create a form on the client.
 
-> Two notes: There should be only one `superForm` instance per form - its methods should not be used in multiple forms. And don't forget the `name` attribute on the form fields! Unless you are using [nested data](/concepts/nested-data), they are required.
+> Two notes: There should be only one `superForm` instance per form - its methods cannot be used in multiple forms. And don't forget the `name` attribute on the form fields! Unless you are using [nested data](/concepts/nested-data), they are required.
 
 This is what the form should look like now:
 
@@ -200,11 +205,11 @@ This should be displayed:
 
 <SuperDebug data={$form} />
 
-When editing the form fields, the data is automatically updated. The component also displays the current page status in the right corner.
+When editing the form fields (try in the form above), the data is automatically updated. The component also displays the current page status in the right corner.
 
 ### Posting data
 
-In the form actions defined in `+page.server.ts`, we'll use the `superValidate` function again, but now it should handle `FormData`. This can be done in several ways:
+In the form actions, defined in `+page.server.ts`, we'll use the `superValidate` function again, but now it should handle `FormData`. This can be done in several ways:
 
 - Use the `request` parameter (which contains `FormData`)
 - Use the `event` object (which contains the request)
@@ -308,15 +313,15 @@ Now we know that validation has failed and there are errors being sent to the cl
 </style>
 ```
 
-As you see, by including `errors`, we can display errors where it's appropriate, and through `constraints` (already provided by the load function), we get browser validation even without javascript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
+As you see, by including `errors`, we can display errors where it's appropriate, and through `constraints` (already provided by the load function), we get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
 
 We now have a fully working form, with convenient handling of data and validation both on the client and server!
 
-There are no hidden DOM manipulations or other secrets; it's just HTML attributes and Svelte stores. No JS is needed for the basics. 
+There are no hidden DOM manipulations or other secrets; it's just HTML attributes and Svelte stores. No JavaScript needed for the basics.
 
 ### Adding progressive enhancement
 
-As a last step, let's add progressive enhancement, so the majority of the users will have a better experience. It is required to use for example client-side validation and events, and of course to avoid reloading the page when the form is posted.
+As a last step, let's add progressive enhancement, so the JS users will have a better experience. It is required to use for example client-side validation and events, and of course to avoid reloading the page when the form is posted.
 
 This is simply added with `enhance`, returned from `superForm`:
 
@@ -330,9 +335,9 @@ This is simply added with `enhance`, returned from `superForm`:
 <form method="POST" use:enhance>
 ```
 
-Now the page won't reload when submitting, and we unlock lots of client-side features like events, timers, auto error focus, etc.
+Now the page won't reload when submitting, and we unlock lots of client-side features like events, timers, auto error focus, etc, that you can read about under the Concepts section in the navigation.
 
-The `use:enhance` action takes no arguments; instead, events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
+The `use:enhance` action takes no arguments; instead, events are used to hook into the SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
 ## Next steps
 

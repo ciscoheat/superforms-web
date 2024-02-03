@@ -12,21 +12,18 @@
 
 <Head title="Client-side validation" />
 
-There are three ways of handling client-side validation with Superforms: 
+There are two client-side validation options with Superforms: 
 
 * The built-in browser validation, which doesn't require JavaScript to be enabled in the browser.
-* Using a Zod schema, usually the same one as on the server. Requires JavaScript and [use:enhance](/concepts/enhance).
-* Using a Superforms validators object. Requires JavaScript and [use:enhance](/concepts/enhance).
-
-The last two are mutually exclusive, but the browser validation can be combined with any of them. Here's how it works:
+* Using a validation schema, usually the same one as on the server. Requires JavaScript and [use:enhance](/concepts/enhance).
 
 ## Built-in browser validation
 
-There is a web standard for [client-side form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which doesn't require JavaScript and is virtually effortless to use with Superforms:
+There is a web standard for [form input](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation), which doesn't require JavaScript and is virtually effortless to use with Superforms:
 
 ### constraints
 
-To use the built-in browser constraints, just spread the `$constraints` store for a schema field on its input field:
+To use the built-in browser validation, just spread the `$constraints` store for a schema field on its input field:
 
 ```svelte
 <script lang="ts">
@@ -45,17 +42,19 @@ The constraints is an object with validation properties mapped from the schema:
 
 ```ts
 {
-  pattern?: string;      // z.string().regex(r)
-  step?: number | 'any'; // z.number().step(n)
-  minlength?: number;    // z.string().min(n)
-  maxlength?: number;    // z.string().max(n)
-  min?: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
-  max?: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
-  required?: true;       // true if not nullable(), nullish() or optional()
+  pattern?: string;      // string with RegExp pattern
+  step?: number | 'any'; // number with a step validator
+  minlength?: number;    // string with a minimum length
+  maxlength?: number;    // string with a maximum length
+  min?: number | string; // number if number validator, ISO date string if date validator
+  max?: number | string; // number if number validator, ISO date string if date validator
+  required?: true;       // true if not nullable, nullish or optional
 }
 ```
 
-For some input types, a correct format is required. For example with `date` fields, both the underlying data and the constraint needs to be in `yyyy-mm-dd` format, which can be handled by [using a proxy](/concepts/proxy-objects#date-input-issues) and adding attributes after the constraints spread, in which case they will take precedence:
+#### Special input formats
+
+For some input types, a certain format is required. For example with `date` fields, both the underlying data and the constraint needs to be in `yyyy-mm-dd` format, which can be handled by [using a proxy](/concepts/proxy-objects#date-input-issues) and adding attributes after the constraints spread, in which case they will take precedence:
 
 ```svelte
 <input
@@ -64,24 +63,22 @@ For some input types, a correct format is required. For example with `date` fiel
   aria-invalid={$errors.date ? 'true' : undefined}
   bind:value={$proxyDate}
   {...$constraints.date}
-  min={$constraints.date?.min?.toString().slice(0, 10)} />
+  min={$constraints.date?.min?.toString().slice(0, 10)} 
+/>
 ```
 
 Check the validation attributes and their valid values at [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation#validation-related_attributes).
 
-## Usage
+## Using a validation schema
 
-The built-in browser validation can be a bit constrained (pun intended); for example, you can't easily control the position and appearance of the error messages. Instead, you can customize the validation with a number of options, so [$errors](/concepts/error-handling) will be displayed in real-time.
+The built-in browser validation can be a bit constrained; for example, you can't easily control the position and appearance of the error messages. Instead (or supplementary), you can use a validation schema and customize the validation with a number of options, so the form errors will be displayed in real-time.
 
 > As with most client-side functionality, [use:enhance](/concepts/enhance) is required for real-time validation.
 
 ```ts
 const { form, enhance, constraints, validate } = superForm(data.form, {
-  validators: AnyZodObject | {
-    field: (value) => string | string[] | null | undefined;
-  },
+  validators: ClientValidationAdapter<S> | 'clear',
   validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only' = 'auto',
-  defaultValidator: 'keep' | 'clear' = 'keep',
   customValidity: boolean = false
 })
 ```
@@ -89,69 +86,40 @@ const { form, enhance, constraints, validate } = superForm(data.form, {
 ### validators
 
 ```ts
-validators: AnyZodObject | {
-  field: (value) => string | string[] | null | undefined;
-}
+validators: ClientValidationAdapter<S> | 'clear'
 ```
 
-Setting the `validators` option to the same Zod schema as on the server is the most convenient and recommended way. Just put the schema in a shared directory, `$lib/schemas` for example, and import it on the client as well as on the server. 
+Setting the `validators` option to an adapter with the same schema as on the server, is the most convenient and recommended way. Just put the schema in a shared directory, `$lib/schemas` for example, and import it on the client as well as on the server.
 
-This will increase the size of the client bundle a bit however, since Zod now has to be imported on the client. If you're highly concerned about a few extra kilobytes, a lightweight alternative is to use a Superforms validation object. 
-
-It's an object with the same keys as the form, with a function that receives the field value and should return `string | string[]` as an error message, or `null | undefined` if the field is valid. 
-
-Here's how to validate a string length, for example:
+Adding a adapter on the client will increase the client bundle size a bit, since the validation library now has to be imported there too. But the client-side adapter is optimized to be as small as possible, so it shouldn't be too much of an issue. To use it, append `Client` to the adapter import, for example:
 
 ```ts
+import { valibotClient } from 'sveltekit-superforms/adapters';
+import { schema } from './schema.js';
+
 const { form, errors, enhance } = superForm(data.form, {
-  validators: {
-    name: (name) =>
-      name.length < 3 ? 'Name must be at least 3 characters' : null
-  }
+  validators: valibotClient(schema)
 });
 ```
 
-For nested data, just keep building on the `validators` structure. Note that arrays have a single validator that will be applied to each value in the array:
+> This works only with the same schema as the one used on the server. If you need to switch schemas on the client, you need the full adapter.
 
-```ts
-const schema = z.object({
-  name: z.string().min(3),
-  tags: z.string().min(2).array()
-});
-
-const { form, errors, enhance } = superForm(data.form, {
-  validators: {
-    name: (name) =>
-      name.length < 3 ? 'Name must be at least 3 characters' : null,
-    tags: (tag) => (tag.length < 2 ? 'Tag must be at least 2 characters' : null)
-  }
-});
-```
+As a super-simple alternative to an adapter, you can also set the option to `'clear'`, to remove errors for a field as soon as it's modified.
 
 ### validationMethod
 
 ```ts
-validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only',
+validationMethod: 'auto' | 'oninput' | 'onblur' | 'onsubmit',
 ```
 
-The validation is triggered when **a value is changed**, not just when focusing on, or tabbing through a field. The default validation method is based on the "reward early, validate late" pattern, a [researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
+The validation is triggered when **a value is changed**, not just when focusing on, or tabbing through a field. The default validation method is based on the "reward early, validate late" pattern, [a researched way](https://medium.com/wdstack/inline-validation-in-forms-designing-the-experience-123fb34088ce) of validating input data that makes for a high user satisfaction:
 
 - If entering data in a field that has or previously had errors, validate on `input`
 - Otherwise, validate on `blur`.
 
-But you can instead use the `oninput` or `onblur` setting to always validate on one of these respective events, or `submit-only` to validate only on submit.
+But you can instead use the `oninput` or `onblur` settings to always validate on one of these respective events, or `onsubmit` to validate only on submit.
 
-> If you're using a Zod schema in the [validators](/concepts/client-validation#validators) option, be aware that the whole schema will be validated, not just the modified field.<br><br>This is because errors can be added to any field in the schema during validation with [refine](https://zod.dev/?id=customize-error-path) or similar, so the whole schema must be validated to know the final result.
-
-### defaultValidator
-
-This is an option for specifying the validation behavior for fields when no validation exists for a specific field. In other words, if [validators](/concepts/client-validation#validators) is set, this option won't have any effect for any fields included there.
-
-```ts
-defaultValidator: 'keep' | 'clear' = 'keep'
-```
-
-The default value `keep` means that validation errors will be displayed until the form submits. The other option, `clear`, will remove the error as soon as the field value is modified.
+> Be aware that the whole schema will be validated, not just the modified field, because errors can be added to any field in the schema during validation with Zod's [refine](https://zod.dev/?id=customize-error-path) or similar, so the whole schema must be validated to know the final result.
 
 ### customValidity
 
@@ -180,17 +148,21 @@ validate('name', { value: 'Test', update: 'errors' });
 validate('tags[1].name', { value: 'Test', taint: true });
 
 // If called with no arguments, it validates the whole form and
-// returns a result similar to superValidate
+// returns a SuperValidated result:
 const result = await validate();
 
 if (result.valid) {
   // ...
 }
+
+// Finally, you can use the update option to trigger a full
+// client-side validation (requires the validators option to be set)
+await validate({ update: true });
 ```
 
 ## Asynchronous validation and debouncing
 
-All the validators are asynchronous, so you can return a `Promise` and it will work. But a slow validator will delay the others, so for a server round-trip validation like checking if a username is available, you might want to exclude that field from the schema and handle it manually, with `on:input` and a package like [throttle-debounce](https://www.npmjs.com/package/throttle-debounce).
+The validation is asynchronous, but a slow validator will delay the final result, so for a server round-trip validation like checking if a username is available, you might want to exclude that field from the schema and handle it manually, with `on:input` and a package like [throttle-debounce](https://www.npmjs.com/package/throttle-debounce).
 
 Errors can also be set manually by updating the `$errors` store:
 

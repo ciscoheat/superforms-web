@@ -1,7 +1,7 @@
 export const concepts = [
   ['/concepts/error-handling', 'Error handling'],
   ['/concepts/messages', 'Status messages'],
-  ['/concepts/client-validation', 'Client-side validation'],
+  ['/concepts/client-validation', 'Client validation'],
   ['/concepts/submit-behavior', 'Submit behavior'],
   ['/concepts/tainted', 'Tainted fields'],
   ['/concepts/events', 'Events'],

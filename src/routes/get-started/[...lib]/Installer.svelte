@@ -12,11 +12,12 @@
     <option value="yarn add --dev">yarn</option>
   </select>
   <span>and my validation library is</span>
-  <select class="select w-28 max-w-28" bind:value={$settings.lib}>
+  <select class="select w-36 max-w-36" bind:value={$settings.lib}>
     <option value="">Choose:</option>
     <option value="ajv">Ajv</option>
     <option value="arktype">Arktype</option>
     <option value="joi">Joi</option>
+    <option value="superstruct">Superstruct</option>
     <option value="@sinclair/typebox">TypeBox</option>
     <option value="valibot">Valibot</option>
     <option value="yup">Yup</option>
@@ -27,8 +28,17 @@
 {#if $settings.lib == 'ajv'}
   <aside class="alert variant-ghost mt-2">
     <div class="alert-message">
-      Ajv is not yet available due to ESM incompatibility. TypeBox is
-      recommended as an alternative.
+      Ajv is not available due to ESM incompatibility and tree-shaking issues.
+      TypeBox is recommended as an alternative.
+    </div>
+  </aside>
+{:else if $settings.lib == 'superstruct'}
+  <aside class="alert variant-ghost mt-2">
+    <div class="alert-message">
+      Superstruct is not yet available due to a <a
+        href="https://github.com/ianstormtaylor/superstruct/issues/1200"
+        target="_blank">moduleResolution problem</a
+      >.
     </div>
   </aside>
 {:else}
@@ -38,7 +48,7 @@
 
 <style lang="scss">
   select {
-    max-width: 112px !important;
+    max-width: 142px !important;
   }
 
   :global(.copy-content) {

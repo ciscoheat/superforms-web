@@ -4,27 +4,15 @@
   import Installer from './Installer.svelte'
 </script>
 
-# Superforms v2 - Next version
+# Superforms v2 - Migration guide
 
-<Head title="Test out Superforms version 2!" />
+<Head title="Superforms v2 - Migration guide" />
 
-The next major version of Superforms is now available in an alpha version! It's a huge upgrade, because it now has the potential to **support virtually every validation library out there**.
-
-Not only that, the client validation part has been rewritten to be much more efficient. File uploads are now supported. And of course, Zod is still perfectly usable with just a small modification to the code.
-
-## Test it out!
-
-Install the v2 version with this command: 
-
-<Installer />
-
-Missing a library? No problem, writing new adapters is super-simple. Let me know on [Discord](https://discord.gg/AptebvVuhB) or [Twitter](https://twitter.com/encodeart).
-
-## Migration and getting started
-
-The headlines show what has changed, so look for them and make the necessary changes in the code.
+Version 2 is a huge upgrade, because it now has the potential to **support virtually every validation library out there**. Of course, Zod is still perfectly usable with just a small modification to the code.
 
 ## Changes
+
+Here's a brief list of the changes, keep reading further down for details.
 
 ### The biggest change (IMPORTANT)
 
@@ -33,7 +21,7 @@ The biggest breaking change is that the options now follow the SvelteKit default
 - resetForm is now `true` as default
 - taintedMessage is now `false` as default
 
-But don't worry, there's no need to change the options on every form to migrate. Instead, add the following define in `vite.config.ts` to keep the original behavior:
+But don't worry, there's no need to change these options on every form to migrate. Instead, add the following define in `vite.config.ts` to keep the original behavior:
 
 ```diff
 export default defineConfig({
@@ -94,7 +82,7 @@ export const load = async () => {
 
 #### Schema caching
 
-In the example above, both the schema and the defaults are defined outside the load function, on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be long-lived. Therefore, define the schema and options for the adapter on the top level of a module, so they always refer to the same object.
+In the example above, both the schema and the defaults are defined outside the load function, on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be kept in memory. Therefore, define the schema, options and eventual default values for the adapter on the top level of a module, so they always refer to the same object.
 
 #### Optimized client-side validation
 
@@ -111,20 +99,21 @@ const { form, errors, enhance } = superForm(data.form, {
 
 > This works with the same schema as the one used on the server. If you need to switch schemas on the client, you need the full adapter.
 
-For the built-in Superforms validation, import `superformClient`. The input parameter can now be `undefined`, be sure to check for that case:
+The Superforms validator is now deprecated, since it requires you to do much of the type checking yourself. To keep using it, import `superformClient`. The input parameter can now be `undefined` as well, be sure to check for that case:
 
 ```ts
 import { superformClient } from 'sveltekit-superforms/adapters';
 
 const { form, errors, enhance } = superForm(data.form, {
   validators: superformClient({
-    id: (id?) => { if(id === undefined || isNaN(id) || id < 3) return 'Id must be larger than 2' },
-    name: (name?) => { if(!name || name.length < 2) return 'Name must be at least two characters' }
+    name: (name?) => { 
+      if(!name || name.length < 2) return 'Name must be at least two characters' 
+    }
   })
 });
 ```
 
-The superform adapter can only to be used on the client, and is in general **not** a replacement for any other validation library. Hopefully, you can switch to something better now.
+As said, this adapter requires you to do much of the type checking yourself, so in general it is **not** a replacement for the other validation libraries. Use only for a very good reason!
 
 ### SuperValidated type parameters have changed
 
@@ -188,6 +177,10 @@ It's not possible to set the `id` option to `undefined` anymore, which is very r
 ### arrayProxy
 
 A simple change: `fieldErrors` is renamed to `valueErrors`.
+
+### The defaultValidators option has moved
+
+Another simple change: Set `'clear'` directly on the `validators` option instead.
 
 ### Enums in schemas
 
