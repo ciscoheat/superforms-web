@@ -41,22 +41,58 @@ This tutorial will create a Superform containing a name and an email address, re
 
 The main thing required to create a Superform is a validation schema, representing the form data for a single form.
 
-{#if $settings.lib == 'zod'}
-```ts
-import { z } from 'zod';
-
-const schema = z.object({
-  name: z.string().default('Hello world!'),
-  email: z.string().email()
-});
-```
-{:else if $settings.lib == 'arktype'}
+{#if $settings.lib == 'arktype'}
 ```ts
 import { type } from 'arktype';
 
 const schema = type({
   name: 'string',
   email: 'email'
+});
+```
+{:else if $settings.lib == 'joi'}
+```ts
+import Joi from 'joi';
+
+const schema = z.object({
+  name: Joi.string().default('Hello world!'),
+  email: Joi.string().email().required()
+});
+```
+{:else if $settings.lib == '@sinclair/typebox'}
+```ts
+import { Type } from '@sinclair/typebox';
+
+const schema = Type.Object({
+  name: Type.String({ default: 'Hello world!' }),
+  email: Type.String({ format: 'email' }),
+});
+```
+{:else if $settings.lib == 'valibot'}
+```ts
+import { object, string, email, optional } from 'valibot';
+
+const schema = object({
+  name: optional(string(), 'Hello world!'),
+  email: string([email()]),
+});
+```
+{:else if $settings.lib == 'yup'}
+```ts
+import { object, string } from 'yup';
+
+const schema = object({
+  name: string().default('Hello world!'),
+  email: string().email().required(),
+});
+```
+{:else if $settings.lib == 'zod'}
+```ts
+import { z } from 'zod';
+
+const schema = z.object({
+  name: z.string().default('Hello world!'),
+  email: z.string().email()
 });
 ```
 {:else}
@@ -73,26 +109,7 @@ To initialize the form, the schema should be used in a load function with the `s
 
 **src/routes/+page.server.ts**
 
-{#if $settings.lib == 'zod'}
-```ts
-import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import { z } from 'zod';
-
-// Define outside the load function so the adapter can be cached
-const schema = z.object({
-  name: z.string().default('Hello world!'),
-  email: z.string().email()
-});
-
-export const load = (async () => {
-  const form = await superValidate(zod(schema));
-
-  // Always return { form } in load functions and form actions.
-  return { form };
-});
-```
-{:else if $settings.lib == 'arktype'}
+{#if $settings.lib == 'arktype'}
 ```ts
 import { superValidate } from 'sveltekit-superforms';
 import { arktype } from 'sveltekit-superforms/adapters';
@@ -111,7 +128,102 @@ export const load = (async () => {
   // Arktype requires explicit default values for now
   const form = await superValidate(arktype(schema, { defaults }));
 
-  // Always return { form } in load functions and form actions.
+  // Always return { form } in load functions
+  return { form };
+});
+```
+{:else if $settings.lib == 'joi'}
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { joi } from 'sveltekit-superforms/adapters';
+import Joi from 'joi';
+
+// Define outside the load function so the adapter can be cached
+const schema = z.object({
+  name: Joi.string().default('Hello world!'),
+  email: Joi.string().email().required()
+});
+
+export const load = (async () => {
+  const form = await superValidate(joi(schema));
+
+  // Always return { form } in load functions
+  return { form };
+});
+```
+{:else if $settings.lib == '@sinclair/typebox'}
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { typebox } from 'sveltekit-superforms/adapters';
+import { Type } from '@sinclair/typebox';
+
+// Define outside the load function so the adapter can be cached
+const schema = Type.Object({
+  name: Type.String({ default: 'Hello world!' }),
+  email: Type.String({ format: 'email' }),
+});
+
+export const load = (async () => {
+  const form = await superValidate(typebox(schema));
+
+  // Always return { form } in load functions
+  return { form };
+});
+```
+{:else if $settings.lib == 'valibot'}
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { valibot } from 'sveltekit-superforms/adapters';
+import { object, string, email, optional } from 'valibot';
+
+// Define outside the load function so the adapter can be cached
+const schema = object({
+  name: optional(string(), 'Hello world!'),
+  email: string([email()]),
+});
+
+export const load = (async () => {
+  const form = await superValidate(valibot(schema));
+
+  // Always return { form } in load functions
+  return { form };
+});
+```
+{:else if $settings.lib == 'yup'}
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { yup } from 'sveltekit-superforms/adapters';
+import { object, string } from 'yup';
+
+// Define outside the load function so the adapter can be cached
+const schema = object({
+  name: string().default('Hello world!'),
+  email: string().email().required(),
+});
+
+export const load = (async () => {
+  const form = await superValidate(yup(schema));
+
+  // Always return { form } in load functions
+  return { form };
+});
+```
+{:else if $settings.lib == 'zod'}
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
+
+// Define outside the load function so the adapter can be cached
+const schema = z.object({
+  name: z.string().default('Hello world!'),
+  email: z.string().email()
+});
+
+export const load = (async () => {
+  const form = await superValidate(zod(schema));
+
+  // Always return { form } in load functions
   return { form };
 });
 ```
@@ -139,7 +251,7 @@ export const load = async ({ params }) => {
 
   const form = await superValidate(user, zod(schema));
 
-  // Always return { form } in load functions and form actions.
+  // Always return { form } in load functions
   return { form };
 };
 ```
@@ -179,9 +291,9 @@ The `superValidate` function returns the data required to instantiate a form on 
 </form>
 ```
 
-The `superForm` function is used to create a form on the client.
+The `superForm` function is used to create a form on the client, and `bind:value` is used to create a two-way binding between the form data and the input fields.
 
-> Two notes: There should be only one `superForm` instance per form - its methods cannot be used in multiple forms. And don't forget the `name` attribute on the form fields! Unless you are using [nested data](/concepts/nested-data), they are required.
+> Two notes: There should be only one `superForm` instance per form - its methods cannot be used in multiple forms. And don't forget the `name` attribute on the input fields! Unless you are using [nested data](/concepts/nested-data), they are required.
 
 This is what the form should look like now:
 
@@ -189,7 +301,7 @@ This is what the form should look like now:
 
 ### Debugging
 
-We can see that the form has been populated with the default values. However, let's add the Superform debugging component called [SuperDebug](/super-debug) to gain more insight:
+We can see that the form has been populated with the default values. However, let's add the debugging component [SuperDebug](/super-debug) to gain more insight:
 
 **src/routes/+page.svelte**
 
@@ -291,7 +403,8 @@ Now we know that validation has failed and there are errors being sent to the cl
     name="name"
     aria-invalid={$errors.name ? 'true' : undefined}
     bind:value={$form.name}
-    {...$constraints.name} />
+    {...$constraints.name} 
+  />
   {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
 
   <label for="email">E-mail</label>
@@ -300,7 +413,8 @@ Now we know that validation has failed and there are errors being sent to the cl
     name="email"
     aria-invalid={$errors.email ? 'true' : undefined}
     bind:value={$form.email}
-    {...$constraints.email} />
+    {...$constraints.email} 
+  />
   {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
 
   <div><button>Submit</button></div>
@@ -317,11 +431,11 @@ As you see, by including `errors`, we can display errors where it's appropriate,
 
 We now have a fully working form, with convenient handling of data and validation both on the client and server!
 
-There are no hidden DOM manipulations or other secrets; it's just HTML attributes and Svelte stores. No JavaScript needed for the basics.
+There are no hidden DOM manipulations or other secrets; it's just HTML attributes and Svelte stores. No JavaScript is needed for the basics.
 
 ### Adding progressive enhancement
 
-As a last step, let's add progressive enhancement, so the JS users will have a better experience. It is required to use for example client-side validation and events, and of course to avoid reloading the page when the form is posted.
+As a last step, let's add progressive enhancement, so the JS users will have a better experience. It's also required to use for example client-side validation and events, and of course to avoid reloading the page when the form is posted.
 
 This is simply added with `enhance`, returned from `superForm`:
 
@@ -335,7 +449,7 @@ This is simply added with `enhance`, returned from `superForm`:
 <form method="POST" use:enhance>
 ```
 
-Now the page won't reload when submitting, and we unlock lots of client-side features like events, timers, auto error focus, etc, that you can read about under the Concepts section in the navigation.
+Now the page won't fully reload when submitting, and we unlock lots of client-side features like events, timers, auto error focus, etc, that you can read about under the Concepts section in the navigation.
 
 The `use:enhance` action takes no arguments; instead, events are used to hook into the SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
