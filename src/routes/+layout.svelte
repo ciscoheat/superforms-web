@@ -87,9 +87,10 @@
 
   beforeNavigate((nav) => {
     if (nav.type == 'form') return;
-    document
-      .querySelectorAll('.copy-content')
-      .forEach((el) => el.removeEventListener('click', copyContent));
+    document.querySelectorAll('.copy-content').forEach((el) => {
+      el.removeEventListener('click', copyContent);
+      el.remove();
+    });
   });
 
   afterNavigate((nav) => {
@@ -128,7 +129,6 @@
     }
   }
 
-  // TODO: Factorize, since the tutorial will modify the boxes
   function copyBoxes() {
     document
       .querySelectorAll<HTMLElement>('pre:not(.super-debug--pre) > code')

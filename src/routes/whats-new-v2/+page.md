@@ -39,15 +39,19 @@ Unions are also quite difficult to make assumptions about in `FormData`. If `"12
 
 There is no obvious answer, so unions **with more than one type** can only be used when the `dataType` option is set to `'json'` (which will bypass the whole `FormData` parsing, as the form data is serialized).
 
+## Form is reset by default
+
+To better follow the SvelteKit defaults, the `resetForm` option for `superForm` is now `true` as default.
+
 ## Tainted updates
 
-The `taintedMessage` is now `false` as default, so no message will be displayed if the form is modified, unless you set it to `true`, a `string` or a function that returns a promise resolved to `true` if navigation should proceed.
+The default for `taintedMessage` changed too, it is now `false`, so no message will be displayed if the form is modified, unless you set it to either `true`, a string message, or a function that returns a promise resolved to `true` if navigation should proceed (so you can now use a custom dialog for displaying the message).
 
 The tainted store is also smarter, keeping track of the original data, so if you go back to a previous value, it's not considered tainted anymore.
 
 ### New isTainted method
 
-A new `isTainted` method is available on `superForm`, to check whether any part of the form is tainted. Use it instead of checking the `$tainted` store, which may give unexpected results.
+A new `isTainted` method is available on `superForm`, to check whether any part of the form is tainted. Use it instead of testing against the `$tainted` store, which may give unexpected results.
 
 ```ts
 const { form, enhance, isTainted } = superForm(form.data);
@@ -82,11 +86,11 @@ const { form, errors, enhance } = superForm(data.form, {
 
 ## validate method improved
 
-The [validate](/concepts/client-validation#validate) method is useful for retreiving the validation result for the whole form, or a specific field. You can now also call `validate({ update: true })` to trigger a full client-side validation.
+The [validate](/concepts/client-validation#validate) method is useful for retrieving the validation result for the whole form, or a specific field. You can now also call `validate({ update: true })` to trigger a full client-side validation.
 
 ## Simplified imports
 
-You may have noticed in the examples that `/client` and `/server` isn't needed anymore, just import everything except adapters from `sveltekit-superforms`. The same goes for `SuperDebug`, which is now the default export of the library:
+You may have noticed in the examples that `/client` and `/server` isn't needed anymore. Simply import everything except adapters from `sveltekit-superforms`. The same goes for `SuperDebug`, which is now the default export of the library:
 
 ```ts
 import { superForm, superValidate, dateProxy } from 'sveltekit-superforms';
@@ -95,4 +99,4 @@ import SuperDebug from 'sveltekit-superforms';
 
 ## Release notes
 
-The [2.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v2.0.0) have a full list of changes, and as usual, let me know on Github or Discord if something is unclear or not working.
+The [2.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v2.0.0) have a full list of changes, and as usual, let me know on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms) if something is unclear or not working.

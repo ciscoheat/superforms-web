@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { getSettings } from '$lib/settings';
 
   const settings = getSettings();
@@ -12,7 +13,14 @@
     <option value="yarn add --dev">yarn</option>
   </select>
   <span>and my validation library is</span>
-  <select class="select w-36 max-w-36" bind:value={$settings.lib}>
+  <select
+    class="select w-36 max-w-36"
+    bind:value={$settings.lib}
+    on:input={(e) =>
+      goto('/get-started/' + e.currentTarget.value, {
+        replaceState: true,
+        invalidateAll: true
+      })}>
     <option value="">Choose:</option>
     <option value="ajv">Ajv</option>
     <option value="arktype">Arktype</option>

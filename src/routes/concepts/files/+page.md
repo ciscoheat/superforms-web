@@ -18,7 +18,8 @@ From version 2, Superforms has full support for file uploads. The basics is to u
 With this, you need a schema that can validate files. Zod has this possibility:
 
 ```ts
-import { superValidate } from 'sveltekit-superforms';
+import { fail } from '@sveltejs/kit';
+import { superValidate, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
@@ -49,7 +50,7 @@ export const actions = {
 };
 ```
 
-(Let me know if it works with other libraries.)
+(Let me know if you have a file example with other libraries.)
 
 ## Client-side file validation
 
@@ -74,7 +75,7 @@ We need an array schema field to validate multiple files:
 const schema = z.object({
   images: z
     .custom<File>()
-    .refine((f) => f instanceof File && f.size < 10000, 'Max 10Kb upload size.')
+    .refine((f) => f instanceof File && f.size < 100_000, 'Max 100 kB upload size.')
     .array()
 });
 
@@ -114,4 +115,4 @@ This will remove the file objects from the form before returning it, so SvelteKi
 
 ## Preventing file uploads
 
-If you want to prevent file uploads, you can do that with the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, which will also happen if you have defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important). In that case, set `{ allowFiles: true }` to allow files.
+If you want to prevent file uploads, you can do that with the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, which will also happen if you have defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important). With that defined, set `{ allowFiles: true }` to allow files.
