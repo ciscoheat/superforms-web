@@ -24,10 +24,14 @@ A nice SvelteKit feature is [snapshots](https://kit.svelte.dev/docs/snapshots), 
 ## Usage
 
 ```ts
-const { form, capture, restore } = superForm(data.form);
+const { form, capture, restore } = superForm(data.form, {
+  taintedMessage: null
+});
 
 export const snapshot = { capture, restore };
 ```
+
+The export has to be on a `+page.svelte` page to work, it cannot be in a component.
 
 ## Test it out
 
