@@ -35,7 +35,6 @@
   import paypal from '$lib/assets/paypal.svg?raw';
   import buymeacoffee from '$lib/assets/buymeacoffee.svg?raw';
   import SearchButton from './SearchButton.svelte';
-  import { tick } from 'svelte';
   import { writable } from 'svelte/store';
   import copy from 'clipboard-copy';
 

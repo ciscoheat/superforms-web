@@ -2,8 +2,16 @@
   import Head from '$lib/Head.svelte'
   import Form from './Form.svelte'
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
+  import Installer from './Installer.svelte'
+  import { getSettings } from '$lib/settings';
 
 	export let data;
+
+  const settings = getSettings();
+
+  if(data.lib) {
+    $settings.lib = data.lib;
+  }
 	
 	let formComponent
 	$: form = formComponent && formComponent.formData()
@@ -11,17 +19,9 @@
 
 <Head title="Get started - Tutorial for Superforms" />
 
-## Installation
+## Get started
 
-Install Superforms with `npm` or `pnpm`:
-
-```
-npm i -D sveltekit-superforms zod
-```
-
-```
-pnpm i -D sveltekit-superforms zod
-```
+<Installer />
 
 ## Following along
 

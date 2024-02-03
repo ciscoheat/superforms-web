@@ -1,4 +1,3 @@
-import type { Actions, PageServerLoad } from './$types';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import { echo } from '$lib/echo';
@@ -8,9 +7,9 @@ export const _schema = z.object({
   email: z.string().email()
 });
 
-export const load = (async () => {
+export const load = (async ({ params }) => {
   const form = await superValidate(_schema);
-  return { form };
+  return { form, lib: params.lib };
 })
 
 export const actions = {
