@@ -6,6 +6,7 @@ export const concepts = [
   ['/concepts/tainted', 'Tainted fields'],
   ['/concepts/events', 'Events'],
   ['/concepts/timers', 'Loading timers'],
+  ['/concepts/files', 'File uploads'],
   ['/concepts/nested-data', 'Nested data'],
   ['/concepts/multiple-forms', 'Multiple forms'],
   ['/concepts/proxy-objects', 'Proxy objects'],
