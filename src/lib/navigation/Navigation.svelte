@@ -34,9 +34,18 @@
   <ul>
     <li><A href="/">Home</A></li>
     <li><A href="/get-started">Get started</A></li>
-    <li><A href="/api">API</A></li>
+    <li><A href="/support">Help & Support</A></li>
     <li><A href="/sponsors">Sponsors</A></li>
-    <li><A href="/migration-v2" class="glow">Version 2 alpha</A></li>
+    <li><A href="/api">API</A></li>
+
+    <Title id="version-1">Version 2</Title>
+
+    <li><A href="/whats-new-v2">What's new?</A></li>
+    <li><A href="/migration-v2">Migration guide</A></li>
+    <li>
+      <A href="https://superforms-v1.vercel.app/" target="_blank"
+        >Version 1 docs</A>
+    </li>
 
     <Title id="concepts">Concepts</Title>
 
@@ -53,7 +62,7 @@
 
     <Title id="concepts">Other topics</Title>
 
-    <li><A href="/contributing">Contribute</A></li>
+    <li><A href="/contributing">Donate</A></li>
     <li><A href="/faq">FAQ</A></li>
     <li><A href="/flash-messages">Flash messages</A></li>
     <li><A href="/playground">Playground</A></li>
