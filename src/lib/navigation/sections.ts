@@ -1,5 +1,4 @@
 export const concepts = [
-  ['/concepts/enhance', 'use:enhance'],
   ['/concepts/error-handling', 'Error handling'],
   ['/concepts/messages', 'Status messages'],
   ['/concepts/client-validation', 'Client-side validation'],
@@ -11,5 +10,6 @@ export const concepts = [
   ['/concepts/multiple-forms', 'Multiple forms'],
   ['/concepts/proxy-objects', 'Proxy objects'],
   ['/concepts/snapshots', 'Snapshots'],
-  ['/concepts/spa', 'Single-page apps']
+  ['/concepts/spa', 'Single-page apps'],
+  ['/concepts/enhance', 'use:enhance'],
 ];

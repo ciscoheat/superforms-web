@@ -27,8 +27,7 @@
 {#if $settings.lib == 'ajv'}
   <aside class="alert variant-ghost-primary mt-2">
     <div class="alert-message">
-      Ajv is not yet available due to ESM incompatibility. TypeBox is
-      recommended as an alternative.
+      Ajv is not yet available due to ESM incompatibility.
     </div>
   </aside>
 {:else}
