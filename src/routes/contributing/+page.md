@@ -1,6 +1,6 @@
 <script lang="ts">
   import Head from '$lib/Head.svelte'
-  import Sponsor from '$lib/sponsoring/Sponsor.svelte'
+  import Donating from './Donating.svelte'
   import Message from '$lib/sponsoring/Message.svelte'
 </script>
 
@@ -26,10 +26,8 @@ If you find a typo on the website, you can make a quick PR directly in its [Gith
 
 ## Donations
 
-<Sponsor />
+If you want to contribute to the future development of Superforms, you can make a donation:
 
-Any $10 or more monthly donation will be listed on the [Sponsors](/sponsors) page with a picture and link!
+<Donating />
 
-## Voting on new features
-
-You can give a thumbs up on the [Github issues](https://github.com/ciscoheat/sveltekit-superforms/issues) marked with "enhancement", and I will prioritize the ones with highest votes for the next feature release.
+If you have appreciated my support on Discord and Github, or want to ensure that things keep rolling, please support open source software in this way.

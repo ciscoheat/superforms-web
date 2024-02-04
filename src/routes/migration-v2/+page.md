@@ -16,7 +16,7 @@ Here's a brief list of the changes, keep reading further down for details.
 
 ### The biggest change (IMPORTANT)
 
-The biggest breaking change is that the options now follow the SvelteKit defaults more closely:
+The biggest breaking change is that two options now follow the SvelteKit defaults more closely:
 
 - resetForm is now `true` as default
 - taintedMessage is now `false` as default

@@ -62,7 +62,7 @@
 
     <Title id="concepts">Other topics</Title>
 
-    <li><A href="/contributing">Donate</A></li>
+    <li><A href="/contributing">Contribute</A></li>
     <li><A href="/faq">FAQ</A></li>
     <li><A href="/flash-messages">Flash messages</A></li>
     <li><A href="/playground">Playground</A></li>
