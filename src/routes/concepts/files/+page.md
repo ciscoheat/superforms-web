@@ -6,16 +6,7 @@
 
 <Head title="File upload and validation" />
 
-From version 2, Superforms has full support for file uploads. The basics is to use a form with the proper `enctype` setting, and a file input field:
-
-```svelte
-<form method="POST" enctype="multipart/form-data">
-  <input type="file" name="image" />
-  <button>Submit</button>
-</form>
-```
-
-With this, you need a schema that can validate files. Zod has this possibility:
+From version 2, Superforms has full support for file uploads. For that, you need a schema that can validate files. Zod has this possibility:
 
 ```ts
 import { fail } from '@sveltejs/kit';
@@ -23,10 +14,10 @@ import { superValidate, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
-const schema = z.object({
+export const schema = z.object({
   image: z
-    .custom<File>()
-    .refine((f) => f instanceof File && f.size < 100_000, 'Max 100 kB upload size.')
+    .custom<File>((f) => f instanceof File, 'Please upload a file.')
+    .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
 });
 
 export const load = async () => {
@@ -50,15 +41,48 @@ export const actions = {
 };
 ```
 
-(Let me know if you have a file example with other libraries.)
+(Let me know if you have an example with other validation libraries.)
+
+Then you need a form with the proper [enctype](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype) value on the form, and a file input field:
+
+```svelte
+<form method="POST" enctype="multipart/form-data">
+  <input type="file" name="image" /> 
+  {#if $errors.image}<span>{$errors.image}</span>{/if}
+  <button>Submit</button>
+</form>
+```
 
 ## Client-side file validation
 
-File validation even works on the client, with an `on:input` handler:
+File validation works even on the client, with an `on:input` handler.
 
 ### Single file input
 
+In this case, the image field needs to be nullable to satisfy the compiler, but it won't pass the `custom` check if null, so it doesn't matter:
+
+```ts
+export const schema = z.object({
+  image: z
+    .custom<File>((f) => f instanceof File, 'Please upload a file.')
+    .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+    .nullable()
+});
+```
+
 ```svelte
+<script lang="ts">
+  import { superForm } from 'sveltekit-superforms'
+  import { zodClient } from 'sveltekit-superforms/adapters'
+  import { schema } from './schema'
+
+  export let data;
+
+  const { form } = superForm(data.form, {
+    validators: zodClient(schema)
+  })
+</script>
+
 <input
   type="file"
   name="image"
@@ -74,8 +98,8 @@ We need an array schema field to validate multiple files:
 ```ts
 const schema = z.object({
   images: z
-    .custom<File>()
-    .refine((f) => f instanceof File && f.size < 100_000, 'Max 100 kB upload size.')
+    .custom<File>((f) => f instanceof File, 'Please upload a file.')
+    .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
     .array()
 });
 
@@ -83,6 +107,18 @@ const form = await superValidate(formData, zod(schema));
 ```
 
 ```svelte
+<script lang="ts">
+  import { superForm } from 'sveltekit-superforms'
+  import { zodClient } from 'sveltekit-superforms/adapters'
+  import { schema } from './schema'
+
+  export let data;
+
+  const { form } = superForm(data.form, {
+    validators: zodClient(schema)
+  })
+</script>
+
 <input
   type="file"
   multiple
@@ -106,12 +142,12 @@ if (!form.valid) return fail(400, withFiles({ form }));
 // Vhen returning just the form:
 return withFiles({ form })
 
-// message and setError does this automatically:
+// message and setError handles this automatically:
 return message(form, 'Posted OK!');
 return setError(form, 'image', 'Could not process file.');
 ```
 
-This will remove the file objects from the form before returning it, so SvelteKit can serialize it properly.
+This will remove the file objects from the form data before returning it, so SvelteKit can serialize it properly.
 
 ## Validating files manually
 

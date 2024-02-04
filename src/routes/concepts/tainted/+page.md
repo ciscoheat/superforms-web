@@ -12,41 +12,62 @@
 
 <Head title="Tainted form fields" />
 
-When the form data is modified, that piece of data, and in turn the form, is considered _tainted_, also known as "dirty" in other form libraries.
+When the form data is modified, through modifying `$form`, the modified data (and in turn the form), is considered _tainted_, also known as "dirty" in other form libraries.
 
-A Superforms feature is to prevent the user from losing data when accidentally navigating away from a tainted form.
+A Superforms feature is to prevent the user from losing data when navigating away from a tainted form.
 
 ## Usage
 
 ```ts
-const { form, enhance, tainted } = superForm(data.form, {
+const { form, enhance } = superForm(data.form, {
   taintedMessage: string | (() => Promise<boolean>) | boolean = false
 })
 ```
 
-You can set the option to `true`, to have a default message (in english) shown when navigating away from a tainted form, or set your own message with a `string` value.
+You can set the option to `true` to have a default message (in english) shown when navigating away from a tainted form, or set your own message with a `string` value. Note that this message will only be displayed when navigating to a page within the same site. When closing the tab or reloading the page, a browser default message will be shown instead.
 
-Alternatively, you can return a `Promise<boolean>` that should resolve to `true` if navigating away is ok. This enables you to provide your own stylish dialog, instead of the default browser.
+Alternatively, you can set `taintedMessage` to a `() => Promise<boolean>` function that should resolve to `true` if navigating away is ok. This enables you to provide your own dialog:
 
-## Example
+```ts
+const { form, enhance } = superForm(data.form, {
+  taintedMessage: () => {
+    return new Promise((resolve) => {
+      modalStore.trigger({
+        type: 'confirm',
+        title: 'Do you want to leave?',
+        body: 'Changes you made may not be saved.',
+        response: resolve
+      });
+    });
+  }
+});
+```
 
-Try to modify the form below, then close the tab or hit the back button. A confirmation dialog should prevent you from losing the changes.
+The code demonstrates the custom dialog with a [Skeleton modal](https://www.skeleton.dev/utilities/modals). Try it out below! Modify the form, then click the back button. A modal should pop up, preventing you from losing the changes:
 
 <Form {data} />
 
-> For login and registration forms, password managers can taint the form when inserting saved usernames and passwords.
-
 ## Untainting the form
 
-When a validation result is returned for the form with a `valid` status set to `true`, the form is automatically marked as untainted by setting the `$tainted` store to `undefined`.
+When a successful validation result is returned for the form, with a `valid` status set to `true`, the form is automatically marked as untainted.
 
 Try that by posting the form with valid values. The tainted message should not appear when browsing away from the page.
 
-## Tainted store
+## Check if the form is tainted
 
-You can access the fields that are tainted through the `$tainted` store returned from `superForm`. When you modify the form fields above, you'll see how the `$tainted` store reacts.
+An `isTainted` method is available on `superForm`, to check whether any part of the form is tainted:
 
-> Any direct assignment to `$form` will taint the affected field(s)! The tainted check is made against `$form`, not the HTML input fields. In general, don't modify the `$tainted` store directly; instead, see below for how to set form data without tainting the form.
+```ts
+const { form, enhance, isTainted } = superForm(form.data);
+
+// Check the whole form
+if(isTainted())
+
+// Check a part of the form
+if(isTainted('name'))
+```
+
+## Preventing tainting the form
 
 If you want to modify the `form` store without tainting any fields, you can update it with an extra option:
 
@@ -65,9 +86,11 @@ form.update(
 The `taint` options are:
 
 ```ts
-{ taint: boolean | 'untaint' | 'untaint-all' }
+{ taint: boolean | 'untaint' | 'untaint-form' }
 ```
 
-Which can be used to not only prevent tainting, but also untaint the modified field(s), or the whole form.
+Which can be used to not only prevent tainting, but also untaint the modified field(s), or untainting the whole form.
+
+> For login and registration forms, password managers could automatically taint the form when inserting saved usernames and passwords.
 
 <Next section={concepts} />

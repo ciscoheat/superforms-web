@@ -18,8 +18,8 @@
       onSubmit() {
         prevented = 0;
       },
-      onError({ message, result }) {
-        message.set(result.error.message);
+      onError({ result }) {
+        $message.set(result.error.message);
       },
       timeoutMs: 2000
     });
@@ -44,7 +44,7 @@
 
   <label for="delayed" class="label">
     <RangeSlider
-      name="delay"
+      name="delayMs"
       bind:value={options.delayMs}
       max={9900}
       step={100}

@@ -13,7 +13,7 @@
 
 <Head title="Timers" />
 
-It's important that the users understand that things are happening when they submit a form. Loading timers give us a way of providing feedback when there is a server response delay, for example by displaying a spinner icon.
+It's important that users understand that things are happening when they submit a form. Loading timers can be used to provide feedback when there is a server response delay, for example by displaying a loading spinner icon.
 
 ## Usage
 
@@ -58,7 +58,7 @@ The reason for using `delayed` instead of `submitting` is based on the article [
 
 Submit the following form and play around with the different settings. Different loading spinners are set to display when `delayed` and `timeout` are true respectively. 
 
-Submit multiple times to see the effect of the [multipleSubmits](/concepts/submit-behavior#multiplesubmits) option as well.
+The default [multipleSubmits](/concepts/submit-behavior#multiplesubmits) setting prevents the form from being submitted multiple times, until the `timeout` state is reached. Click multiple times to see the effect of that.
 
 <Form {data} />
 

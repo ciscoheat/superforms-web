@@ -74,7 +74,7 @@ const { form, errors, enhance } = superForm(data.form, {
       // Form input event
       console.log(
         event.path, 'was changed from', event.target, 
-        'in form', event.formEl
+        'in form', event.formElement
       );
     } else {
       // Programmatic event

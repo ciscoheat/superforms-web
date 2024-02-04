@@ -3,18 +3,34 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
+  import { getModalStore } from '@skeletonlabs/skeleton';
+
+  const modalStore = getModalStore();
 
   export function formData() {
     return form;
   }
 
   export let data: PageData;
+
   const { form, errors, enhance, tainted, message, constraints } = superForm(
-    data.form
+    data.form,
+    {
+      taintedMessage: () => {
+        return new Promise((resolve) => {
+          modalStore.trigger({
+            type: 'confirm',
+            title: 'Do you want to leave?',
+            body: 'Changes you made may not be saved.',
+            response: resolve
+          });
+        });
+      }
+    }
   );
 </script>
 
-<Debug label="$tainted store" status={false} open={true} data={$tainted} />
+<!-- Debug label="$tainted store" status={false} open={true} data={$tainted} /-->
 
 <form
   method="POST"

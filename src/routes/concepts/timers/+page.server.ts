@@ -12,11 +12,14 @@ export const load = echoLoad(_schema);
 
 export const actions = {
   default: async ({ request }) => {
-    const form = await superValidate(request, zod(_schema));
+    const formData = await request.formData();
+    console.log("🚀 ~ default: ~ formData:", formData)
+    const form = await superValidate(formData, zod(_schema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
+    console.log("🚀 ~ default: ~ form:", form)
 
     await new Promise((resolve) =>
       setTimeout(resolve, form.data.delay)
