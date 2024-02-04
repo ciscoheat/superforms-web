@@ -12,7 +12,7 @@
 
 <Head title="Status messages" />
 
-A status message like "Form posted" can be displayed after submitting a form. The validation object contains a `message` property used for this:
+A status message like "Form posted" can be displayed after submitting a form. The validation object contains a `message` store used for this:
 
 ## Usage
 
@@ -28,12 +28,12 @@ It is used to display the message on the client, like any other store:
 {/if}
 ```
 
-However, we need to send it from the server first. Using the `message` auxiliary function makes this rather simple.
+However, we need to send it from the server first. Using the `message` function makes this rather simple.
 
 ## The message helper
 
 ```ts
-import { message, superValidate } from 'sveltekit-superforms/server';
+import { message, superValidate } from 'sveltekit-superforms';
 
 export const actions = {
   default: async ({ request }) => {
@@ -171,7 +171,7 @@ The difference between the two events is that you can modify and cancel the upda
 
 ## Limitations
 
-Since there is no form data sent when redirecting, in that case the message will be lost. Since it's common to redirect after a successful post, the `message` property isn't a general solution for displaying status messages.
+Since there is no form data returned when redirecting, in that case the message will be lost. It's quite common to redirect after a successful post, so the `message` property isn't a general solution for displaying status messages.
 
 The library [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message) is a complete solution that works with redirects, however. It can be directly integrated into Superforms, [documented here](/flash-messages).
 

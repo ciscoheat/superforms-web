@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
+import { zod } from 'sveltekit-superforms/adapters';
 import { echo } from '$lib/echo';
 
 export const _schema = z.object({
@@ -8,7 +9,7 @@ export const _schema = z.object({
 });
 
 export const load = (async ({ params }) => {
-  const form = await superValidate(_schema);
+  const form = await superValidate(zod(_schema));
   return { form, lib: params.lib };
 })
 

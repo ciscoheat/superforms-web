@@ -25,7 +25,8 @@ By deconstructing `errors` from `superForm`, you'll get an object with form erro
   <input
     name="name"
     aria-invalid={$errors.name ? 'true' : undefined}
-    bind:value={$form.name} />
+    bind:value={$form.name}
+  />
   {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
 
   <div><button>Submit</button></div>
@@ -39,7 +40,7 @@ The `aria-invalid` attribute is used to automatically focus on the first error f
 Most errors will be set automatically when the data is validated, but you may want to add errors after determining that the data is valid. This is easily done with the `setError` helper function.
 
 ```ts
-import { setError, superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms';
 
 export const actions = {
   default: async ({ request }) => {
@@ -58,21 +59,21 @@ export const actions = {
 };
 ```
 
-`setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. Check [the API](/api#seterrorform-field-error-options) for more options.
+`setError` returns a `fail(400, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. Check [the API](/api#seterrorform-field-error-options) for additional options.
 
-If you have [nested data](/concepts/nested-data), a string path is used to specify where in the data structure the error is:
+If you're using [nested data](/concepts/nested-data), a string path is used to specify where in the data structure the error is:
 
 ```ts
 setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 ```
 
-> All errors added with `setError` will be removed when a Zod schema is used in [client-side validation](/concepts/client-validation) and the first validation occurs (such as modifying a field).
+> Errors added with `setError` will be removed when a schema is used in [client-side validation](/concepts/client-validation) and the first validation occurs (such as modifying a field).
 
-## Throwing server errors
+## Server errors
 
-If something goes wrong beyond validation, instead of `return fail(400, { form })`, you can also `throw error(5xx)`, which can then be handled with the [onError](/concepts/events#onerror) event, or, if the custom [use:enhance](/concepts/enhance) doesn't exist on the form, the nearest +error.svelte page will be rendered.
+If something goes wrong beyond validation, instead of `return fail(400, { form })`, you can also call the SvelteKit `error` function, which can then be handled with the [onError](/concepts/events#onerror) event, or, if the custom [use:enhance](/concepts/enhance) doesn't exist on the form, the nearest +error.svelte page will be rendered.
 
-To avoid data loss even for non-javascript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
+To avoid data loss even for non-JavaScript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
 
 ## Initial form errors
 
@@ -235,7 +236,7 @@ You may also want to list the errors above the form. The `$allErrors` store can 
 
 ## Customizing error messages in the schema
 
-Most methods in the Zod schema has a parameter for a custom error message, so you can just add them there.
+Most methods in the validation schema has a parameter for a custom error message, so you can just add them there. For example with Zod:
 
 ```ts
 const schema = z.object({

@@ -77,7 +77,7 @@ The built-in browser validation can be a bit constrained; for example, you can't
 
 ```ts
 const { form, enhance, constraints, validate } = superForm(data.form, {
-  validators: ClientValidationAdapter<S> | 'clear',
+  validators: ClientValidationAdapter<S> | 'clear' | false,
   validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only' = 'auto',
   customValidity: boolean = false
 })
@@ -86,7 +86,7 @@ const { form, enhance, constraints, validate } = superForm(data.form, {
 ### validators
 
 ```ts
-validators: ClientValidationAdapter<S> | 'clear'
+validators: ClientValidationAdapter<S> | 'clear' | false
 ```
 
 Setting the `validators` option to an adapter with the same schema as on the server, is the most convenient and recommended way. Just put the schema in a shared directory, `$lib/schemas` for example, and import it on the client as well as on the server.

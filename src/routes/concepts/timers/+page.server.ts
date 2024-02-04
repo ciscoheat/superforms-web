@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { echoLoad } from '$lib/echo';
-import { superValidate, message } from 'sveltekit-superforms/server';
+import { superValidate, message } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
 
 const _schema = z.object({
@@ -11,7 +12,7 @@ export const load = echoLoad(_schema);
 
 export const actions = {
   default: async ({ request }) => {
-    const form = await superValidate(request, _schema);
+    const form = await superValidate(request, zod(_schema));
 
     if (!form.valid) {
       return fail(400, { form });

@@ -14,7 +14,9 @@ The sister library to Superforms is called [sveltekit-flash-message](https://git
 
 ## Usage
 
-The library works together with Superforms without any extra configuration, but if you want to integrate the flash message more closely with a form, you can do that by importing its module when calling `superForm`:
+The library works together with Superforms **without any extra configuration**, usually you can replace the Superforms [status messages](/concepts/messages) with the flash message, and that will work very well.
+
+But if you have some special use case where you need to integrate the flash message more closely with a form, you can do that by importing its module when calling `superForm`:
 
 ```ts
 import * as flashModule from 'sveltekit-flash-message/client';
@@ -22,12 +24,12 @@ import * as flashModule from 'sveltekit-flash-message/client';
 const { form, errors, enhance } = superForm(data.form, {
   flashMessage: {
     module: flashModule,
-    onError?: ({result, message}) => {
+    onError?: ({ result, flashMessage }) => {
       // Error handling for the flash message:
       // - result is the ActionResult
-      // - message is the flash store (not the status message store)
+      // - flashMessage is the flash store (not the status message store)
       const errorMessage = result.error.message
-      message.set(/* Your flash message type */);
+      flashMessage.set(/* Your flash message type */);
     }
   },
   syncFlashMessage: false
@@ -44,4 +46,4 @@ It's important that the flash and form message types are matching, in this case.
 
 ### flashMessage.onError
 
-If a form error occurs, which happens when `throw error(...)` is thrown in a form action (and use:enhance is added to the form), the `flashMessage.onError` callback can be used to transform it into your flash message type, so you can display the error at the flash message instead of in `form.message`.
+If a form error occurs, which happens when `error(...)` is called in a form action (and `use:enhance` is added to the form), the `flashMessage.onError` callback can be used to transform it into your flash message type, so you can display the error at the flash message instead of in `form.message`.

@@ -20,17 +20,21 @@ A Superforms feature is to prevent the user from losing data when accidentally n
 
 ```ts
 const { form, enhance, tainted } = superForm(data.form, {
-  taintedMessage: string | null = 'Do you want to leave this page? Changes you made may not be saved.'
+  taintedMessage: string | (() => Promise<boolean>) | boolean = false
 })
 ```
 
-> For the user's sake, the tainted message is set by default, but if you're certain you don't want an alert to appear for a particular form, set the option to `null`. This can be necessary for login and registration forms, where password managers can taint the form when inserting saved usernames and passwords.
+You can set the option to `true`, to have a default message (in english) shown when navigating away from a tainted form, or set your own message with a `string` value.
+
+Alternatively, you can return a `Promise<boolean>` that should resolve to `true` if navigating away is ok. This enables you to provide your own stylish dialog, instead of the default browser.
 
 ## Example
 
 Try to modify the form below, then close the tab or hit the back button. A confirmation dialog should prevent you from losing the changes.
 
 <Form {data} />
+
+> For login and registration forms, password managers can taint the form when inserting saved usernames and passwords.
 
 ## Untainting the form
 

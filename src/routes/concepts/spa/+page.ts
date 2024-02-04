@@ -1,4 +1,5 @@
 import { superValidate } from 'sveltekit-superforms/client';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 export const _userSchema = z.object({
@@ -14,7 +15,7 @@ export const load = async () => {
       name: 'SPA user',
       email: 'spa@spam.web'
     },
-    _userSchema
+    zod(_userSchema)
   );
 
   return { form };

@@ -1,5 +1,6 @@
-import { fail, type RequestEvent, type ServerLoadEvent } from '@sveltejs/kit';
-import { message, superValidate } from 'sveltekit-superforms/server';
+import { fail, type RequestEvent } from '@sveltejs/kit';
+import { message, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters'
 import type { ZodEffects, AnyZodObject } from 'zod';
 
 type ZodValidation<T extends AnyZodObject> =
@@ -13,7 +14,7 @@ export function echo<
   E extends RequestEvent
 >(schema: S, debug = false) {
   return async (event: E) => {
-    const form = await superValidate(event, schema);
+    const form = await superValidate(event, zod(schema));
 
     if (debug) console.log('POST', form);
 
@@ -29,7 +30,7 @@ export function echoLoad<T extends AnyZodObject, S extends ZodValidation<T>>(
   schema: S
 ) {
   return async function load() {
-    const form = await superValidate(schema)
+    const form = await superValidate(zod(schema))
     return { form };
   };
 }
