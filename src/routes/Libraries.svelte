@@ -15,7 +15,7 @@
   ];
 </script>
 
-<div class="mb-4 flex justify-center gap-2">
+<div class="mb-4 flex flex-wrap justify-center gap-2">
   {#each links as link}
     <a class="variant-ghost btn no-underline" href="/get-started/{link[0]}"
       >{#if link[2]}<img

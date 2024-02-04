@@ -185,7 +185,6 @@
       </svelte:fragment>
       <svelte:fragment slot="trail">
         <a
-          class="mr-2"
           href="https://discord.gg/AptebvVuhB"
           target="_blank"
           rel="noreferrer">
@@ -202,11 +201,23 @@
         </a>
         <a
           href="https://github.com/ciscoheat/sveltekit-superforms"
+          class="w-6 text-primary-500"
+          target="_blank"
+          rel="noreferrer"><div class="md:w-6">{@html github}</div></a>
+        <a
+          href="https://twitter.com/encodeart"
           class="w-7 text-primary-500 md:w-8 md:pr-2"
           target="_blank"
           rel="noreferrer"
-          >{@html github}
-        </a>
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+            ><path
+              fill="currentColor"
+              d="M18.205 2.25h3.308l-7.227 8.26l8.502 11.24H16.13l-5.214-6.817L4.95 21.75H1.64l7.73-8.835L1.215 2.25H8.04l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z" /></svg
+          ></a>
         <SearchButton cls="hidden md:inline" />
         <button
           type="button"
