@@ -3,8 +3,10 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
+// TODO: Enable indexSite when v2 is released.
+
 export default defineConfig(async ({ mode }) => {
-  if (mode == 'development') await indexSite();
+  //if (mode == 'development') await indexSite();
   return {
     plugins: [
       sveltekit(),
@@ -13,7 +15,7 @@ export default defineConfig(async ({ mode }) => {
         name: 'index-site',
         async handleHotUpdate(ctx) {
           if (ctx.file.endsWith('+page.md')) {
-            await indexSite();
+            //await indexSite();
           }
         }
       }
