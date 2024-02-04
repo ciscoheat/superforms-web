@@ -35,9 +35,9 @@ const schema = z.object({
 
 ### Multi-type unions can only be used when dataType is 'json'
 
-Unions are also quite difficult to make assumptions about in `FormData`. If `"123"` was posted (as all posted values are strings), should it be parsed as a string or a number, in the above case?
+Unions are also quite difficult to make assumptions about in `FormData`. If `"123"` was posted (as all posted values are strings), should it be parsed as a string or a number in the above case?
 
-There is no obvious answer, so unions **with more than one type** can only be used when the `dataType` option is set to `'json'` (which will bypass the whole `FormData` parsing, as the form data is serialized).
+There is no obvious answer, so unions **with more than one type** can only be used when the `dataType` option is set to `'json'` (which will bypass the whole `FormData` parsing by serializing the form data).
 
 ## Form is reset by default
 

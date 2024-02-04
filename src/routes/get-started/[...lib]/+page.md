@@ -235,11 +235,11 @@ The Superform server API is called `superValidate`. You can call it in two ways 
 
 ### Empty form
 
-If you want the form to be initially empty, just pass the schema as in the example above, and it will be filled with default values based on the schema. For example, a `string` field results in an empty string, unless you have set a default.
+If you want the form to be initially empty, just pass the adapter as in the example above, and the form will be filled with default values based on the schema. For example, a `string` field results in an empty string, unless you have set a default.
 
 ### Populate form from database
 
-If you want to populate the form, you can send data to the form as the first parameter, schema second, like this:
+If you want to populate the form, you can send data to `superValidate` as the first parameter, adapter second, like this:
 
 ```ts
 export const load = async ({ params }) => {
@@ -256,17 +256,17 @@ export const load = async ({ params }) => {
 };
 ```
 
-As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is especially useful for backend interfaces, where the form usually should be populated based on a url like `/users/123`.
+As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is useful for backend interfaces, where the form should usually be populated based on a url like `/users/123`.
 
-> Errors will be displayed as default when the form is populated, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
+> Errors will be displayed when the form is populated, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
 
 ### Important note about return values
 
-Unless you call `redirect` or `error`, you should **always** return the form object to the client, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned like this in all code paths that returns, both in load functions and form actions.
+Unless you call the SvelteKit `redirect` or `error` functions, you should **always** return the form object to the client, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned like this in all code paths that returns, both in load functions and form actions.
 
 ### Displaying the form
 
-The `superValidate` function returns the data required to instantiate a form on the client, which is now available in `+page.svelte` as `data.form`, as we did `return { form }`. There, we'll use the client part of the API:
+The `superValidate` function returns the data required to instantiate a form on the client, now available in `+page.svelte` as `data.form`, as we did `return { form }`. There, we'll use the client part of the API:
 
 **src/routes/+page.svelte**
 
@@ -301,7 +301,7 @@ This is what the form should look like now:
 
 ### Debugging
 
-We can see that the form has been populated with the default values. However, let's add the debugging component [SuperDebug](/super-debug) to gain more insight:
+We can see that the form has been populated with the default values. But let's add the debugging component [SuperDebug](/super-debug) to gain more insight:
 
 **src/routes/+page.svelte**
 
@@ -373,12 +373,12 @@ This is the validation object returned from `superValidate`, containing the data
 | **posted**      | Tells you if the data was posted (in a form action) or not (in a load function).                                                                                                       |
 | **data**        | The posted data, which should be returned to the client using `fail` if not valid.                                                                                                     |
 | **errors**      | An object with all validation errors, in a structure reflecting the data.                                                                                                              |
+| **message**     | (optional) Can be set as a [status message](/concepts/messages). |
 
-There are some optional properties as well, only being sent in the load function:
+There are some other properties as well, that are only being sent in the load function:
 
 | Property           | Purpose |
 | ------------------ | ------- |
-| **message**     | Can be set as a [status message](/concepts/messages). |
 | **constraints** | An object with [HTML validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation), that can be spread on input fields. |
 | **shape**       | Used internally in error handling. |
 
@@ -437,7 +437,7 @@ There are no hidden DOM manipulations or other secrets; it's just HTML attribute
 
 As a last step, let's add progressive enhancement, so the JS users will have a better experience. It's also required to use for example client-side validation and events, and of course to avoid reloading the page when the form is posted.
 
-This is simply added with `enhance`, returned from `superForm`:
+This is simply done with `enhance`, returned from `superForm`:
 
 ```svelte
 <script lang="ts">
@@ -449,7 +449,7 @@ This is simply added with `enhance`, returned from `superForm`:
 <form method="POST" use:enhance>
 ```
 
-Now the page won't fully reload when submitting, and we unlock lots of client-side features like events, timers, auto error focus, etc, that you can read about under the Concepts section in the navigation.
+Now the page won't fully reload when submitting, and we unlock lots of client-side features like timers for [loading spinners](/concepts/timers), [auto error focus](/concepts/error-handling#errorselector), [tainted fields](/concepts/tainted), etc, that you can read about under the Concepts section in the navigation.
 
 The `use:enhance` action takes no arguments; instead, events are used to hook into the SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 

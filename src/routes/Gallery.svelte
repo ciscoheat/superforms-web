@@ -14,22 +14,22 @@
     [
       nesteddata,
       'Nested data',
-      'Use any kind of nested data structure with Superforms. Coercion to and from Date, arrays, etc, is automatic.'
+      'Use any kind of <a href="/concepts/nested-data/">nested data structure</a> with Superforms. Coercion to and from Date, arrays, etc, is automatic.'
     ],
     [
       multipleforms,
       'Multiple forms on the same page',
-      'Superforms handles multiple forms in a straightforward manner, without you having to worry about collisions in <code>PageData</code> and <code>ActionData</code>.'
+      'Superforms handles <a href="/concepts/multiple-forms/">multiple forms</a> in a straightforward manner, without you having to worry about collisions in <code>PageData</code> and <code>ActionData</code>.'
     ],
     [
       tainted,
       'Tainted fields',
-      'Prevent data loss by alerting the user, when navigating away from a modified form.'
+      'Prevent data loss by <a href="/concepts/tainted/">marking fields as tainted</a> and alerting the user, when navigating away from a modified form.'
     ],
     [
       clientvalidation,
       'Client-side validation',
-      'Real time client-side validation, with automatic centering and focusing on error fields.'
+      'Real time <a href="/concepts/client-validation/">client-side validation</a>, with automatic centering and <a href="/concepts/error-handling/#errorselector">focusing on error fields</a>.'
     ],
     [
       spinner,
