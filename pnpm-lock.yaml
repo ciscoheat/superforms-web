@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
+  '@fireworks-js/svelte':
+    specifier: ^2.10.7
+    version: 2.10.7
   '@jsdevtools/rehype-toc':
     specifier: ^3.0.2
     version: 3.0.2
@@ -598,6 +601,12 @@ packages:
   /@fastify/busboy@2.1.0:
     resolution: {integrity: sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==}
     engines: {node: '>=14'}
+    dev: true
+
+  /@fireworks-js/svelte@2.10.7:
+    resolution: {integrity: sha512-TXAQCihGWyWGiRoF8E9WOiBT/tRhhDznvOEdjIAGBEIOYRiKwbt1OdDGTPU9s4oa/tIkjUOLuQ3dqaDnOjcuRw==}
+    dependencies:
+      fireworks-js: 2.10.7
     dev: true
 
   /@gcornut/valibot-json-schema@0.0.22(@types/json-schema@7.0.15)(esbuild-runner@2.2.2)(esbuild@0.18.20)(valibot@0.27.1):
@@ -1941,6 +1950,10 @@ packages:
     dependencies:
       locate-path: 6.0.0
       path-exists: 4.0.0
+    dev: true
+
+  /fireworks-js@2.10.7:
+    resolution: {integrity: sha512-FyRNiqlgu9ZeFCjfN0UiGUlj5dUWNYLyFaWN/Q8sOMf0E+KGA4dMROaBZpCtym85fChgCspoa3jHoLTRZiy74A==}
     dev: true
 
   /flat-cache@3.2.0:

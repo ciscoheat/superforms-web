@@ -4,11 +4,12 @@
 	import Youtube from '$lib/Youtube.svelte'
 	import Gallery from './Gallery.svelte'
   import Libraries from './Libraries.svelte'
+  import ReleaseV2 from './ReleaseV2.svelte'
 </script>
 
 <Head title="Superforms for SvelteKit" />
 
-> Superforms version 2 is released, supporting all possible validation libraries. Find out [what's new](/whats-new-v2) and see [how to migrate](/migration-v2) your existing projects!
+<ReleaseV2 />
 
 <Header />
 
