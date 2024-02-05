@@ -6,7 +6,7 @@
 
 <Head title="Default values" />
 
-When `superValidate` encounters a schema field that isn't optional, or when a `FormData` field is falsy, a default value is returned to the form, to ensure that the type is correct:
+When `superValidate` encounters a schema field that isn't optional, and when its supplied data is empty, a default value is returned to the form, to ensure that the type is correct:
 
 | type    | value       |
 | ------- | ----------- |
@@ -20,14 +20,11 @@ When `superValidate` encounters a schema field that isn't optional, or when a `F
 
 ## Changing a default value
 
-You can, of course, set your own default values in the schema, using the `default` method. You can even abuse the typing system a bit to handle the classic "agree to terms" checkbox:
+You can, of course, set your own default values in the schema, using the `default` method in Zod, for example. You can even abuse the typing system a bit to handle the classic "agree to terms" checkbox:
 
 ```ts
 const schema = z.object({
-  age: z
-    .number()
-    .positive()
-    .default('' as unknown as number),
+  age: z.number().positive().default('' as unknown as number),
   agree: z.literal(true).default(false as true)
 });
 ```
@@ -40,17 +37,20 @@ This looks a bit strange, but will ensure that the age isn't set to 0 as default
 
 Fields set to `null` will take precedence over `undefined`, so a field that is both `nullable` and `optional` will have `null` as its default value. Otherwise, it's `undefined`.
 
-## Non-supported defaults
+## Explicit defaults
 
-The Zod types `ZodEnum` and `ZodUnion` can't use the listed default values, in which case you must set a default value for them:
+Enums and unions must have an explicit default value:
 
 ```ts
 const schema = z.object({
-  fish: z.enum(['Salmon', 'Tuna', 'Trout']).default('Salmon')
+  fish: z.enum(['Salmon', 'Tuna', 'Trout']).default('Salmon'),
+  either: z.union([z.number(), z.string()]).default(123)
 });
+```
 
-// If it's nullable/optional/nullish, no need for a default
-// (but it can still be set)
+If the field is nullable or optional, there's no need for a default value (but it can still be set).
+
+```ts
 const schema2 = z.object({
   fish: z.enum(['Salmon', 'Tuna', 'Trout']).nullable()
 });
