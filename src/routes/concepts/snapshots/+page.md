@@ -19,14 +19,12 @@
 
 <Head title="Snapshots" />
 
-A nice SvelteKit feature is [snapshots](https://kit.svelte.dev/docs/snapshots), which save and restore data when the user navigates in the browser history. This is perfect for saving the form state, and with Superforms, you can take advantage of this in one line of code:
+A nice SvelteKit feature is [snapshots](https://kit.svelte.dev/docs/snapshots), which saves and restores data when the user navigates on the site. This is perfect for saving the form state, and with Superforms, you can take advantage of this in one line of code:
 
 ## Usage
 
 ```ts
-const { form, capture, restore } = superForm(data.form, {
-  taintedMessage: null
-});
+const { form, capture, restore } = superForm(data.form);
 
 export const snapshot = { capture, restore };
 ```
@@ -35,7 +33,7 @@ The export has to be on a `+page.svelte` page to work, it cannot be in a compone
 
 ## Test it out
 
-Modify the form below without submitting, then click the browser back button and then forward again. The form should be restored to its intermediate state. The [taintedMessage](/concepts/tainted) option is also set to `null`, to avoid a dialog when navigating elsewhere.
+Modify the form below without submitting, then click the browser back button and then forward again. The form should be restored to its intermediate state.
 
 <Form {form} {errors} {enhance} {message} {reset} />
 

@@ -3,13 +3,15 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
+  import { zod } from 'sveltekit-superforms/adapters';
+  import { schema } from './schema';
 
   export let data: PageData;
 
   const { form, errors, message, enhance } = superForm(data.form, {
     dataType: 'json',
     errorSelector: '.input-error',
-    defaultValidator: 'clear',
+    validators: zod(schema),
     taintedMessage: null
   });
 </script>

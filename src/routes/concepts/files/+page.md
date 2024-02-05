@@ -48,14 +48,13 @@ Then you need a form with the proper [enctype](https://developer.mozilla.org/en-
 ```svelte
 <form method="POST" enctype="multipart/form-data">
   <input type="file" name="image" /> 
-  {#if $errors.image}<span>{$errors.image}</span>{/if}
   <button>Submit</button>
 </form>
 ```
 
-## Client-side file validation
+## Examples
 
-File validation works even on the client, with an `on:input` handler.
+The examples show how to add file validation even on the client, with an `on:input` handler.
 
 ### Single file input
 
@@ -78,22 +77,26 @@ export const schema = z.object({
 
   export let data;
 
-  const { form } = superForm(data.form, {
+  const { form, enhance, errors } = superForm(data.form, {
     validators: zodClient(schema)
   })
 </script>
 
-<input
-  type="file"
-  name="image"
-  accept="image/png, image/jpeg"
-  on:input={(e) => ($form.image = e.currentTarget.files?.item(0) ?? null)}
-/>
+<form method="POST" enctype="multipart/form-data" use:enhance>
+  <input
+    type="file"
+    name="image"
+    accept="image/png, image/jpeg"
+    on:input={(e) => ($form.image = e.currentTarget.files?.item(0) ?? null)}
+  />
+  {#if $errors.image}<span>{$errors.image}</span>{/if}
+  <button>Submit</button>
+</form>
 ```
 
 ### Multiple files
 
-We need an array schema field to validate multiple files:
+We need an array to validate multiple files:
 
 ```ts
 const schema = z.object({
@@ -114,18 +117,23 @@ const form = await superValidate(formData, zod(schema));
 
   export let data;
 
-  const { form } = superForm(data.form, {
+  const { form, enhance, errors } = superForm(data.form, {
     validators: zodClient(schema)
   })
 </script>
 
-<input
-  type="file"
-  multiple
-  name="images"
-  accept="image/png, image/jpeg"
-  on:input={(e) => ($form.images = Array.from(e.currentTarget.files ?? []))}
-/>
+<form method="POST" enctype="multipart/form-data" use:enhance>
+  <input
+    type="file"
+    multiple
+    name="images"
+    accept="image/png, image/jpeg"
+    on:input={(e) => ($form.images = Array.from(e.currentTarget.files ?? []))}
+  />
+  {#if $errors.images}<span>{$errors.images}</span>{/if}
+  <button>Submit</button>
+</form>
+
 ```
 
 ## Form action caveat
@@ -134,7 +142,7 @@ There's one important thing to be aware of: Because file objects cannot be seria
 
 ```ts
 import { fail } from '@sveltejs/kit';
-import { withFiles } from 'sveltekit-superforms';
+import { withFiles, message, setError } from 'sveltekit-superforms';
 
 // When using fail
 if (!form.valid) return fail(400, withFiles({ form }));
@@ -159,20 +167,20 @@ export const actions = {
     const formData = await request.formData();
     const form = await superValidate(formData, schema);
 
-    if (!form.valid) return fail(400, { form });
+    if (!form.valid) return fail(400, withFiles({ form }));
 
     const image = formData.get('image');
     if (image instanceof File) {
       // Validate and process the image.
     }
 
-    return { form };
+    return withFiles({ form });
   }
 };
 ```
 
-If you want errors for such a field, you can add an optional field to the schema with the same name, and use [setError](/concepts/error-handling#seterror) to set and display an error message.
+If the file field isn't a part of the schema, but you still want errors for it, you can add an optional field to the schema with the same name, and use [setError](/concepts/error-handling#seterror) to set and display an error message.
 
 ## Preventing file uploads
 
-To prevent file uploads, set the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, so you don't have to use `withFiles`. This will also be `true` by default if you have defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important). In that case, set `{ allowFiles: true }` to allow files.
+To prevent file uploads, set the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, so you don't have to use `withFiles`. This will also happen if you have defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important). In that case, set `{ allowFiles: true }` to allow files.

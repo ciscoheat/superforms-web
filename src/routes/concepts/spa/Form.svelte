@@ -3,17 +3,19 @@
   import {
     superForm,
     message as setMessage,
-    setError
-  } from 'sveltekit-superforms/client';
+    setError,
+    type Infer
+  } from 'sveltekit-superforms';
   import { _userSchema } from './+page';
+  import { zod } from 'sveltekit-superforms/adapters';
 
   export let data: PageData;
 
-  const { form, errors, message, constraints, enhance, delayed } = superForm<
-    typeof _userSchema
+  const { form, errors, message, enhance } = superForm<
+    Infer<typeof _userSchema>
   >(data.form, {
     SPA: true,
-    validators: _userSchema,
+    validators: zod(_userSchema),
     taintedMessage: null,
     onUpdate({ form }) {
       console.log('SPA post', form);
@@ -24,8 +26,8 @@
         // TODO: Do something with the validated data
       }
     },
-    onError({ result, message }) {
-      message.set(result.error.message);
+    onError({ result }) {
+      $message.set(result.error.message);
     }
   });
 </script>

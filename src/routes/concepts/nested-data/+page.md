@@ -12,7 +12,7 @@
 
 <Head title="Nested data" />
 
-Basic HTML forms can only handle string values, and the `<form>` element cannot nest other forms, so there is no standardized way to represent a nested data structure or more complex values like dates. Fortunately, Superforms has a few solutions for this!
+HTML forms can only handle string values, and the `<form>` element cannot nest other forms, so there is no standardized way to represent a nested data structure or more complex values like dates. Fortunately, Superforms has a solution for this!
 
 ## Usage
 
@@ -24,13 +24,13 @@ const { form, enhance } = superForm(data.form, {
 
 ### dataType
 
-By simply setting `dataType` to `'json'`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the `form` store, and you don't have to worry about failed coercion, converting strings to objects and arrays, etc.
+By simply setting `dataType` to `'json'`, you can store any data structure allowed by [devalue](https://github.com/Rich-Harris/devalue) in the `$form` store, and you don't have to worry about failed coercion, converting strings to objects and arrays, etc.
 
-You don't even have to set a name on the form fields anymore, since the actual data in `$form` is now posted, not the fields in the HTML. They are now simply UI components for modifying a data model ([as they should be](https://blog.encodeart.dev/rediscovering-mvc)).
+You don't even have to set a name on the form fields anymore, since the actual data in `$form` is now posted, not the input fields in the HTML. They are now simply UI components for modifying a data model ([as they should be](https://blog.encodeart.dev/rediscovering-mvc)).
 
-> When `dataType` is set to `'json'`, the `onSubmit` event contains `formData`, but it cannot be used to modify the posted data. You need to set or update the `form` store.<br><br>It also means that the `disabled` attribute, which normally prevents fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
+> When `dataType` is set to `'json'`, the `onSubmit` event will contain `FormData`, but it cannot be used to modify the posted data. You need to set or update `$form`.<br><br>It also means that the `disabled` attribute, which normally prevents input fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
 
-Modifying the `form` store programmatically is easy, you can either assign `$form.field = ...` directly, which will taint the affected fields. If you don't want to taint anything, you can use `update` with an extra option:
+Modifying the `form` store programmatically is easy, you can either assign `$form.field = ...` directly, which will taint the affected fields, or if you don't want to taint anything, you can use `form.update` with an extra option:
 
 ```ts
 form.update(
@@ -45,7 +45,7 @@ form.update(
 The `taint` options are:
 
 ```ts
-{ taint: boolean | 'untaint' | 'untaint-all' }
+{ taint: boolean | 'untaint' | 'untaint-form' }
 ```
 
 Which can be used to not only prevent tainting, but also untaint the modified field(s), or the whole form.
@@ -68,9 +68,7 @@ When your schema contains arrays or objects, you can access them through `$form`
 Given the following schema, which describes an array of tag objects:
 
 ```ts
-import { z } from 'zod';
-
-export const schema = z.object({
+const schema = z.object({
   tags: z
     .object({
       id: z.number().int().min(1),
@@ -82,12 +80,12 @@ export const schema = z.object({
 const tags = [{ id: 1, name: 'test' }];
 
 export const load = async () => {
-  const form = await superValidate({ tags }, schema);
+  const form = await superValidate({ tags }, zod(schema));
   return { form };
 };
 ```
 
-You can build up a HTML form for these tags using an `{#each}` loop:
+You can build a HTML form for these tags using an `{#each}` loop:
 
 ```svelte
 <script lang="ts">
@@ -130,7 +128,7 @@ Note that we're using the index of the loop, so the value can be bound directly 
 
 ## Arrays with primitive values
 
-Since you can post multiple HTML elements with the same name, you could, but don't have to use `dataType: 'json'` for arrays of primitive values like numbers and strings. Just add the input fields, **all with the same name as the schema field**, which can only be at the top level of the schema, of course. Superforms will handle the type coercion to array automatically (just remember the name attribute):
+It's possible to post multiple HTML elements with the same name, so you don't have to use `dataType: 'json'` for arrays of primitive values like numbers and strings. Just add the input fields, **all with the same name as the schema field**, which can only be at the top level of the schema. Superforms will handle the type coercion to array automatically, as long as the fields have the same name attribute:
 
 ```ts
 export const schema = z.object({

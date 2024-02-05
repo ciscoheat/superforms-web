@@ -12,9 +12,9 @@
 
 <Head title="Multiple forms on the same page" />
 
-Since there is only one `page` store, multiple forms on the same page, like a register and login form, can cause problems since form actions will both update `$page.form`, possibly affecting the incorrect form.
+Since there is only one `$page` store per route, multiple forms on the same page, like a register and login form, can cause problems since both form actions will update `$page.form`, possibly affecting the other form.
 
-With Superforms, multiple forms on the same page are handled transparently **if you are using `use:enhance`, and the forms have different schema types**. When using the same schema for multiple forms, you need to set the `id` option:
+With Superforms, multiple forms on the same page are handled automatically **if you are using `use:enhance`, and the forms have different schema types**. When using the same schema for multiple forms, you need to set the `id` option:
 
 ```ts
 const form = await superValidate(schema, {
@@ -33,7 +33,8 @@ Here's an example of how to handle a login and registration form on the same pag
 ```ts
 import { z } from 'zod';
 import { fail } from '@sveltejs/kit';
-import { message, superValidate } from 'sveltekit-superforms/server';
+import { message, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -47,9 +48,9 @@ const registerSchema = z.object({
 });
 
 export const load = async () => {
-  // Different schemas, so no id required.
-  const loginForm = await superValidate(loginSchema);
-  const registerForm = await superValidate(registerSchema);
+  // Different schemas, no id required.
+  const loginForm = await superValidate(zod(loginSchema));
+  const registerForm = await superValidate(zod(registerSchema));
 
   // Return them both
   return { loginForm, registerForm };
@@ -57,15 +58,16 @@ export const load = async () => {
 
 export const actions = {
   login: async ({ request }) => {
-    const loginForm = await superValidate(request, loginSchema);
+    const loginForm = await superValidate(request, zod(loginSchema));
 
     if (!loginForm.valid) return fail(400, { loginForm });
 
     // TODO: Login user
     return message(loginForm, 'Login form submitted');
   },
+
   register: async ({ request }) => {
-    const registerForm = await superValidate(request, registerSchema);
+    const registerForm = await superValidate(request, zod(registerSchema));
 
     if (!registerForm.valid) return fail(400, { registerForm });
 
@@ -114,14 +116,14 @@ The code above uses [named form actions](https://kit.svelte.dev/docs/form-action
 {#if $registerMessage}<h3>{$registerMessage}</h3>{/if}
 
 <form method="POST" action="?/register" use:registerEnhance>
-  E-mail: <input name="email" type="email" bind:value={$form.email} />
+  E-mail: <input name="email" type="email" bind:value={$registerForm.email} />
   Password:
-  <input name="password" type="password" bind:value={$form.password} />
+  <input name="password" type="password" bind:value={$registerForm.password} />
   Confirm password:
   <input
     name="confirmPassword"
     type="password"
-    bind:value={$form.confirmPassword} />
+    bind:value={$registerForm.confirmPassword} />
   <button>Submit</button>
 </form>
 ```
@@ -167,8 +169,6 @@ Multiple forms also work without `use:enhance`, though in this case you must add
 </form>
 ```
 
-(You can add this field even with `use:enhance` added, it works in both cases.)
-
 ## Configuration and troubleshooting
 
 Due to the many different use cases, it's hard to set sensible default options for multiple forms. A common issue is that when one form is submitted, the other forms' data are lost. This is due to the page being invalidated by default on a successful response.
@@ -179,23 +179,7 @@ Also check out the [componentization](/components) page for ideas on how to plac
 
 ## Test it out
 
-Here we have two forms, with separate id's and some extra options:
-
-```ts
-{
-  // Clear form on success.
-  resetForm: true,
-  // Prevent page invalidation, which would otherwise
-  // clear the other form when the load function executes again.
-  invalidateAll: false,
-  // Disable tainted message check, since password
-  // managers can taint the field when automatically
-  // filling in the fields.
-  taintedMessage: null
-}
-```
-
-Submit them and see that they are acting independently.
+Here we have two forms, with separate id's and their `invalidateAll` option set to `false`, to prevent page invalidation, which would otherwise clear the other form when the load function executes again.
 
 <Form {data} />
 

@@ -1,18 +1,5 @@
-import { z } from 'zod';
 import { echoLoad, echoActions } from '$lib/echo';
-
-const schema = z.object({
-  tags: z
-    .object({
-      id: z.number().int().min(1),
-      name: z.string().min(2)
-    })
-    .array()
-    .default([
-      { id: 0, name: 'test' },
-      { id: 7, name: 'a' }
-    ])
-});
+import { schema } from './schema.js';
 
 export const load = echoLoad(schema);
 export const actions = echoActions(schema);

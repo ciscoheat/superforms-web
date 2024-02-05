@@ -12,27 +12,24 @@
 
 <Head title="Proxy objects" />
 
-Sometimes the form data must be proxied, which could happen when you get a `string` value from an input field, third-party library, etc. and want it to be automatically converted and updated with a non-string value in your schema.
+Sometimes you get a `string` value from an input field or third-party library, and want it to be automatically converted and updated with a non-string value in your schema. This is what proxies are for.
 
 ```ts
 import {
-  // The first ones uses the $form store
-  // and is always a Writable<string>:
+  // The primitives returns a Writable<string>:
   booleanProxy,
   dateProxy,
   intProxy,
   numberProxy,
   stringProxy,
-  // These two uses the whole object returned from
-  // superForm. Type depends on the field.
+  // The type of the other three depends on the field:
   formFieldProxy,
   arrayProxy,
-  // Can use any object. Type depends on the field.
   fieldProxy      
 } from 'sveltekit-superforms/client';
 ```
 
-The usage for all of them is practically the same, only the initial argument will differ, as described above.
+The usage for all of them is practically the same. You can use the form store, or the whole superForm as input, which allows you to set a `tainted` option, in case you don't want to taint the form when it updates.
 
 ```ts
 import { superForm, intProxy } from 'sveltekit-superforms/client';
@@ -40,10 +37,14 @@ import { superForm, intProxy } from 'sveltekit-superforms/client';
 // Assume the following schema:
 // z.object({ id: z.number().int() })
 
-const { form } = superForm(data.form);
+const theForm = superForm(data.form);
+const { form, errors, enhance } = theForm;
 
 // Returns a Writable<string>
 const idProxy = intProxy(form, 'id');
+
+// Use the whole superForm object to prevent tainting
+const idProxy2 = intProxy(theForm, 'id', { taint: false });
 ```
 
 Now if you bind to `$idProxy` instead of `$form.id`, the value will be converted to and from an integer, and `$form.id` will be updated automatically.
@@ -72,11 +73,11 @@ const proxyDate = dateProxy(form, 'date', { format: 'date' });
   aria-invalid={$errors.date ? 'true' : undefined}
   {...$constraints.date}
   min={$constraints.date?.min?.toString().slice(0, 10)}
-  max={$constraints.date?.max?.toString().slice(0, 10)} 
+  max={$constraints.date?.max?.toString().slice(0, 10)}
 />
 ```
 
-We're also taking advantage of the `min` and `max` constraints to limit the date picker selection. The following example limits the date from today and forward, and also uses the [empty option](/api#dateproxyform-fieldname-options) of the proxy, to set an invalid date to `undefined`:
+We're also taking using the `min` and `max` constraints to limit the date picker selection. The following example limits the date from today and forward, and also uses the [empty option](/api#dateproxyform-fieldname-options) of the proxy, to set an invalid date to `undefined`:
 
 <Form {data} />
 

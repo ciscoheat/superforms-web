@@ -23,11 +23,11 @@ By using `enhance` returned from `superForm`, we'll get the client-side enhancem
 
 The `use:enhance` action takes no arguments; instead, events are used to hook into the default SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
-> Without `use:enhance`, the form will be static. No events, loading timers, auto-focus, etc. The only things that will work are [constraints](/concepts/client-validation#constraints). Also note that SvelteKit's own `use:enhance` cannot be used; you must use the one returned from `superForm`, and it should only be used on a single form element - you cannot share it between forms.
+> Without `use:enhance` (and JavaScript enabled in the browser), the form will be static. No events, loading timers, auto-focus, etc. The only things that will work are [constraints](/concepts/client-validation#constraints). Also note that SvelteKit's own `use:enhance` cannot be used; you must use the one returned from `superForm`, and it should only be used on a single form element - you cannot share it between forms.
 
 ## Modifying the use:enhance behavior
 
-The default `use:enhance` behavior can be modified, here are the options available along with the default values; you don't need to add them unless you want to change a value.
+The default `use:enhance` behavior can be modified, there are three options available, here shown with the default values; you don't need to add them unless you want to change a value.
 
 ```ts
 const { form, enhance, reset } = superForm(data.form, {
@@ -45,7 +45,7 @@ Turning this behavior off can be useful when you want to isolate the form from o
 
 ### invalidateAll
 
-When `invalidateAll` is `true` (the default) and a successful validation result is returned from the server, the page will be invalidated and the load functions will run again. A login form takes advantage of this to update user information on the page.
+When `invalidateAll` is `true` (the default) and a successful validation result is returned from the server, the page will be invalidated and the load functions will run again. A login form takes advantage of this to update user information on the page, but the default setting may cause problems with [multiple forms on the same page](/concepts/multiple-forms), since the load function will reload the data for all forms defined there.
 
 ### resetForm
 
@@ -58,8 +58,6 @@ For a custom reset, you can instead modify the `data` field returned from `super
 ## When to change the defaults?
 
 Quite rarely! If you have a single form on the page and nothing else is causing the page to invalidate, you'll probably be fine as it is. For multiple forms on the same page, you have to experiment with these three options. Read more on the [multiple forms](/concepts/multiple-forms) page.
-
-`applyAction` and `invalidateAll` are the most technical ones; if you're dealing with a single form per page, you can most likely skip them.
 
 ## Making the form behave like the SvelteKit default
 
