@@ -7,14 +7,14 @@
 
 <div class="flex items-center gap-1">
   <span>I'm using</span>
-  <select class="select w-24 max-w-24" bind:value={$settings.pm}>
+  <select class="select w-24 max-w-24 py-1" bind:value={$settings.pm}>
     <option value="npm i -D">npm</option>
     <option value="pnpm i -D">pnpm</option>
     <option value="yarn add --dev">yarn</option>
   </select>
   <span>and my validation library is</span>
   <select
-    class="select w-36 max-w-36"
+    class="select w-36 max-w-36 py-1"
     bind:value={$settings.lib}
     on:input={(e) =>
       goto('/get-started/' + e.currentTarget.value, {

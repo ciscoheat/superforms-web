@@ -1,6 +1,5 @@
 <script lang="ts">
   import Head from '$lib/Head.svelte'
-  import Generics from './Generics.svelte'
 </script>
 
 <Head title="Forms and fields in components" />
@@ -10,6 +9,7 @@
 By looking at the rather simple [get started tutorial](/get-started), it's obvious that quite a bit of boilerplate code adds up for a Superform:
 
 ```svelte
+<!-- For each form field -->
 <label for="name">Name</label>
 <input
   type="text"
@@ -27,12 +27,9 @@ And it also gets bad in the script part when you have more than a couple of form
 
 ```svelte
 <script lang="ts">
-  import type { PageData } from './$types';
-  import { superForm } from 'sveltekit-superforms/client'
+  import { superForm } from 'sveltekit-superforms'
 
-  export let data: PageData;
-
-  const { form, errors, enhance, ... } = superForm(data.form);
+  export let data;
 
   const {
     form: loginForm,
@@ -73,11 +70,11 @@ Now you can import and use this type in a separate component:
 
 ```svelte
 <script lang="ts">
-  import type { SuperValidated } from 'sveltekit-superforms';
-  import { superForm } from 'sveltekit-superforms/client'
+  import type { SuperValidated, Infer } from 'sveltekit-superforms';
+  import { superForm } from 'sveltekit-superforms'
   import type { LoginSchema } from '$lib/schemas';
 
-  export let data: SuperValidated<LoginSchema>;
+  export let data: SuperValidated<Infer<LoginSchema>>;
 
   const { form, errors, enhance, ... } = superForm(data);
 </script>
@@ -93,9 +90,7 @@ Use it by passing the form data from `+page.svelte` to the component, making it 
 
 ```svelte
 <script lang="ts">
-  import type { PageData } from './$types';
-
-  export let data: PageData;
+  export let data;
 </script>
 
 <LoginForm data={data.loginForm} />
@@ -161,18 +156,17 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 
 (Note that you must bind directly to `$form.tags` with the index, you cannot use the each loop variable, hence the underscore.)
 
-It's a little bit better and will certainly help when the components require some styling, but there are still plenty of attributes. Can we do even better?
+This is a bit better and will certainly help when the components require some styling, but there are still plenty of attributes. Can we do even better?
 
 ### Using a fieldProxy
 
-You may have used [proxy objects](/concepts/proxy-objects) for converting an input field string like `"2023-04-12"` into a `Date`, but that is just a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:
+You may have used [proxy objects](/concepts/proxy-objects) for converting an input field string like `"2023-04-12"` into a `Date`, but that's a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:
 
 ```svelte
 <script lang="ts">
-  import type { PageData } from './$types';
   import { superForm, fieldProxy } from 'sveltekit-superforms/client';
 
-  export let data: PageData;
+  export let data;
 
   const { form } = superForm(data.form);
 
@@ -183,7 +177,14 @@ You may have used [proxy objects](/concepts/proxy-objects) for converting an inp
 <button on:click={() => ($name = '')}>Clear name</button>
 ```
 
-Any updates to `$name` will reflect in `$form.name`. Note that this will also [taint](/concepts/tainted) that field, so if this is not intended, you may want to use the `$tainted` store and undefine its `name` field.
+Any updates to `$name` will reflect in `$form.name`. Note that this will also [taint](/concepts/tainted) that field, so if this is not intended, you can use the whole superForm object and add an option:
+
+```ts
+const theForm = superForm(data.form);
+const { form } = theForm;
+
+const name = fieldProxy(theForm, 'name', { taint: false });
+```
 
 A `fieldProxy` isn't enough here, however. We'd still have to make proxies for `form`, `errors`, and `constraints`, and then we're back to the same problem again.
 
@@ -212,22 +213,16 @@ But we didn't want to pass all those proxies, so let's imagine a component that 
 
 How nice would this be? This can actually be pulled off in a typesafe way with a bit of Svelte magic:
 
-<Generics>
-<span slot="svelte4">
-
 ```svelte
 <script lang="ts" context="module">
-  import type { AnyZodObject } from 'zod';
-  type T = AnyZodObject;
+  type T = Record<string, unknown>;
 </script>
 
-<script lang="ts" generics="T extends AnyZodObject">
-  import type { z } from 'zod';
-  import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms';
-  import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
+<script lang="ts" generics="T extends Record<string, unknown>">
+  import { formFieldProxy, type SuperForm, type FormPathLeaves } from 'sveltekit-superforms';
 
-  export let form: SuperForm<ZodValidation<T>, unknown>;
-  export let field: FormPathLeaves<z.infer<T>>;
+  export let form: SuperForm<T, unknown>;
+  export let field: FormPathLeaves<T>;
 
   const { value, errors, constraints } = formFieldProxy(form, field);
 </script>
@@ -245,48 +240,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 {#if $errors}<span class="invalid">{$errors}</span>{/if}
 ```
 
-The Svelte 4 syntax requires `AnyZodObject` to be defined before its used in the `generics` attribute, so we have to import it in a module context. Now when `T` is defined as `AnyZodObject` (the schema object type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used.
-
-</span>
-<span slot="svelte3">
-
-```svelte
-<script lang="ts">
-  import type { z, AnyZodObject } from 'zod';
-  import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms';
-  import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
-
-  type T = $$Generic<AnyZodObject>;
-
-  export let form: SuperForm<ZodValidation<T>, unknown>;
-  export let field: FormPathLeaves<z.infer<T>>;
-
-  const { value, errors, constraints } = formFieldProxy(form, field);
-</script>
-
-<label>
-  {field}<br />
-  <input
-    name={field}
-    type="text"
-    aria-invalid={$errors ? 'true' : undefined}
-    bind:value={$value}
-    {...$constraints}
-    {...$$restProps} />
-</label>
-{#if $errors}<span class="invalid">{$errors}</span>{/if}
-```
-
-`type T = $$Generic<AnyZodObject>` is the Svelte 3 way of defining generic arguments in components. Having defined `T` as `AnyZodObject` (the schema object type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used.
-
-</span>
-</Generics>
-
-### Type explanations
-
-The `ZodValidation<T>` type is required because we can use refine/superRefine/transform on the schema object, which will wrap it in a `ZodEffects` type, so it's not a `AnyZodObject` anymore. The `ZodValidation` type will unwrap the actual object, which may be several levels deep.
-
-We also need the actual schema data, not the schema object itself. `z.infer<T>` is used for that. And it's wrapped in `FormPathLeaves`, that produces the valid paths of an object as strings, so we can use [nested data](/concepts/nested-data) in a type-safe manner.
+The Svelte 4 syntax requires `Record<string, unknown>` to be defined before its used in the `generics` attribute, so we have to import it in a module context. Now when `T` is defined (the schema object type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used.
 
 > The `FormPathLeaves` type prevents using a field that isn't at the end of the schema (the "leaves" of the schema tree). This means that arrays and objects cannot be used in `formFieldProxy`. Array-level errors are handled [like this](/concepts/error-handling#form-level-and-array-errors).
 
@@ -312,14 +266,15 @@ Because our component is generic, `value` returned from `formFieldProxy` can't b
   class="checkbox"
   bind:checked={$boolValue}
   {...$constraints}
-  {...$$restProps} />
+  {...$$restProps} 
+/>
 ```
 
 Checkboxes, especially grouped ones, can be tricky to handle. Read the Svelte tutorial about [bind:group](https://svelte.dev/tutorial/group-inputs), and see the [Ice cream example](https://stackblitz.com/edit/sveltekit-superforms-group-inputs?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) on Stackblitz if you're having trouble with it.
 
 ## Using the componentized field in awesome ways
 
-As said, using this component is now as simple as:
+Using this component is now as simple as:
 
 ```svelte
 <TextField {form} field="name" />
@@ -339,7 +294,7 @@ But to show off some super proxy power, let's recreate the tags example above wi
 </form>
 ```
 
-We can now produce a text field for any object inside our data, which will update the `$form` store.
+We can now produce a type-safe text field for any object inside our data, which will update the `$form` store.
 
 In general, nested data requires the `dataType` option to be set to `'json'`, but this example works without it, even without `use:enhance`, since arrays of primitive values are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
 
