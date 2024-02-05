@@ -20,7 +20,7 @@ You're not limited to just `return { form }` in load functions and form actions;
 
 ```ts
 export const load = (async ({ locals }) => {
-  const loginForm = await superValidate(loginSchema);
+  const loginForm = await superValidate(zod(loginSchema));
   const userName = locals.currentUser.name;
   
   return { loginForm, userName };
@@ -43,14 +43,12 @@ It can then be accessed in `PageData` in `+page.svelte`:
 
 #### From a form action
 
-Returning extra data from a form action is usually most convenient with a strongly typed status message. See the [status message](/concepts/messages) page for an example.
-
-But you can also return it directly, in which case it can be accessed in `ActionData`:
+Returning extra data from a form action is most convenient with a [status message](/concepts/messages). But you can also return it directly, in which case it can be accessed in `ActionData`:
 
 ```ts
 export const actions = {
   default: async ({ request, locals }) => {
-    const form = await superValidate(request, schema);
+    const form = await superValidate(request, zod(schema));
 
     if (!form.valid) return fail(400, { form });
 
@@ -91,7 +89,7 @@ You can add additional input fields to the form that aren't part of the schema, 
 export const actions = {
   default: async ({ request }) => {
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) return fail(400, { form });
 
@@ -120,7 +118,7 @@ The onSubmit event is also a good place to modify `$form`, in case you're using 
 
 ### How to handle file uploads?
 
-From version 2, file uploads are handled by Superforms, read more about it on the [file uploads](/concepts/files) page.
+From version 2, file uploads are handled by Superforms. Read all about it on the [file uploads](/concepts/files) page.
 
 ---
 
@@ -132,7 +130,7 @@ Yes, there is a helper function for constructing an `ActionResult` that can be r
 
 ### Can I post to an external API?
 
-If the API doesn't return an [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) with the form data, you cannot post to it directly. Instead you can use the [SPA mode](/concepts/spa) of Superforms and call the API with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) in the `onUpdate` event.
+If the API doesn't return an [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) with the form data, you cannot post to it directly. Instead you can use the [SPA mode](/concepts/spa) of Superforms and call the API with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) or similar in the `onUpdate` event.
 
 ---
 
@@ -144,7 +142,7 @@ Use the [requestSubmit](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFor
 
 ### Can a form be factored out into a separate component?
 
-Yes - this question now has its own [article page here](/components).
+Yes - the answer has its own [article page here](/components).
 
 ---
 
@@ -167,8 +165,8 @@ export const actions = {
   default: async ({ request }) => {
     const formData = await request.formData();
 
-    const form = await superValidate(formData, schema);
-    const form2 = await superValidate(formData, anotherSchema);
+    const form = await superValidate(formData, zod(schema));
+    const form2 = await superValidate(formData, zod(anotherSchema));
 
     // Business as usual
   }
@@ -185,13 +183,7 @@ It can be fixed by setting the option and the default schema value to an empty s
 
 ---
 
-### Can some other validation library than Zod be used?
-
-Most other popular validation libraries don't allow schema introspection on Zod's level, which makes it difficult to generate default values and constraints. The issue is discussed [here](https://github.com/ciscoheat/sveltekit-superforms/issues/120).
-
----
-
-### How to customize error messages directly in the Zod schema?
+### How to customize error messages directly in the validation schema?
 
 You can add them as parameters to most schema methods. [Here's an example](/concepts/error-handling#customizing-error-messages-in-the-schema).
 
@@ -199,7 +191,7 @@ You can add them as parameters to most schema methods. [Here's an example](/conc
 
 ### Can you use Superforms without any data, for example with a delete button on each row in a table?
 
-That's possible with an empty schema `z.object({})`, or using the `$formId` store with the button to set the form id dynamically. See [this Stackblitz repo](https://stackblitz.com/edit/sveltekit-superforms-list-actions?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) for an example.
+That's possible with an empty schema, or using the `$formId` store with the button to set the form id dynamically. See [this Stackblitz repo](https://stackblitz.com/edit/superforms-2-list-actions?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) for an example.
 
 ---
 
@@ -208,16 +200,14 @@ That's possible with an empty schema `z.object({})`, or using the `$formId` stor
 When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
 
 ```ts
-import type { ZodValidation } from 'sveltekit-superforms';
-import { superForm as realSuperForm } from 'sveltekit-superforms/client';
-import type { AnyZodObject } from 'zod';
+import { superForm as realSuperForm, type ZodValidation } from 'sveltekit-superforms';
 
 export type Message = {
   status: 'success' | 'error' | 'warning';
   text: string;
 };
 
-export function superForm<T extends ZodValidation<AnyZodObject>>(
+export function superForm<T extends Record<string, unknown>>(
   ...params: Parameters<typeof realSuperForm<T, Message>>
 ) {
   return realSuperForm<T, Message>(params[0], {
