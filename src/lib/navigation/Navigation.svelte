@@ -67,7 +67,6 @@
     <li><A href="/flash-messages">Flash messages</A></li>
     <li><A href="/playground">Playground</A></li>
     <li><A href="/rate-limiting">Rate limiting</A></li>
-    <li><A href="/legacy">Legacy version</A></li>
   </ul>
 
   <div class="p-4 text-gray-600">
