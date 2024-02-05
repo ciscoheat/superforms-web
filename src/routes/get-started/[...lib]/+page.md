@@ -25,7 +25,31 @@
 
 Select your environment above and run the install command in your project folder.
 
-If you're starting from scratch, create a new SvelteKit project with `npm create svelte@latest`. Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/sveltekit-superforms-1-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser.
+If you're starting from scratch, create a new SvelteKit project: 
+
+{#if $settings.pm == 'npm i -D'}
+```npm
+npm create svelte@latest
+```
+{:else if $settings.pm == 'pnpm i -D'}
+```npm
+pnpm create svelte@latest
+```
+{:else if $settings.pm == 'yarn add --dev'}
+```npm
+yarn create svelte@latest
+```
+{/if}
+
+{#if $settings.lib == 'valibot'}
+
+Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/superforms-2-tutorial-valibot?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser.
+
+{:else}
+
+Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/superforms-2-tutorial-zod?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser.
+
+{/if}
 
 {#if ['', 'ajv', 'superstruct'].includes($settings.lib)}
 

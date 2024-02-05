@@ -14,7 +14,7 @@ There are two ways of getting support with using Superforms:
 
 ## Free support
 
-If you're using Superforms in a personal or non-profit project, support is completely free; a star on [Github](https://github.com/ciscoheat/sveltekit-superforms) is more than enough if you want to contribute. Join #free-support on Discord and ask away!
+If you're using Superforms in a non-profit project, support is completely free; a star on [Github](https://github.com/ciscoheat/sveltekit-superforms) is more than enough if you want to show your appreciation. Join #free-support on Discord and ask away!
 
 ## Commercial support
 
