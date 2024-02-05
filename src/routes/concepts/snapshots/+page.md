@@ -19,7 +19,7 @@
 
 <Head title="Snapshots" />
 
-A nice SvelteKit feature is [snapshots](https://kit.svelte.dev/docs/snapshots), which saves and restores data when the user navigates on the site. This is perfect for saving the form state, and with Superforms, you can take advantage of this in one line of code:
+A nice SvelteKit feature is [snapshots](https://kit.svelte.dev/docs/snapshots), which saves and restores data when the user navigates on the site. This is perfect for saving the form state, and with Superforms, you can take advantage of this in one line of code, as an alternative to a [tainted form message](/concepts/tainted):
 
 ## Usage
 

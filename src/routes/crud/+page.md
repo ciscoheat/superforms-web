@@ -28,7 +28,7 @@ To follow along, there are three ways:
 
 ### Video tutorial
 
-Instead of the text version below, here's the video version.
+Instead of the text version below, here's the video version (using version 1 of Superforms, but the differences are small).
 
 <Youtube id="nN72awrXsHE" />
 
@@ -59,7 +59,7 @@ Select **Skeleton project** and **Typescript syntax** at the prompts, the rest i
 
 ## Start - Creating a test database
 
-When you have the code up and running, we need data storage for testing. Refer to the [Zod schema reference](https://zod.dev/?id=primitives) for help with building a schema.
+When you have the code up and running, we need a user schema, and a mock database for testing. We will use Zod as a validation library, but its schema can easily be converted to others.
 
 **src/lib/users.ts**
 
@@ -93,21 +93,18 @@ export const users: UserDB = [
 ];
 ```
 
-This user database in the shape of an array will be helpful for testing our CRUD operations.
+This mock database in the shape of an array will be helpful for testing our CRUD operations.
 
 ## Form vs. database schemas
 
-When starting on the server page, we'll encounter a thing about validation schemas. The `userSchema` is for **database integrity**, so an `id` **must** exist there. But we want to create an entity, and must therefore allow `id` not to exist when creating users.
+When starting on the server page, we'll encounter a thing about validation schemas. Our `userSchema` is for **database integrity**, so an `id` **must** exist there. But we want to create an entity, and must therefore allow `id` not to exist when creating users.
 
 Fortunately, Zod makes it quite easy to append a modifier to a field without duplicating the whole schema by extending it:
 
 **src/routes/users/[[id]]/+page.server.ts**
 
 ```ts
-import { superValidate, message } from 'sveltekit-superforms/server';
-import { error, fail, redirect } from '@sveltejs/kit';
-
-import { users, userId, userSchema } from '$lib/users';
+import { userSchema } from '$lib/users';
 
 const crudSchema = userSchema.extend({
   id: userSchema.shape.id.optional()
@@ -125,6 +122,11 @@ Let's add a load function to the page, using the SvelteKit route parameters to l
 **src/routes/users/[[id]]/+page.server.ts**
 
 ```ts
+import { superValidate, message } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { error, fail, redirect } from '@sveltejs/kit';
+import { users, userId } from '$lib/users';
+
 export const load = async ({ url, params }) => {
   // READ user
   const user = users.find((u) => u.id == params.id);
@@ -132,7 +134,7 @@ export const load = async ({ url, params }) => {
   if (params.id && !user) throw error(404, 'User not found.');
 
   // If user is null, default values for the schema will be returned.
-  const form = await superValidate(user, crudSchema);
+  const form = await superValidate(user, zod(crudSchema));
   return { form, users };
 };
 ```
@@ -154,7 +156,9 @@ Now that we have loaded the data, let's display it in a page component:
   export let data: PageData;
 
   const { form, errors, constraints, enhance, delayed, message } = superForm(
-    data.form
+    data.form, {
+      resetForm: false
+    }
   );
 </script>
 
@@ -165,11 +169,11 @@ Now that we have loaded the data, let's display it in a page component:
 <h2>{!$form.id ? 'Create' : 'Update'} user</h2>
 ```
 
-There are plenty of variables extracted from `superForm`; refer to the [API reference](/api#superform-return-type) for a complete list.
+There are plenty of variables extracted from `superForm`; refer to the [API reference](/api#superform-return-type) for a complete list. We've also setting the `resetForm` to `false`, since the data should be kept after editing.
 
-Apart from getting the data ready to be displayed, we've prepared a status message, using `$page.status` to test for success or failure, and we're using `$form.id` to display a "Create user" or "Update user" title. Now let's add the form itself:
+We've also prepared a status message, using `$page.status` to test for success or failure, and we're using `$form.id` to display a "Create user" or "Update user" title. Now let's add the form itself:
 
-**src/routes/users/[[id]]/+page.svelte**
+**src/routes/users/[[id]]/+page.svelte** (continued)
 
 ```svelte
 <form method="POST" use:enhance>
@@ -196,8 +200,7 @@ Apart from getting the data ready to be displayed, we've prepared a status messa
     {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
   </label>
 
-  <button>Submit</button>
-  {#if $delayed}Working...{/if}
+  <button>Submit</button> {#if $delayed}Working...{/if}
 </form>
 
 <style>
@@ -211,8 +214,7 @@ Remember to use [SuperDebug](/super-debug) if you want to see your form data liv
 
 ```svelte
 <script>
-  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-  // ...
+  import SuperDebug from 'sveltekit-superforms';
 </script>
 
 <SuperDebug data={$form} />
@@ -227,7 +229,7 @@ With this, the form should be ready for creating a user. Let's add the form acti
 ```ts
 export const actions = {
   default: async ({ request }) => {
-    const form = await superValidate(request, crudSchema);
+    const form = await superValidate(request, zod(crudSchema));
     if (!form.valid) return fail(400, { form });
 
     if (!form.data.id) {
@@ -271,10 +273,10 @@ To delete a user, we can make use of the HTML `button` element, which can have a
 
 In the form action, we now use the `FormData` from the request to check if the delete button was pressed.
 
-We can also add a Delayed button to mimick the behavior of a slow network call:
+We can also add a delayed button in the form to mimick the behavior of a slow network call:
 
 ```svelte
-<button name="delay" class="delay">Delayed</button>
+<button name="delay" class="delay">Submit delayed</button>
 ```
 
 We shouldn't use the schema since `delete` and `delayed` are not a part of the user, but it's not a big change:
@@ -285,7 +287,7 @@ We shouldn't use the schema since `delete` and `delayed` are not a part of the u
 export const actions: Actions = {
   default: async ({ request }) => {
     const formData = await request.formData();
-    const form = await superValidate(formData, crudSchema);
+    const form = await superValidate(formData, zod(crudSchema));
 
     if (formData.has('delay')) {
       await new Promise((r) => setTimeout(r, 2000));
@@ -377,6 +379,6 @@ And some styling for everything at the end:
 </style>
 ```
 
-That's it! Thank you for following along, the code is [available here](https://stackblitz.com/edit/sveltekit-superforms-1-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte) on Stackblitz.
+That's it! Thank you for following along, the code is [available here](https://stackblitz.com/edit/superforms-2-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte) on Stackblitz.
 
-If you have any questions, post them in the [discussion forum](https://github.com/ciscoheat/sveltekit-superforms/discussions) or ask on [the Discord server](https://discord.gg/AptebvVuhB).
+If you have any questions, see the [help & support](/support) page.
