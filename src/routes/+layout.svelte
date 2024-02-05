@@ -275,6 +275,12 @@
     <Navigation />
   </svelte:fragment>
   <!-- Page Route Content -->
+  <div class="bg-surface-500 p-3 text-center font-bold">
+    This is the documentation for Superforms version 1. The latest version can
+    be found at <a class="text-primary-500" href="https://superforms.rocks"
+      >superforms.rocks</a
+    >!
+  </div>
   <div
     use:tocCrawler={{
       mode: 'generate',
