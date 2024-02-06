@@ -401,7 +401,7 @@ import { removeFiles } from 'sveltekit-superforms';
 // When using fail
 if (!form.valid) return fail(400, removeFiles({ form }));
 
-// Vhen returning just the form:
+// When returning just the form:
 return removeFiles({ form })
 
 // message and setError works as usual:
