@@ -6,47 +6,39 @@
 
 <Head title="API reference" />
 
-Throughout the reference, the following types are represented:
+Throughout the reference, the type `T` represents the type of the validation schema, extending `Record<string, unknown>`. For example, in a form with name and email, name being optional:
 
 ```ts
-/**
- * T represents a validation schema.
- *
- * z.object({
- *   name: z.string().min(2)
- * })
- */
-T extends AnyZodObject
+type T = {
+  name?: string | undefined,
+  email: string
+};
+```
 
-/**
- * S refers to the underlying type of the schema,
- * the actual data structure.
- *
- * { name: string }
- */
-S = z.infer<T>
+The `Nested<T, R>` type replaces all primitive values of `T` with `R`, and removes any optional modifier. In the above example:
 
-/**
- * Nested represents a structure where the values in S
- * are replaced with the second parameter.
- *
- * { name: string[] | undefined }
- */
-Nested<S, string[] | undefined> // Errors for each field in S
+```ts
+type Nested<T, string[]> = {
+  name: string[],
+  email: string[]
+};
+```
 
-/**
- * FormPath and FormPathLeaves are string paths that points to a
- * field in the schema. FormPathLeaves can only be used at the
- * end nodes of the schema.
- *
- * z.object({
- *   tags: z.object({
- *     name: z.string().min(1)
- *   }).array()
- * })
- */
-FormPath<S> = "tags[3]"
-FormPathLeaves<S> = "tags[3].name"
+The type `M` represents the [status message](/concepts/messages/) type, default `any`.
+
+```ts
+type M = any;
+```
+
+A `ValidationAdapter<T>` and `ClientValidationAdapter<T>` are the adapters used to wrap the schema, based on the selected validation library. For example:
+
+```ts
+import type { Infer } from 'sveltekit-superforms'
+import { zod, zodClient } from 'sveltekit-superforms/adapters'
+import { schema } from './schema'
+
+// Type is now ValidationAdapter<Infer<typeof schema>>
+const adapter = zod(schema);
 ```
 
 ## Server API
@@ -54,26 +46,25 @@ FormPathLeaves<S> = "tags[3].name"
 ```ts
 import {
   superValidate,
-  superValidateSync,
   actionResult,
   defaultValues,
   message,
   setError
-} from 'sveltekit-superforms/server';
+} from 'sveltekit-superforms';
 ```
 
-### superValidate(schema | data, schema? | options?, options?)
+### superValidate(adapter | data, adapter? | options?, options?)
 
-If you want the form to be initially empty, you can pass the schema as the first parameter:
+If you want the form to be initially empty, you can pass the adapter as the first parameter:
 
 ```ts
 superValidate<T, M = any>(
-  schema: T,
+  adapter: ValidationAdapter<T>,
   options?: SuperValidateOptions
 ): Promise<SuperValidated<T, M>>
 ```
 
-If you want to populate the form, for example, from a database, `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter and the schema second:
+If you want to populate the form, for example, from a database, `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter and the adapter second:
 
 ```ts
 superValidate<T, M = any>(
@@ -83,41 +74,25 @@ superValidate<T, M = any>(
     | FormData
     | URL
     | URLSearchParams
-    | Partial<S>
+    | Partial<T>
     | null
     | undefined,
-  schema: T,
+  adapter: ValidationAdapter<T>,
   options?: SuperValidateOptions
 ): Promise<SuperValidated<T, M>>
-```
-
-The `superValidateSync` function can be useful on the client in Svelte components, since they cannot have top-level `await`.
-
-```ts
-superValidateSync<T, M = any>(
-  data:
-    | FormData
-    | URL
-    | URLSearchParams
-    | Partial<S>
-    | null
-    | undefined,
-  schema: T,
-  options?: SuperValidateOptions
-): SuperValidated<T, M>
 ```
 
 ### superValidate options
 
 ```ts
 SuperValidateOptions = {
-  errors?: boolean;          // Add or remove errors from output (valid status is always preserved)
-  id?: string;               // Form id, for multiple forms support
-  preprocessed?: (keyof S)[] // Bypass superValidate data coercion for posted fields in this array
-  warnings?: {               // Disable warnings
-    multipleRegexps?: boolean;
-    multipleSteps?: boolean;
-  };
+  errors?: boolean;           // Add or remove errors from output (valid status is always preserved)
+  id?: string;                // Form id, for multiple forms support. Set automatically by default
+  preprocessed?: (keyof T)[]; // Bypass superValidate data coercion for posted fields in this array
+  defaults?: T;               // Override default values from the schema
+  jsonSchema?: JSONSchema;    // Override JSON schema from the adapter
+  strict?: boolean;           // If true, validate exactly the posted data, no defaults added
+  allowFiles?: boolean;       // If false, set all posted File objects to undefined
 }
 ```
 
@@ -127,27 +102,26 @@ See the page about [multiple forms](/concepts/multiple-forms) for information ab
 
 ```ts
 SuperValidated<T, M = any> = {
+  id: string;
   valid: boolean;
   posted: boolean;
-  data: S;
-  errors: Nested<S, string[] | undefined>;
-  constraints: Nested<S, InputConstraints | undefined>;
+  data: T;
+  errors: Nested<T, string[] | undefined>;
+  constraints?: Nested<T, InputConstraints | undefined>;
   message?: M;
-  id?: string;
 };
 ```
 
-If data is empty, a `SuperValidated` object with default values for the schema is returned, in this shape:
+If data is empty, a `SuperValidated` object with default values for the schema is returned:
 
 ```js
 {
+  id: string;
   valid: false;
   posted: false;
-  errors: options.errors ? Nested<S, string[] | undefined> : {};
-  data: S;
-  constraints: Nested<S, InputConstraints>;
-  id: undefined;
-  message: undefined;
+  errors: options.errors ? Nested<T, string[] | undefined> : {};
+  data: T;
+  constraints: Nested<T, InputConstraints>;
 }
 ```
 
@@ -161,13 +135,13 @@ See [this page](/default-values) for a list of default schema values.
  * Properties are mapped from the schema:
  */
 InputConstraints = Partial<{
-  required: boolean; // Not nullable(), nullish() or optional()
-  pattern: string; // z.string().regex(r)
-  min: number | string; // number if z.number.min(n), ISO date string if z.date().min(d)
-  max: number | string; // number if z.number.max(n), ISO date string if z.date().max(d)
-  step: number | 'any'; // z.number().step(n)
-  minlength: number; // z.string().min(n)
-  maxlength: number; // z.string().max(n)
+  required: boolean; // Not nullable or optional
+  pattern: string; // string validator with RegExp pattern
+  min: number | string; // number or ISO date string depending on type
+  max: number | string; // number or ISO date string depending on type
+  step: number | 'any'; // number validator with step constraint
+  minlength: number; // string validator
+  maxlength: number; // string validator
 }>;
 ```
 
@@ -176,9 +150,9 @@ InputConstraints = Partial<{
 ```ts
 setError(
   form: SuperValidated<T, M>,
-  field: '' | FormPathLeaves<S>,
+  field: '' | FormPathLeaves<T>,
   error: string | string[],
-  options?: { overwrite = false, status : NumericRange<400, 599> = 400 }
+  options?: { overwrite = false, status : ErrorStatus = 400 }
 ) : ActionFailure<{form: SuperValidated<T, M>}>
 ```
 
@@ -233,7 +207,8 @@ Note that the `status` option must be in the range `400-599`.
 Returns the default values for a schema, either the [Superforms defaults](/default-values) or the ones you set on the schema yourself.
 
 ```ts
-import { defaultValues } from 'sveltekit-superforms/server';
+import { defaultValues } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -242,10 +217,10 @@ const schema = z.object({
 });
 
 // Returns { name: '', tags: ['a', 'b'] }
-const defaults = defaultValues(schema);
+const defaults = defaultValues(zod(schema));
 ```
 
-This corresponds to the `form.data` returned from `const form = await superValidate(schema)`.
+This corresponds to the `form.data` returned from `const form = await superValidate(zod(schema))`.
 
 ### actionResult(type, data?, options? | status?)
 
@@ -254,7 +229,7 @@ When using an [endpoint](https://kit.svelte.dev/docs/routing#server) (a `+server
 The `actionResult` function helps you construct one in a `Response` object, so you can return a validation object from your API/endpoints.
 
 ```ts
-import { actionResult } from 'sveltekit-superforms/server';
+import { actionResult } from 'sveltekit-superforms';
 
 actionResult('success', { form }, 200);
 actionResult('failure', { form }, 400);
@@ -279,6 +254,7 @@ actionResult('redirect', '/', {
 
 ```ts
 import { actionResult, superValidate } from '$lib/server';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 const loginSchema = z.object({
@@ -287,7 +263,7 @@ const loginSchema = z.object({
 });
 
 export const POST = async ({ request }) => {
-  const form = await superValidate(request, loginSchema);
+  const form = await superValidate(request, zod(loginSchema));
   if (!form.valid) return actionResult('failure', { form });
 
   // Verify login here //
@@ -299,20 +275,10 @@ export const POST = async ({ request }) => {
 ## Client API
 
 ```ts
-import { superForm } from 'sveltekit-superforms/client';
-```
-
-The server part of the API can also be imported, for [single-page app](/concepts/spa) usage:
-
-```ts
-import {
-  superValidate,
-  superValidateSync,
-  setError,
-  setMessage, // Same as message
-  actionResult,
-  defaultValues
-} from 'sveltekit-superforms/client';
+import { 
+  superForm, 
+  defaults 
+} from 'sveltekit-superforms';
 ```
 
 ### superForm(form, options?)
@@ -327,20 +293,20 @@ superForm<T, M = any>(
 ### superForm options
 
 ```ts
-FormOptions<T, M> = Partial<{
+type FormOptions<T, M> = Partial<{
   // Basics
   id: string;
   applyAction: boolean;
   invalidateAll: boolean;
   resetForm: boolean | (() => boolean);
-  taintedMessage: string | false | null;
+  taintedMessage: boolean | string | (() => Promise<boolean>);
   dataType: 'form' | 'json';
   multipleSubmits: 'prevent' | 'allow' | 'abort';
   SPA: true | { failStatus?: number };
 
   // Error handling
   scrollToError: 'auto' | 'smooth' | 'off' | boolean | ScrollIntoViewOptions;
-  autoFocusOnError: boolean | 'detect';
+  autoFocusOnError: 'detect' | boolean;
   errorSelector: string;
   selectErrorText: boolean;
   stickyNavbar: string;
@@ -362,6 +328,7 @@ FormOptions<T, M> = Partial<{
   onUpdated: (event: {
     form: Readonly<SuperValidated<T, M>>;
   }) => MaybePromise<unknown | void>;
+  onChange: (event: ChangeEvent) => void;
   onError:
     | 'apply'
     | ((event: {
@@ -374,10 +341,9 @@ FormOptions<T, M> = Partial<{
       }) => MaybePromise<unknown | void>);
 
   // Client-side validation
-  validators: T | false | Validators<T>;
-  validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only';
-  defaultValidator: 'keep' | 'clear';
-  clearOnSubmit: 'errors' | 'message' | 'errors-and-message' | 'none';
+  validators: ClientValidationAdapter<Record<string, unknown>> | false | 'clear';
+  validationMethod: 'auto' | 'oninput' | 'onblur' | 'onsubmit';
+  clearOnSubmit: 'errors-and-message' | 'message' | 'errors' | 'none';
   delayMs: number;
   timeoutMs: number;
 
@@ -403,6 +369,17 @@ FormOptions<T, M> = Partial<{
     noValidationAndConstraints?: boolean;
   };
 }>;
+
+type ChangeEvent =
+	{
+    path: string;
+    paths: string[];
+    formElement: HTMLFormElement;
+    target: Element;
+	} | {
+    target: undefined;
+    paths: string[];
+  };
 ```
 
 See [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) for details about the `onSubmit` arguments, and [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) for `onResult`.
@@ -410,24 +387,23 @@ See [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfuncti
 ### superForm return type
 
 ```ts
-SuperForm<T extends AnyZodObject, M = any> = {
+SuperForm<T, M = any> = {
   form: {
-    subscribe: (data: S) => void
-    set: (value: S, options?: { taint?: boolean | 'untaint' | 'untaint-all' }) => void
-    update: (updater: (S) => S, options?: { taint?: boolean | 'untaint' | 'untaint-all' }) => void
+    subscribe: (data: T) => void
+    set: (value: T, options?: { taint?: boolean | 'untaint' | 'untaint-form' }) => void
+    update: (updater: (T) => T, options?: { taint?: boolean | 'untaint' | 'untaint-form' }) => void
   };
-  errors: Writable<Nested<S, string[] | undefined>>;
-  constraints: Writable<Nested<S, InputConstraints | undefined>>;
+  errors: Writable<Nested<T, string[] | undefined>>;
+  constraints: Writable<Nested<T, InputConstraints | undefined>>;
   message: Writable<M | undefined>;
-  tainted: Writable<Nested<S, boolean | undefined> | undefined>;
+  tainted: Writable<Nested<T, boolean | undefined> | undefined>;
 
   submitting: Readable<boolean>;
   delayed: Readable<boolean>;
   timeout: Readable<boolean>;
   posted: Readable<boolean>;
 
-  formId: Writable<string | undefined>;
-  fields: Record<keyof S, FormField<T>>;
+  formId: Writable<string>;
   allErrors: Readable<{ path: string; messages: string[] }[]>;
 
   options: FormOptions<T, M>;
@@ -439,46 +415,51 @@ SuperForm<T extends AnyZodObject, M = any> = {
   reset: (options?: {
     keepMessage?: boolean;
     id?: string;
-    data?: Partial<S>;
+    data?: Partial<T>;
   }) => void;
 
   capture: () => SuperFormSnapshot<T, M>;
   restore: (snapshot: SuperFormSnapshot<T, M>) => void;
 
-  validate: (path?: FormPathLeaves<S>, opts?: {
-    value: FormPathType<FormPathLeaves<S>>;
+  validate: (path?: FormPathLeaves<T> | { update: true }, opts?: {
+    value: FormPathType<FormPathLeaves<T>>;
     update: boolean | 'errors' | 'value';
-    taint: boolean | 'untaint' | 'untaint-all';
+    taint: boolean | 'untaint' | 'untaint-form';
     errors: string | string[];
   }) => Promise<(string[] | undefined) | SuperValidated<T, M>>;
 };
+```
 
-FormField<S, Prop extends keyof S> = {
-  readonly name: Prop;
-  value: Writable<S[Prop]>;
-  errors?: Writable<ValidationErrors<S[Prop]>>;
-  constraints?: Writable<InputConstraints<S[Prop]>>;
-};
+### defaults
+
+The `defaults` function can be useful on the client in Svelte components and [SPA mode](/concepts/spa), since components cannot have top-level `await`.
+
+```ts
+defaults<T, M = any>(
+  data:
+    | Partial<T>
+    | null
+    | undefined,
+  schema: ClientValidationAdapter<T>,
+  options?: SuperValidateOptions
+): SuperValidated<T, M>
 ```
 
 ## Proxy objects
 
 ```ts
 import {
-  // The first ones uses the $form store
-  // and is always a Writable<string>:
+  // The primitives return a Writable<string>:
   booleanProxy,
   dateProxy,
   intProxy,
   numberProxy,
   stringProxy,
-  // Uses the whole object returned from superForm.
-  // Type depends on the field.
+  // The type of the other three depends on the field:
   formFieldProxy,
   arrayProxy,
-  // Can use any object. Type depends on the field.
   fieldProxy      
-} from 'sveltekit-superforms/client';
+} from 'sveltekit-superforms';
 ```
 
 A proxy handles bi-directional updates and data transformation of a corresponding form field. Updates in either the proxy or data it points to, will reflect in the other.
@@ -488,7 +469,7 @@ A proxy handles bi-directional updates and data transformation of a correspondin
 Creates a string store for an **integer** field in the schema. It's rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
 
 ```ts
-import { superForm, intProxy } from 'sveltekit-superforms/client';
+import { superForm, intProxy } from 'sveltekit-superforms';
 export let data;
 
 const { form } = superForm(data.form);
@@ -501,17 +482,19 @@ const proxy = intProxy(form, 'field', { options });
 { 
   empty?: 'null' | 'undefined';
   emptyIfZero?: boolean = true;
+  zeroIfEmpty?: boolean = false;
+  taint?: TaintOption;
 }
 ```
 
-Use the `empty` option to set the field to `null` or `undefined` if the value is falsy. (Which includes the number zero, unless `emptyIfZero` is set to `false`.)
+Use the `empty` option to set the field to `null` or `undefined` if the value is falsy, Which includes the number zero, unless `emptyIfZero` is set to `false`. The reverse, `zeroIfEmpty`, sets the field to zero if the string value of the proxy is empty.
 
 ### numberProxy(form, fieldName, options?)
 
 Creates a string store for a **number** field in the schema. It's rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
 
 ```ts
-import { superForm, numberProxy } from 'sveltekit-superforms/client';
+import { superForm, numberProxy } from 'sveltekit-superforms';
 export let data;
 
 const { form } = superForm(data.form);
@@ -535,7 +518,7 @@ Use the `empty` option to set the field to `null` or `undefined` if the value is
 Creates a string store for a **boolean** schema field. The option can be used to change what string value should represent `true`. An empty string always represents `false`.
 
 ```ts
-import { superForm, booleanProxy } from 'sveltekit-superforms/client';
+import { superForm, booleanProxy } from 'sveltekit-superforms';
 export let data;
 
 const { form } = superForm(data.form);
@@ -555,7 +538,7 @@ const proxy = booleanProxy(form, 'field', { options });
 Creates a string store for a **Date** schema field. The option can be used to change the proxied string format of the date.
 
 ```ts
-import { superForm, dateProxy } from 'sveltekit-superforms/client';
+import { superForm, dateProxy } from 'sveltekit-superforms';
 export let data;
 
 const { form } = superForm(data.form);
@@ -584,7 +567,7 @@ const proxy = dateProxy(form, 'field', { options });
 Creates a string store for a **string** schema field. It may look redundant, but the option can be useful if you need to convert an empty string to `null` or `undefined`.
 
 ```ts
-import { superForm, stringProxy } from 'sveltekit-superforms/client';
+import { superForm, stringProxy } from 'sveltekit-superforms';
 export let data;
 
 const { form } = superForm(data.form);
@@ -607,7 +590,7 @@ Proxies a form field, returning stores similar to `superForm` but for a single f
 
 ```svelte
 <script lang="ts">
-  import { superForm, formFieldProxy } from 'sveltekit-superforms/client';
+  import { superForm, formFieldProxy } from 'sveltekit-superforms';
 
   export let data;
 
@@ -638,7 +621,7 @@ Proxies an array in a form, returning stores similar to `superForm` but for the 
 
 ```svelte
 <script lang="ts">
-  import { superForm, arrayProxy } from 'sveltekit-superforms/client';
+  import { superForm, arrayProxy } from 'sveltekit-superforms';
 
   export let data;
 
@@ -670,7 +653,7 @@ Proxies field access in any object, usually in `$form`, but in that case `formFi
 
 ```svelte
 <script lang="ts">
-  import { superForm, fieldProxy } from 'sveltekit-superforms/client';
+  import { superForm, fieldProxy } from 'sveltekit-superforms';
   export let data;
 
   const { form } = superForm(data.form);
@@ -694,7 +677,7 @@ A proxy for a [HTML date field](https://developer.mozilla.org/en-US/docs/Web/HTM
 
 ```svelte
 <script lang="ts">
-  import { superForm, dateProxy } from 'sveltekit-superforms/client';
+  import { superForm, dateProxy } from 'sveltekit-superforms';
   import type { PageData } from './$types';
 
   export let data: PageData;

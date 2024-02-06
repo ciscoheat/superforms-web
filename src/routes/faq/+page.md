@@ -200,7 +200,7 @@ That's possible with an empty schema, or using the `$formId` store with the butt
 When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
 
 ```ts
-import { superForm as realSuperForm, type ZodValidation } from 'sveltekit-superforms';
+import { superForm as realSuperForm } from 'sveltekit-superforms';
 
 export type Message = {
   status: 'success' | 'error' | 'warning';

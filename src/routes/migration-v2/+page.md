@@ -179,6 +179,10 @@ It's not possible to set the `id` option to `undefined` anymore, which is very r
 
 A simple change: `fieldErrors` is renamed to `valueErrors`.
 
+### intProxy and numberProxy
+
+The `emptyIfZero` setting is removed from `numberProxy` and `intProxy`.
+
 ### The defaultValidators option has moved
 
 Another simple change: If you've been using `defaultValidators`, set `'clear'` on the `validators` option instead.

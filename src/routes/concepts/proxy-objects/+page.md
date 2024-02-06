@@ -2,7 +2,7 @@
   import Head from '$lib/Head.svelte'
   import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
+	import SuperDebug from 'sveltekit-superforms'
   import { concepts } from '$lib/navigation/sections'
 
 	export let data;
@@ -16,7 +16,7 @@ Sometimes you get a `string` value from an input field or third-party library, a
 
 ```ts
 import {
-  // The primitives returns a Writable<string>:
+  // The primitives return a Writable<string>:
   booleanProxy,
   dateProxy,
   intProxy,
@@ -26,16 +26,16 @@ import {
   formFieldProxy,
   arrayProxy,
   fieldProxy      
-} from 'sveltekit-superforms/client';
+} from 'sveltekit-superforms';
 ```
 
 The usage for all of them is practically the same. You can use the form store, or the whole superForm as input, which allows you to set a `tainted` option, in case you don't want to taint the form when it updates.
 
 ```ts
-import { superForm, intProxy } from 'sveltekit-superforms/client';
+import { superForm, intProxy } from 'sveltekit-superforms';
 
 // Assume the following schema:
-// z.object({ id: z.number().int() })
+// { id: number }
 
 const theForm = superForm(data.form);
 const { form, errors, enhance } = theForm;

@@ -53,14 +53,23 @@ The tainted store is also smarter, keeping track of the original data, so if you
 
 A new `isTainted` method is available on `superForm`, to check whether any part of the form is tainted. Use it instead of testing against the `$tainted` store, which may give unexpected results.
 
-```ts
-const { form, enhance, isTainted } = superForm(form.data);
+```svelte
+<script lang="ts">
+  const { form, enhance, tainted, isTainted } = superForm(form.data);
 
-// Check the whole form
-if(isTainted())
+  // Check the whole form
+  if(isTainted()) {
+    console.log('The form is tainted')
+  }
 
-// Check a part of the form
-if(isTainted('name'))
+  // Check a part of the form
+  if(isTainted('name')) {
+    console.log('The name field is tainted')
+  }
+</script>
+
+<!-- Make the function reactive by passing the $tainted store -->
+<button disabled={!isTainted($tainted)}>Submit</button>
 ```
 
 ## onChange event
@@ -87,6 +96,20 @@ const { form, errors, enhance } = superForm(data.form, {
 ## validate method improved
 
 The [validate](/concepts/client-validation#validate) method is useful for retrieving the validation result for the whole form, or a specific field. You can now also call `validate({ update: true })` to trigger a full client-side validation.
+
+## empty: 'zero' option for intProxy and numberProxy
+
+For number fields, a UX problem has been that the default value for numbers, `0`, hides the placeholder text, and it's not always wanted to have a number there. But it's now possible to make this work, with two new options in `intProxy` and `numberProxy`:
+
+```ts
+const schema = z.object({
+  num: z.number()
+})
+
+const proxy = intProxy(form, 'num', { empty: 'zero', initiallyEmptyIfZero: true })
+```
+
+The `empty` option, if set to `'zero'`, will set the field to 0 if it's empty, and the unfortunately long `initiallyEmptyIfZero` will ensure the field is empty at first.
 
 ## Simplified imports
 

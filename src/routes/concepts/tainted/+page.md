@@ -57,14 +57,23 @@ Try that by posting the form with valid values. The tainted message should not a
 
 An `isTainted` method is available on `superForm`, to check whether any part of the form is tainted:
 
-```ts
-const { form, enhance, isTainted } = superForm(form.data);
+```svelte
+<script lang="ts">
+  const { form, enhance, tainted, isTainted } = superForm(form.data);
 
-// Check the whole form
-if(isTainted())
+  // Check the whole form
+  if(isTainted()) {
+    console.log('The form is tainted')
+  }
 
-// Check a part of the form
-if(isTainted('name'))
+  // Check a part of the form
+  if(isTainted('name')) {
+    console.log('The name field is tainted')
+  }
+</script>
+
+<!-- Make the function reactive by passing the $tainted store -->
+<button disabled={!isTainted($tainted)}>Submit</button>
 ```
 
 ## Preventing tainting the form

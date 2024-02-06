@@ -18,6 +18,8 @@
     email: ['Cannot use example.com as email.'],
   });
 
+  const fileData = { file: new File(['Example file'.repeat(10)], 'example.txt', { type: 'text/plain' }) };
+
   let product = undefined;
   let rejected = undefined;
 
@@ -47,7 +49,7 @@ It's not limited to the Superforms data, other use cases includes debugging plai
 ## Usage
 
 ```ts
-import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+import SuperDebug from 'sveltekit-superforms';
 ```
 
 ```svelte
@@ -181,6 +183,16 @@ If you want to debug multiple stores/objects in the same instance.
 ```
 
 <SuperDebug data={{$form, $errors}} />
+
+### Displaying files
+
+SuperDebug displays `File` and `FileList` objects as well:
+
+```svelte
+<SuperDebug data={$form} />
+```
+
+<SuperDebug data={fileData} />
 
 ### SuperDebug loves stores
 

@@ -1,15 +1,8 @@
 <script lang="ts">
   import { Fireworks } from '@fireworks-js/svelte';
-  import type { FireworksOptions } from '@fireworks-js/svelte';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
 
-  let fw: Fireworks;
-
-  const options = {
-    intensity: 5
-  } satisfies FireworksOptions;
-
-  function resized() {
+  function moveFireworks() {
     const alert = document.querySelector('.alert');
     const box = alert?.getBoundingClientRect();
     if (!box) return;
@@ -25,10 +18,19 @@
     canvas.width = box.width;
   }
 
-  onMount(resized);
+  onMount(() => {
+    moveFireworks();
+    document.querySelector('#page')?.addEventListener('scroll', moveFireworks);
+  });
+
+  onDestroy(() => {
+    document
+      .querySelector('#page')
+      ?.removeEventListener('scroll', moveFireworks);
+  });
 </script>
 
-<svelte:window on:resize={resized} />
+<svelte:window on:resize={moveFireworks} />
 
 <aside class="alert mt-2">
   <div class="alert-message text-center">
@@ -38,7 +40,7 @@
     and see
     <a href="/migration-v2">how to migrate</a> your existing projects!
   </div>
-  <Fireworks bind:this={fw} {options} class="fireworks" />
+  <Fireworks options={{ intensity: 5 }} class="fireworks" />
 </aside>
 
 <style lang="scss">
