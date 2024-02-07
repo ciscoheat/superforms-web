@@ -93,9 +93,9 @@ const { form, errors, enhance } = superForm(data.form, {
 })
 ```
 
-## validate method improved
+## New validateForm method
 
-The [validate](/concepts/client-validation#validate) method is useful for retrieving the validation result for the whole form, or a specific field. You can now also call `validate({ update: true })` to trigger a full client-side validation.
+The `validateForm` method is useful for retrieving the validation result for the whole form. Previously you could call `validate()` to do this, but you must now use `validateForm()`. There are two options, `{ update?: true, schema?: ValidationAdapter<Partial<T>> }` which can be used to trigger a full client-side validation, and validate the schema only partially.
 
 ## empty: 'zero' option for intProxy and numberProxy
 

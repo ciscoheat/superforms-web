@@ -76,7 +76,7 @@ The built-in browser validation can be a bit constrained; for example, you can't
 > As with most client-side functionality, [use:enhance](/concepts/enhance) is required for real-time validation.
 
 ```ts
-const { form, enhance, constraints, validate } = superForm(data.form, {
+const { form, enhance, constraints, validate, validateForm } = superForm(data.form, {
   validators: ClientValidationAdapter<S> | 'clear' | false,
   validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only' = 'auto',
   customValidity: boolean = false
@@ -127,10 +127,12 @@ This option uses the browser built-in tooltip to display validation errors, so n
 
 ### validate
 
-The `validate` function, deconstructed from `superForm`, gives you complete control over the validation process. Examples of how to use it:
+The `validate` function, deconstructed from `superForm`, gives you complete control over the validation process for specific fields. Examples of how to use it:
 
 ```ts
-const { form, enhance, validate } = superForm(data.form);
+const { form, enhance, validate } = superForm(data.form, {
+  validators: zod(schema) // Required option for validate to work
+});
 
 // Simplest case, validate what's in the field right now
 validate('name');
@@ -146,18 +148,28 @@ validate('name', { value: 'Test', update: 'errors' });
 
 // Validate and update nested data, and also taint the field
 validate('tags[1].name', { value: 'Test', taint: true });
+```
 
-// If called with no arguments, it validates the whole form and
-// returns a SuperValidated result:
-const result = await validate();
+### validateForm
+
+Similar to `validate`, `validateForm` lets you validate the whole form and return a `SuperValidated` result:
+
+```ts
+const { form, enhance, validateForm } = superForm(data.form, {
+  validators: zod(schema) // Required option for validate to work
+});
+
+const result = await validateForm();
 
 if (result.valid) {
   // ...
 }
 
-// Finally, you can use the update option to trigger a full
-// client-side validation (requires the validators option to be set)
-await validate({ update: true });
+// You can use the update option to trigger a client-side validation
+await validateForm({ update: true });
+
+// Or the schema option to validate the form partially
+const result2 = await validateForm({ schema: zod(partialSchema) });
 ```
 
 ## Asynchronous validation and debouncing

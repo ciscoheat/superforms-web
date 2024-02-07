@@ -90,7 +90,7 @@ The client-side validation is using the smallest possible part of the adapter, t
 
 ```ts
 import { valibotClient } from 'sveltekit-superforms/adapters';
-import { schema } from './schema.js';
+import { schema } from './schema';
 
 const { form, errors, enhance } = superForm(data.form, {
   validators: valibotClient(schema)
@@ -99,13 +99,15 @@ const { form, errors, enhance } = superForm(data.form, {
 
 > This works with the same schema as the one used on the server. If you need to switch schemas on the client, you need the full adapter.
 
-The Superforms validator is now deprecated, since it requires you to do much of the type checking yourself. To keep using it, import `superformClient`. The input parameter can now be `undefined` as well, be sure to check for that case:
+The Superforms validator is now deprecated, since it requires you to do much of the type checking yourself. To keep using it, import `superformClient` and use the new `Infer` type to type it correctly with the schema, as in the following example. The input parameter can now be `undefined` as well, be sure to check for that case.
 
 ```ts
+import type { Infer } from 'sveltekit-superforms';
+import type { schema } from './schema';
 import { superformClient } from 'sveltekit-superforms/adapters';
 
 const { form, errors, enhance } = superForm(data.form, {
-  validators: superformClient({
+  validators: superformClient<Infer<typeof schema>>({
     name: (name?) => { 
       if(!name || name.length < 2) return 'Name must be at least two characters' 
     }
@@ -171,7 +173,11 @@ const { form, errors, enhance } = superForm(defaults(initialData, zod(schema)), 
 
 Note that `superValidate` can be used anywhere but on the top-level of Svelte components, so it's not removed from the client and SPA usage. But client-side validation is more of a convenience than ensuring data integrity. Always let an external API or a server request do a proper validation of the data before it's stored or used somewhere.
 
-#### The id option
+### validate() method with no arguments is renamed to validateForm
+
+
+
+### id option must be a string
 
 It's not possible to set the `id` option to `undefined` anymore, which is very rare anyway. By default, the id is automatically set to a string hash of the schema. It's only for multiple forms on the same page, or dynamically generated schemas, that you may want to change it.
 
@@ -254,7 +260,7 @@ const form = await superValidate(zod(schema), { errors: true });
 form.errors = {}
 ```
 
-#### Default values aren't required fields anymore
+#### Fields with default values aren't required anymore
 
 In hindsight, this should have been the default, given the forgiving nature of the data coercion and parsing. When a default value exists, the field is not required anymore. If that field isn't posted, its default value will be added to `form.data`.
 

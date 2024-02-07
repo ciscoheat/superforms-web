@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { Fireworks } from '@fireworks-js/svelte';
   import { onDestroy, onMount } from 'svelte';
 
@@ -24,6 +25,7 @@
   });
 
   onDestroy(() => {
+    if (!browser) return;
     document
       .querySelector('#page')
       ?.removeEventListener('scroll', moveFireworks);

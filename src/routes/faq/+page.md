@@ -200,17 +200,18 @@ That's possible with an empty schema, or using the `$formId` store with the butt
 When you start to configure the library to suit your stack, you can create an object with default options that you will refer to instead of `superForm`:
 
 ```ts
-import { superForm as realSuperForm } from 'sveltekit-superforms';
+import { superForm } from 'sveltekit-superforms';
 
 export type Message = {
   status: 'success' | 'error' | 'warning';
   text: string;
 };
 
-export function superForm<T extends Record<string, unknown>>(
-  ...params: Parameters<typeof realSuperForm<T, Message>>
+// If no strongly type message is required, set M to any
+export function mySuperForm<T extends Record<string, unknown>, M = Message>(
+  ...params: Parameters<typeof superForm<T, M>>
 ) {
-  return realSuperForm<T, Message>(params[0], {
+  return superForm<T, M>(params[0], {
     // Your defaults here
     errorSelector: '.has-error',
     delayMs: 300,

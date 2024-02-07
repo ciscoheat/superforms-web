@@ -421,12 +421,17 @@ SuperForm<T, M = any> = {
   capture: () => SuperFormSnapshot<T, M>;
   restore: (snapshot: SuperFormSnapshot<T, M>) => void;
 
-  validate: (path?: FormPathLeaves<T> | { update: true }, opts?: {
+  validateForm: (opts?: {
+    update: boolean,
+    schema: ValidationAdapter<Partial<T>>
+  }) => Promise<SuperValidated<T, M>>;
+
+  validate: (path: FormPathLeaves<T>, opts?: {
     value: FormPathType<FormPathLeaves<T>>;
     update: boolean | 'errors' | 'value';
     taint: boolean | 'untaint' | 'untaint-form';
     errors: string | string[];
-  }) => Promise<(string[] | undefined) | SuperValidated<T, M>>;
+  }) => Promise<string[] | undefined>;
 };
 ```
 
