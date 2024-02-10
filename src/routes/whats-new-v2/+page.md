@@ -74,28 +74,11 @@ A new `isTainted` method is available on `superForm`, to check whether any part 
 
 ## onChange event
 
-An `onChange` event is added to the `superForm` options, so you can track specific fields for changes:
-
-```ts
-const { form, errors, enhance } = superForm(data.form, {
-  onChange(event) {
-    if(event.target) {
-      // Form input event
-      console.log(
-        event.path, 'was changed from', event.target, 
-        'in form', event.formElement
-      );
-    } else {
-      // Programmatic event
-      console.log('Fields updated:', event.paths)
-    }
-  }
-})
-```
+An `onChange` event is added to the `superForm` options, so you can track specific fields for changes. Check the [events page](/concepts/events#onchange) for the details.
 
 ## New validateForm method
 
-The `validateForm` method is useful for retrieving the validation result for the whole form. Previously you could call `validate()` to do this, but you must now use `validateForm()`. There are two options, `{ update?: true, schema?: ValidationAdapter<Partial<T>> }` which can be used to trigger a full client-side validation, and validate the schema only partially.
+Previously you could call `validate()` for retrieving a validation result for the whole form, but you must now use `validateForm()`. There are two options, `{ update?: true, schema?: ValidationAdapter<Partial<T>> }` which can be used to trigger a full client-side validation, and validate the schema only partially.
 
 ## empty: 'zero' option for intProxy and numberProxy
 

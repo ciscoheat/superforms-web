@@ -161,4 +161,31 @@ You can also set `onError` to the string value `'apply'`, in which case the Svel
 
 > If you're unsure what event to use, start with `onUpdated`; unless your app is a [SPA](/concepts/spa), then `onUpdate` should be used to validate the form data.
 
+## Non-submit events 
+
+### onChange
+
+The `onChange` event is not triggered when submitting, but every time `$form` is modified, both as a html event (with `bind:value`) and programmatically (direct assignment to `$form`). 
+
+The event is a discriminated union that you can distinguish between using the `target` property:
+
+```ts
+const { form, errors, enhance } = superForm(data.form, {
+  onChange(event) {
+    if(event.target) {
+      // Form input event
+      console.log(
+        event.path, 'was changed from', event.target, 
+        'in form', event.formElement
+      );
+    } else {
+      // Programmatic event
+      console.log('Fields updated:', event.paths)
+    }
+  }
+})
+```
+
+If you only want to handle programmatic events, you can access `event.paths` without distinguishing.
+
 <Next section={concepts} />

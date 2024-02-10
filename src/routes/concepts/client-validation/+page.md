@@ -42,7 +42,7 @@ The constraints is an object with validation properties mapped from the schema:
 
 ```ts
 {
-  pattern?: string;      // string with RegExp pattern
+  pattern?: string;      // The *first* string validator with a RegExp pattern
   step?: number | 'any'; // number with a step validator
   minlength?: number;    // string with a minimum length
   maxlength?: number;    // string with a maximum length

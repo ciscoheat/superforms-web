@@ -30,14 +30,19 @@ The type `M` represents the [status message](/concepts/messages/) type, default 
 type M = any;
 ```
 
-A `ValidationAdapter<T>` and `ClientValidationAdapter<T>` are the adapters used to wrap the schema, based on the selected validation library. For example:
+A `ValidationAdapter<T, In>` and `ClientValidationAdapter<T, In>` are the adapters used to wrap the schema, based on the selected validation library. `In` is the input type of the schema, as transformations and pipes can make it differ from `T`, but usually they are the same. Example:
 
 ```ts
-import type { Infer } from 'sveltekit-superforms'
-import { zod, zodClient } from 'sveltekit-superforms/adapters'
-import { schema } from './schema'
+import type { Infer, InferIn } from 'sveltekit-superforms';
+import { zod, zodClient } from 'sveltekit-superforms/adapters';
+import { z } from 'zod';
 
-// Type is now ValidationAdapter<Infer<typeof schema>>
+const schema = z.object({
+  name: z.string().min(3)
+})
+
+// Type is now ValidationAdapter<Infer<typeof schema>, InferIn<typeof schema>>
+// Which is the same as ValidationAdapter<{name: string}, {name: string}>
 const adapter = zod(schema);
 ```
 
@@ -58,28 +63,28 @@ import {
 If you want the form to be initially empty, you can pass the adapter as the first parameter:
 
 ```ts
-superValidate<T, M = any>(
-  adapter: ValidationAdapter<T>,
+superValidate<T, M = any, In = T>(
+  adapter: ValidationAdapter<T, In>,
   options?: SuperValidateOptions
-): Promise<SuperValidated<T, M>>
+): Promise<SuperValidated<T, M, In>>
 ```
 
 If you want to populate the form, for example, from a database, `URL` parameters in the load function, or `FormData` in the form actions, send the data as the first parameter and the adapter second:
 
 ```ts
-superValidate<T, M = any>(
+superValidate<T, M = any, In = T>(
   data:
     | RequestEvent
     | Request
     | FormData
     | URL
     | URLSearchParams
-    | Partial<T>
+    | Partial<In>
     | null
     | undefined,
-  adapter: ValidationAdapter<T>,
+  adapter: ValidationAdapter<T, In>,
   options?: SuperValidateOptions
-): Promise<SuperValidated<T, M>>
+): Promise<SuperValidated<T, M, In>>
 ```
 
 ### superValidate options
@@ -101,7 +106,7 @@ See the page about [multiple forms](/concepts/multiple-forms) for information ab
 ### superValidate return type
 
 ```ts
-SuperValidated<T, M = any> = {
+SuperValidated<T, M = any, In = T> = {
   id: string;
   valid: boolean;
   posted: boolean;
@@ -136,7 +141,7 @@ See [this page](/default-values) for a list of default schema values.
  */
 InputConstraints = Partial<{
   required: boolean; // Not nullable or optional
-  pattern: string; // string validator with RegExp pattern
+  pattern: string; // The *first* string validator with RegExp pattern
   min: number | string; // number or ISO date string depending on type
   max: number | string; // number or ISO date string depending on type
   step: number | 'any'; // number validator with step constraint
@@ -149,11 +154,11 @@ InputConstraints = Partial<{
 
 ```ts
 setError(
-  form: SuperValidated<T, M>,
+  form: SuperValidated<T, M, In>,
   field: '' | FormPathLeaves<T>,
   error: string | string[],
   options?: { overwrite = false, status : ErrorStatus = 400 }
-) : ActionFailure<{form: SuperValidated<T, M>}>
+) : ActionFailure<{form: SuperValidated<T, M, In>}>
 ```
 
 For setting errors on the form after validation. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning.
@@ -167,10 +172,10 @@ Use the `overwrite` option to remove all previously set errors for the field, an
 
 ```ts
 message(
-  form: SuperValidated<T, M>,
+  form: SuperValidated<T, M, In>,
   message: M,
   options?: { status? : NumericRange<400, 599> }
-) : { form: SuperValidated<T, M> } | ActionFailure<{form: SuperValidated<T, M>}>
+) : { form: SuperValidated<T, M, In> } | ActionFailure<{form: SuperValidated<T, M, In>}>
 ```
 
 `message` is a convenience method for setting `form.message`, best explained by an example:
@@ -285,15 +290,15 @@ import {
 
 ```ts
 superForm<T, M = any>(
-  form: SuperValidated<T, M> | null | undefined,
-  options?: FormOptions<T, M>
+  form: SuperValidated<T, M, In> | null | undefined,
+  options?: FormOptions<T, M, In>
 ) : SuperForm<T, M>
 ```
 
 ### superForm options
 
 ```ts
-type FormOptions<T, M> = Partial<{
+type FormOptions<T, M, In> = Partial<{
   // Basics
   id: string;
   applyAction: boolean;
@@ -321,12 +326,12 @@ type FormOptions<T, M> = Partial<{
     cancel: () => void;
   }) => MaybePromise<unknown | void>;
   onUpdate: (event: {
-    form: SuperValidated<T, M>;
+    form: SuperValidated<T, M, In>;
     formEl: HTMLFormElement;
     cancel: () => void;
   }) => MaybePromise<unknown | void>;
   onUpdated: (event: {
-    form: Readonly<SuperValidated<T, M>>;
+    form: Readonly<SuperValidated<T, M, In>>;
   }) => MaybePromise<unknown | void>;
   onChange: (event: ChangeEvent) => void;
   onError:
@@ -337,17 +342,21 @@ type FormOptions<T, M> = Partial<{
           status?: number;
           error: App.Error;
         };
-        message: Writable<SuperValidated<T, M>['message']>;
+        message: Writable<SuperValidated<T, M, In>['message']>;
       }) => MaybePromise<unknown | void>);
 
   // Client-side validation
-  validators: ClientValidationAdapter<Record<string, unknown>> | false | 'clear';
+	validators:
+		| ClientValidationAdapter<Partial<T>, Record<string, unknown>>
+		| ValidationAdapter<Partial<T>, Record<string, unknown>>
+		| false
+		| 'clear';
   validationMethod: 'auto' | 'oninput' | 'onblur' | 'onsubmit';
   clearOnSubmit: 'errors-and-message' | 'message' | 'errors' | 'none';
   delayMs: number;
   timeoutMs: number;
 
-  // Flash message integration
+  // Special flash message integration (not usually required)
   syncFlashMessage?: boolean;
   flashMessage: {
     module: import * as flashModule from 'sveltekit-flash-message/client';
@@ -366,7 +375,6 @@ type FormOptions<T, M> = Partial<{
   // Disable warnings
   warnings: {
     duplicateId?: boolean;
-    noValidationAndConstraints?: boolean;
   };
 }>;
 
@@ -406,7 +414,7 @@ SuperForm<T, M = any> = {
   formId: Writable<string>;
   allErrors: Readable<{ path: string; messages: string[] }[]>;
 
-  options: FormOptions<T, M>;
+  options: FormOptions<T, M, In>;
 
   enhance: (el: HTMLFormElement, events?: {
     onSubmit, onResult, onError, onUpdate, onUpdated
@@ -424,7 +432,7 @@ SuperForm<T, M = any> = {
   validateForm: (opts?: {
     update: boolean,
     schema: ValidationAdapter<Partial<T>>
-  }) => Promise<SuperValidated<T, M>>;
+  }) => Promise<SuperValidated<T, M, In>>;
 
   validate: (path: FormPathLeaves<T>, opts?: {
     value: FormPathType<FormPathLeaves<T>>;
@@ -447,7 +455,7 @@ defaults<T, M = any>(
     | undefined,
   schema: ClientValidationAdapter<T>,
   options?: SuperValidateOptions
-): SuperValidated<T, M>
+): SuperValidated<T, M, In>
 ```
 
 ## Proxy objects

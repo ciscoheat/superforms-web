@@ -74,6 +74,9 @@ An `isTainted` method is available on `superForm`, to check whether any part of 
 
 <!-- Make the function reactive by passing the $tainted store -->
 <button disabled={!isTainted($tainted)}>Submit</button>
+
+<!-- It even works with individual fields -->
+<button disabled={!isTainted($tainted.name)}>Submit name</button>
 ```
 
 ## Preventing tainting the form

@@ -173,9 +173,9 @@ const { form, errors, enhance } = superForm(defaults(initialData, zod(schema)), 
 
 Note that `superValidate` can be used anywhere but on the top-level of Svelte components, so it's not removed from the client and SPA usage. But client-side validation is more of a convenience than ensuring data integrity. Always let an external API or a server request do a proper validation of the data before it's stored or used somewhere.
 
-### validate() method with no arguments is renamed to validateForm
+### validate method with no arguments is renamed to validateForm
 
-
+Previously, you could do `const result = await validate()` to get a validation result for the whole form. This overload caused a lot of trouble, so it has now been split into `validate` for fields, and `validateForm` for the whole form. Just replace the calls to `validate()` with `validateForm()` to fix this.
 
 ### id option must be a string
 
