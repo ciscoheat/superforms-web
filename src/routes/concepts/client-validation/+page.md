@@ -106,6 +106,25 @@ const { form, errors, enhance } = superForm(data.form, {
 
 As a super-simple alternative to an adapter, you can also set the option to `'clear'`, to remove errors for a field as soon as it's modified.
 
+#### Switching schemas
+
+You can even switch schemas dynamically, with the `options` object. `options.validators` accepts a partial validator, which can be very useful for multi-step forms:
+
+```ts
+import { valibot } from 'sveltekit-superforms/adapters';
+import { schema, partialSchema } from './schema.js';
+
+const { form, errors, enhance, options } = superForm(data.form, {
+  // Validate the first step of the form
+  validators: valibot(partialSchema)
+});
+
+// When moving to the last step of the form
+options.validators = valibot(schema)
+```
+
+As mentioned, you need the full adapter to switch schemas dynamically. An exception will be thrown if a client adapter is detected different from the initial `validators` option.
+
 ### validationMethod
 
 ```ts

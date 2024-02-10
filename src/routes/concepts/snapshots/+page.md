@@ -31,6 +31,8 @@ export const snapshot = { capture, restore };
 
 The export has to be on a `+page.svelte` page to work, it cannot be in a component.
 
+> The `options` object contains functions and cannot be serialized for a snapshot. If you modify the options dynamically, make a custom version of the methods to handle the changes.
+
 ## Test it out
 
 Modify the form below without submitting, then click the browser back button and then forward again. The form should be restored to its intermediate state.
