@@ -70,6 +70,9 @@ A new `isTainted` method is available on `superForm`, to check whether any part 
 
 <!-- Make the function reactive by passing the $tainted store -->
 <button disabled={!isTainted($tainted)}>Submit</button>
+
+<!-- It even works with individual fields -->
+<button disabled={!isTainted($tainted.name)}>Submit name</button>
 ```
 
 ## onChange event
@@ -103,6 +106,10 @@ import { superForm, superValidate, dateProxy } from 'sveltekit-superforms';
 import SuperDebug from 'sveltekit-superforms';
 ```
 
-## Release notes
+# Migrate now!
+
+Read the detailed [migration guide](/migration-v2) to convert your projects to Superforms version 2. Ask any migration questions in the [#v2-migration] Discord channel, or open an issue on [Github](https://github.com/ciscoheat/sveltekit-superforms/issues)
+
+# Release notes
 
 The [2.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v2.0.0) have a full list of changes, and as usual, let me know on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms) if something is unclear or not working.

@@ -165,7 +165,7 @@ You can also set `onError` to the string value `'apply'`, in which case the Svel
 
 ### onChange
 
-The `onChange` event is not triggered when submitting, but every time `$form` is modified, both as a html event (with `bind:value`) and programmatically (direct assignment to `$form`). 
+The `onChange` event is not triggered when submitting, but every time `$form` is modified, both as a html event (when modified with `bind:value`) and programmatically (direct assignment to `$form`). 
 
 The event is a discriminated union that you can distinguish between using the `target` property:
 
