@@ -1,21 +1,19 @@
 import { indexSite } from './src/lib/indexSite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vitest/config';
+import { defineConfig, type HmrContext } from 'vite';
 import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
-// TODO: Enable indexSite when v2 is released.
-
 export default defineConfig(async ({ mode }) => {
-  //if (mode == 'development') await indexSite();
+  if (mode == 'development') await indexSite();
   return {
     plugins: [
       sveltekit(),
       purgeCss(),
       {
         name: 'index-site',
-        async handleHotUpdate(ctx) {
+        async handleHotUpdate(ctx : HmrContext) {
           if (ctx.file.endsWith('+page.md')) {
-            //await indexSite();
+            await indexSite();
           }
         }
       }
