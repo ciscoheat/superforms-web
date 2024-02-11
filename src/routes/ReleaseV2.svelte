@@ -26,9 +26,7 @@
 
   onDestroy(() => {
     if (!browser) return;
-    document
-      .querySelector('#page')
-      ?.removeEventListener('scroll', moveFireworks);
+    document.querySelector('#page')?.removeEventListener('scroll', moveFireworks);
   });
 </script>
 
@@ -36,11 +34,12 @@
 
 <aside class="alert mt-2">
   <div class="alert-message text-center">
-    <strong>Superforms version 2</strong> has just been released, supporting all
-    possible validation libraries. Find out
+    <strong>Superforms version 2</strong> has just been released, supporting all possible validation
+    libraries. Find out
     <a href="/whats-new-v2">what's new</a>
     and see
-    <a href="/migration-v2">how to migrate</a> your existing projects!
+    <a href="/migration-v2">how to migrate</a> your existing projects! Version 1 docs available
+    <a href="https://superforms-v1.vercel.app/">here</a>.
   </div>
   <Fireworks options={{ intensity: 5 }} class="fireworks" />
 </aside>

@@ -19,4 +19,4 @@ There is a whole collection of examples on Stackblitz, how to use select/drop me
 
 https://stackblitz.com/@ciscoheat/collections/superforms
 
-Send a message on Discord or on Github if you have an idea of an example that should be included!
+Send a message on Discord if you have an idea of an example that should be included!

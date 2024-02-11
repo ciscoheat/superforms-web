@@ -109,7 +109,7 @@ import SuperDebug from 'sveltekit-superforms';
 
 # Migrate now!
 
-Read the detailed [migration guide](/migration-v2) to convert your projects to Superforms version 2. Ask any migration questions in the [#v2-migration] Discord channel, or open an issue on [Github](https://github.com/ciscoheat/sveltekit-superforms/issues)
+Read the detailed [migration guide](/migration-v2) to convert your projects to Superforms version 2. Ask any migration questions in the [#v2-migration](https://discord.gg/4mKwqnu25f) Discord channel, or open an issue on [Github](https://github.com/ciscoheat/sveltekit-superforms/issues)
 
 # Release notes
 

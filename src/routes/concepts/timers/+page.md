@@ -62,6 +62,6 @@ The default [multipleSubmits](/concepts/submit-behavior#multiplesubmits) setting
 
 <Form data={data} />
 
-By experimenting with the timers and the delay between them, it's certainly possible to prevent the feeling of unresponsiveness. Please share your results on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms/discussions), if you do!
+By experimenting with the timers and the delay between them, it's certainly possible to prevent the feeling of unresponsiveness.
 
 <Next section={concepts} />
