@@ -43,11 +43,11 @@ yarn create svelte@latest
 
 {#if $settings.lib == 'valibot'}
 
-Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/superforms-2-tutorial-valibot?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser.
+Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/superforms-2-tutorial-valibot?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser and copy the code.
 
 {:else}
 
-Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/superforms-2-tutorial-zod?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser.
+Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/superforms-2-tutorial-zod?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser and copy the code.
 
 {/if}
 
@@ -479,6 +479,6 @@ The `use:enhance` action takes no arguments; instead, events are used to hook in
 
 ## Next steps
 
-This concludes the tutorial (full source code [on Stackblitz]((https://stackblitz.com/edit/superforms-2-tutorial?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte))). To learn the details, keep reading under the Concepts section in the navigation. Especially, if you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) page carefully. The same goes for having [multiple forms on the same page](/concepts/multiple-forms).
+This concludes the tutorial! To learn the details, keep reading under the Concepts section in the navigation. [Status messages](/concepts/messages) are very common to add, for example. Also, if you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) page carefully. The same goes for having [multiple forms on the same page](/concepts/multiple-forms).
 
 When you're ready for something more advanced, check out the [CRUD tutorial](/crud), which shows how to make a fully working backend in about 150 lines of code.
