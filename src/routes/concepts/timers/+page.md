@@ -60,7 +60,7 @@ Submit the following form and play around with the different settings. Different
 
 The default [multipleSubmits](/concepts/submit-behavior#multiplesubmits) setting prevents the form from being submitted multiple times, until the `timeout` state is reached. Click multiple times to see the effect of that.
 
-<Form {data} />
+<Form data={data} />
 
 By experimenting with the timers and the delay between them, it's certainly possible to prevent the feeling of unresponsiveness. Please share your results on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms/discussions), if you do!
 

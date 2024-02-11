@@ -13,11 +13,11 @@
 
 <Header />
 
-Superforms is a SvelteKit form library that brings you a comprehensive solution for **server and client form validation**. It supports a multitude of validation libraries: 
+Superforms is a SvelteKit form library that brings you a comprehensive solution for **server and client form validation**. It supports a multitude of validation libraries:
 
 <Libraries />
 
-Pick your favorite, Superforms handles the rest with consistent handling of form data and validation errors, with full type safety. It works with both TypeScript and JavaScript, even in static and single-page apps.
+Pick your favorite, Superforms takes care of the rest with consistent handling of form data and validation errors, with full type safety. It works with both TypeScript and JavaScript, even in static and single-page apps.
 
 The API is minimal, basically a single method on the server and client, but it's very flexible and configurable to handle every possible case of:
 

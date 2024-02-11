@@ -35,14 +35,14 @@ And it also gets bad in the script part when you have more than a couple of form
     form: loginForm,
     errors: loginErrors,
     enhance: loginEnhance,
-    ...
+    //...
   } = superForm(data.loginForm);
 
   const {
     form: registerForm,
     errors: registerErrors,
     enhance: registerEnhance,
-    ...
+    // ...
   } = superForm(data.registerForm);
 </script>
 ```
@@ -58,7 +58,7 @@ To do this, you need the type of the schema, which can be defined as follows:
 ```ts
 export const loginSchema = z.object({
   email: z.string().email(),
-  password: ...
+  password: // ...
 });
 
 export type LoginSchema = typeof loginSchema;
@@ -76,7 +76,7 @@ Now you can import and use this type in a separate component:
 
   export let data: SuperValidated<Infer<LoginSchema>>;
 
-  const { form, errors, enhance, ... } = superForm(data);
+  const { form, errors, enhance } = superForm(data);
 </script>
 
 <form method="POST" use:enhance>
@@ -219,7 +219,11 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 </script>
 
 <script lang="ts" generics="T extends Record<string, unknown>">
-  import { formFieldProxy, type SuperForm, type FormPathLeaves } from 'sveltekit-superforms';
+  import { 
+    formFieldProxy, 
+    type SuperForm, 
+    type FormPathLeaves 
+  } from 'sveltekit-superforms';
 
   export let form: SuperForm<T, unknown>;
   export let field: FormPathLeaves<T>;
@@ -240,7 +244,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 {#if $errors}<span class="invalid">{$errors}</span>{/if}
 ```
 
-The Svelte 4 syntax requires `Record<string, unknown>` to be defined before its used in the `generics` attribute, so we have to import it in a module context. Now when `T` is defined (the schema object type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used.
+The Svelte syntax requires `Record<string, unknown>` to be defined before its used in the `generics` attribute, so we have to import it in a module context. Now when `T` is defined (the schema object type), we can use it in the `form` prop to ensure that only a `SuperForm` matching the `field` prop is used.
 
 > The `FormPathLeaves` type prevents using a field that isn't at the end of the schema (the "leaves" of the schema tree). This means that arrays and objects cannot be used in `formFieldProxy`. Array-level errors are handled [like this](/concepts/error-handling#form-level-and-array-errors).
 

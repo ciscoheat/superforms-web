@@ -8,7 +8,7 @@
 
 <Head title="Submit behavior" />
 
-When a form is submitted, it's important for the user experience to show that things are happening. Superforms provides you with [loading timers](/concepts/timers) and the following options for this:
+When a form is submitted, it's important for the UX to show that things are happening on the server. Superforms provides you with [loading timers](/concepts/timers) and the following options for handling this:
 
 ## Usage
 
