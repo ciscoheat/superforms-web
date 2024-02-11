@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { derived, type Readable } from 'svelte/store';
+  import { derived, readable, type Readable } from 'svelte/store';
 
-  export let submitting: Readable<boolean>;
-  export let delayed: Readable<boolean>;
-  export let timeout: Readable<boolean>;
+  export let submitting: Readable<boolean> = readable(false);
+  export let delayed: Readable<boolean> = readable(false);
+  export let timeout: Readable<boolean> = readable(false);
 
   export let delayMs = 500;
   export let timeoutMs = 8000;
