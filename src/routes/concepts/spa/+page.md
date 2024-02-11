@@ -134,7 +134,7 @@ Since you can't use top-level await in Svelte components, you can't use `superVa
   import { zod } from 'sveltekit-superforms/adapters';
   import { loginSchema } from '$lib/schemas';
 
-  const { form, errors, enhance } = superForm(defaults(loginSchema), {
+  const { form, errors, enhance } = superForm(defaults(zod(loginSchema)), {
     SPA: true,
     validators: zod(loginSchema),
     onUpdate({ form }) {
