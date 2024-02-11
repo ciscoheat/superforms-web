@@ -92,14 +92,14 @@ The client-side validation is using the smallest possible part of the adapter, t
 import { valibotClient } from 'sveltekit-superforms/adapters';
 import { schema } from './schema';
 
-const { form, errors, enhance } = superForm(data.form, {
+const { form, errors, enhance, options } = superForm(data.form, {
   validators: valibotClient(schema)
 });
 ```
 
-> This works with the same schema as the one used on the server. If you need to switch schemas on the client, you need the full adapter.
+> This works with the same schema as the one used on the server. If you need to switch schemas on the client (with `options.validators`), you need the full adapter.
 
-The Superforms validator is now deprecated, since it requires you to do much of the type checking yourself. To keep using it, import `superformClient` and use the new `Infer` type to type it correctly with the schema, as in the following example. The input parameter can now be `undefined` as well, be sure to check for that case.
+The built-in Superforms validator is now deprecated, since it requires you to do much of the type checking yourself. To keep using it, import `superformClient` and use the new `Infer` type to type it correctly with the schema, as in the following example. The input parameter can now be `undefined` as well, be sure to check for that case.
 
 ```ts
 import type { Infer } from 'sveltekit-superforms';
@@ -138,13 +138,26 @@ import type { Infer } from 'sveltekit-superforms'
 export let data: SuperValidated<Infer<LoginSchema>>;
 ```
 
+If your schema uses transformations or pipes, so the input and output types are different, there's an `InferIn` type and a third type parameter that can be used.
+
+```ts
+import type { Infer, InferIn } from 'sveltekit-superforms'
+import { zod } from 'sveltekit-superforms/adapters'
+import { schema } from './schema'
+
+type Message = { status: 'success' | 'failure', text: string }
+type Validated = SuperValidated<Infer<typeof schema>, Message, InferIn<typeof schema>>;
+
+const form : Validated = await superValidate(zod(schema));
+```
+
 Also, `constraints` are now optional in the `SuperValidated` type, since they won't be returned when posting data anymore, only when loading data, to save some bandwidth. This is only relevant if you're changing the constraints before calling `superForm`.
 
 ### superValidateSync is renamed to defaults
 
 The quite popular `superValidateSync` function has changed, since it's not possible to make a synchronous validation anymore (not all validation libaries are synchronous). So if you've validated data with `superValidateSync` (in its first parameter), be aware that **superValidateSync cannot do validation anymore**. You need to use a `+page.ts` to do proper validation, as described on the [SPA page](/concepts/spa#using-pagets-instead-of-pageserverts).
 
-> Since this is a bit of a security issue, `superValidateSync` has been renamed to `defaults`.
+Since this is a bit of a security issue, `superValidateSync` has been renamed to `defaults`.
 
 Fortunately though, a [quick Github search](https://github.com/search?q=superValidateSync%28&type=code) reveals that most of its usages are with the schema only, which requires no validation and no `+page.ts`. In that case, just call `defaults` with your adapter and eventual initial data, and you're good to go:
 
@@ -171,11 +184,11 @@ const { form, errors, enhance } = superForm(defaults(initialData, zod(schema)), 
 })
 ```
 
-Note that `superValidate` can be used anywhere but on the top-level of Svelte components, so it's not removed from the client and SPA usage. But client-side validation is more of a convenience than ensuring data integrity. Always let an external API or a server request do a proper validation of the data before it's stored or used somewhere.
+Note that `superValidate` can be used anywhere but on the top-level of Svelte components, so it's not completely removed from the client and SPA usage. But client-side validation is more of a convenience than ensuring data integrity. Always let an external API or a server request do a proper validation of the data before it's stored or used somewhere.
 
 ### validate method with no arguments is renamed to validateForm
 
-Previously, you could do `const result = await validate()` to get a validation result for the whole form. This overload caused a lot of trouble, so it has now been split into `validate` for fields, and `validateForm` for the whole form. Just replace the calls to `validate()` with `validateForm()` to fix this.
+Previously, you could do `const result = await validate()` to get a validation result for the whole form. This overload caused a lot of typing issues, so it has now been split into `validate` for fields, and `validateForm` for the whole form. Just replace the calls to `validate()` with `validateForm()` to fix this.
 
 ### id option must be a string
 
@@ -191,7 +204,7 @@ The `emptyIfZero` setting is removed from `numberProxy` and `intProxy`.
 
 ### The defaultValidators option has moved
 
-Another simple change: If you've been using `defaultValidators`, set `'clear'` on the `validators` option instead.
+Another simple change: If you've been using `defaultValidators`, set the value `'clear'` on the `validators` option instead.
 
 ### Enums in schemas
 
@@ -215,8 +228,8 @@ Enums don't have a default "empty" value unlike other types, so it's not certain
 
 ```ts
 export enum Foo {
-	A = 2,
-	B = 3
+  A = 2,
+  B = 3
 }
 
 const schema = z.object({

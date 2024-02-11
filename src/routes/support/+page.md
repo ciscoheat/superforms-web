@@ -22,8 +22,10 @@ If you're making or aiming to make money on your project, a donation proportiona
 
 <Sponsor />
 
-For a longer period, you can make a monthly donation. Any $10 or higher monthly donation will be listed on the [Sponsors](/sponsors) page with a picture and link, and in Discord as a Sponsor. Many thanks if you want to support open source software in this way!
+For a longer period, you can make a monthly donation. Any $10 or higher monthly donation will be listed on the [Sponsors](/sponsors) page with a picture and link, and in Discord as a Sponsor. Many thanks if you want to support Open Source Software in this way!
 
-## Bug fixes
+## Bug reporting
 
-Bug reporting and fixing is free, of course. Report bugs as an issue [on Github](https://github.com/ciscoheat/sveltekit-superforms/issues).
+Please report bugs as an issue [on Github](https://github.com/ciscoheat/sveltekit-superforms/issues). 
+
+Fixing bugs and working on new features will be handled in due time, but if you want to speed up the process, a donation is welcome, or you can submit a [pull request](https://github.com/ciscoheat/sveltekit-superforms/pulls), since with open source, we can also pay with our time.

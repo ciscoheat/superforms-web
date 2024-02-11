@@ -81,11 +81,11 @@ An `onChange` event is added to the `superForm` options, so you can track specif
 
 ## New validateForm method
 
-Previously you could call `validate()` for retrieving a validation result for the whole form, but you must now use `validateForm()`. There are two options, `{ update?: true, schema?: ValidationAdapter<Partial<T>> }` which can be used to trigger a full client-side validation, and validate the schema only partially.
+Previously you could call `validate()` for retrieving a validation result for the whole form, but you must now use `validateForm()`. There are two options, `{ update?: true, schema?: ValidationAdapter<Partial<T>> }` which can be used to trigger a full client-side validation, and validate the schema partially, which is useful for multi-step forms.
 
 ## empty: 'zero' option for intProxy and numberProxy
 
-For number fields, a UX problem has been that the default value for numbers, `0`, hides the placeholder text, and it's not always wanted to have a number there. But it's now possible to make this work, with two new options in `intProxy` and `numberProxy`:
+For number fields, a UX problem has been that the default value for numbers, `0`, hides the placeholder text, and it's not always wanted to have a number there initially. But it's now possible to make this work, with two new options in `intProxy` and `numberProxy`:
 
 ```ts
 const schema = z.object({
@@ -103,6 +103,7 @@ You may have noticed in the examples that `/client` and `/server` isn't needed a
 
 ```ts
 import { superForm, superValidate, dateProxy } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import SuperDebug from 'sveltekit-superforms';
 ```
 
@@ -112,4 +113,4 @@ Read the detailed [migration guide](/migration-v2) to convert your projects to S
 
 # Release notes
 
-The [2.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v2.0.0) have a full list of changes, and as usual, let me know on [Discord](https://discord.gg/AptebvVuhB) or [Github](https://github.com/ciscoheat/sveltekit-superforms) if something is unclear or not working.
+The [2.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v2.0.0) have a full list of changes.
