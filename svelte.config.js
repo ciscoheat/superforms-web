@@ -13,7 +13,6 @@ const config = {
   extensions: ['.svelte', '.md', '.svx', '.svelte.md'],
 
   preprocess: [
-    vitePreprocess(),
     mdsvex({
       extensions: ['.md', '.svx', '.svelte.md'],
       layout: './src/lib/mdsvex/MarkdownLayout.svelte',
@@ -41,7 +40,8 @@ const config = {
           }
         }]
       ]
-    })
+    }),
+    vitePreprocess(),
   ],
 
   kit: {

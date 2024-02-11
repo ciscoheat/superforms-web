@@ -1,8 +1,9 @@
-import { create, insert, stemmers } from '@orama/orama';
+import { create, insert } from '@orama/orama';
 import fg from 'fast-glob';
 import fs from 'fs/promises';
 import { normalizePath } from 'vite';
-import { persistToFile, restore } from '@orama/plugin-data-persistence';
+import { restore } from '@orama/plugin-data-persistence';
+import { persistToFile } from '@orama/plugin-data-persistence/server';
 import { marked } from 'marked';
 import path, { dirname } from 'path';
 import GithubSlugger from 'github-slugger';
@@ -16,8 +17,8 @@ type Schema = {
   code: string;
 };
 
-function siteSchema() {
-  return create({
+async function siteSchema() {
+  return await create({
     schema: {
       title: 'string',
       hash: 'string',
@@ -25,11 +26,6 @@ function siteSchema() {
       url: 'string',
       content: 'string',
       code: 'string'
-    },
-    components: {
-      tokenizer: {
-        stemmer: stemmers.english
-      }
     }
   });
 }
@@ -52,7 +48,7 @@ export async function searchEngine(load?: typeof fetch) {
 
 let currentUrl: string;
 let currentSection: Schema | undefined;
-let sectionCount = 0;
+//let sectionCount = 0;
 
 async function insertCurrentSection() {
   if (!currentSection) return;
@@ -67,7 +63,7 @@ async function insertCurrentSection() {
 
     currentSection.title = currentSection.title.trim();
     await insert(_search, currentSection);
-    sectionCount++;
+    //sectionCount++;
   }
 
   currentSection = undefined;
@@ -96,7 +92,7 @@ async function index(file: string) {
     currentUrl = path.dirname(file.replace(/^src\/routes\//, '/'));
 
     newSection(parsedTitle[1]);
-    sectionCount = 0;
+    //sectionCount = 0;
 
     marked.parse(fileContent);
 
