@@ -147,7 +147,7 @@ import { withFiles, message, setError } from 'sveltekit-superforms';
 // When using fail
 if (!form.valid) return fail(400, withFiles({ form }));
 
-// Vhen returning just the form:
+// When returning just the form:
 return withFiles({ form })
 
 // message and setError handles this automatically:
