@@ -17,7 +17,7 @@ Since there is only one `$page` store per route, multiple forms on the same page
 With Superforms, multiple forms on the same page are handled automatically **if you are using `use:enhance`, and the forms have different schema types**. When using the same schema for multiple forms, you need to set the `id` option:
 
 ```ts
-const form = await superValidate(schema, {
+const form = await superValidate(zod(schema), {
   id: string | undefined
 });
 ```

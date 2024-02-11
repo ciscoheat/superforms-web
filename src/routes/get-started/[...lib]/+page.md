@@ -360,7 +360,7 @@ import { fail } from '@sveltejs/kit';
 
 export const actions = {
   default: async ({ request }) => {
-    const form = await superValidate(request, schema);
+    const form = await superValidate(request, zod(schema));
     console.log(form);
 
     if (!form.valid) {

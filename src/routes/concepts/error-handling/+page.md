@@ -84,10 +84,10 @@ If no data was posted or sent to `superValidate`, **no errors will be returned**
 ```ts
 export const load = async () => {
   // No errors set, since no data is sent to superValidate
-  const form = await superValidate(schema);
+  const form = await superValidate(zod(schema));
 
   // No data, but errors can still be added with an option
-  const form2 = await superValidate(schema, { errors: true });
+  const form2 = await superValidate(zod(schema), { errors: true });
 };
 ```
 
@@ -98,19 +98,19 @@ export const load = async () => {
   const initialData = { test: 123 };
 
   // Form is populated, so errors will be set if validation fails
-  const form = await superValidate(initialData, schema);
+  const form = await superValidate(initialData, zod(schema));
 
   // No errors will be set, even if validation fails
-  const form2 = await superValidate(initialData, schema, { errors: false });
+  const form2 = await superValidate(initialData, zod(schema), { errors: false });
 };
 
 export const actions = {
   default: async ({ request }) => {
     // Data is posted, so form.errors will be populated
-    const form = await superValidate(request, schema);
+    const form = await superValidate(request, zod(schema));
 
     // Unless we turn them off (which is rare in form actions)
-    const form2 = await superValidate(request, schema, { errors: false });
+    const form2 = await superValidate(request, zod(schema), { errors: false });
   }
 };
 ```
