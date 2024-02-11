@@ -23,7 +23,7 @@ const { form, enhance } = superForm(data, {
 })
 ```
 
-By setting the `SPA` option to `true`, the form won't be sent to the server when submitted. Instead, the client-side [validators](/concepts/client-validation#validators) option will determine the success or failure of the form, which will trigger the [event chain](/concepts/events), and the validation result will be most conveniently consumed in the [onUpdate](/concepts/events#onupdate) event.
+By setting the `SPA` option to `true`, the form won't be sent to the server when submitted. Instead, the client-side [validators](/concepts/client-validation#validators) option will determine the success or failure of the form, which will trigger the [event chain](/concepts/events), and the validation result will be most conveniently used in the [onUpdate](/concepts/events#onupdate) event, for example by calling an external API.
 
 > Remember that the Superforms [use:enhance](/concepts/enhance) must be added to the form for SPA to work.
 
@@ -84,7 +84,7 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
         if (form.data.email.includes('spam')) {
           setError(form, 'email', 'Suspicious email address.');
         } else if (form.valid) {
-          // TODO: Do something with the validated form.data
+          // TODO: Call an external API with form.data, await the result and update form
           setMessage(form, 'Valid data!');
         }
       }
