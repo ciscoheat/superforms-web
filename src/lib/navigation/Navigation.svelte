@@ -3,7 +3,6 @@
   import { getDrawerStore } from '@skeletonlabs/skeleton';
   import A from './A.svelte';
   import Title from './Title.svelte';
-  import { page } from '$app/stores';
   import { concepts } from './sections';
   import skeleton from '$lib/assets/skeleton.svg?raw';
   import mdsvex from '$lib/assets/mdsvex.svg?raw';
@@ -25,8 +24,6 @@
       }
     });
   });
-
-  $: active = $page.url.pathname;
 </script>
 
 <nav class="list-nav p-4" bind:this={nav}>
@@ -43,8 +40,7 @@
     <li><A href="/whats-new-v2">What's new?</A></li>
     <li><A href="/migration-v2">Migration guide</A></li>
     <li>
-      <A href="https://superforms-v1.vercel.app/" target="_blank"
-        >Version 1 docs</A>
+      <A href="https://superforms-v1.vercel.app/" target="_blank">Version 1 docs</A>
     </li>
 
     <Title id="concepts">Concepts</Title>
@@ -75,8 +71,7 @@
     <a
       href="https://www.skeleton.dev/"
       target="_blank"
-      class="mt-1 !p-0 text-gray-400 hover:!bg-transparent hover:text-gray-300"
-      >{@html skeleton}</a>
+      class="mt-1 !p-0 text-gray-400 hover:!bg-transparent hover:text-gray-300">{@html skeleton}</a>
     <a
       href="https://mdsvex.com/"
       target="_blank"
@@ -94,12 +89,20 @@
 
   @keyframes glow {
     from {
-      text-shadow: 0 0 10px #eeeeee, 0 0 20px #000000, 0 0 30px #000000,
-        0 0 40px #000000, 0 0;
+      text-shadow:
+        0 0 10px #eeeeee,
+        0 0 20px #000000,
+        0 0 30px #000000,
+        0 0 40px #000000,
+        0 0;
     }
     to {
-      text-shadow: 0 0 20px #eeeeee, 0 0 30px #ff4da6, 0 0 40px #ff4da6,
-        0 0 50px #ff4da6, 0 0;
+      text-shadow:
+        0 0 20px #eeeeee,
+        0 0 30px #ff4da6,
+        0 0 40px #ff4da6,
+        0 0 50px #ff4da6,
+        0 0;
     }
   }
 </style>

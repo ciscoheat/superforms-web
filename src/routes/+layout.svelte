@@ -5,11 +5,7 @@
   //import '@skeletonlabs/skeleton/styles/all.css';
   // Most of your app wide CSS should be put in this file
   import '../app.postcss';
-  import {
-    getDrawerStore,
-    getModalStore,
-    initializeStores
-  } from '@skeletonlabs/skeleton';
+  import { getDrawerStore, getModalStore, initializeStores } from '@skeletonlabs/skeleton';
   import {
     AppShell,
     AppBar,
@@ -131,19 +127,17 @@
   }
 
   function copyBoxes() {
-    document
-      .querySelectorAll<HTMLElement>('pre:not(.super-debug--pre) > code')
-      .forEach((el) => {
-        const pre = el.parentElement as HTMLPreElement;
-        var copy = document.createElement('div');
-        copy.classList.add('copy-content');
-        copy.addEventListener('click', copyContent);
+    document.querySelectorAll<HTMLElement>('pre:not(.super-debug--pre) > code').forEach((el) => {
+      const pre = el.parentElement as HTMLPreElement;
+      var copy = document.createElement('div');
+      copy.classList.add('copy-content');
+      copy.addEventListener('click', copyContent);
 
-        copy.innerHTML =
-          '<button type="button"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M5 22q-.825 0-1.413-.588T3 20V6h2v14h11v2H5Zm4-4q-.825 0-1.413-.588T7 16V4q0-.825.588-1.413T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.588 1.413T18 18H9Zm0-2h9V4H9v12Zm0 0V4v12Z"/></svg></button>';
+      copy.innerHTML =
+        '<button type="button"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M5 22q-.825 0-1.413-.588T3 20V6h2v14h11v2H5Zm4-4q-.825 0-1.413-.588T7 16V4q0-.825.588-1.413T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.588 1.413T18 18H9Zm0-2h9V4H9v12Zm0 0V4v12Z"/></svg></button>';
 
-        pre.prepend(copy);
-      });
+      pre.prepend(copy);
+    });
   }
 </script>
 
@@ -176,23 +170,13 @@
               </svg>
             </span>
           </button>
-          <img
-            class="logo mr-3 hidden lg:block"
-            src={logo}
-            alt="Superforms logo" />
+          <img class="logo mr-3 hidden lg:block" src={logo} alt="Superforms logo" />
           <strong class="truncate text-lg md:text-xl">Superforms</strong>
         </div>
       </svelte:fragment>
       <svelte:fragment slot="trail">
-        <a
-          href="https://discord.gg/AptebvVuhB"
-          target="_blank"
-          rel="noreferrer">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="15"
-            height="15"
-            viewBox="0 0 15 15"
+        <a href="https://discord.gg/g5GHjGtU2W" target="_blank" rel="noreferrer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"
             ><path
               fill="currentColor"
               fill-rule="evenodd"
@@ -209,11 +193,7 @@
           class="w-7 text-primary-500 md:w-8 md:pr-2"
           target="_blank"
           rel="noreferrer"
-          ><svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1em"
-            height="1em"
-            viewBox="0 0 24 24"
+          ><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
             ><path
               fill="currentColor"
               d="M18.205 2.25h3.308l-7.227 8.26l8.502 11.24H16.13l-5.214-6.817L4.95 21.75H1.64l7.73-8.835L1.215 2.25H8.04l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z" /></svg
@@ -224,11 +204,7 @@
           class="sponsor variant-ghost btn btn-sm relative"
           on:click={() => (hideSponsor = !hideSponsor)}>
           <span
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+            ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
               ><path
                 fill="currentColor"
                 d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35Z" /></svg
@@ -245,9 +221,7 @@
           event: () => (hideSponsor = !hideSponsor),
           ignore: '.sponsor.btn'
         }}>
-        <div class="relative -left-5 -top-1 w-28 text-center md:hidden">
-          Donate
-        </div>
+        <div class="relative -left-5 -top-1 w-28 text-center md:hidden">Donate</div>
         <a
           href="https://github.com/sponsors/ciscoheat"
           target="_blank"
@@ -255,10 +229,7 @@
           <span class="w-7 p-1 text-primary-500">{@html github}</span>
           <span>Github</span>
         </a>
-        <a
-          href="https://ko-fi.com/ciscoheat"
-          target="_blank"
-          class="variant-ghost btn btn-sm">
+        <a href="https://ko-fi.com/ciscoheat" target="_blank" class="variant-ghost btn btn-sm">
           <span class="w-6 p-0 text-primary-500">{@html kofi}</span>
           <span>Ko-fi</span>
         </a>
@@ -269,11 +240,7 @@
           <span class="w-6 p-0 text-primary-500">{@html buymeacoffee}</span>
           <span>Buymeacoffee</span>
         </a>
-        <form
-          class="flex"
-          action="https://www.paypal.com/donate"
-          method="POST"
-          target="_top">
+        <form class="flex" action="https://www.paypal.com/donate" method="POST" target="_top">
           <input type="hidden" name="hosted_button_id" value="NY7F5ALHHSVQS" />
           <button type="submit" class="variant-ghost btn btn-sm w-full">
             <span class="w-6 p-0 text-primary-500">{@html paypal}</span>
@@ -296,8 +263,7 @@
     <slot />
   </div>
   <svelte:fragment slot="sidebarRight">
-    <TableOfContents
-      class="w-56 {displayToC ? 'hidden md:block' : 'hidden'} p-4" />
+    <TableOfContents class="w-56 {displayToC ? 'hidden md:block' : 'hidden'} p-4" />
   </svelte:fragment>
 </AppShell>
 
