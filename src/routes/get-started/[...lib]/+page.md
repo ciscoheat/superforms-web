@@ -51,7 +51,7 @@ Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/superfo
 
 {/if}
 
-{#if ['', 'ajv', 'superstruct'].includes($settings.lib)}
+{#if ['', 'ajv', 'superstruct', 'n/a'].includes($settings.lib)}
 
 > Please select a validation library above before continuing, as the tutorial changes depending on that.
 

@@ -30,14 +30,15 @@
     <option value="valibot">Valibot</option>
     <option value="yup">Yup</option>
     <option value="zod">Zod</option>
+    <option value="n/a">Not on the list!</option>
   </select>
 </div>
 
 {#if $settings.lib == 'ajv'}
   <aside class="alert variant-ghost mt-2">
     <div class="alert-message">
-      Ajv is not available due to ESM incompatibility and tree-shaking issues.
-      TypeBox is recommended as an alternative.
+      Ajv is not available due to ESM incompatibility and tree-shaking issues. TypeBox is
+      recommended as an alternative.
     </div>
   </aside>
 {:else if $settings.lib == 'superstruct'}
@@ -47,6 +48,14 @@
         href="https://github.com/ianstormtaylor/superstruct/issues/1200"
         target="_blank">moduleResolution problem</a
       >.
+    </div>
+  </aside>
+{:else if $settings.lib == 'n/a'}
+  <aside class="alert variant-ghost mt-2">
+    <div class="alert-message">
+      Missing your favorite library? Writing an adapter for a library is usually no problem. Let me
+      know on <a href="https://discord.gg/g5GHjGtU2W">Discord</a> or
+      <a href="https://github.com/ciscoheat/sveltekit-superforms/issues">Github</a>!
     </div>
   </aside>
 {:else}
