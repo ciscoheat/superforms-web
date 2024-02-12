@@ -5,13 +5,17 @@
   import matus from './img/matus.png';
   import bradenw from './img/braden-w.jpg';
   import saturnonearth from './img/saturnonearth.jpg';
+  import huntabyte from './img/huntabyte.jpg';
+  import jitpackjoyride from './img/jitpackjoyride.jpg';
 
   const sponsors = [
     [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
     [torwent, 'Torwent', 'https://github.com/Torwent'],
     [matus, 'Vicente Matus', 'https://github.com/vicentematus'],
     [bradenw, 'Braden Wong', 'https://github.com/braden-w'],
-    [saturnonearth, 'Cory Tyburski', 'https://github.com/saturnonearth']
+    [saturnonearth, 'Cory Tyburski', 'https://github.com/saturnonearth'],
+    [huntabyte, 'Hunter Johnston', 'https://github.com/huntabyte'],
+    [jitpackjoyride, 'Ajit Krishna', 'https://github.com/JitPackJoyride']
   ];
 </script>
 
@@ -50,6 +54,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    justify-content: center;
     text-align: center;
     margin-bottom: 1rem;
 
