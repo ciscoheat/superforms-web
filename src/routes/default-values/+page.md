@@ -39,12 +39,12 @@ Fields set to `null` will take precedence over `undefined`, so a field that is b
 
 ## Explicit defaults
 
-Enums and unions must have an explicit default value:
+Multi-type unions must have an explicit default value, or exactly one of the union types must have one. Enums doesn't, otherwise it wouldn't be possible to have a required enum field. If no explicit default, the first enum value will be used.
 
 ```ts
 const schema = z.object({
-  fish: z.enum(['Salmon', 'Tuna', 'Trout']).default('Salmon'),
-  either: z.union([z.number(), z.string()]).default(123)
+  either: z.union([z.number(), z.string()]).default(123),
+  fish: z.enum(['Salmon', 'Tuna', 'Trout']) // Default will be 'Salmon'
 });
 ```
 

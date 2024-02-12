@@ -224,7 +224,7 @@ For string enums, it works to post strings, of course.
 
 #### Enums must have an explicit default value
 
-Enums don't have a default "empty" value unlike other types, so it's not certain what the default value should be. Previously the first enum member was used, but v2 is a bit more strict. Therefore, you must specify a default value for enums explicitly:
+Enums don't have a default "empty" value unlike other types, so it's not certain what the default value should be. To be able to set an enum as required, the first enum value will be used, unless there is an explicit default.
 
 ```ts
 export enum Foo {
@@ -233,8 +233,8 @@ export enum Foo {
 }
 
 const schema = z.object({
-  foo: z.nativeEnum(Foo).default(Foo.A),
-  zodEnum: z.enum(['a', 'b', 'c']).default('a')
+  foo: z.nativeEnum(Foo), // Default is Foo.A, field is required
+  zodEnum: z.enum(['a', 'b', 'c']).default('b') // Explicit default 'b', field is optional
 })
 ```
 
