@@ -34,10 +34,11 @@ However, we need to send it from the server first. Using the `message` function 
 
 ```ts
 import { message, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 
 export const actions = {
   default: async ({ request }) => {
-    const form = await superValidate(request, schema);
+    const form = await superValidate(request, zod(schema));
 
     if (!form.valid) {
       // Will return fail(400, { form }) since form isn't valid
@@ -70,18 +71,25 @@ See right below for how to make this data strongly typed.
 
 ## Strongly typed message
 
-The message is of type `any` by default, but you can type it using `superValidate` type parameters:
+The message is of type `any` by default, but you can type it using the `superValidate` type parameters:
 
 ```ts
-const form = await superValidate<typeof schema, string>(event, schema);
+import { type Infer, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+
+// Inferred schema type as first parameter, message type second
+const form = await superValidate<Infer<typeof schema>, string>(event, zod(schema));
 ```
 
 A string can be a bit limiting though; more realistically, there will be some kind of status for the form submission, so making a `Message` type can be useful for consistency.
 
 ```ts
+import { type Infer, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+
 type Message = { status: 'error' | 'success' | 'warning'; text: string };
 
-const form = await superValidate<typeof schema, Message>(event, schema);
+const form = await superValidate<Infer<typeof schema>, Message>(event, zod(schema));
 ```
 
 To simplify this even further, if you have the same type for all status messages across the project, you can add a `Message` type to the `App.Superforms` namespace in src/app.d.ts, and it will be automatically set, no need for generic type parameters:
