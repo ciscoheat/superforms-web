@@ -36,6 +36,7 @@ Since SPA pages don't have a server representation, you can use [+page.ts](https
 ```ts
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/client';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 export const _userSchema = z.object({
@@ -53,7 +54,7 @@ export const load = async ({ params, fetch }) => {
   if (request.status >= 400) throw error(request.status);
 
   const userData = await request.json();
-  const form = await superValidate(userData, _userSchema);
+  const form = await superValidate(userData, zod(_userSchema));
 
   return { form };
 };

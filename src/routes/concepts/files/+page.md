@@ -165,7 +165,7 @@ If your validation library cannot validate files, you can obtain `FormData` from
 export const actions = {
   default: async ({ request }) => {
     const formData = await request.formData();
-    const form = await superValidate(formData, schema);
+    const form = await superValidate(formData, zod(schema));
 
     if (!form.valid) return fail(400, withFiles({ form }));
 

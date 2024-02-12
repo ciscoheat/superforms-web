@@ -65,7 +65,7 @@ The above error set in `refine` will be available on the client as `$errors._err
 If you'd like a form-level message to persist, using `message` instead of `setError` will persist it until the next form submission:
 
 ```ts
-const form = await superValidate(request, schema);
+const form = await superValidate(request, zod(schema));
 
 if (!form.valid) return fail(400, { form });
 
@@ -235,7 +235,7 @@ The following `superValidate` options have changed:
 
 ```ts
 // Add errors to an empty form
-const form = await superValidate(schema, { errors: true });
+const form = await superValidate(zod(schema), { errors: true });
 ```
 
 The [1.0 release notes](https://github.com/ciscoheat/sveltekit-superforms/releases/tag/v1.0.0) have a full list of changes, and as usual, let me know on Github or Discord if something is unclear or not working.
