@@ -225,7 +225,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
     type FormPathLeaves 
   } from 'sveltekit-superforms';
 
-  export let form: SuperForm<T, unknown>;
+  export let form: SuperForm<T, any>;
   export let field: FormPathLeaves<T>;
 
   const { value, errors, constraints } = formFieldProxy(form, field);
