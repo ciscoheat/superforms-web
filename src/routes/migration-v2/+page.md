@@ -37,6 +37,8 @@ export default defineConfig({
 
 You can do the same on a form-by-form basis by setting the `legacy` option on `superForm` to `true` as well.
 
+> When legacy mode is set and you want to use the new [file uploads](/concepts/files) feature, you need to add `{ allowFiles: true }` as an option to `superValidate` in form actions.
+
 ### superValidate
 
 Instead of a Zod schema, you now use an adapter for your favorite validation library. The following are currently supported:
