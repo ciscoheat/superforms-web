@@ -1,5 +1,7 @@
 <script lang="ts">
   import Head from '$lib/Head.svelte'
+  import Next from '$lib/Next.svelte'
+  import { concepts } from '$lib/navigation/sections'
 </script>
 
 # File uploads
@@ -186,3 +188,5 @@ If the file field isn't a part of the schema, but you still want errors for it, 
 To prevent file uploads, set the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, so you don't have to use `withFiles`. 
 
 This will also happen if you have migrated from version 1 and defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important). In that case, set `{ allowFiles: true }` to allow files.
+
+<Next section={concepts} />
