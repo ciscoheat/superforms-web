@@ -169,6 +169,8 @@ Multiple forms also work without `use:enhance`, though in this case you must add
 </form>
 ```
 
+This is also required if you're changing schemas in a form action, as can happen in [multi-step forms](/examples#multi-step-forms).
+
 ## Configuration and troubleshooting
 
 Due to the many different use cases, it's hard to set sensible default options for multiple forms. A common issue is that when one form is submitted, the other forms' data are lost. This is due to the page being invalidated by default on a successful response.
