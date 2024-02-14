@@ -101,6 +101,15 @@ const schema = object({
   email: string([email()]),
 });
 ```
+{:else if $settings.lib == '@vinejs/vine'}
+```ts
+import Vine from '@vinejs/vine';
+
+const schema = Vine.object({
+  name: Vine.string(),
+  email: Vine.string().email()
+});
+```
 {:else if $settings.lib == 'yup'}
 ```ts
 import { object, string } from 'yup';
@@ -208,6 +217,27 @@ const schema = object({
 
 export const load = (async () => {
   const form = await superValidate(valibot(schema));
+
+  // Always return { form } in load functions
+  return { form };
+});
+```
+{:else if $settings.lib == '@vinejs/vine'}
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { vine } from 'sveltekit-superforms/adapters';
+import Vine from '@vinejs/vine';
+
+const schema = Vine.object({
+  name: Vine.string(),
+  email: Vine.string().email()
+});
+
+// Defaults should also be defined outside the load function
+const defaults = { name: 'Hello world!', email: '' }
+
+export const load = (async () => {
+  const form = await superValidate(vine(schema, { defaults }));
 
   // Always return { form } in load functions
   return { form };

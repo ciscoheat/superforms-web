@@ -3,13 +3,15 @@
   import joi from '$lib/assets/libs/joi_small.png';
   import typebox from '$lib/assets/libs/typebox_small.png';
   import valibot from '$lib/assets/libs/valibot_small.png';
+  import vine from '$lib/assets/libs/vinejs_small.png';
   import zod from '$lib/assets/libs/zod_small.png';
 
   const links = [
     ['arktype', 'Arktype', arktype],
     ['joi', 'Joi', joi],
-    ['typebox', 'TypeBox', typebox],
+    ['@sinclair/typebox', 'TypeBox', typebox],
     ['valibot', 'Valibot', valibot],
+    ['@vinejs/vine', 'VineJS', vine],
     ['yup', 'Yup'],
     ['zod', 'Zod', zod]
   ];

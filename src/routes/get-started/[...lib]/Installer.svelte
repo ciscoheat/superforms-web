@@ -28,6 +28,7 @@
     <option value="superstruct">Superstruct</option>
     <option value="@sinclair/typebox">TypeBox</option>
     <option value="valibot">Valibot</option>
+    <option value="@vinejs/vine">VineJS</option>
     <option value="yup">Yup</option>
     <option value="zod">Zod</option>
     <option value="n/a">Not on the list!</option>
