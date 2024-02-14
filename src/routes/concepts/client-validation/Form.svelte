@@ -4,6 +4,7 @@
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
   import { tick } from 'svelte';
+  import { superformClient } from 'sveltekit-superforms/adapters';
 
   export function formData() {
     return form;
@@ -16,14 +17,14 @@
 
   const { form, errors, enhance, message } = superForm(data.form, {
     taintedMessage: null,
-    validators: {
-      tags: (tag) =>
-        tag.length < 2 ? 'Tag must be at least 2 characters' : null
-    }
+    validators: superformClient({
+      tags: (tag?) => (!tag || tag.length < 2 ? 'Tag must be at least 2 characters' : null)
+    })
   });
 
   async function addTag() {
     if (!newTag) return;
+    if (!$form.tags) $form.tags = [];
     $form.tags = [...$form.tags, newTag];
     await tick();
     setTimeout(() => (newTag = ''), 1);
@@ -50,8 +51,7 @@
       name="tags"
       bind:value={$form.tags[i]}
       data-invalid={$errors.tags?.[i]} />
-    {#if $errors.tags?.[i]}<span class="text-red-500">{$errors.tags[i]}</span
-      >{/if}
+    {#if $errors.tags?.[i]}<span class="text-red-500">{$errors.tags[i]}</span>{/if}
   {/each}
 
   <input
