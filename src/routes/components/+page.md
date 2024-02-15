@@ -225,7 +225,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
     type FormPathLeaves 
   } from 'sveltekit-superforms';
 
-  export let form: SuperForm<T, any>;
+  export let form: SuperForm<T>;
   export let field: FormPathLeaves<T>;
 
   const { value, errors, constraints } = formFieldProxy(form, field);
@@ -260,8 +260,7 @@ Because our component is generic, `value` returned from `formFieldProxy` can't b
   // ... other imports and props
 
   const { value, errors, constraints } = formFieldProxy(form, field);
-
-  $: boolValue = value as Writable<boolean>;
+  const boolValue = value as Writable<boolean>;
 </script>
 
 <input

@@ -207,7 +207,7 @@ export type Message = {
   text: string;
 };
 
-// If no strongly type message is required, set M to any
+// If no strongly type message is needed, leave out the M type parameter
 export function mySuperForm<T extends Record<string, unknown>, M = Message>(
   ...params: Parameters<typeof superForm<T, M>>
 ) {
