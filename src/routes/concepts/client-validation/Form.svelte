@@ -17,7 +17,7 @@
 
   const { form, errors, enhance, message } = superForm(data.form, {
     taintedMessage: null,
-    validators: superformClient({
+    validators: superformClient<{ tags: string[] }>({
       tags: (tag?) => (!tag || tag.length < 2 ? 'Tag must be at least 2 characters' : null)
     })
   });
