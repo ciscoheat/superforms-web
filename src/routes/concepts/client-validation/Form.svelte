@@ -44,6 +44,7 @@
   <label for="tags" class="label">
     <span>Tags</span>
   </label>
+  <!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
   {#each $form.tags as _, i}
     <input
       class="input"
