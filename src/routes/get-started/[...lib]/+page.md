@@ -312,7 +312,7 @@ export const load = async ({ params }) => {
 
 As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is useful for backend interfaces, where the form should usually be populated based on a url like `/users/123`.
 
-> Errors will be displayed when the form is populated, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
+> Errors will be automatically displayed when the form is populated, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
 
 ### Important note about return values
 

@@ -49,6 +49,7 @@ Instead of a Zod schema, you now use an adapter for your favorite validation lib
 | Joi      | `import { joi } from 'sveltekit-superforms/adapters'`     | No  |
 | TypeBox  | `import { typebox } from 'sveltekit-superforms/adapters'` | No  |
 | Valibot  | `import { valibot } from 'sveltekit-superforms/adapters'` | No  |
+| VineJS   | `import { vine } from 'sveltekit-superforms/adapters'`    | Yes |
 | Yup      | `import { yup } from 'sveltekit-superforms/adapters'`     | No  |
 | Zod      | `import { zod } from 'sveltekit-superforms/adapters'`     | No  |
 
