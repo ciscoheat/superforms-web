@@ -30,9 +30,9 @@ Click [here to get started](/get-started) right away, or watch this video for an
 
 <Youtube id="MiKzH3kcVfs" />
 
-<br><br>
+<br><br><br>
 
 <div class="flex flex-col items-center">
-  <div class="text-gray-500">Browser testing by</div>
-  <a href="https://bugbug.io/"><img class="w-36 m-0 p-0 mt-4" src={bugbug}></a>
+  <div class="text-gray-500 mb-4">Browser testing by</div>
+  <a href="https://bugbug.io/"><img class="w-36 m-0 p-0" src={bugbug}></a>
 </div>
