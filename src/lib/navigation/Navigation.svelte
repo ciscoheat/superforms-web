@@ -6,6 +6,7 @@
   import { concepts } from './sections';
   import skeleton from '$lib/assets/skeleton.svg?raw';
   import mdsvex from '$lib/assets/mdsvex.svg?raw';
+  import bugbug from '$lib/assets/bugbug.svg?raw';
   import SearchButton from '../../routes/SearchButton.svelte';
 
   const drawerStore = getDrawerStore();
@@ -65,18 +66,25 @@
     <li><A href="/rate-limiting">Rate limiting</A></li>
   </ul>
 
-  <div class="p-4 text-gray-600">
+  <div class="p-4 text-gray-500">
     <hr class="mb-2 mt-5" />
     Built with<br />
     <a
       href="https://www.skeleton.dev/"
       target="_blank"
-      class="mt-1 !p-0 text-gray-400 hover:!bg-transparent hover:text-gray-300">{@html skeleton}</a>
+      class="mt-1 !p-0 text-gray-400 hover:!bg-transparent hover:text-gray-300 focus:bg-transparent"
+      >{@html skeleton}</a>
     <a
       href="https://mdsvex.com/"
       target="_blank"
-      class="mt-0 w-20 !p-0 text-gray-400 hover:!bg-transparent hover:text-gray-300"
+      class="mt-1 w-20 !p-0 text-gray-400 hover:!bg-transparent hover:text-gray-300 focus:bg-transparent"
       >{@html mdsvex}</a>
+
+    <a
+      href="https://bugbug.io/"
+      target="_blank"
+      class="mt-2 w-24 !p-0 hover:!bg-transparent hover:text-gray-300 focus:bg-transparent"
+      >{@html bugbug}</a>
   </div>
 </nav>
 

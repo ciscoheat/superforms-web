@@ -5,6 +5,7 @@
 	import Gallery from './Gallery.svelte'
   import Libraries from './Libraries.svelte'
   import ReleaseV2 from './ReleaseV2.svelte'
+  import bugbug from '$lib/assets/bugbug-yellow.svg'
 </script>
 
 <Head title="Superforms for SvelteKit" />
@@ -30,3 +31,8 @@ Click [here to get started](/get-started) right away, or watch this video for an
 <Youtube id="MiKzH3kcVfs" />
 
 <br><br>
+
+<div class="flex flex-col items-center">
+  <div class="text-gray-500">Browser testing by</div>
+  <a href="https://bugbug.io/"><img class="w-36 m-0 p-0 mt-4" src={bugbug}></a>
+</div>
