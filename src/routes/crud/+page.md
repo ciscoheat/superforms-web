@@ -5,7 +5,7 @@
 
 # Designing a CRUD interface
 
-<Head title="CRUD tutorial" />
+<Head title="CRUD tutorial for Superforms" />
 
 An excellent use case for Superforms is a backend interface, commonly used as in the acronym **CRUD** (Create, Read, Update, Delete):
 
@@ -28,13 +28,13 @@ To follow along, there are three ways:
 
 ### Video tutorial
 
-Instead of the text version below, here's the video version (using version 1 of Superforms, but the differences are small).
+Instead of the text version below, here's the video version. It's using version 1 of Superforms, but the differences are small; use an adapter and add `resetForm: false` to the options.
 
 <Youtube id="nN72awrXsHE" />
 
 ### Stackblitz
 
-The code is available on [Stackblitz](https://stackblitz.com/edit/sveltekit-superforms-1-crud?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte); just click the link, and you're up and running in the browser in 15 seconds!
+The code is available [on Stackblitz](https://stackblitz.com/edit/superforms-2-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts). Just click the link, and you're up and running in the browser in less than 30 seconds!
 
 ### New SvelteKit project
 
@@ -51,9 +51,7 @@ pnpm create svelte@latest
 Select **Skeleton project** and **Typescript syntax** at the prompts, the rest is up to you. Then add this to `<head>` in **src/app.html** for a much nicer visual experience:
 
 ```html
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/normalize.css@8.0.1/normalize.css" />
+<link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.1/normalize.css" />
 <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" />
 ```
 
@@ -92,8 +90,6 @@ export const users: UserDB = [
   }
 ];
 ```
-
-This mock database in the shape of an array will be helpful for testing our CRUD operations.
 
 ## Form vs. database schemas
 
@@ -151,7 +147,7 @@ Now that we have loaded the data, let's display it in a page component:
 <script lang="ts">
   import type { PageData } from './$types';
   import { page } from '$app/stores';
-  import { superForm } from 'sveltekit-superforms/client';
+  import { superForm } from 'sveltekit-superforms';
 
   export let data: PageData;
 
@@ -379,6 +375,6 @@ And some styling for everything at the end:
 </style>
 ```
 
-That's it! Thank you for following along, the code is [available here](https://stackblitz.com/edit/superforms-2-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte) on Stackblitz.
+That's it! Thank you for following along, the code is [available here](https://stackblitz.com/edit/superforms-2-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts) on Stackblitz.
 
 If you have any questions, see the [help & support](/support) page.
