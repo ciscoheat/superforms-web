@@ -141,10 +141,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>Superforms for SvelteKit</title>
-</svelte:head>
-
 <svelte:window on:keydown|stopPropagation={onWindowKeydown} />
 
 <Modal components={modalRegistry} />

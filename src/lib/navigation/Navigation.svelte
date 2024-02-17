@@ -83,7 +83,7 @@
     <a
       href="https://bugbug.io/"
       target="_blank"
-      class="mt-2 w-24 !p-0 hover:!bg-transparent hover:text-gray-300 focus:bg-transparent"
+      class="mt-3 w-24 !p-0 hover:!bg-transparent hover:text-gray-300 focus:bg-transparent"
       >{@html bugbug}</a>
   </div>
 </nav>

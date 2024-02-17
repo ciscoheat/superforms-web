@@ -11,7 +11,7 @@
 
 # Loading timers
 
-<Head title="Timers" />
+<Head title="Timers for loading spinners" />
 
 It's important that users understand that things are happening when they submit a form. Loading timers can be used to provide feedback when there is a server response delay, for example by displaying a loading spinner icon.
 

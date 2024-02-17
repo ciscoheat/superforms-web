@@ -8,7 +8,7 @@
   import bugbug from '$lib/assets/bugbug-yellow.svg'
 </script>
 
-<Head title="Superforms for SvelteKit" />
+<Head />
 
 <ReleaseV2 />
 
