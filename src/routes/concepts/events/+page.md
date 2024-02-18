@@ -3,10 +3,10 @@
   import Form from './Form.svelte'
   import Next from '$lib/Next.svelte'
   import Flowchart from './Flowchart.svelte'
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
 
-	export let data;
+  export let data;
 </script>
 
 # Events
@@ -35,22 +35,62 @@ const { form, enhance } = superForm(data.form, {
 })
 ```
 
-### onSubmit
+## onSubmit
 
 ```ts
 onSubmit: ({
-  action,
-  formData,
-  formElement,
-  controller,
-  submitter,
-  cancel
+  action, formData, formElement, controller, submitter, cancel,
+  jsonData, validators
 }) => void;
 ```
 
-The `onSubmit` event is the first one triggered, being essentially the same as SvelteKit's own `use:enhance` function. It gives you a chance to cancel the submission altogether. See the SvelteKit docs for the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature.
+The `onSubmit` event is the first one triggered, being essentially the same as SvelteKit's own `use:enhance` function. It gives you a chance to cancel the submission altogether. See the SvelteKit docs for most of the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature. There are two extra properties in the Superforms `onSubmit` event:
 
-### onResult
+#### jsonData
+
+If you're using [nested data](/concepts/nested-data), the `formData` property cannot be used to modify the posted data, since `$form` is serialized and posted instead. If you want to post something else than `$form`, you can do it with the `jsonData` function:
+
+```ts
+import { superForm, type FormPath } from 'sveltekit-superforms'
+
+const { form, enhance, isTainted } = superForm(data.form, {
+  dataType: 'json',
+  onSubmit({ jsonData }) {
+    // Only post tainted (top-level) fields
+    const taintedData = Object.fromEntries(
+      Object.entries($form).filter(([key]) => {
+        return isTainted(key as FormPath<typeof $form>)
+      })
+    )
+    // Set data to be posted
+    jsonData(taintedData);
+  }
+});
+```
+
+Note that if [client-side validation](/concepts/client-validation) is enabled, it's always `$form` that will be validated. Only if it passes validation, the data sent with `jsonData` will be used. It does not work in [SPA mode](/concepts/spa) either, as data transformation can be handled in `onUpdate` in that case.
+
+#### validators
+
+For advanced validation, you can change client-side validators for the current form submission with this function.
+
+```ts
+import { superForm } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { customSchema } from './schemas.js';
+
+let step = 1;
+const lastStep = 5;
+
+const { form, enhance } = superForm(data.form, {
+  onSubmit({ validators }) {
+    if(step == 1) validators(zod(customSchema));
+    else if(step == lastStep) validators(false);
+  }
+});
+```
+
+## onResult
 
 ```ts
 onResult: ({ result, formElement, cancel }) => void
@@ -103,7 +143,7 @@ Usually, you check the ActionResult status in `onResult`, not the form validatio
 </script>
 ```
 
-### onUpdate
+## onUpdate
 
 ```ts
 onUpdate: ({ form, formElement, cancel }) => void
@@ -115,7 +155,7 @@ The `onUpdate` event is triggered right before the form update is being applied,
 
 When you don't need to modify or cancel the validation result, the last event is the most convenient to use:
 
-### onUpdated
+## onUpdated
 
 ```ts
 onUpdated: ({ form }) => void
@@ -139,7 +179,7 @@ const { form, enhance } = superForm(data.form, {
 });
 ```
 
-### onError
+## onError
 
 ```ts
 onError: (({ result }) => void) | 'apply'
@@ -163,7 +203,7 @@ You can also set `onError` to the string value `'apply'`, in which case the Svel
 
 ## Non-submit events 
 
-### onChange
+## onChange
 
 The `onChange` event is not triggered when submitting, but every time `$form` is modified, both as a html event (when modified with `bind:value`) and programmatically (direct assignment to `$form`). 
 

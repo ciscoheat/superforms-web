@@ -318,7 +318,10 @@ type FormOptions<T, M, In> = Partial<{
 
   // Events
   onSubmit: (
-    ...params: Parameters<SubmitFunction>
+    submit: Parameters<SubmitFunction> & { 
+      jsonData: (data: Record<string, unknown>) => void,
+      validators: (validators: ValidationAdapter<Partial<T>, Record<string, unknown>> | false) => void
+    }
   ) => MaybePromise<unknown | void>;
   onResult: (event: {
     result: ActionResult;

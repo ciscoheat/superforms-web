@@ -28,9 +28,9 @@ By simply setting `dataType` to `'json'`, you can store any data structure allow
 
 You don't even have to set a name on the form fields anymore, since the actual data in `$form` is now posted, not the input fields in the HTML. They are now simply UI components for modifying a data model ([as they should be](https://blog.encodeart.dev/rediscovering-mvc)).
 
-> When `dataType` is set to `'json'`, the `onSubmit` event will contain `FormData`, but it cannot be used to modify the posted data. You need to set or update `$form`.<br><br>It also means that the `disabled` attribute, which normally prevents input fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
+> When `dataType` is set to `'json'`, the `onSubmit` event will contain `FormData`, but it cannot be used to modify the posted data. You need to set or update `$form`, or in special cases, use [jsonData in onSubmit](/concepts/events#jsondata).<br><br>This also means that the `disabled` attribute, which normally prevents input fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
 
-Modifying the `form` store programmatically is easy, you can either assign `$form.field = ...` directly, which will taint the affected fields, or if you don't want to taint anything, you can use `form.update` with an extra option:
+Modifying the `form` store programmatically is easy, you can either assign `$form.field = ...` directly, which will taint the affected fields. If you want to prevent the form from being tainted, you can use `form.update` with an extra option:
 
 ```ts
 form.update(
