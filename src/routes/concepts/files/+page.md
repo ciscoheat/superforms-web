@@ -39,6 +39,7 @@ export const actions = {
     // TODO: Do something with the image
     console.log(form.data.image);
 
+    // See note about withFiles further down
     return withFiles({ form });
   }
 };
@@ -139,7 +140,7 @@ const form = await superValidate(formData, zod(schema));
 
 ```
 
-## Form action caveat
+## Form action caveat - withFiles
 
 There's one important thing to be aware of: Because file objects cannot be serialized, you must use a `withFiles` helper function when you return a form containing files:
 
@@ -158,7 +159,7 @@ return message(form, 'Posted OK!');
 return setError(form, 'image', 'Could not process file.');
 ```
 
-This will remove the file objects from the form data before returning it, so SvelteKit can serialize it properly.
+This will remove the file objects from the form data before returning, so SvelteKit can serialize it properly.
 
 ## Validating files manually
 
