@@ -691,7 +691,7 @@ A proxy for a [HTML date field](https://developer.mozilla.org/en-US/docs/Web/HTM
 ```svelte
 <script lang="ts">
   import { superForm, dateProxy } from 'sveltekit-superforms';
-  import type { PageData } from './$types';
+  import type { PageData } from './$types.js';
 
   export let data: PageData;
 

@@ -32,7 +32,7 @@ It can then be accessed in `PageData` in `+page.svelte`:
 
 ```svelte
 <script lang="ts">
-  import type { PageData } from './$types';
+  import type { PageData } from './$types.js';
   export let data: PageData;
 
   const { form, errors, enhance } = superForm(data.loginForm);
@@ -62,7 +62,7 @@ export const actions = {
 
 ```svelte
 <script lang="ts">
-  import type { PageData, ActionData } from './$types';
+  import type { PageData, ActionData } from './$types.js';
   import { superForm } from 'sveltekit-superforms/client'
 
   export let data: PageData;

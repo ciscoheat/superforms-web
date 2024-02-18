@@ -194,7 +194,7 @@ The solution is to use a `formFieldProxy`, which is a helper function for produc
 
 ```svelte
 <script lang="ts">
-  import type { PageData } from './$types';
+  import type { PageData } from './$types.js';
   import { superForm, formFieldProxy } from 'sveltekit-superforms/client';
 
   export let data: PageData;

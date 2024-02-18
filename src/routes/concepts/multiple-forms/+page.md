@@ -84,7 +84,7 @@ The code above uses [named form actions](https://kit.svelte.dev/docs/form-action
 ```svelte
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
-  import type { PageData } from './$types';
+  import type { PageData } from './$types.js';
 
   export let data: PageData;
 
@@ -157,7 +157,7 @@ Multiple forms also work without `use:enhance`, though in this case you must add
 ```svelte
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
-  import type { PageData } from './$types';
+  import type { PageData } from './$types.js';
 
   export let data: PageData;
 

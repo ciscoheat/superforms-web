@@ -86,7 +86,7 @@ Usually, you check the ActionResult status in `onResult`, not the form validatio
 ```svelte
 <script lang="ts">
   import { superForm, type FormResult } from 'sveltekit-superforms';
-  import type { ActionData } from './$types';
+  import type { ActionData } from './$types.js';
 
   export let data;
 
