@@ -71,7 +71,7 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
 ```svelte
 <script lang="ts">
   import { superForm, setMessage, setError } from 'sveltekit-superforms/client';
-  import { _userSchema } from './+page';
+  import { _userSchema } from './+page.js';
 
   export let data;
 

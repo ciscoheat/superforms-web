@@ -93,7 +93,7 @@ The client-side validation is using the smallest possible part of the adapter, t
 
 ```ts
 import { valibotClient } from 'sveltekit-superforms/adapters';
-import { schema } from './schema';
+import { schema } from './schema.js';
 
 const { form, errors, enhance, options } = superForm(data.form, {
   validators: valibotClient(schema)
@@ -106,7 +106,7 @@ The built-in Superforms validator is now deprecated, since it requires you to do
 
 ```ts
 import type { Infer } from 'sveltekit-superforms';
-import type { schema } from './schema';
+import type { schema } from './schema.js';
 import { superformClient } from 'sveltekit-superforms/adapters';
 
 const { form, errors, enhance } = superForm(data.form, {
@@ -127,7 +127,7 @@ If you have used type parameters for a call to `superValidate` before, or have b
 ```ts
 import type { Infer } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
-import { schema } from './schema'
+import { schema } from './schema.js'
 
 type Message = { status: 'success' | 'failure', text: string }
 
@@ -146,7 +146,7 @@ If your schema uses transformations or pipes, so the input and output types are 
 ```ts
 import type { Infer, InferIn } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
-import { schema } from './schema'
+import { schema } from './schema.js'
 
 type Message = { status: 'success' | 'failure', text: string }
 type Validated = SuperValidated<Infer<typeof schema>, Message, InferIn<typeof schema>>;

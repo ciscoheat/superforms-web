@@ -75,7 +75,7 @@ export const schema = z.object({
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms'
   import { zodClient } from 'sveltekit-superforms/adapters'
-  import { schema } from './schema'
+  import { schema } from './schema.js'
 
   export let data;
 
@@ -115,7 +115,7 @@ const form = await superValidate(formData, zod(schema));
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms'
   import { zodClient } from 'sveltekit-superforms/adapters'
-  import { schema } from './schema'
+  import { schema } from './schema.js'
 
   export let data;
 
