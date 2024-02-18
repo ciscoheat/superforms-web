@@ -7,6 +7,7 @@
   import saturnonearth from './img/saturnonearth.jpg';
   import huntabyte from './img/huntabyte.jpg';
   import jitpackjoyride from './img/jitpackjoyride.jpg';
+  import sillvva from './img/sillvva.jpg';
 
   const sponsors = [
     [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
@@ -15,7 +16,8 @@
     [bradenw, 'Braden Wong', 'https://github.com/braden-w'],
     [saturnonearth, 'Cory Tyburski', 'https://github.com/saturnonearth'],
     [huntabyte, 'Hunter Johnston', 'https://github.com/huntabyte'],
-    [jitpackjoyride, 'Ajit Krishna', 'https://github.com/JitPackJoyride']
+    [jitpackjoyride, 'Ajit Krishna', 'https://github.com/JitPackJoyride'],
+    [sillvva, 'Matt DeKok', 'https://github.com/sillvva']
   ];
 </script>
 
