@@ -16,15 +16,16 @@ import { superValidate, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
-export const schema = z.object({
+const schema = z.object({
   image: z
     .custom<File>((f) => f instanceof File, 'Please upload a file.')
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
 });
 
 export const load = async () => {
-  const form = await superValidate(user, zod(schema));
-  return { form };
+  return { 
+    form: await superValidate(zod(schema))
+  }
 };
 
 export const actions = {
