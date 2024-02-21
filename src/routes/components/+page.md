@@ -158,6 +158,9 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 
 This is a bit better and will certainly help when the components require some styling, but there are still plenty of attributes. Can we do even better?
 
+> Things will get a bit advanced from here, so an alternative is to use the [Formsnap](/formsnap) library, which simplifies componentization a lot.
+
+
 ### Using a fieldProxy
 
 You may have used [proxy objects](/concepts/proxy-objects) for converting an input field string like `"2023-04-12"` into a `Date`, but that's a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:

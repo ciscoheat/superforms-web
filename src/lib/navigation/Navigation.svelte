@@ -63,6 +63,7 @@
     <li><A href="/examples">Examples</A></li>
     <li><A href="/faq">FAQ</A></li>
     <li><A href="/flash-messages">Flash messages</A></li>
+    <li><A href="/formsnap">Formsnap</A></li>
     <li><A href="/rate-limiting">Rate limiting</A></li>
   </ul>
 
