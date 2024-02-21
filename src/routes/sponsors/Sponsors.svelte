@@ -8,6 +8,7 @@
   import huntabyte from './img/huntabyte.jpg';
   import jitpackjoyride from './img/jitpackjoyride.jpg';
   import sillvva from './img/sillvva.jpg';
+  import bugbug from './img/bugbug.png';
 
   const sponsors = [
     [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
@@ -17,14 +18,15 @@
     [saturnonearth, 'Cory Tyburski', 'https://github.com/saturnonearth'],
     [huntabyte, 'Hunter Johnston', 'https://github.com/huntabyte'],
     [jitpackjoyride, 'Ajit Krishna', 'https://github.com/JitPackJoyride'],
-    [sillvva, 'Matt DeKok', 'https://github.com/sillvva']
+    [sillvva, 'Matt DeKok', 'https://github.com/sillvva'],
+    [bugbug, 'bugbug.io', 'https://bugbug.io']
   ];
 </script>
 
 <div class="sponsors">
   {#each sponsors as sponsor}
     <div>
-      <a href={sponsor[2]}>
+      <a href={sponsor[2]} target="_blank">
         <Avatar
           src={sponsor[0]}
           background="transparent"
