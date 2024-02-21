@@ -381,16 +381,28 @@ type FormOptions<T, M, In> = Partial<{
   };
 }>;
 
-type ChangeEvent =
-	{
-    path: string;
-    paths: string[];
-    formElement: HTMLFormElement;
-    target: Element;
-	} | {
-    target: undefined;
-    paths: string[];
-  };
+type ChangeEvent<T> =
+{
+  path: FormPath<T>;
+  paths: FormPath<T>[];
+  formElement: HTMLFormElement;
+  target: Element;
+  set: <Path extends FormPath<T>>(
+    path: Path,
+    value: FormPathType<T, Path>,
+    options?: { taint?: boolean | 'untaint' | 'untaint-form' }
+  ) => void;
+  get: <Path extends FormPath<T>>(path: Path) => FormPathType<T, Path>;
+} | {
+  target: undefined;
+  paths: FormPath<T>[];
+  set: <Path extends FormPath<T>>(
+    path: Path,
+    value: FormPathType<T, Path>,
+    options?: { taint?: boolean | 'untaint' | 'untaint-form' }
+  ) => void;
+  get: <Path extends FormPath<T>>(path: Path) => FormPathType<T, Path>;
+};
 ```
 
 See [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) for details about the `onSubmit` arguments, and [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) for `onResult`.
@@ -398,7 +410,7 @@ See [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfuncti
 ### superForm return type
 
 ```ts
-SuperForm<T, M = any> = {
+SuperForm<T, M = any, In = T> = {
   form: {
     subscribe: (data: T) => void
     set: (value: T, options?: { taint?: boolean | 'untaint' | 'untaint-form' }) => void
@@ -425,16 +437,19 @@ SuperForm<T, M = any> = {
 
   reset: (options?: {
     keepMessage?: boolean;
-    id?: string;
     data?: Partial<T>;
+    id?: string;
   }) => void;
+
+  submit: (submitter?: HTMLElement | null) => void;
 
   capture: () => SuperFormSnapshot<T, M>;
   restore: (snapshot: SuperFormSnapshot<T, M>) => void;
 
   validateForm: (opts?: {
-    update: boolean,
-    schema: ValidationAdapter<Partial<T>>
+    update?: boolean;
+    schema?: ValidationAdapter<Partial<T>>;
+    focusOnError?: boolean;
   }) => Promise<SuperValidated<T, M, In>>;
 
   validate: (path: FormPathLeaves<T>, opts?: {
