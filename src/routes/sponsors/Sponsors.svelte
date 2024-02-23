@@ -9,6 +9,7 @@
   import jitpackjoyride from './img/jitpackjoyride.jpg';
   import sillvva from './img/sillvva.jpg';
   import bugbug from './img/bugbug.png';
+  import risk21 from './img/21risk.png';
 
   const sponsors = [
     [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
@@ -19,7 +20,8 @@
     [huntabyte, 'Hunter Johnston', 'https://github.com/huntabyte'],
     [jitpackjoyride, 'Ajit Krishna', 'https://github.com/JitPackJoyride'],
     [sillvva, 'Matt DeKok', 'https://github.com/sillvva'],
-    [bugbug, 'bugbug.io', 'https://bugbug.io']
+    [bugbug, 'bugbug.io', 'https://bugbug.io'],
+    [risk21, '21RISK', 'https://21risk.com']
   ];
 </script>
 
