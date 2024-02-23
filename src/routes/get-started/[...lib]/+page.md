@@ -78,7 +78,7 @@ const schema = type({
 ```ts
 import Joi from 'joi';
 
-const schema = z.object({
+const schema = Joi.object({
   name: Joi.string().default('Hello world!'),
   email: Joi.string().email().required()
 });
@@ -172,7 +172,7 @@ import { joi } from 'sveltekit-superforms/adapters';
 import Joi from 'joi';
 
 // Define outside the load function so the adapter can be cached
-const schema = z.object({
+const schema = Joi.object({
   name: Joi.string().default('Hello world!'),
   email: Joi.string().email().required()
 });
