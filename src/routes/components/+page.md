@@ -97,6 +97,28 @@ Use it by passing the form data from `+page.svelte` to the component, making it 
 <RegisterForm data={data.registerForm} />
 ```
 
+If your schema input and output types differ, or you have a strongly typed [status message](/concepts/messages#strongly-typed-message), you can add two additional type parameters:
+
+```svelte
+<script lang="ts">
+  import type { SuperValidated, Infer, InferIn } from 'sveltekit-superforms';
+  import { superForm } from 'sveltekit-superforms'
+  import type { LoginSchema } from '$lib/schemas';
+
+  export let data: SuperValidated<Infer<LoginSchema>, { status: number, text: string }, InferIn<LoginSchema>>;
+
+  const { form, errors, enhance, message } = superForm(data);
+</script>
+
+{#if $message.text}
+  ...
+{/if}
+
+<form method="POST" use:enhance>
+  <!-- Business as usual -->
+</form>
+```
+
 ## Factoring out form fields
 
 Since `bind` is available on Svelte components, we can make a `TextInput` component quite easily:
@@ -223,9 +245,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 
 <script lang="ts" generics="T extends Record<string, unknown>">
   import { 
-    formFieldProxy, 
-    type SuperForm, 
-    type FormPathLeaves 
+    formFieldProxy, type SuperForm, type FormPathLeaves 
   } from 'sveltekit-superforms';
 
   export let form: SuperForm<T>;
@@ -251,32 +271,42 @@ The Svelte syntax requires `Record<string, unknown>` to be defined before its us
 
 > The `FormPathLeaves` type prevents using a field that isn't at the end of the schema (the "leaves" of the schema tree). This means that arrays and objects cannot be used in `formFieldProxy`. Array-level errors are handled [like this](/concepts/error-handling#form-level-and-array-errors).
 
-## A minor issue: Checkboxes
+## Type narrowing for paths
 
-A workaround is required for checkboxes, since they don't bind with `bind:value`, rather with `bind:checked`, which requires a `boolean`.
+Checkboxes don't bind with `bind:value` but with `bind:checked`, which requires a `boolean`.
 
-Because our component is generic, `value` returned from `formFieldProxy` can't be `boolean` specifically, so we need to make a specific checkbox component to use it, or cast it with a dynamic declaration:
+Because our component is generic, `value` returned from `formFieldProxy` is unknown, but we need a `boolean` here. Then we can add a type parameter to `FormPathLeaves` to narrow it down to a specific type, and use the [satisfies](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator) operator to specify the type:
 
 ```svelte
-<script lang="ts">
-  import type { Writable } from 'svelte/store';
-  // ... other imports and props
+<script lang="ts" context="module">
+  type T = Record<string, unknown>;
+</script>
 
-  const { value, errors, constraints } = formFieldProxy(form, field);
-  const boolValue = value as Writable<boolean>;
+<script lang="ts" generics="T extends Record<string, unknown>">
+  import { 
+    formFieldProxy, type FormFieldProxy,
+    type SuperForm, type FormPathLeaves
+  } from 'sveltekit-superforms';
+
+  export let form: SuperForm<T>;
+  export let field: FormPathLeaves<T, boolean>;
+
+  const { value, errors, constraints } = formFieldProxy(form, field) satisfies FormFieldProxy<boolean>;
 </script>
 
 <input
   name={field}
   type="checkbox"
   class="checkbox"
-  bind:checked={$boolValue}
+  bind:checked={$value}
   {...$constraints}
   {...$$restProps} 
 />
 ```
 
-Checkboxes, especially grouped ones, can be tricky to handle. Read the Svelte tutorial about [bind:group](https://svelte.dev/tutorial/group-inputs), and see the [Ice cream example](https://stackblitz.com/edit/sveltekit-superforms-group-inputs?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) on Stackblitz if you're having trouble with it.
+This will also narrow the `field` prop, so only `boolean` fields in the schema can be selected when using the component.
+
+Checkboxes, especially grouped ones, can be tricky to handle. Read the Svelte tutorial about [bind:group](https://svelte.dev/tutorial/group-inputs), and see the [Ice cream example](https://stackblitz.com/edit/superforms-2-group-inputs?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) on Stackblitz if you're having trouble with it.
 
 ## Using the componentized field in awesome ways
 

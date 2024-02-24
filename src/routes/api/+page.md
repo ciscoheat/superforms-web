@@ -302,7 +302,7 @@ type FormOptions<T, M, In> = Partial<{
   // Basics
   id: string;
   applyAction: boolean;
-  invalidateAll: boolean;
+  invalidateAll: boolean | 'force';
   resetForm: boolean | (() => boolean);
   taintedMessage: boolean | string | (() => Promise<boolean>);
   dataType: 'form' | 'json';

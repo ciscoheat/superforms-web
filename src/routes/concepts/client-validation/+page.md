@@ -102,7 +102,7 @@ const { form, errors, enhance } = superForm(data.form, {
 });
 ```
 
-> This works only with the same schema as the one used on the server. If you need to switch schemas on the client, you need the full adapter.
+> This works only with the same schema as the one used on the server. If you need to switch schemas on the client, you need the full adapter (for example `zod` instead of `zodClient`).
 
 As a super-simple alternative to an adapter, you can also set the option to `'clear'`, to remove errors for a field as soon as it's modified.
 

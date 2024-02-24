@@ -32,7 +32,7 @@ The default `use:enhance` behavior can be modified, there are three options avai
 ```ts
 const { form, enhance, reset } = superForm(data.form, {
   applyAction: true,
-  invalidateAll: true,
+  invalidateAll: true | 'force',
   resetForm: true
 });
 ```
@@ -46,6 +46,10 @@ Turning this behavior off can be useful when you want to isolate the form from o
 ### invalidateAll
 
 When `invalidateAll` is `true` (the default) and a successful validation result is returned from the server, the page will be invalidated and the load functions will run again. A login form takes advantage of this to update user information on the page, but the default setting may cause problems with [multiple forms on the same page](/concepts/multiple-forms), since the load function will reload the data for all forms defined there.
+
+#### Optimistic updates
+
+There can be a conflict between the data returned in the form action and the new data from the load function. The form action data is "optimistic", meaning that what's returned will be displayed, assuming that all data was supposed to be updated. But if you update the form partially, the form data will be out of sync with the load function data, in which case you may want to wait for the load function data. This can be achieved with by setting `invalidateAll: 'force'`. Now the load function data will be prioritized, and the `reset` function will also use the latest load function data when called.
 
 ### resetForm
 
