@@ -46,7 +46,7 @@ export const actions = {
 };
 ```
 
-> The field has to be `nullable`, as that is the default value for empty files. If you want the upload to be optional, set the field to `nullish`, to allow `undefined` as well.
+> The file field has to be `nullable`, as that is the default value for empty files. If you want the upload to be optional, set the field to `nullish`, to allow `undefined` as well.
 
 Then you need a form with the proper [enctype](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype) value on the form, and a file input field:
 
@@ -63,7 +63,7 @@ The examples show how to add file validation even on the client, with an `on:inp
 
 ### Single file input
 
-In this case, the image field needs to be nullable to satisfy the compiler, but empty files will be set to `undefined` when posted, so it will work. (If you want the upload to be optional, set the field to `nullish`.)
+As mentioned before, the field needs to be nullable. If you want the upload to be optional, set the field to `nullish`.
 
 ```ts
 export const schema = z.object({
