@@ -20,6 +20,7 @@ const schema = z.object({
   image: z
     .instanceof(File, { message: 'Please upload a file.'})
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+    .nullable()
 });
 
 export const load = async () => {
@@ -45,7 +46,7 @@ export const actions = {
 };
 ```
 
-(Let me know if you have an example with other validation libraries.)
+> The field has to be `nullable`, as that is the default value for empty files. If you want the upload to be optional, set the field to `nullish`, to allow `undefined` as well.
 
 Then you need a form with the proper [enctype](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype) value on the form, and a file input field:
 
