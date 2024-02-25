@@ -18,7 +18,7 @@ import { z } from 'zod';
 
 const schema = z.object({
   image: z
-    .custom<File>((f) => f instanceof File, 'Please upload a file.')
+    .instanceof(File, { message: 'Please upload a file.'})
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
 });
 
@@ -62,12 +62,12 @@ The examples show how to add file validation even on the client, with an `on:inp
 
 ### Single file input
 
-In this case, the image field needs to be nullable to satisfy the compiler, but it won't pass the `custom` check if null, so it doesn't matter:
+In this case, the image field needs to be nullable to satisfy the compiler, but empty files will be set to `undefined` when posted, so it will work. (If you want the upload to be optional, set the field to `nullish`.)
 
 ```ts
 export const schema = z.object({
   image: z
-    .custom<File>((f) => f instanceof File, 'Please upload a file.')
+    .instanceof(File, { message: 'Please upload a file.'})
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
     .nullable()
 });
@@ -105,7 +105,7 @@ We need an array to validate multiple files:
 ```ts
 const schema = z.object({
   images: z
-    .custom<File>((f) => f instanceof File, 'Please upload a file.')
+    .instanceof(File, { message: 'Please upload a file.'})
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
     .array()
 });
