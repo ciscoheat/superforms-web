@@ -13,6 +13,7 @@ If you have gone through the Concepts section of this site, maybe you want to te
 For experimenting, bug reporting, or more advanced support questions.
 
 - [Valibot](https://stackblitz.com/edit/superforms-2-testing-valibot?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte)
+- [Yup](https://stackblitz.com/edit/superforms-2-testing-yup?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte)
 - [Zod](https://stackblitz.com/edit/superforms-2-testing?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte)
 
 ## Multi-step forms
