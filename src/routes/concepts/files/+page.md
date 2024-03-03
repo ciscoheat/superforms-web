@@ -86,14 +86,14 @@ export const schema = z.object({
     type="file"
     name="image"
     accept="image/png, image/jpeg"
-    on:input={(e) => ($form.image = e.currentTarget.files?.item(0) ?? null)}
+    on:input={(e) => ($form.image = e.currentTarget.files?.item(0) as File)}
   />
   {#if $errors.image}<span>{$errors.image}</span>{/if}
   <button>Submit</button>
 </form>
 ```
 
-> To satisfy the compiler the field has to be `nullable`, as that is the default empty value, but then a non-existing file could pass through, so you may have to ignore that error in the component. If you want the file to be optional, set the field to `nullish` to allow `undefined` as well.
+> The `as File` casting is needed since `null` is the value for "no file", so be aware that `$form.image` may be `null` even though the schema type says otherwise. If you want the upload to be optional, set the field to `optional`.
 
 ### Multiple files
 
