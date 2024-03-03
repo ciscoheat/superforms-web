@@ -48,9 +48,9 @@
     max-height: 128px;
     margin: 0;
 
-    @media screen and (max-width: 768px) {
-      max-width: 96px;
-      max-height: 96px;
+    @media screen and (max-width: 861px) {
+      max-width: 66px;
+      max-height: 66px;
     }
   }
 
