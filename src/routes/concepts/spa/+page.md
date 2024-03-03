@@ -12,7 +12,7 @@
 
 # Single-page applications (SPA)
 
-It's possible to use the whole Superforms library on the client in single page applications. A SPA is easy to create with SvelteKit, [fully documented here](https://kit.svelte.dev/docs/single-page-apps).
+It's possible to use the whole Superforms library on the client in single page applications. A SPA is easy to create with SvelteKit, [documented here](https://kit.svelte.dev/docs/single-page-apps).
 
 ## Usage
 
@@ -23,7 +23,7 @@ const { form, enhance } = superForm(data, {
 })
 ```
 
-By setting the `SPA` option to `true`, the form won't be sent to the server when submitted. Instead, the client-side [validators](/concepts/client-validation#validators) option will determine the success or failure of the form, which will trigger the [event chain](/concepts/events), and the validation result will be most conveniently used in the [onUpdate](/concepts/events#onupdate) event, for example by calling an external API.
+By setting the `SPA` option to `true`, the form won't be sent to the server when submitted. Instead, the client-side [validators](/concepts/client-validation#validators) option will determine if the form is valid, and you can then use the [onUpdate](/concepts/events#onupdate) event as a submit handler, for example to call an external API with the form data.
 
 > Remember that the Superforms [use:enhance](/concepts/enhance) must be added to the form for SPA to work.
 
@@ -35,7 +35,7 @@ Since SPA pages don't have a server representation, you can use [+page.ts](https
 
 ```ts
 import { error } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/client';
+import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
@@ -70,8 +70,9 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
 
 ```svelte
 <script lang="ts">
-  import { superForm, setMessage, setError } from 'sveltekit-superforms/client';
+  import { superForm, setMessage, setError } from 'sveltekit-superforms';
   import { _userSchema } from './+page.js';
+  import { zod } from 'sveltekit-superforms/adapters';
 
   export let data;
 
@@ -79,7 +80,7 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
     data.form,
     {
       SPA: true,
-      validators: _userSchema,
+      validators: zod(_userSchema),
       onUpdate({ form }) {
         // Form validation
         if (form.data.email.includes('spam')) {
@@ -140,7 +141,7 @@ Since you can't use top-level await in Svelte components, you can't use `superVa
     validators: zod(loginSchema),
     onUpdate({ form }) {
       if (form.valid) {
-        // TODO: Do something with the validated form.data
+        // TODO: Call an external API with form.data, await the result and update form
       }
     }
   });
