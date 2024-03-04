@@ -93,7 +93,7 @@ export const schema = z.object({
 </form>
 ```
 
-> The `as File` casting is needed since `null` is the value for "no file", so be aware that `$form.image` may be `null` even though the schema type says otherwise. If you want the upload to be optional, set the field to `optional`.
+> The `as File` casting is needed since `null` is the value for "no file", so be aware that `$form.image` may be `null` even though the schema type says otherwise. If you want the upload to be optional, set the field to `nullable` and it will be type-safe.
 
 ### Multiple files
 
