@@ -12,7 +12,7 @@
 
 # Single-page applications (SPA)
 
-It's possible to use the whole Superforms library on the client in single page applications. A SPA is easy to create with SvelteKit, [documented here](https://kit.svelte.dev/docs/single-page-apps).
+It's possible to use the whole Superforms library on the client, for example in single page applications or when you want to call an external API instead of the SvelteKit form actions. A SPA is easy to create with SvelteKit, [documented here](https://kit.svelte.dev/docs/single-page-apps).
 
 ## Usage
 
