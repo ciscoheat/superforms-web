@@ -334,6 +334,16 @@ Generic components were previously using Zod types for type safety. It is simple
 </form>
 ```
 
+## Update your imports, in case of problems
+
+The `/client` and `/server` paths for imports aren't needed anymore, but are kept for backwards compatibility. If you're having problems with loading pages, import everything except adapters from `sveltekit-superforms`. The same goes for `SuperDebug`, which is now the default export of the library.
+
+```ts
+import { superForm, superValidate, dateProxy } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import SuperDebug from 'sveltekit-superforms';
+```
+
 ## Removed features
 
 ### superForm.fields is removed
