@@ -11,6 +11,7 @@
   import bugbug from './img/bugbug.png';
   import risk21 from './img/21risk.png';
   import tylergaw from './img/tylergaw.jpg';
+  import knd775 from './img/knd775.jpg';
 
   const sponsors = [
     [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
@@ -23,7 +24,8 @@
     [sillvva, 'Matt DeKok', 'https://github.com/sillvva'],
     [bugbug, 'bugbug.io', 'https://bugbug.io'],
     [risk21, '21RISK', 'https://21risk.com'],
-    [tylergaw, 'Tyler Gaw', 'https://github.com/tylergaw']
+    [tylergaw, 'Tyler Gaw', 'https://github.com/tylergaw'],
+    [knd775, 'Ben Ayles', 'https://github.com/knd775']
   ];
 </script>
 
