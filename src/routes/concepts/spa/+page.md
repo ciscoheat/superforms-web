@@ -12,7 +12,7 @@
 
 # Single-page applications (SPA)
 
-It's possible to use the whole Superforms library on the client in single page applications. A SPA is easy to create with SvelteKit, [documented here](https://kit.svelte.dev/docs/single-page-apps).
+It's possible to use the whole Superforms library on the client, for example in single page applications or when you want to call an external API instead of the SvelteKit form actions. A SPA is easy to create with SvelteKit, [documented here](https://kit.svelte.dev/docs/single-page-apps).
 
 ## Usage
 
@@ -150,12 +150,12 @@ Since you can't use top-level await in Svelte components, you can't use `superVa
 
 ### With initial top-level data
 
-If you have initial data in the top level of the component, you can pass it as a first parameter to `defaults`, **but remember that it won't be validated**. There's a trick though; if you want to show errors for the initial data, you can call `validate` directly after `superForm`. The `validators` option must be set for this to work:
+If you have initial data in the top level of the component, you can pass it as a first parameter to `defaults`, **but remember that it won't be validated**. There's a trick though; if you want to show errors for the initial data, you can call `validateForm` directly after `superForm`. The `validators` option must be set for this to work:
 
 ```ts
 const initialData = { name: 'New user' };
 
-const { form, errors, enhance, validate } = superForm(
+const { form, errors, enhance, validateForm } = superForm(
   defaults(initialData, zod(loginSchema)), {
     SPA: true,
     validators: zod(loginSchema)
@@ -163,7 +163,7 @@ const { form, errors, enhance, validate } = superForm(
   }
 );
 
-validate({ update: true });
+validateForm({ update: true });
 ```
 
 ## Test it out
