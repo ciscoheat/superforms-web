@@ -383,8 +383,6 @@ In the form actions, defined in `+page.server.ts`, we'll use the `superValidate`
 
 The most common is to use `request`:
 
-**src/routes/+page.server.ts**
-
 ```ts
 import { fail } from '@sveltejs/kit';
 
@@ -420,14 +418,14 @@ Now we can post the form back to the server. Submit the form, and see what's hap
 
 This is the validation object returned from `superValidate`, containing the data needed to update the form:
 
-| Property        | Purpose                                                                                                                                                                                |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **id**          | Id for the schema, to handle [multiple forms](/concepts/multiple-forms) on the same page.                                                                                              |
-| **valid**       | Tells you whether the validation succeeded or not. Used on the server and in [events](/concepts/events).                                                                               |
-| **posted**      | Tells you if the data was posted (in a form action) or not (in a load function).                                                                                                       |
-| **data**        | The posted data, which should be returned to the client using `fail` if not valid.                                                                                                     |
-| **errors**      | An object with all validation errors, in a structure reflecting the data.                                                                                                              |
-| **message**     | (optional) Can be set as a [status message](/concepts/messages). |
+| Property        | Purpose                                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------------------- |
+| **id**          | Id for the schema, to handle [multiple forms](/concepts/multiple-forms) on the same page.                |
+| **valid**       | Tells you whether the validation succeeded or not. Used on the server and in [events](/concepts/events). |
+| **posted**      | Tells you if the data was posted (in a form action) or not (in a load function).                         |
+| **data**        | The posted data, which should be returned to the client using `fail` if not valid.                       |
+| **errors**      | An object with all validation errors, in a structure reflecting the data.                                |
+| **message**     | (optional) Can be set as a [status message](/concepts/messages).                                         |
 
 There are some other properties as well, that are only being sent in the load function:
 
