@@ -420,10 +420,10 @@ Now we can post the form back to the server. Submit the form, and see what's hap
 
 This is the validation object returned from `superValidate`, containing the data needed to update the form:
 
-| Property           | Purpose                                                                                                                                                                                |
+| Property        | Purpose                                                                                                                                                                                |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **id**          | Id for the schema, to handle [multiple forms](/concepts/multiple-forms) on the same page.                                                                                              |
-| **valid**       | Tells you whether the validation succeeded or not. Used on the server and in [events](/concepts/events).                                                                                |
+| **valid**       | Tells you whether the validation succeeded or not. Used on the server and in [events](/concepts/events).                                                                               |
 | **posted**      | Tells you if the data was posted (in a form action) or not (in a load function).                                                                                                       |
 | **data**        | The posted data, which should be returned to the client using `fail` if not valid.                                                                                                     |
 | **errors**      | An object with all validation errors, in a structure reflecting the data.                                                                                                              |
@@ -433,8 +433,8 @@ There are some other properties as well, that are only being sent in the load fu
 
 | Property           | Purpose |
 | ------------------ | ------- |
-| **constraints** | An object with [HTML validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation), that can be spread on input fields. |
-| **shape**       | Used internally in error handling. |
+| **constraints**    | An object with [HTML validation constraints](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation#using_built-in_form_validation), that can be spread on input fields. |
+| **shape**          | Used internally in error handling. |
 
 You can modify any of these, and they will be updated on the client when you `return { form }`. There are a couple of helper functions for making this more convenient, like [message](/concepts/messages) and [setError](/concepts/error-handling).
 
@@ -481,7 +481,7 @@ Now we know that validation has failed and there are errors being sent to the cl
 </style>
 ```
 
-As you see, by including `errors`, we can display errors where it's appropriate, and through `constraints` (already provided by the load function), we get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
+As you see, by including `errors`, we can display errors where it's appropriate, and through `constraints` (provided by the load function), we get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
 
 We now have a fully working form, with convenient handling of data and validation both on the client and server!
 
@@ -489,7 +489,7 @@ There are no hidden DOM manipulations or other secrets; it's just HTML attribute
 
 ### Adding progressive enhancement
 
-As a last step, let's add progressive enhancement, so the JS users will have a better experience. It's also required to use for example client-side validation and events, and of course to avoid reloading the page when the form is posted.
+As a last step, let's add progressive enhancement, so the users with JavaScript enabled will have a nicer experience. It's also required to use for example [client-side validation](/concepts/client-validation) and [events](/concepts/events), and of course to avoid reloading the page when the form is posted.
 
 This is simply done with `enhance`, returned from `superForm`:
 
