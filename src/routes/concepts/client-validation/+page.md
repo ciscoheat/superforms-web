@@ -193,9 +193,7 @@ const result2 = await validateForm({ schema: zod(partialSchema) });
 
 ## Asynchronous validation and debouncing
 
-The validation is asynchronous, but a slow validator will delay the final result, so for a server round-trip validation like checking if a username is available, you might want to exclude that field from the schema and handle it manually, with `on:input` and a package like [throttle-debounce](https://www.npmjs.com/package/throttle-debounce).
-
-Errors can also be set manually by updating the `$errors` store:
+The validation is asynchronous, but a slow validator will delay the final result, so for a server round-trip validation, like checking if a username is available, you might want to handle it with `on:input` and a package like [throttle-debounce](https://www.npmjs.com/package/throttle-debounce). Errors can be set manually by updating the `$errors` store:
 
 ```ts
 // Needs to be a string[]
