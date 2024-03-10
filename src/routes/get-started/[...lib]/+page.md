@@ -282,7 +282,9 @@ export const load = (async () => {
 });
 ```
 {:else}
-<p>*Under construction*</p>
+
+> Select a validation library at the top of the page to see the example code.
+
 {/if}
 
 The Superform server API is called `superValidate`. You can call it in two ways in the load function:
@@ -382,6 +384,8 @@ In the form actions, defined in `+page.server.ts`, we'll use the `superValidate`
 - Use `FormData` directly, if you need to access it before calling `superValidate`.
 
 The most common is to use `request`:
+
+**src/routes/+page.server.ts**
 
 ```ts
 import { fail } from '@sveltejs/kit';
