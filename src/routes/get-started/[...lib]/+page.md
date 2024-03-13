@@ -1,8 +1,9 @@
 <script lang="ts">
-  import Head from '$lib/Head.svelte'
-  import Form from './Form.svelte'
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
-  import Installer from './Installer.svelte'
+  import Head from '$lib/Head.svelte';
+  import Form from './Form.svelte';
+	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+  import Installer from './Installer.svelte';
+  import SvelteLab from './SvelteLab.svelte';
   import { getSettings } from '$lib/settings';
 
 	export let data;
@@ -41,15 +42,7 @@ yarn create svelte@latest
 ```
 {/if}
 
-{#if $settings.lib == 'valibot'}
-
-Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/superforms-2-tutorial-valibot?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser and copy the code.
-
-{:else}
-
-Alternatively, open [the Stackblitz project](https://stackblitz.com/edit/superforms-2-tutorial-zod?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) to follow along in the browser and copy the code.
-
-{/if}
+<SvelteLab lib={$settings.lib} />
 
 {#if ['', 'ajv', 'superstruct', 'n/a'].includes($settings.lib)}
 
@@ -129,7 +122,9 @@ const schema = z.object({
 });
 ```
 {:else}
-<p>*Under construction*</p>
+
+> Select a validation library at the top of the page to see the example code.
+
 {/if}
 
 #### Schema caching
@@ -314,7 +309,7 @@ export const load = async ({ params }) => {
 
 As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is useful for backend interfaces, where the form should usually be populated based on a url like `/users/123`.
 
-> Errors will be automatically displayed when the form is populated, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
+> Errors will be automatically displayed when the form is populated like this, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
 
 ### Important note about return values
 
@@ -322,7 +317,7 @@ Unless you call the SvelteKit `redirect` or `error` functions, you should **alwa
 
 ### Displaying the form
 
-The `superValidate` function returns the data required to instantiate a form on the client, now available in `+page.svelte` as `data.form`, as we did `return { form }`. There, we'll use the client part of the API:
+The `superValidate` function returns the data required to instantiate a form on the client, now available in `+page.svelte` as `data.form` (as we did a `return { form }`). There, we'll use the client part of the API:
 
 **src/routes/+page.svelte**
 
@@ -357,7 +352,7 @@ This is what the form should look like now:
 
 ### Debugging
 
-We can see that the form has been populated with the default values. But let's add the debugging component [SuperDebug](/super-debug) to gain more insight:
+We can see that the form has been populated with the default values. But let's add the debugging component [SuperDebug](/super-debug) to look behind the scenes:
 
 **src/routes/+page.svelte**
 
@@ -373,7 +368,7 @@ This should be displayed:
 
 <SuperDebug data={$form} />
 
-When editing the form fields (try in the form above), the data is automatically updated. The component also displays the current page status in the right corner.
+When editing the form fields (try in the form above), the data is automatically updated. The component also displays a copy button and the current page status in the right corner. There are many [configuration options](/super-debug) available.
 
 ### Posting data
 
@@ -388,6 +383,7 @@ The most common is to use `request`:
 **src/routes/+page.server.ts**
 
 ```ts
+import { message } from 'sveltekit-superforms';
 import { fail } from '@sveltejs/kit';
 
 export const actions = {
@@ -402,8 +398,8 @@ export const actions = {
 
     // TODO: Do something with the validated form.data
 
-    // Yep, return { form } here too
-    return { form };
+    // Display a success status message
+    return message(form, 'Form posted successfully!');
   }
 };
 ```
@@ -416,7 +412,7 @@ Now we can post the form back to the server. Submit the form, and see what's hap
   valid: false,
   posted: true,
   data: { name: 'Hello world!', email: '' },
-  errors: { email: [ 'Invalid email' ] },
+  errors: { email: [ 'Invalid email' ] }
 }
 ```
 
@@ -431,7 +427,7 @@ This is the validation object returned from `superValidate`, containing the data
 | **errors**      | An object with all validation errors, in a structure reflecting the data.                                |
 | **message**     | (optional) Can be set as a [status message](/concepts/messages).                                         |
 
-There are some other properties as well, that are only being sent in the load function:
+There are some other properties as well, only being sent in the load function:
 
 | Property           | Purpose |
 | ------------------ | ------- |
@@ -448,9 +444,11 @@ Now we know that validation has failed and there are errors being sent to the cl
 
 ```svelte
 <script lang="ts">
-  const { form, errors, constraints } = superForm(data.form);
-  //            ^^^^^^  ^^^^^^^^^^^
+  const { form, errors, constraints, message } = superForm(data.form);
+  //            ^^^^^^  ^^^^^^^^^^^  ^^^^^^^
 </script>
+
+{#if $message}<h3>{$message}</h3>{/if}
 
 <form method="POST">
   <label for="name">Name</label>
@@ -483,29 +481,29 @@ Now we know that validation has failed and there are errors being sent to the cl
 </style>
 ```
 
-As you see, by including `errors`, we can display errors where it's appropriate, and through `constraints` (provided by the load function), we get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field.
+As you see, by including `errors`, we can display errors where it's appropriate, and through `constraints` (provided by the load function), we get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field. And finally, we added a [status message](/concepts/messages) above the form to show if it was posted successfully.
 
 We now have a fully working form, with convenient handling of data and validation both on the client and server!
 
-There are no hidden DOM manipulations or other secrets; it's just HTML attributes and Svelte stores. No JavaScript is needed for the basics.
+There are no hidden DOM manipulations or other secrets; it's just HTML attributes and Svelte stores, so it works with server-side rendering. No JavaScript is required for the basics.
 
 ### Adding progressive enhancement
 
-As a last step, let's add progressive enhancement, so the users with JavaScript enabled will have a nicer experience. It's also required to use for example [client-side validation](/concepts/client-validation) and [events](/concepts/events), and of course to avoid reloading the page when the form is posted.
+As a last step, let's add progressive enhancement, so users with JavaScript enabled will have a nicer experience. It's also required to enable [client-side validation](/concepts/client-validation) and [events](/concepts/events), and of course to avoid reloading the page when the form is posted.
 
 This is simply done with `enhance`, returned from `superForm`:
 
 ```svelte
 <script lang="ts">
-  const { form, errors, constraints, enhance } = superForm(data.form);
-  //                                 ^^^^^^^
+  const { form, errors, constraints, message, enhance } = superForm(data.form);
+  //                                          ^^^^^^^
 </script>
 
 <!-- Add to the form element: -->
 <form method="POST" use:enhance>
 ```
 
-Now the page won't fully reload when submitting, and we unlock lots of client-side features like timers for [loading spinners](/concepts/timers), [auto error focus](/concepts/error-handling#errorselector), [tainted fields](/concepts/tainted), etc, that you can read about under the Concepts section in the navigation.
+Now the page won't fully reload when submitting, and we unlock lots of client-side features like timers for [loading spinners](/concepts/timers), [auto error focus](/concepts/error-handling#errorselector), [tainted fields](/concepts/tainted), etc, which you can read about under the Concepts section in the navigation.
 
 The `use:enhance` action takes no arguments; instead, events are used to hook into the SvelteKit use:enhance parameters and more. Check out the [events page](/concepts/events) for details.
 
