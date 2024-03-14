@@ -3,7 +3,7 @@
   import Header from './Header.svelte'
 	import Youtube from '$lib/Youtube.svelte'
 	import Gallery from './Gallery.svelte'
-  import Libraries from './Libraries.svelte'
+  import Libraries from '$lib/LibrariesButtons.svelte'
   import ReleaseV2 from './ReleaseV2.svelte'
   import bugbug from '$lib/assets/bugbug-yellow.svg'
 </script>
@@ -16,7 +16,7 @@
 
 Superforms is a SvelteKit form library that brings you a comprehensive solution for **server and client form validation**. It supports a multitude of validation libraries:
 
-<Libraries />
+<Libraries url="/get-started/" />
 
 Pick your favorite, Superforms takes care of the rest with consistent handling of form data and validation errors, with full type safety. It works with both TypeScript and JavaScript, even in static and single-page apps.
 

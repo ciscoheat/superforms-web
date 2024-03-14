@@ -1,20 +1,19 @@
 <script lang="ts">
   import Head from '$lib/Head.svelte'
+  import Libraries from '$lib/LibrariesButtons.svelte'
 </script>
+
+# Playground
+
+<Head title="Superform examples and playground" />
+
+For playing around, bug reporting, support questions, or as a start for your project, pick your library here to open it in [SvelteLab](https://www.sveltelab.dev/):
+
+<Libraries url="https://sveltelab.dev/github.com/ciscoheat/superforms-examples/tree" name="adapter" target="_blank" />
 
 # Examples
 
-<Head title="Form examples" />
-
 If you have gone through the Concepts section of this site, maybe you want to test out some things or see some working examples. There are plenty of Stackblitz projects that you can take a look at.
-
-## Playground and bug reporting
-
-For experimenting, bug reporting, or more advanced support questions.
-
-- [Valibot](https://stackblitz.com/edit/superforms-2-testing-valibot?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte)
-- [Yup](https://stackblitz.com/edit/superforms-2-testing-yup?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte)
-- [Zod](https://stackblitz.com/edit/superforms-2-testing?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte)
 
 ## Multi-step forms
 
