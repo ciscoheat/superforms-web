@@ -166,10 +166,63 @@ const { form, errors, enhance, validateForm } = superForm(
 validateForm({ update: true });
 ```
 
-## Test it out
+## SPA action form
 
-The following form has `SPA: true` set, and is using `+page.ts` for loading the initial data. Take a look in the browser devtools and see that nothing is posted to the server on submit.
+Sometimes you want a fetch function for a form field, for example to check if a username is valid while entering it. Instead of doing this manually with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/fetch), which cannot take advantage of Superforms' loading timers, events and other functionality, you can create a "SPA action form", a hidden form that does most of the work, with the convenience you get from `superForm`:
 
-<Form {data} />
+```ts
+const { submitting, submit } = superForm(
+  { username: '' },
+  {
+    SPA: '?/check',
+    onSubmit({ cancel, formData }) {
+      if (!$form.username) cancel();
+      formData.set('username', $form.username);
+    },
+    onUpdated({ form }) {
+      $errors.username = form.errors.username;
+    }
+  }
+);
+
+const checkUsername = debounce(300, submit);
+```
+
+A SPA action form takes its default data as the first parameter, and then you specify the form action in the `SPA` option. Then you basically have an empty, hidden form that you can populate in the `onSubmit` event. It can then be connected to a form action:
+
+> As you'd usually want no page updates for this, a SPA action form has [invalidateAll](/concepts/enhance#invalidateall) and [applyAction](/concepts/enhance#applyaction) set to false as default, but it can be changed with the `superForm` options as usual.
+
+```ts
+const usernameSchema = fullSchema.pick({ username: true });
+
+export const actions: Actions = {
+  check: async ({ request }) => {
+    const form = await superValidate(request, zod(usernameSchema));
+
+    if (!form.valid) return fail(400, { form });
+    
+    if(!checkUsername(form.data.username)) {
+      setError(form, 'username', 'Username is already taken.');
+    }
+
+    return { form };
+  }
+};
+```
+
+And finally, an `on:input` event on the input field:
+
+```svelte
+<input
+  name="username"
+  aria-invalid={$errors.username ? 'true' : undefined}
+  bind:value={$form.username}
+  on:input={checkUsername}
+/>
+{#if $submitting}<img src={spinner} alt="Checking availability" />
+{:else if $errors.username}<div class="invalid">{$errors.username}</div>{/if}
+```
+
+A full example of a username check is [available on SvelteLab](https://sveltelab.dev/github.com/ciscoheat/superforms-examples/tree/username-available-zod).
 
 <Next section={concepts} />
