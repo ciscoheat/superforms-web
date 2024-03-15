@@ -35,9 +35,9 @@
   {/each}
 </div>
 
-<div class="my-4 flex flex-wrap justify-center gap-x-4">
+<div class="examples my-4 flex flex-wrap justify-center gap-x-4">
   {#each examples as example}
-    <div class="card variant-filled-surface w-full sm:w-1/3 md:w-60">
+    <div class="example card variant-filled-surface w-full sm:w-1/3 md:w-60">
       <header
         class="{bgDark.includes(example.slug)
           ? undefined
@@ -100,7 +100,7 @@
     background-color: #fafafa;
   }
 
-  :global(svg) {
+  :global(.examples .example svg) {
     width: 18px;
     height: 18px;
     display: inline;
