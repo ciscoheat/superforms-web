@@ -164,4 +164,29 @@ To summarize, the index `i` of the `#each` loop is used to access `$form.tags`, 
 
 This example, having a `max(3)` limitation of the number of tags, also shows how to display array-level errors with the `$errors.tags._errors` field.
 
+## Validation schemas and nested paths
+
+Validation libraries like Zod can refine the validation, the classic example is to check if two password fields are identical when updating a password. Usually there's a `path` specifier for setting errors on those fields in the refine function:
+
+```ts
+const confirmPassword = z
+  .object({
+    password: z.string(),
+    confirm: z.string(),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Passwords don't match",
+    path: ["confirm"], // path of error
+  });
+  ```
+
+  This works fine for top-level properties, but for nested data you must usually specify that path as an **array**, each segment in its own element, not as a string path as you can do in the `FormPathLeaves` type!
+
+  ```ts
+  // OK:
+  path: ['form', 'tags', 3]
+  // Will not work with Zod refine and superRefine:
+  path ['form.tags[3]']
+  ```
+
 <Next section={concepts} />
