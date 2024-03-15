@@ -149,11 +149,11 @@ Usually, you check the ActionResult status in `onResult`, not the form validatio
 onUpdate: ({ form, formElement, cancel }) => void
 ```
 
-The `onUpdate` event is triggered right before the form update is being applied, giving you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formElement`.
+The `onUpdate` event is triggered right before the form update is being applied, giving you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formElement`. 
 
-> If your app is a single-page application, use `onUpdate` to process the form data. See the [SPA](/concepts/spa) page for more details.
+If your app is a single-page application, `onUpdate` is the most convenient to process the form data. See the [SPA](/concepts/spa) page for more details.
 
-When you don't need to modify or cancel the validation result, the last event is the most convenient to use:
+> The `form` parameter is deliberately named "form", to avoid using the `$form` store, as changes to the form parameter are applied to `$form` and the other stores, when the event is completed.
 
 ## onUpdated
 
@@ -161,7 +161,7 @@ When you don't need to modify or cancel the validation result, the last event is
 onUpdated: ({ form }) => void
 ```
 
-When you just want to ensure that the form is validated and do something extra afterwards, like showing a toast notification, `onUpdated` is the easiest way.
+If you just want to ensure that the form is validated and do something extra afterwards, like showing a toast notification, `onUpdated` is the easiest way.
 
 The `form` parameter contains the validation result, and should be considered read-only here, since the stores have updated at this point.
 
