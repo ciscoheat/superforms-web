@@ -1,5 +1,6 @@
 <script lang="ts">
   import { examples as allExamples, tags } from './examples.js';
+  import github from '$lib/assets/github.svg?raw';
 
   let filter = new Set<string>();
 
@@ -54,8 +55,12 @@
               href="https://sveltelab.dev/github.com/ciscoheat/superforms-examples/tree/{example.slug}-{lib}"
               target="_blank"
               >{#if example.libs.length == 1}Open example{:else}{lib.slice(0, 1).toUpperCase() +
-                  lib.slice(1)}{/if}</a
-            >{#if i < example.libs.length - 1}<span class="px-1">•</span>{/if}
+                  lib.slice(1)}{/if}
+            </a>
+            <a
+              href="https://github.com/ciscoheat/superforms-examples/tree/{example.slug}-{lib}"
+              target="_blank">{@html github}</a>
+            {#if i < example.libs.length - 1}<span class="px-1">•</span>{/if}
           {/each}
         </p>
       </section>
@@ -93,5 +98,13 @@
 
   .example-white-bg {
     background-color: #fafafa;
+  }
+
+  :global(svg) {
+    width: 18px;
+    height: 18px;
+    display: inline;
+    margin-left: 3px;
+    color: white;
   }
 </style>

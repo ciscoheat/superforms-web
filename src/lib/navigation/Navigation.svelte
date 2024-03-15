@@ -34,6 +34,7 @@
     <li><A href="/get-started">Get started</A></li>
     <li><A href="/support">Help & Support</A></li>
     <li><A href="/sponsors">Sponsors</A></li>
+    <li><A href="/examples">Examples</A></li>
     <li><A href="/api">API</A></li>
 
     <Title id="version-1">Version 2</Title>
@@ -60,7 +61,6 @@
     <Title id="concepts">Other topics</Title>
 
     <li><A href="/contributing">Contribute</A></li>
-    <li><A href="/examples">Examples</A></li>
     <li><A href="/faq">FAQ</A></li>
     <li><A href="/flash-messages">Flash messages</A></li>
     <li><A href="/formsnap">Formsnap</A></li>
