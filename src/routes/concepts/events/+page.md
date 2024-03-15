@@ -5,8 +5,6 @@
   import Flowchart from './Flowchart.svelte'
   import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte'
   import { concepts } from '$lib/navigation/sections'
-
-  export let data;
 </script>
 
 # Events
