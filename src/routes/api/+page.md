@@ -487,7 +487,13 @@ import {
   intProxy,
   numberProxy,
   stringProxy,
-  // The type of the other three depends on the field:
+  // File proxies
+  fileProxy,
+  fileFieldProxy, // formFieldProxy
+  // Multiple files proxies
+  filesProxy,
+  filesFieldProxy, // arrayProxy
+  // The type of the others depends on the field:
   formFieldProxy,
   arrayProxy,
   fieldProxy      

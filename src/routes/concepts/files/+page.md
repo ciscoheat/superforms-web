@@ -1,6 +1,7 @@
 <script lang="ts">
   import Head from '$lib/Head.svelte'
   import Next from '$lib/Next.svelte'
+  import Examples from './Examples.svelte'
   import { concepts } from '$lib/navigation/sections'
 </script>
 
@@ -56,7 +57,7 @@ Then you need a form with the proper [enctype](https://developer.mozilla.org/en-
 
 ## Examples
 
-The examples show how to add file validation even on the client, with an `on:input` handler.
+The recommended way to bind the file input to the form data is through a `fileProxy` or `filesProxy`, but you can also do it with an `on:input` handler. Here are examples for both, which also shows how to have file validation even on the client.
 
 ### Single file input
 
@@ -67,6 +68,39 @@ export const schema = z.object({
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
 });
 ```
+
+<Examples>
+<span slot="proxy">
+
+```svelte
+<script lang="ts">
+  import { superForm, fileProxy } from 'sveltekit-superforms'
+  import { zodClient } from 'sveltekit-superforms/adapters'
+  import { schema } from './schema.js'
+
+  export let data;
+
+  const { form, enhance, errors } = superForm(data.form, {
+    validators: zodClient(schema)
+  })
+
+  const file = fileProxy(form, 'image')
+</script>
+
+<form method="POST" enctype="multipart/form-data" use:enhance>
+  <input
+    type="file"
+    name="image"
+    accept="image/png, image/jpeg"
+    bind:files={$file}
+  />
+  {#if $errors.image}<span>{$errors.image}</span>{/if}
+  <button>Submit</button>
+</form>
+```
+
+</span>
+<span slot="input">
 
 ```svelte
 <script lang="ts">
@@ -95,6 +129,9 @@ export const schema = z.object({
 
 > The `as File` casting is needed since `null` is the value for "no file", so be aware that `$form.image` may be `null` even though the schema type says otherwise. If you want the upload to be optional, set the field to `nullable` and it will be type-safe.
 
+</span>
+</Examples>
+
 ### Multiple files
 
 We need an array to validate multiple files:
@@ -106,9 +143,41 @@ const schema = z.object({
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
     .array()
 });
-
-const form = await superValidate(formData, zod(schema));
 ```
+
+<Examples>
+<span slot="proxy">
+
+```svelte
+<script lang="ts">
+  import { superForm, filesProxy } from 'sveltekit-superforms'
+  import { zodClient } from 'sveltekit-superforms/adapters'
+  import { schema } from './schema.js'
+
+  export let data;
+
+  const { form, enhance, errors } = superForm(data.form, {
+    validators: zodClient(schema)
+  })
+
+  const files = filesProxy(form, 'images');
+</script>
+
+<form method="POST" enctype="multipart/form-data" use:enhance>
+  <input
+    type="file"
+    multiple
+    name="images"
+    accept="image/png, image/jpeg"
+    bind:files={$files}
+  />
+  {#if $errors.images}<span>{$errors.images}</span>{/if}
+  <button>Submit</button>
+</form>
+```
+
+</span>
+<span slot="input">
 
 ```svelte
 <script lang="ts">
@@ -134,8 +203,14 @@ const form = await superValidate(formData, zod(schema));
   {#if $errors.images}<span>{$errors.images}</span>{/if}
   <button>Submit</button>
 </form>
-
 ```
+
+> As there is no `bind:files` attribute on the input field, note that it cannot be hidden with an `{#if}` block. Use css instead to hide it.
+
+</span>
+</Examples>
+
+> To use the file proxies in a component, `fileFieldProxy` and `filesFieldProxy` are available as a complement to `formFieldProxy`.
 
 ## Form action caveat - withFiles
 
