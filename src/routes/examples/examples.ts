@@ -13,6 +13,7 @@ const exampleData = [
   ['dropdown-check', 'dropdown checkboxes array', 'Group inputs, with a dropdown menu and checkboxes.', 'zod'],
   ['file-uploads', 'file-upload array client-validation', 'Single and multiple file upload with client-side validation.', 'zod'],
   ['list-actions', 'list spinner form-id database', 'How to use Superforms with actions on a list of data.', 'zod'],
+  ['spa', 'spa spinner fetch client-validation proxy', 'Single-page application form, no +page.server.ts, calling an external API instead.', 'valibot'],
   ['multi-step-client', 'client-validation multi-step events', 'Multi-step form on the client, JS required but nice UX.', 'zod'],
   ['multi-step-server', 'multi-step no-js', 'Multi-step form on the server, no JS required but reloads on every step.', 'zod'],
   ['multi-step-skeleton', 'multi-step skeleton', 'Multi-step form with the Skeleton UI framework.', 'valibot'],
