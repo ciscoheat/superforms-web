@@ -37,14 +37,14 @@ import { superForm, intProxy } from 'sveltekit-superforms';
 // Assume the following schema:
 // { id: number }
 
-const theForm = superForm(data.form);
-const { form, errors, enhance } = theForm;
+const superform = superForm(data.form);
+const { form, errors, enhance } = superform;
 
 // Returns a Writable<string>
 const idProxy = intProxy(form, 'id');
 
 // Use the whole superForm object to prevent tainting
-const idProxy2 = intProxy(theForm, 'id', { taint: false });
+const idProxy2 = intProxy(superform, 'id', { taint: false });
 ```
 
 Now if you bind to `$idProxy` instead of `$form.id`, the value will be converted to and from an integer, and `$form.id` will be updated automatically.

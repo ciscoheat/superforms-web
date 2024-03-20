@@ -23,6 +23,8 @@ Now the following will be true:
 - Any missing **required** field will be reported as an error.
 - Errors will be displayed as default (can be changed with the `errors` option).
 
+> As checkboxes aren't posted unless checked, they will fail validation in strict mode unless you add an empty hidden field for the checkbox, signifying `false`.
+
 ## Catch-all schema
 
 Some validation libraries have a "catch-all" feature, allowing extra fields to be posted and validated. Here's an example of how to use it with Zod:

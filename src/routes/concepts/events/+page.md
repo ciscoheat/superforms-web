@@ -185,7 +185,9 @@ onError: (({ result }) => void) | 'apply'
 
 When the SvelteKit [error](https://kit.svelte.dev/docs/errors#expected-errors) function is called on the server, you can use the `onError` event to catch it.
 
-`result` is the error ActionResult, with the `error` property casted to [App.Error](https://kit.svelte.dev/docs/types#app-error). In this simple example, the message store is set to the error:
+`result` is the error ActionResult, with its `error` property having the type `App.Error | Error | { message: string }`. 
+
+In this simple example, the message store is set to the error message:
 
 ```ts
 const { form, enhance, message } = superForm(data.form, {
@@ -194,6 +196,8 @@ const { form, enhance, message } = superForm(data.form, {
   }
 });
 ```
+
+This works since errors will always have a `message` property, whether it's an expected error, exception or a failed request. As a special case, if JSON is returned, the HTTP status code will be used from its `status` property, instead of the default status `500` for [unexpected errors](https://kit.svelte.dev/docs/errors#unexpected-errors).
 
 You can also set `onError` to the string value `'apply'`, in which case the SvelteKit `applyAction` error behaviour will be used, which is to render the nearest [+error](https://kit.svelte.dev/docs/routing#error) page, also wiping out the form. To avoid data loss even for non-JavaScript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
 

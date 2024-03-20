@@ -55,3 +55,13 @@ const schema2 = z.object({
   fish: z.enum(['Salmon', 'Tuna', 'Trout']).nullable()
 });
 ```
+
+## Enums and group inputs
+
+If you're using the enum for radio buttons or a select menu, you may not want any option to be initally selected. This can be achieved in a similar way to the misuse of the default value above, by setting it to an empty string and casting it:
+
+```ts
+const schema2 = z.object({
+  fish: z.enum(['Salmon', 'Tuna', 'Trout']).default('' as 'Salmon')
+});
+```

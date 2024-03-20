@@ -72,9 +72,18 @@ setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 
 ## Server errors
 
-If something goes wrong beyond validation, instead of `return fail(400, { form })`, you can also call the SvelteKit `error` function, which can then be handled with the [onError](/concepts/events#onerror) event, or, if the custom [use:enhance](/concepts/enhance) doesn't exist on the form, the nearest +error.svelte page will be rendered.
+In the case of a server error, Superforms tries to normalize the different kind of server errors that can occur:
 
-To avoid data loss even for non-JavaScript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
+| Error type | Example   |
+| ---------- | --------- |
+| [Expected error](https://kit.svelte.dev/docs/errors#expected-errors) | `error(404, { code: 'user_not_found', message: 'Not found' })` |
+| Exception              | `throw new Error("Database connection error")` |
+| JSON response          | `return json({ code: 'rate_limited', status: 429 }, { status: 429 })` |
+| Other response         | `<!doctype html><html lang="en"><head><meta charset=...` |
+
+These can be handled with the [onError](/concepts/events#onerror) event, assuming the Superforms [use:enhance](/concepts/enhance) action is applied to the form. If it isn't, the nearest `+error.svelte` page will be rendered.
+
+In general, returning a [status message](/concepts/messages) is recommended instead of calling `error` or throwing exceptions, as this will make even the non-JS users keep their form data.
 
 ## Initial form errors
 

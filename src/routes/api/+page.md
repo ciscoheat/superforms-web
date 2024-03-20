@@ -343,7 +343,7 @@ type FormOptions<T, M, In> = Partial<{
         result: {
           type: 'error';
           status?: number;
-          error: App.Error;
+          error: App.Error | Error | { message: string };
         };
         message: Writable<SuperValidated<T, M, In>['message']>;
       }) => MaybePromise<unknown | void>);
@@ -632,10 +632,10 @@ Proxies a form field, returning stores similar to `superForm` but for a single f
 
   export let data;
 
-  const theForm = superForm(data.form); // The whole superForm object is required
-  const { form } = theForm; // Deconstruct as usual here
+  const superform = superForm(data.form); // The whole superForm object is required
+  const { form } = superform; // Deconstruct as usual here
 
-  const { path, value, errors, constraints, tainted } = formFieldProxy(theForm, 'name');
+  const { path, value, errors, constraints, tainted } = formFieldProxy(superform, 'name');
 </script>
 ```
 
@@ -663,10 +663,10 @@ Proxies an array in a form, returning stores similar to `superForm` but for the 
 
   export let data;
 
-  const theForm = superForm(data.form); // The whole superForm object is required
-  const { form } = theForm; // Deconstruct as usual here
+  const superform = superForm(data.form); // The whole superForm object is required
+  const { form } = superform; // Deconstruct as usual here
 
-  const { path, values, errors, fieldErrors } = arrayProxy(theForm, 'tags');
+  const { path, values, errors, fieldErrors } = arrayProxy(superform, 'tags');
 </script>
 ```
 

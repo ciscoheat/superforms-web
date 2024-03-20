@@ -205,10 +205,10 @@ You may have used [proxy objects](/concepts/proxy-objects) for converting an inp
 Any updates to `$name` will reflect in `$form.name`. Note that this will also [taint](/concepts/tainted) that field, so if this is not intended, you can use the whole superForm object and add an option:
 
 ```ts
-const theForm = superForm(data.form);
-const { form } = theForm;
+const superform = superForm(data.form);
+const { form } = superform;
 
-const name = fieldProxy(theForm, 'name', { taint: false });
+const name = fieldProxy(superform, 'name', { taint: false });
 ```
 
 A `fieldProxy` isn't enough here, however. We'd still have to make proxies for `form`, `errors`, and `constraints`, and then we're back to the same problem again.
