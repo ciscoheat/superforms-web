@@ -60,7 +60,7 @@
             <a
               href="https://github.com/ciscoheat/superforms-examples/tree/{example.slug}-{lib}"
               target="_blank">{@html github}</a>
-            {#if i < example.libs.length - 1}<span class="px-1">•</span>{/if}
+            {#if i < example.libs.length - 1}<span class="px-1"><br /></span>{/if}
           {/each}
         </p>
       </section>

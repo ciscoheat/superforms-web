@@ -22,10 +22,10 @@ const exampleData = [
 ]
 
 export const examples : Example[] = exampleData.map(e => ({
-  slug: e[0],
-  tags: e[1].split(' '),
-  description: e[2],
-  libs: e[3].split(' ')
+  slug: e[0].trim(),
+  tags: `${e[1]} ${e[3]}`.trim().split(' '),
+  description: e[2].trim(),
+  libs: e[3].trim().split(' ')
 }))
 
 export const tags = Array.from(new Set(examples.flatMap(e => e.tags))).sort()
