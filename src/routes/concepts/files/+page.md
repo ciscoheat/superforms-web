@@ -12,8 +12,8 @@
 From version 2, Superforms has full support for file uploads. For that, you need a schema that can validate files. Zod has this possibility:
 
 ```ts
-import { fail } from '@sveltejs/kit';
-import { superValidate, withFiles } from 'sveltekit-superforms';
+// NOTE: Import fail from Superforms, not from @sveltejs/kit!
+import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
@@ -34,30 +34,51 @@ export const actions = {
     const form = await superValidate(request, zod(schema));
 
     if (!form.valid) {
-      return fail(400, withFiles({ form }));
+      return fail(400, { form });
     }
 
     // TODO: Do something with the image
     console.log(form.data.image);
 
-    // See note about withFiles further down
-    return withFiles({ form });
+    return message(form, 'You have uploaded a valid file!');
   }
 };
 ```
 
-Then you need a form with the proper [enctype](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype) value on the form, and a file input field:
+## Returning files in form actions
 
-```svelte
-<form method="POST" enctype="multipart/form-data">
-  <input type="file" name="image" /> 
-  <button>Submit</button>
-</form>
+**Important:** Because file objects cannot be serialized, you must return the form using `fail`, `message` or `setError` imported from Superforms:
+
+```ts
+import { message, setError, fail } from 'sveltekit-superforms';
+
+// message, setError and the custom fail handles this automatically:
+if (!form.valid) return fail(400, { form });
+return message(form, 'Posted OK!');
+return setError(form, 'image', 'Could not process file.');
 ```
+
+Otherwise, a `withFiles` helper function is required:
+
+```ts
+// Importing the default fail
+import { fail } from '@sveltejs/kit';
+import { withFiles } from 'sveltekit-superforms';
+
+// With the @sveltejs/kit fail:
+if (!form.valid) {
+  return fail(400, withFiles({ form }));
+}
+
+// When returning just the form:
+return withFiles({ form })
+```
+
+This will remove the file objects from the form data, so SvelteKit can serialize it properly.
 
 ## Examples
 
-The recommended way to bind the file input to the form data is through a `fileProxy` or `filesProxy`, but you can also do it with an `on:input` handler. Here are examples for both, which also shows how to have file validation even on the client.
+The recommended way to bind the file input to the form data is through a `fileProxy` or `filesProxy`, but you can also do it with an `on:input` handler. Here are examples for both, which also shows how to add client-side validation for files, which can save plenty of bandwidth!
 
 ### Single file input
 
@@ -211,27 +232,6 @@ const schema = z.object({
 </Examples>
 
 > To use the file proxies in a component, `fileFieldProxy` and `filesFieldProxy` are available as a complement to `formFieldProxy`.
-
-## Form action caveat - withFiles
-
-There's one important thing to be aware of: Because file objects cannot be serialized, you must use a `withFiles` helper function when you return a form containing files:
-
-```ts
-import { fail } from '@sveltejs/kit';
-import { withFiles, message, setError } from 'sveltekit-superforms';
-
-// When using fail
-if (!form.valid) return fail(400, withFiles({ form }));
-
-// When returning just the form:
-return withFiles({ form })
-
-// message and setError handles this automatically:
-return message(form, 'Posted OK!');
-return setError(form, 'image', 'Could not process file.');
-```
-
-This will remove the file objects from the form data before returning, so SvelteKit can serialize it properly.
 
 ## Validating files manually
 

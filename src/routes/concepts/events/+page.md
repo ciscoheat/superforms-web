@@ -117,34 +117,10 @@ const { form, enhance } = superForm(data.form, {
 
 Also, if `applyAction` is `false`, which means that `$page.status` won't update, you'll find the status code for the request in `result.status`.
 
-#### Strongly typed ActionResult
-
-Usually, you check the ActionResult status in `onResult`, not the form validation result, which is more conveniently handled in `onUpdate` (see below). But if you return additional data in the form action, there is a helper type called `FormResult`, that you can use to make the ActionResult data strongly typed:
-
-```svelte
-<script lang="ts">
-  import { superForm, type FormResult } from 'sveltekit-superforms';
-  import type { ActionData } from './$types.js';
-
-  export let data;
-
-  const { form, enhance } = superForm(data.form, {
-    onResult: (event) => {
-      const result = event.result as FormResult<ActionData>;
-      if (result.type == 'failure') {
-        // Strongly typed now (but quite unreadable,
-        // prefer to use onUpdate or onUpdated)
-        console.log(result.data?.form.data.name);
-      }
-    }
-  });
-</script>
-```
-
 ## onUpdate
 
 ```ts
-onUpdate: ({ form, formElement, cancel }) => void
+onUpdate: ({ form, formElement, cancel, result }) => void
 ```
 
 The `onUpdate` event is triggered right before the form update is being applied, giving you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formElement`. 
@@ -152,6 +128,26 @@ The `onUpdate` event is triggered right before the form update is being applied,
 If your app is a single-page application, `onUpdate` is the most convenient to process the form data. See the [SPA](/concepts/spa) page for more details.
 
 > The `form` parameter is deliberately named "form", to avoid using the `$form` store, as changes to the form parameter are applied to `$form` and the other stores, when the event is completed.
+
+You can also access the `ActionResult` in `result`, which is narrowed to type `'success'` or `'failure'` here. You can use it to more conventiently access any additional form action data:
+
+```ts
+import { superForm } from 'sveltekit-superforms';
+import type { ActionData, PageData } from './$types.js';
+
+export let data: PageData;
+
+const { form, errors, message, enhance } = superForm(data.form, {
+  onUpdate({ form, result }) {
+    const data = result.data as NonNullable<ActionData>;
+    // If you've returned from the form action:
+    // return { form, extra: "test" }
+    if (data.extra) {
+      // Do something with the extra data
+    }
+  }
+});
+```
 
 ## onUpdated
 
@@ -183,25 +179,34 @@ const { form, enhance } = superForm(data.form, {
 onError: (({ result }) => void) | 'apply'
 ```
 
-When the SvelteKit [error](https://kit.svelte.dev/docs/errors#expected-errors) function is called on the server, you can use the `onError` event to catch it.
+When the SvelteKit [error](https://kit.svelte.dev/docs/errors#expected-errors) function is called on the server, you can use the `onError` event to catch it. `result` is the error ActionResult, with its `error` property:
 
-`result` is the error ActionResult, with its `error` property having the type `App.Error | Error | { message: string }`. 
+```ts
+App.Error | Error | { message: string }
+```
 
-In this simple example, the message store is set to the error message:
+Depending on what kind of error occurs, it will have a different shape.
+
+| Error type | Shape |
+| ---------- | ----- |
+| [Expected error](https://kit.svelte.dev/docs/errors#expected-errors) | `App.Error` |
+| Server exception   | `{ message: string }` |
+| JSON response      | Unexpected JSON responses, such as from a proxy server, should be included in `App.Error` to be type-safe. |
+| Other response     | If a fetch fails, or HTML is returned for example, result.error will be of type `Error` ([MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)), usually with a JSON parse error. It has a `message` property. |
+
+In this simple example, the message store is set to the error message or a fallback:
 
 ```ts
 const { form, enhance, message } = superForm(data.form, {
   onError({ result }) {
-    $message = result.error.message;
+    $message = result.error.message || "Unknown error";
   }
 });
 ```
 
-This works since errors will always have a `message` property, whether it's an expected error, exception or a failed request. As a special case, if JSON is returned, the HTTP status code will be used from its `status` property, instead of the default status `500` for [unexpected errors](https://kit.svelte.dev/docs/errors#unexpected-errors).
+If JSON is returned, the HTTP status code will be taken from its `status` property, instead of the default status `500` for [unexpected errors](https://kit.svelte.dev/docs/errors#unexpected-errors).
 
-You can also set `onError` to the string value `'apply'`, in which case the SvelteKit `applyAction` error behaviour will be used, which is to render the nearest [+error](https://kit.svelte.dev/docs/routing#error) page, also wiping out the form. To avoid data loss even for non-JavaScript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
-
-> If you're unsure what event to use, start with `onUpdated`; unless your app is a [SPA](/concepts/spa), then `onUpdate` should be used to validate the form data.
+You can also set `onError` to the string value `'apply'`, in which case the default SvelteKit error behaviour will be used, which is to render the nearest [+error](https://kit.svelte.dev/docs/routing#error) page, also wiping out the form. To avoid data loss even for non-JavaScript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
 
 ## Non-submit events 
 
@@ -217,7 +222,7 @@ const { form, errors, enhance } = superForm(data.form, {
     if(event.target) {
       // Form input event
       console.log(
-        event.path, 'was changed from', event.target, 
+        event.path, 'was changed with', event.target, 
         'in form', event.formElement
       );
     } else {

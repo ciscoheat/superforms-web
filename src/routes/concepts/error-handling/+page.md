@@ -40,7 +40,7 @@ The `aria-invalid` attribute is used to automatically focus on the first error f
 Most errors will be set automatically when the data is validated, but you may want to add errors after determining that the data is valid. This is easily done with the `setError` helper function.
 
 ```ts
-import { setError, superValidate } from 'sveltekit-superforms';
+import { setError, superValidate, fail } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const actions = {
@@ -72,7 +72,7 @@ setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 
 ## Server errors
 
-In the case of a server error, Superforms tries to normalize the different kind of server errors that can occur:
+In the case of a server error, Superforms will normalize the different kind of server errors that can occur:
 
 | Error type | Example   |
 | ---------- | --------- |

@@ -54,7 +54,9 @@ import {
   actionResult,
   defaultValues,
   message,
-  setError
+  setError,
+  fail,
+  withFiles
 } from 'sveltekit-superforms';
 ```
 
@@ -161,7 +163,7 @@ setError(
 ) : ActionFailure<{form: SuperValidated<T, M, In>}>
 ```
 
-For setting errors on the form after validation. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning.
+For setting errors on the form after validation. It returns a `fail(status, { form })` so it can be returned immediately, or more errors can be added by calling it multiple times before returning. `form.valid` will also be set to `false`.
 
 Use the `overwrite` option to remove all previously set errors for the field, and `status` to set a different status than the default `400` (which must be in the range 400-599).
 
@@ -282,7 +284,7 @@ export const POST = async ({ request }) => {
 ```ts
 import { 
   superForm, 
-  defaults 
+  defaults
 } from 'sveltekit-superforms';
 ```
 
@@ -332,6 +334,7 @@ type FormOptions<T, M, In> = Partial<{
     form: SuperValidated<T, M, In>;
     formEl: HTMLFormElement;
     cancel: () => void;
+    result: Extract<ActionResult, { type: 'success' | 'failure' }>;
   }) => MaybePromise<unknown | void>;
   onUpdated: (event: {
     form: Readonly<SuperValidated<T, M, In>>;
@@ -349,11 +352,11 @@ type FormOptions<T, M, In> = Partial<{
       }) => MaybePromise<unknown | void>);
 
   // Client-side validation
-	validators:
-		| ClientValidationAdapter<Partial<T>, Record<string, unknown>>
-		| ValidationAdapter<Partial<T>, Record<string, unknown>>
-		| false
-		| 'clear';
+  validators:
+    | ClientValidationAdapter<Partial<T>, Record<string, unknown>>
+    | ValidationAdapter<Partial<T>, Record<string, unknown>>
+    | false
+    | 'clear';
   validationMethod: 'auto' | 'oninput' | 'onblur' | 'onsubmit';
   clearOnSubmit: 'errors-and-message' | 'message' | 'errors' | 'none';
   delayMs: number;
@@ -442,7 +445,9 @@ SuperForm<T, M = any, In = T> = {
     id?: string;
   }) => void;
 
-  submit: (submitter?: HTMLElement | null) => void;
+  isTainted: (path?: FormPath<T> | TaintedFields<T> | boolean) => boolean;
+
+  submit: (submitter?: HTMLElement | Event | EventTarget | null | undefined) => void;
 
   capture: () => SuperFormSnapshot<T, M>;
   restore: (snapshot: SuperFormSnapshot<T, M>) => void;
