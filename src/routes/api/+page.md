@@ -529,7 +529,7 @@ const proxy = intProxy(form, 'field', { options });
 }
 ```
 
-Use the `empty` option to set the field to `null` or `undefined` if the value is falsy, Which includes the number zero, unless `emptyIfZero` is set to `false`. The reverse, `zeroIfEmpty`, sets the field to zero if the string value of the proxy is empty.
+Use the `empty` option to set the field to some of the defined values. Use `initiallyEmptyIfZero` to set the field to empty if the initial value is zero, to show the placeholder text, usually in combination with the `empty` option being set to `'zero'`.
 
 ### numberProxy(form, fieldName, options?)
 
@@ -553,7 +553,7 @@ const proxy = numberProxy(form, 'field', { options });
 }
 ```
 
-Use the `empty` option to set the field to `null` or `undefined` if the value is falsy. (Which includes the number zero, unless `emptyIfZero` is set to `false`.)
+Use the `empty` option to set the field to some of the defined values. Use `initiallyEmptyIfZero` to set the field to empty if the initial value is zero, to show the placeholder text, usually in combination with the `empty` option being set to `'zero'`.
 
 ### booleanProxy(form, fieldName, options?)
 
