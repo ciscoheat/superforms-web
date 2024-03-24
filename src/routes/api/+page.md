@@ -495,7 +495,7 @@ import {
   // File proxies
   fileProxy,
   fileFieldProxy, // formFieldProxy
-  // Multiple files proxies
+  // File[] proxies
   filesProxy,
   filesFieldProxy, // arrayProxy
   // The type of the others depends on the field:
@@ -523,10 +523,9 @@ const proxy = intProxy(form, 'field', { options });
 
 ```ts
 { 
-  empty?: 'null' | 'undefined';
-  emptyIfZero?: boolean = true;
-  zeroIfEmpty?: boolean = false;
-  taint?: TaintOption;
+  empty?: 'null' | 'undefined' | 'zero';
+  initiallyEmptyIfZero?: boolean;
+  taint?: boolean | 'untaint' | 'untaint-form';
 }
 ```
 
@@ -548,9 +547,9 @@ const proxy = numberProxy(form, 'field', { options });
 
 ```ts
 { 
-  empty?: 'null' | 'undefined';
-  emptyIfZero?: boolean = true;
-  delimiter?: '.' | ',';
+  empty?: 'null' | 'undefined' | 'zero';
+  initiallyEmptyIfZero?: boolean;
+  taint?: boolean | 'untaint' | 'untaint-form';
 }
 ```
 
@@ -573,6 +572,7 @@ const proxy = booleanProxy(form, 'field', { options });
 ```ts
 {
   trueStringValue = 'true';
+  taint?: boolean | 'untaint' | 'untaint-form';
 }
 ```
 
@@ -601,7 +601,8 @@ const proxy = dateProxy(form, 'field', { options });
     | 'date-local' | 'datetime-local' | 'time-local'
     // The default ISODateString:
     | 'iso' = 'iso';
-  empty?: 'null' | 'undefined'
+  empty?: 'null' | 'undefined';
+  taint?: boolean | 'untaint' | 'untaint-form';
 }
 ```
 
@@ -622,6 +623,7 @@ const proxy = stringProxy(form, 'field', { options });
 ```ts
 {
   empty: 'null' | 'undefined';
+  taint?: boolean | 'untaint' | 'untaint-form';
 }
 ```
 
@@ -648,7 +650,7 @@ Proxies a form field, returning stores similar to `superForm` but for a single f
 
 ```ts
 {
-  taint: boolean | 'untaint' | 'untaint-all' = true;
+  taint?: boolean | 'untaint' | 'untaint-all';
 }
 ```
 
@@ -682,7 +684,7 @@ Proxies an array in a form, returning stores similar to `superForm` but for the 
 
 ```ts
 {
-  taint: boolean | 'untaint' | 'untaint-all' = true;
+  taint?: boolean | 'untaint' | 'untaint-all';
 }
 ```
 
@@ -706,13 +708,21 @@ Proxies field access in any object, usually in `$form`, but in that case `formFi
 </script>
 ```
 
+**Options:**
+
+```ts
+{
+  taint?: boolean | 'untaint' | 'untaint-all';
+}
+```
+
 ## Proxy example
 
 Given the following schema:
 
 ```ts
 const schema = z.object({
-  date: z.date()
+  date: z.date().optional()
 });
 ```
 
