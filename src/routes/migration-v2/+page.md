@@ -294,11 +294,11 @@ Generic components were previously using Zod types for type safety. It is simple
 <script lang="ts" generics="T extends Record<string, unknown>">
   import { formFieldProxy, type SuperForm, type FormPathLeaves } from 'sveltekit-superforms';
 
-  export let form: SuperForm<T>;
+  export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T>;
   export let label = '';
 
-  const { value, errors, constraints } = formFieldProxy(form, field);
+  const { value, errors, constraints } = formFieldProxy(superform, field);
 </script>
 
 <label>
@@ -324,12 +324,12 @@ Generic components were previously using Zod types for type safety. It is simple
 
   export let data;
 
-  const supForm = superForm(data.form);
-  const { form, enhance } = supForm;
+  const superform = superForm(data.form);
+  const { enhance } = superform;
 </script>
 
 <form method="POST" use:enhance>
-  <TextInput form={supForm} field="name" />
+  <TextInput {superform} field="name" />
   <button>Submit</button>
 </form>
 ```
