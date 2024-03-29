@@ -129,20 +129,20 @@ If your app is a single-page application, `onUpdate` is the most convenient to p
 
 > The `form` parameter is deliberately named "form", to avoid using the `$form` store, as changes to the form parameter are applied to `$form` and the other stores, when the event is completed.
 
-You can also access the `ActionResult` in `result`, which is narrowed to type `'success'` or `'failure'` here. You can use it to more conventiently access any additional form action data:
+You can also access the `ActionResult` in `result`, which is narrowed to type `'success'` or `'failure'` here. You can use it together with the `FormResult` helper type to more conventiently access any additional form action data:
 
 ```ts
-import { superForm } from 'sveltekit-superforms';
+import { superForm, type FormResult } from 'sveltekit-superforms';
 import type { ActionData, PageData } from './$types.js';
 
 export let data: PageData;
 
 const { form, errors, message, enhance } = superForm(data.form, {
   onUpdate({ form, result }) {
-    const data = result.data as NonNullable<ActionData>;
+    const action : FormResult<ActionData> = result.data;
     // If you've returned from the form action:
-    // return { form, extra: "test" }
-    if (data.extra) {
+    // return { form, extra: "123" }
+    if (action.extra) {
       // Do something with the extra data
     }
   }

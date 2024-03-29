@@ -168,7 +168,7 @@ validateForm({ update: true });
 
 ## SPA action form
 
-Sometimes you want a fetch function for a form field, for example to check if a username is valid while entering it. Instead of doing this manually with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/fetch), which cannot take advantage of Superforms' loading timers, events and other functionality, you can create a "SPA action form", a hidden form that does most of the work, with the convenience you get from `superForm`:
+Sometimes you want a fetch function for a form field or a list of items, for example checking if a username is valid while entering it, or deleting rows in a list of data. Instead of doing this manually with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/fetch), which cannot take advantage of Superforms' loading timers, events and other functionality, you can create a "SPA action form", a hidden form that does most of the work, with the convenience you get from `superForm`:
 
 ```ts
 const { submitting, submit } = superForm(
@@ -188,9 +188,11 @@ const { submitting, submit } = superForm(
 const checkUsername = debounce(300, submit);
 ```
 
-A SPA action form takes its default data as the first parameter, and then you specify the form action in the `SPA` option. Then you basically have an empty, hidden form that you can populate in the `onSubmit` event. It can then be connected to a form action:
+A SPA action form takes a `SuperValidated` object as usual as the first parameter, or you can specify default values directly as in the example. Then you specify the form action URL in the `SPA` option, and you have a hidden form that you can populate in the `onSubmit` event, or its `enhance` method can be used on any number of forms on the page (one for each row in a list of data).
 
 > As you'd usually want no page updates for this, a SPA action form has [invalidateAll](/concepts/enhance#invalidateall) and [applyAction](/concepts/enhance#applyaction) set to false as default, but it can be changed with the `superForm` options as usual.
+
+Create a form action for it:
 
 ```ts
 const usernameSchema = fullSchema.pick({ username: true });
