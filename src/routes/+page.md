@@ -4,7 +4,6 @@
 	import Youtube from '$lib/Youtube.svelte'
 	import Gallery from './Gallery.svelte'
   import Libraries from '$lib/LibrariesButtons.svelte'
-  import ReleaseV2 from './ReleaseV2.svelte'
   import bugbug from '$lib/assets/bugbug-yellow.svg'
 </script>
 
