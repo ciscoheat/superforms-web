@@ -139,9 +139,9 @@ export let data: PageData;
 
 const { form, errors, message, enhance } = superForm(data.form, {
   onUpdate({ form, result }) {
-    const action : FormResult<ActionData> = result.data;
+    const action = result.data as FormResult<ActionData>;
     // If you've returned from the form action:
-    // return { form, extra: "123" }
+    // return { form, extra: 123 }
     if (action.extra) {
       // Do something with the extra data
     }

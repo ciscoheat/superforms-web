@@ -10,8 +10,6 @@
 
 <Head />
 
-<ReleaseV2 />
-
 <Header />
 
 Superforms is a SvelteKit form library that brings you a comprehensive solution for **server and client form validation**. It supports a multitude of validation libraries:
