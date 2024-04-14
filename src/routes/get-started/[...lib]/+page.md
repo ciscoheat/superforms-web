@@ -293,7 +293,10 @@ If you want the form to be initially empty, just pass the adapter as in the exam
 If you want to populate the form, you can send data to `superValidate` as the first parameter, adapter second, like this:
 
 ```ts
+import { error } from '@sveltejs/kit';
+
 export const load = async ({ params }) => {
+  // Replace with your database
   const user = db.users.findUnique({
     where: { id: params.id }
   });
