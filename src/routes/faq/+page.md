@@ -12,6 +12,42 @@ The most common mistake is to forget the `name` attribute on the input field. If
 
 ---
 
+### How can I prevent the form from being reset after it's submitted?
+
+Use the `resetForm: false` option for `superForm`, as described on the [use:enhance](/concepts/enhance#resetform) page.
+
+---
+
+### How to handle file uploads?
+
+From version 2, file uploads are handled by Superforms. Read all about it on the [file uploads](/concepts/files) page.
+
+---
+
+### Can I use endpoints instead of form actions?
+
+Yes, there is a helper function for constructing an `ActionResult` that can be returned from SvelteKit [endpoints](https://kit.svelte.dev/docs/routing#server). See [the API reference](/api#actionresulttype-data-options--status) for more information.
+
+---
+
+### Can I post to an external API?
+
+If the API doesn't return an [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) with the form data, you cannot post to it directly. Instead you can use the [SPA mode](/concepts/spa) of Superforms and call the API with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) or similar in the `onUpdate` event.
+
+---
+
+### How to submit the form programmatically?
+
+Use the `submit` method on the `superForm` object.
+
+---
+
+### Can a form be factored out into a separate component?
+
+Yes - the answer has its own [article page here](/components).
+
+---
+
 ### How can I return additional data together with the form?
 
 You're not limited to just `return { form }` in load functions and form actions; you can return anything else together with the form variables (which can also be called anything you'd like).
@@ -43,7 +79,7 @@ It can then be accessed in `PageData` in `+page.svelte`:
 
 #### From a form action
 
-Returning extra data from a form action is most convenient with a [status message](/concepts/messages). But you can also return it directly, in which case it can be accessed in `ActionData`:
+Returning extra data from a form action is convenient with a [status message](/concepts/messages) if the data is simple, but for larger data structures you can also return it directly, in which case it can be accessed in the [onUpdate](/concepts/events#onupdate) event, or in `ActionData`:
 
 ```ts
 export const actions = {
@@ -52,13 +88,34 @@ export const actions = {
 
     if (!form.valid) return fail(400, { form });
 
-    // TODO: Do something with the validated data
-
+    // Return the username as extra data:
     const userName = locals.currentUser.name;
     return { form, userName };
   }
 };
 ```
+
+**Using onUpdate**
+
+```svelte
+<script lang="ts">
+  import { superForm, type FormResult } from 'sveltekit-superforms';
+  import type { ActionData } from './$types.js';
+
+  export let data;
+
+  const { form, errors, message, enhance } = superForm(data.form, {
+    onUpdate({ form, result }) {
+      const action = result.data as FormResult<ActionData>;
+      if (form.valid && action.userName) {
+        // Do something with the extra data
+      }
+    }
+  });
+</script>
+```
+
+**Using ActionData**
 
 ```svelte
 <script lang="ts">
@@ -69,15 +126,13 @@ export const actions = {
   export let form: ActionData;
 
   // Need to rename form here, since it's used by ActionData.
-  const { form: loginForm, errors, enhance } = superForm(data.loginForm);
+  const { form: formData, errors, enhance } = superForm(data.form);
 </script>
 
 {#if form?.userName}
   <p>Currently logged in as {form.userName}</p>
 {/if}
 ```
-
-Using a [status message](/concepts/messages) instead avoids having to import `ActionData` and rename the `form` store.
 
 ---
 
@@ -116,36 +171,6 @@ The onSubmit event is also a good place to modify `$form`, in case you're using 
 
 ---
 
-### How to handle file uploads?
-
-From version 2, file uploads are handled by Superforms. Read all about it on the [file uploads](/concepts/files) page.
-
----
-
-### Can I use endpoints instead of form actions?
-
-Yes, there is a helper function for constructing an `ActionResult` that can be returned from SvelteKit [endpoints](https://kit.svelte.dev/docs/routing#server). See [the API reference](/api#actionresulttype-data-options--status) for more information.
-
----
-
-### Can I post to an external API?
-
-If the API doesn't return an [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) with the form data, you cannot post to it directly. Instead you can use the [SPA mode](/concepts/spa) of Superforms and call the API with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) or similar in the `onUpdate` event.
-
----
-
-### How to submit the form programmatically?
-
-Use the `submit` method on the `superForm` object.
-
----
-
-### Can a form be factored out into a separate component?
-
-Yes - the answer has its own [article page here](/components).
-
----
-
 ### I'm getting JSON.parse errors as response when submitting a form, why?
 
 This is related to the previous question. You must always return an `ActionResult` as a response to a form submission, either through a form action, where it's done automatically, or by constructing one with the [actionResult](/api#actionresulttype-data-options--status) helper. 
@@ -177,7 +202,7 @@ export const actions = {
 
 ### Why does the form get tainted without any changes, when I use a select element?
 
-If the schema field for the select menu doesn't have an empty string as default value, for example when it's optional, *and* you have an empty first option, like a "Please choose item" text, the field will be set to the empty string, tainting the form.
+If the schema field for the select menu doesn't have an empty string as default value, for example when it's optional, and you have an empty first option, like a "Please select item" text, the field will be set to that empty string, tainting the form.
 
 It can be fixed by setting the option and the default schema value to an empty string, even if it's not its proper type. See [this section](/default-values#changing-a-default-value) for an example.
 
@@ -191,7 +216,7 @@ You can add them as parameters to most schema methods. [Here's an example](/conc
 
 ### Can you use Superforms without any data, for example with a delete button on each row in a table?
 
-That's possible with an empty schema, or using the `$formId` store with the button to set the form id dynamically. See [this Stackblitz repo](https://stackblitz.com/edit/superforms-2-list-actions?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) for an example.
+That's possible with an empty schema, or using the `$formId` store with the button to set the form id dynamically. See [this SvelteLab project](https://sveltelab.dev/github.com/ciscoheat/superforms-examples/tree/list-actions-zod) for an example.
 
 ---
 

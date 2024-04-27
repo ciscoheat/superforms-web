@@ -442,6 +442,7 @@ SuperForm<T, M = any, In = T> = {
   reset: (options?: {
     keepMessage?: boolean;
     data?: Partial<T>;
+    newState?: Partial<T>;
     id?: string;
   }) => void;
 
