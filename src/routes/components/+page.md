@@ -148,7 +148,7 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 {#if errors}<span class="invalid">{errors}</span>{/if}
 ```
 
-> The `type` attribute on input elements must be hard-coded in Svelte, [explained here](https://stackoverflow.com/a/66191989/70894). Especially important for `type="number"`.
+> The `type` attribute on input elements must be hard-coded in Svelte 4, [explained here](https://stackoverflow.com/a/66191989/70894). Especially important for `type="number"`.
 
 **+page.svelte**
 
@@ -185,7 +185,7 @@ This is a bit better and will certainly help when the components require some st
 
 ### Using a fieldProxy
 
-You may have used [proxy objects](/concepts/proxy-objects) for converting an input field string like `"2023-04-12"` into a `Date`, but that's a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:
+You may have seen [proxy objects](/concepts/proxy-objects) being used for converting an input field string like `"2023-04-12"` into a `Date`, but that's a special usage of proxies. They can actually be used for any part of the form data, to have a store that can modify a part of the `$form` store. If you want to update just `$form.name`, for example:
 
 ```svelte
 <script lang="ts">
@@ -194,7 +194,6 @@ You may have used [proxy objects](/concepts/proxy-objects) for converting an inp
   export let data;
 
   const { form } = superForm(data.form);
-
   const name = fieldProxy(form, 'name');
 </script>
 
@@ -202,7 +201,7 @@ You may have used [proxy objects](/concepts/proxy-objects) for converting an inp
 <button on:click={() => ($name = '')}>Clear name</button>
 ```
 
-Any updates to `$name` will reflect in `$form.name`. Note that this will also [taint](/concepts/tainted) that field, so if this is not intended, you can use the whole superForm object and add an option:
+Any updates to `$name` will reflect in `$form.name`, and vice versa. Note that this will also [taint](/concepts/tainted) that field, so if this is not intended, you can use the whole superForm object and add an option:
 
 ```ts
 const superform = superForm(data.form);
@@ -211,11 +210,11 @@ const { form } = superform;
 const name = fieldProxy(superform, 'name', { taint: false });
 ```
 
-A `fieldProxy` isn't enough here, however. We'd still have to make proxies for `form`, `errors`, and `constraints`, and then we're back to the same problem again.
+A `fieldProxy` isn't enough here, however. We'd still have to make proxies for `form`, `errors`, and `constraints`, resulting in the same problem again.
 
 ### Using a formFieldProxy
 
-The solution is to use a `formFieldProxy`, which is a helper function for producing the above proxies from a form. To do this, we cannot immediately deconstruct what we need from `superForm` since `formFieldProxy` takes the form itself as an argument:
+The solution is to use a `formFieldProxy`, which is a helper function for producing the above proxies from a form. To do this, we cannot immediately deconstruct what we need from `superForm`, since `formFieldProxy` takes the form itself as an argument:
 
 ```svelte
 <script lang="ts">
@@ -224,16 +223,16 @@ The solution is to use a `formFieldProxy`, which is a helper function for produc
 
   export let data: PageData;
 
-  const form = superForm(data.form);
+  const superform = superForm(data.form);
 
-  const { path, value, errors, constraints } = formFieldProxy(form, 'name');
+  const { path, value, errors, constraints } = formFieldProxy(superform, 'name');
 </script>
 ```
 
 But we didn't want to pass all those proxies, so let's imagine a component that will handle even the above proxy creation for us.
 
 ```svelte
-<TextField {form} field="name" />
+<TextField {superform} field="name" />
 ```
 
 How nice would this be? This can actually be pulled off in a typesafe way with a bit of Svelte magic:
@@ -244,14 +243,12 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 </script>
 
 <script lang="ts" generics="T extends Record<string, unknown>">
-  import { 
-    formFieldProxy, type SuperForm, type FormPathLeaves 
-  } from 'sveltekit-superforms';
+  import { formFieldProxy, type SuperForm, type FormPathLeaves  } from 'sveltekit-superforms';
 
-  export let form: SuperForm<T>;
+  export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T>;
 
-  const { value, errors, constraints } = formFieldProxy(form, field);
+  const { value, errors, constraints } = formFieldProxy(superform, field);
 </script>
 
 <label>
@@ -288,10 +285,10 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
     type SuperForm, type FormPathLeaves
   } from 'sveltekit-superforms';
 
-  export let form: SuperForm<T>;
+  export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, boolean>;
 
-  const { value, errors, constraints } = formFieldProxy(form, field) satisfies FormFieldProxy<boolean>;
+  const { value, errors, constraints } = formFieldProxy(superform, field) satisfies FormFieldProxy<boolean>;
 </script>
 
 <input
@@ -313,25 +310,25 @@ Checkboxes, especially grouped ones, can be tricky to handle. Read the Svelte tu
 Using this component is now as simple as:
 
 ```svelte
-<TextField {form} field="name" />
+<TextField {superform} field="name" />
 ```
 
 But to show off some super proxy power, let's recreate the tags example above with the `TextField` component:
 
 ```svelte
 <form method="POST" use:enhance>
-  <TextField name="name" {form} field="name" />
+  <TextField name="name" {superform} field="name" />
 
   <h4>Tags</h4>
 
   {#each $form.tags as _, i}
-    <TextField name="tags" {form} field="tags[{i}].name" />
+    <TextField name="tags" {superform} field="tags[{i}].name" />
   {/each}
 </form>
 ```
 
 We can now produce a type-safe text field for any object inside our data, which will update the `$form` store.
 
-In general, nested data requires the `dataType` option to be set to `'json'`, but this example works without it, even without `use:enhance`, since arrays of primitive values are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
+In general, nested data requires the `dataType` option to be set to `'json'`, but this example works without it, and even without `use:enhance`, since arrays of primitive values are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
 
 I hope you now feel under your fingers the superpowers that Superforms bring! 💥
