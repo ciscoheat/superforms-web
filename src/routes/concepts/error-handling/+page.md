@@ -221,6 +221,8 @@ const refined = z.object({
 });
 ```
 
+For nested data, use multiple elements like `["user", "email"]`, which corresponds to `user.email` in the schema.
+
 As said, setting errors on the schema like this is preferred, but it may not always be possible. When you need to set errors after validation, use the [setError](/api#seterrorform-field-error-options) function.
 
 > If you would like a message to persist until the next form submission regardless of validation, use a [status message](/concepts/messages) instead.
