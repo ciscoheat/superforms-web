@@ -1,21 +1,21 @@
 <script lang="ts">
   import Head from '$lib/Head.svelte';
   import Form from './Form.svelte';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
   import Installer from './Installer.svelte';
   import SvelteLab from './SvelteLab.svelte';
   import { getSettings } from '$lib/settings';
 
-	export let data;
+  export let data;
 
   const settings = getSettings();
 
   if(data.lib) {
     $settings.lib = data.lib;
   }
-	
-	let formComponent
-	$: form = formComponent && formComponent.formData()
+  
+  let formComponent
+  $: form = formComponent && formComponent.formData()
 </script>
 
 <Head title="Get started - Tutorial for Superforms" />
@@ -76,6 +76,21 @@ const schema = Joi.object({
   email: Joi.string().email().required()
 });
 ```
+{:else if $settings.lib == 'json-schema'}
+```ts
+import type { JSONSchema } from 'sveltekit-superforms';
+
+export const schema = {
+  type: 'object',
+  properties: {
+    name: { type: 'string', minLength: 2, default: 'Hello world!' },
+    email: { type: 'string', format: 'email' }
+  },
+  required: ['name', 'email'],
+  additionalProperties: false,
+  $schema: 'http://json-schema.org/draft-07/schema#'
+} as const satisfies JSONSchema; // Define as const to get type inference
+```
 {:else if $settings.lib == '@sinclair/typebox'}
 ```ts
 import { Type } from '@sinclair/typebox';
@@ -133,7 +148,7 @@ The schema should be defined outside the load function, in this case on the top 
 
 ### Initializing the form in the load function
 
-To initialize the form, the schema should be used in a load function with the `superValidate` function:
+To initialize the form, you import an adapter corresponding to your library of choice, together with the schema, and pass it in a load function to the `superValidate` function:
 
 **src/routes/+page.server.ts**
 
@@ -174,6 +189,31 @@ const schema = Joi.object({
 
 export const load = (async () => {
   const form = await superValidate(joi(schema));
+
+  // Always return { form } in load functions
+  return { form };
+});
+```
+{:else if $settings.lib == 'json-schema'}
+```ts
+import { superValidate, type JSONSchema } from 'sveltekit-superforms';
+import { schemasafe } from 'sveltekit-superforms/adapters';
+
+export const schema = {
+  type: 'object',
+  properties: {
+    name: { type: 'string', minLength: 2, default: 'Hello world!' },
+    email: { type: 'string', format: 'email' }
+  },
+  required: ['name', 'email'],
+  additionalProperties: false,
+  $schema: 'http://json-schema.org/draft-07/schema#'
+} as const satisfies JSONSchema;
+
+export const load = (async () => {
+  // The adapter must be defined before superValidate for JSON Schema.
+  const adapter = schemasafe(schema);
+  const form = await superValidate(request, adapter);
 
   // Always return { form } in load functions
   return { form };
@@ -303,7 +343,7 @@ export const load = async ({ params }) => {
 
   if (!user) error(404, 'Not found');
 
-  const form = await superValidate(user, zod(schema));
+  const form = await superValidate(user, your_adapter(schema));
 
   // Always return { form } in load functions
   return { form };
@@ -385,13 +425,17 @@ The most common is to use `request`:
 
 **src/routes/+page.server.ts**
 
+{#if $settings.lib == 'json-schema'}
 ```ts
 import { message } from 'sveltekit-superforms';
 import { fail } from '@sveltejs/kit';
 
 export const actions = {
   default: async ({ request }) => {
-    const form = await superValidate(request, zod(schema));
+    // The adapter must be defined before superValidate for JSON Schema.
+    const adapter = schemasafe(schema);
+    const form = await superValidate(request, adapter);
+
     console.log(form);
 
     if (!form.valid) {
@@ -406,6 +450,29 @@ export const actions = {
   }
 };
 ```
+{:else}
+```ts
+import { message } from 'sveltekit-superforms';
+import { fail } from '@sveltejs/kit';
+
+export const actions = {
+  default: async ({ request }) => {
+    const form = await superValidate(request, your_adapter(schema));
+    console.log(form);
+
+    if (!form.valid) {
+      // Again, return { form } and things will just work.
+      return fail(400, { form });
+    }
+
+    // TODO: Do something with the validated form.data
+
+    // Display a success status message
+    return message(form, 'Form posted successfully!');
+  }
+};
+```
+{/if}
 
 Now we can post the form back to the server. Submit the form, and see what's happening on the server:
 

@@ -5,16 +5,16 @@
   const settings = getSettings();
 </script>
 
-<div class="flex items-center gap-1">
-  <span>I'm using</span>
+<div class="items-center gap-1 sm:flex">
+  <span class="whitespace-nowrap">I'm using</span>
   <select class="select w-24 max-w-24 py-1" bind:value={$settings.pm}>
     <option value="npm i -D">npm</option>
     <option value="pnpm i -D">pnpm</option>
     <option value="yarn add --dev">yarn</option>
   </select>
-  <span>and my validation library is</span>
+  <span class="whitespace-nowrap">and my validation library is</span>
   <select
-    class="select w-36 max-w-36 py-1"
+    class="select w-40 max-w-40 py-1"
     bind:value={$settings.lib}
     on:input={(e) =>
       goto('/get-started/' + e.currentTarget.value, {
@@ -25,6 +25,7 @@
     <option value="ajv">Ajv</option>
     <option value="arktype">Arktype</option>
     <option value="joi">Joi</option>
+    <option value="json-schema">JSON Schema</option>
     <option value="superstruct">Superstruct</option>
     <option value="@sinclair/typebox">TypeBox</option>
     <option value="valibot">Valibot</option>
@@ -38,7 +39,7 @@
 {#if $settings.lib == 'ajv'}
   <aside class="alert variant-ghost mt-2">
     <div class="alert-message">
-      Ajv is not available due to ESM incompatibility and tree-shaking issues. TypeBox is
+      Ajv is not available due to ESM incompatibility and tree-shaking issues. JSON Schema is
       recommended as an alternative.
     </div>
   </aside>
@@ -46,7 +47,7 @@
   <aside class="alert variant-ghost mt-2">
     <div class="alert-message">
       Superstruct is not yet available due to a <a
-        href="https://github.com/ianstormtaylor/superstruct/issues/1200"
+        href="https://github.com/ianstormtaylor/superstruct/issues/1224"
         target="_blank">moduleResolution problem</a
       >.
     </div>
@@ -61,12 +62,14 @@
   </aside>
 {:else}
   <pre class="installer language-bash copy-visible"><code class="language-bash"
-      >{$settings.pm} sveltekit-superforms {$settings.lib}</code></pre>
+      >{$settings.pm} sveltekit-superforms {$settings.lib == 'json-schema'
+        ? '@exodus/schemasafe'
+        : $settings.lib}</code></pre>
 {/if}
 
 <style lang="scss">
   select {
-    max-width: 142px !important;
+    max-width: 160px !important;
   }
 
   :global(.copy-content) {

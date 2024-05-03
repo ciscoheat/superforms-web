@@ -15,6 +15,7 @@
   const links = [
     ['arktype', 'Arktype', arktype],
     ['joi', 'Joi', joi],
+    ['json-schema', 'JSON Schema'],
     ['@sinclair/typebox', 'TypeBox', typebox],
     ['valibot', 'Valibot', valibot],
     ['@vinejs/vine', 'VineJS', vine],
