@@ -257,6 +257,17 @@
       key: $page.url.pathname
     }}>
     <slot />
+    {#if $page.url.pathname.length > 1}
+      <div
+        class="fix mx-auto mb-4 mt-2 max-w-4xl px-6 text-right text-sm text-surface-400 md:px-10">
+        Found a typo or an inconsistency? Make a quick correction <a
+          target="_blank"
+          class="underline"
+          href="https://github.com/ciscoheat/superforms-web/tree/main/src/routes{$page.url
+            .pathname}/+page.md">here</a
+        >!
+      </div>
+    {/if}
   </div>
   <svelte:fragment slot="sidebarRight">
     <TableOfContents class="w-56 {displayToC ? 'hidden md:block' : 'hidden'} p-4" />
