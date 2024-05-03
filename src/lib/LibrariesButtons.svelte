@@ -5,6 +5,7 @@
   import valibot from '$lib/assets/libs/valibot_small.png';
   import vine from '$lib/assets/libs/vinejs_small.png';
   import zod from '$lib/assets/libs/zod_small.png';
+  import jsonSchema from '$lib/assets/libs/json-schema_small.png';
 
   export let url: string;
   export let name: 'adapter' | 'package' = 'package';
@@ -15,7 +16,7 @@
   const links = [
     ['arktype', 'Arktype', arktype],
     ['joi', 'Joi', joi],
-    ['json-schema', 'JSON Schema'],
+    ['json-schema', 'JSON Schema', jsonSchema],
     ['@sinclair/typebox', 'TypeBox', typebox],
     ['valibot', 'Valibot', valibot],
     ['@vinejs/vine', 'VineJS', vine],
