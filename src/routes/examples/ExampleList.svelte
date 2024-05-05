@@ -1,16 +1,26 @@
 <script lang="ts">
   import { examples as allExamples, tags } from './examples.js';
   import github from '$lib/assets/github.svg?raw';
+  import { page } from '$app/stores';
+  import { replaceState } from '$app/navigation';
 
-  let filter = new Set<string>();
+  let filter = new Set<string>($page.url.searchParams.getAll('tag'));
 
   $: examples = filter.size
     ? allExamples.filter((e) => e.tags.some((tag) => filter.has(tag)))
     : allExamples;
 
   function toggleTag(tag: string) {
-    filter.has(tag) ? filter.delete(tag) : filter.add(tag);
+    if (tag) {
+      filter.has(tag) ? filter.delete(tag) : filter.add(tag);
+    }
+
     filter = filter;
+
+    const url = new URL($page.url);
+    url.searchParams.delete('tag');
+    filter.forEach((tag) => url.searchParams.append('tag', tag));
+    replaceState(url, {});
   }
 
   const bgDark = ['multi-step-skeleton'];
@@ -19,7 +29,10 @@
 <div class="mb-2 flex min-h-10 items-center">
   <span>Click to filter by tags:</span>
   {#if filter.size}<button
-      on:click={() => (filter = new Set())}
+      on:click={() => {
+        filter = new Set();
+        toggleTag('');
+      }}
       class="variant-filled btn btn-sm ml-2">Clear filters</button
     >{/if}
 </div>
