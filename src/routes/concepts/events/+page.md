@@ -233,6 +233,6 @@ const { form, errors, enhance } = superForm(data.form, {
 })
 ```
 
-If you only want to handle programmatic events, you can access `event.paths` without distinguishing.
+If you want to handle all change events, you can access `event.paths` without distinguishing.
 
 <Next section={concepts} />
