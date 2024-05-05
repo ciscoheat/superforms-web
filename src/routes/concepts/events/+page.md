@@ -142,7 +142,7 @@ const { form, errors, message, enhance } = superForm(data.form, {
     const action = result.data as FormResult<ActionData>;
     // If you've returned from the form action:
     // return { form, extra: 123 }
-    if (action.extra) {
+    if (form.valid && action.extra) {
       // Do something with the extra data
     }
   }
