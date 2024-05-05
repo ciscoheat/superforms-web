@@ -674,12 +674,12 @@ Proxies an array in a form, returning stores similar to `superForm` but for the 
   const superform = superForm(data.form); // The whole superForm object is required
   const { form } = superform; // Deconstruct as usual here
 
-  const { path, values, errors, fieldErrors } = arrayProxy(superform, 'tags');
+  const { path, values, errors, valueErrors } = arrayProxy(superform, 'tags');
 </script>
 ```
 
 - `errors` displays errors for the *array itself*, for example if the number of items are too few.
-- `fieldErrors` is an array that lists errors for the *contents* of the array.
+- `valueErrors` is an array that lists errors for the *content* of the array.
 
 **Options:**
 

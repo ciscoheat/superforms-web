@@ -142,7 +142,7 @@ const { form, errors, message, enhance } = superForm(data.form, {
     const action = result.data as FormResult<ActionData>;
     // If you've returned from the form action:
     // return { form, extra: 123 }
-    if (action.extra) {
+    if (form.valid && action.extra) {
       // Do something with the extra data
     }
   }
@@ -233,6 +233,6 @@ const { form, errors, enhance } = superForm(data.form, {
 })
 ```
 
-If you only want to handle programmatic events, you can access `event.paths` without distinguishing.
+If you want to handle all change events, you can access `event.paths` without distinguishing.
 
 <Next section={concepts} />
