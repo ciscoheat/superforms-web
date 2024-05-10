@@ -12,6 +12,7 @@ const exampleData = [
   ['multi-select', 'dropdown multiple-options array', 'Group inputs, with a dropdown menu and a multiple select menu.', 'zod'],
   ['dropdown-check', 'dropdown checkboxes array', 'Group inputs, with a dropdown menu and checkboxes.', 'zod'],
   ['file-uploads', 'file-upload array client-validation', 'Single and multiple file upload with client-side validation.', 'zod'],
+  ['date-array', 'components array date proxy', 'Array of components with a proxy for date input.', 'zod'],
   ['list-actions', 'list spinner form-id database', 'How to use Superforms with actions on a list of data.', 'zod'],
   ['spa', 'spa spinner fetch client-validation proxy', 'Single-page application form, no +page.server.ts, calling an external API instead.', 'valibot'],
   ['multi-step-client', 'client-validation multi-step events', 'Multi-step form on the client, JS required but nice UX.', 'zod'],
