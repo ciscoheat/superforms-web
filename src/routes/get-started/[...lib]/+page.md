@@ -93,12 +93,12 @@ export const schema = {
 ```
 {:else if $settings.lib == 'superstruct'}
 ```ts
-import { object, string, size, define } from 'superstruct';
+import { object, string, defaulted, define } from 'superstruct';
 
 const email = () => define<string>('email', (value) => String(value).includes('@'));
 
 export const schema = object({
-  name: size(string(), 2, Infinity),
+  name: defaulted(string(), 'Hello world!'),
   email: email()
 });
 ```
@@ -234,13 +234,13 @@ export const load = (async () => {
 ```ts
 import { superValidate } from 'sveltekit-superforms';
 import { superstruct } from 'sveltekit-superforms/adapters';
-import { object, string, size, define } from 'superstruct';
+import { object, string, defaulted, define } from 'superstruct';
 
 const email = () => define<string>('email', (value) => String(value).includes('@'));
 
 // Define outside the load function so the adapter can be cached
 const schema = object({
-  name: size(string(), 2, Infinity),
+  name: defaulted(string(), 'Hello world!'),
   email: email()
 });
 
