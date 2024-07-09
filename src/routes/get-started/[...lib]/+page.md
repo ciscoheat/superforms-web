@@ -44,7 +44,7 @@ yarn create svelte@latest
 
 <SvelteLab lib={$settings.lib} />
 
-{#if ['', 'ajv', 'superstruct', 'n/a'].includes($settings.lib)}
+{#if ['', 'ajv', 'n/a'].includes($settings.lib)}
 
 > Please select a validation library above before continuing, as the tutorial changes depending on that.
 
@@ -91,6 +91,17 @@ export const schema = {
   $schema: 'http://json-schema.org/draft-07/schema#'
 } as const satisfies JSONSchema; // Define as const to get type inference
 ```
+{:else if $settings.lib == 'superstruct'}
+```ts
+import { object, string, size, define } from 'superstruct';
+
+const email = () => define<string>('email', (value) => String(value).includes('@'));
+
+export const schema = object({
+  name: size(string(), 2, Infinity),
+  email: email()
+});
+```
 {:else if $settings.lib == '@sinclair/typebox'}
 ```ts
 import { Type } from '@sinclair/typebox';
@@ -102,11 +113,11 @@ const schema = Type.Object({
 ```
 {:else if $settings.lib == 'valibot'}
 ```ts
-import { object, string, email, optional } from 'valibot';
+import { object, string, email, optional, pipe, minLength } from 'valibot';
 
-const schema = object({
-  name: optional(string(), 'Hello world!'),
-  email: string([email()]),
+export const schema = object({
+	name: pipe(optional(string(), 'Hello world!'), minLength(2)),
+	email: pipe(string(), email())
 });
 ```
 {:else if $settings.lib == '@vinejs/vine'}
@@ -219,6 +230,30 @@ export const load = (async () => {
   return { form };
 });
 ```
+{:else if $settings.lib == 'superstruct'}
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { superstruct } from 'sveltekit-superforms/adapters';
+import { object, string, size, define } from 'superstruct';
+
+const email = () => define<string>('email', (value) => String(value).includes('@'));
+
+// Define outside the load function so the adapter can be cached
+const schema = object({
+  name: size(string(), 2, Infinity),
+  email: email()
+});
+
+// Defaults should also be defined outside the load function
+const defaults = { name: 'Hello world!', email: '' }
+
+export const load = (async () => {
+  const form = await superValidate(superstruct(schema, { defaults }));
+
+  // Always return { form } in load functions
+  return { form };
+});
+```
 {:else if $settings.lib == '@sinclair/typebox'}
 ```ts
 import { superValidate } from 'sveltekit-superforms';
@@ -242,12 +277,12 @@ export const load = (async () => {
 ```ts
 import { superValidate } from 'sveltekit-superforms';
 import { valibot } from 'sveltekit-superforms/adapters';
-import { object, string, email, optional } from 'valibot';
+import { object, string, email, optional, pipe, minLength } from 'valibot';
 
 // Define outside the load function so the adapter can be cached
 const schema = object({
-  name: optional(string(), 'Hello world!'),
-  email: string([email()]),
+	name: pipe(optional(string(), 'Hello world!'), minLength(2)),
+	email: pipe(string(), email())
 });
 
 export const load = (async () => {
@@ -263,6 +298,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { vine } from 'sveltekit-superforms/adapters';
 import Vine from '@vinejs/vine';
 
+// Define outside the load function so the adapter can be cached
 const schema = Vine.object({
   name: Vine.string(),
   email: Vine.string().email()
@@ -450,6 +486,28 @@ export const actions = {
   }
 };
 ```
+{:else if $settings.lib == 'superstruct' || $settings.lib == 'arktype' || $settings.lib == '@vinejs/vine'}
+```ts
+import { message } from 'sveltekit-superforms';
+import { fail } from '@sveltejs/kit';
+
+export const actions = {
+  default: async ({ request }) => {
+    const form = await superValidate(request, your_adapter(schema, { defaults }));
+    console.log(form);
+
+    if (!form.valid) {
+      // Again, return { form } and things will just work.
+      return fail(400, { form });
+    }
+
+    // TODO: Do something with the validated form.data
+
+    // Display a success status message
+    return message(form, 'Form posted successfully!');
+  }
+};
+```
 {:else}
 ```ts
 import { message } from 'sveltekit-superforms';
@@ -551,7 +609,7 @@ Now we know that validation has failed and there are errors being sent to the cl
 </style>
 ```
 
-As you see, by including `errors`, we can display errors where it's appropriate, and through `constraints` (provided by the load function), we get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field. And finally, we added a [status message](/concepts/messages) above the form to show if it was posted successfully.
+By including the `errors` store, we can display errors where appropriate, and through `constraints` we'll get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field. And finally, we added a [status message](/concepts/messages) above the form to show if it was posted successfully.
 
 We now have a fully working form, with convenient handling of data and validation both on the client and server!
 
@@ -559,7 +617,7 @@ There are no hidden DOM manipulations or other secrets; it's just HTML attribute
 
 ### Adding progressive enhancement
 
-As a last step, let's add progressive enhancement, so users with JavaScript enabled will have a nicer experience. It's also required to enable [client-side validation](/concepts/client-validation) and [events](/concepts/events), and of course to avoid reloading the page when the form is posted.
+As a last step, let's add progressive enhancement, so users with JavaScript enabled will have a nicer experience. It's also required for enabling [client-side validation](/concepts/client-validation) and [events](/concepts/events), and of course to avoid reloading the page when the form is posted.
 
 This is simply done with `enhance`, returned from `superForm`:
 
@@ -579,6 +637,8 @@ The `use:enhance` action takes no arguments; instead, events are used to hook in
 
 ## Next steps
 
-This concludes the tutorial! To learn the details, keep reading under the Concepts section in the navigation. [Status messages](/concepts/messages) are very common to add, for example. Also, if you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) page carefully. The same goes for having [multiple forms on the same page](/concepts/multiple-forms).
+This concludes the tutorial! To learn the details, keep reading under the Concepts section in the navigation. A [status message](/concepts/messages) is very common to add, for example. Also, if you plan to use nested data (objects and arrays within the schema), read the [nested data](/concepts/nested-data) page carefully. The same goes for having [multiple forms on the same page](/concepts/multiple-forms).
 
 When you're ready for something more advanced, check out the [CRUD tutorial](/crud), which shows how to make a fully working backend in about 150 lines of code.
+
+Enjoy your Superforms!

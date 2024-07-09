@@ -6,6 +6,7 @@
   import vine from '$lib/assets/libs/vinejs_small.png';
   import zod from '$lib/assets/libs/zod_small.png';
   import jsonSchema from '$lib/assets/libs/json-schema_small.png';
+  import superstruct from '$lib/assets/libs/superstruct_small.png';
 
   export let url: string;
   export let name: 'adapter' | 'package' = 'package';
@@ -17,6 +18,7 @@
     ['arktype', 'Arktype', arktype],
     ['joi', 'Joi', joi],
     ['json-schema', 'JSON Schema', jsonSchema],
+    ['superstruct', 'Superstruct', superstruct],
     ['@sinclair/typebox', 'TypeBox', typebox],
     ['valibot', 'Valibot', valibot],
     ['@vinejs/vine', 'VineJS', vine],

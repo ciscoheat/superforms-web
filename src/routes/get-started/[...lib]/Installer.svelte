@@ -43,15 +43,6 @@
       recommended as an alternative.
     </div>
   </aside>
-{:else if $settings.lib == 'superstruct'}
-  <aside class="alert variant-ghost mt-2">
-    <div class="alert-message">
-      Superstruct is not yet available due to a <a
-        href="https://github.com/ianstormtaylor/superstruct/issues/1224"
-        target="_blank">moduleResolution problem</a
-      >.
-    </div>
-  </aside>
 {:else if $settings.lib == 'n/a'}
   <aside class="alert variant-ghost mt-2">
     <div class="alert-message">
