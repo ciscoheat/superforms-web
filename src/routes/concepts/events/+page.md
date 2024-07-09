@@ -38,7 +38,7 @@ const { form, enhance } = superForm(data.form, {
 ```ts
 onSubmit: ({
   action, formData, formElement, controller, submitter, cancel,
-  jsonData, validators
+  jsonData, validators, customRequest
 }) => void;
 ```
 
@@ -84,6 +84,47 @@ const { form, enhance } = superForm(data.form, {
   onSubmit({ validators }) {
     if(step == 1) validators(zod(customSchema));
     else if(step == lastStep) validators(false);
+  }
+});
+```
+
+#### customRequest
+
+You can make a custom request with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) or [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) when submitting the form. The main use case is to display a progress bar when uploading large files.
+
+The `customRequest` option takes a function that should return a `Promise<Response | XMLHttpRequest>`. In the case of an `XMLHttpRequest`, the promise must be resolved *after* the request is complete. The response body should contain an `ActionResult`, as any form action does.
+
+```ts
+import { superForm } from 'sveltekit-superforms';
+import type { SubmitFunction } from '@sveltejs/kit';
+
+let progress = 0;
+
+function fileUploadWithProgress(input: Parameters<SubmitFunction>[0]) {
+  return new Promise<XMLHttpRequest>((resolve) => {
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.onprogress = function (event) {
+      progress = Math.round((100 * event.loaded) / event.total);
+    };
+
+    xhr.onload = function () {
+      if (xhr.readyState === xhr.DONE) {
+        progress = 0;
+        resolve(xhr);
+      }
+    };
+
+    xhr.open('POST', input.action, true);
+    xhr.send(input.formData);
+
+    return xhr;
+  });
+}
+
+const { form, enhance } = superForm(data.form, {
+  onSubmit({ customRequest }) {
+    customRequest(fileUploadWithProgress)
   }
 });
 ```
