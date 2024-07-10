@@ -117,8 +117,6 @@ function fileUploadWithProgress(input: Parameters<SubmitFunction>[0]) {
 
     xhr.open('POST', input.action, true);
     xhr.send(input.formData);
-
-    return xhr;
   });
 }
 
