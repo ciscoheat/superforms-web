@@ -42,7 +42,9 @@ onSubmit: ({
 }) => void;
 ```
 
-The `onSubmit` event is the first one triggered, being essentially the same as SvelteKit's own `use:enhance` function. It gives you a chance to cancel the submission altogether. See the SvelteKit docs for most of the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature. There are two extra properties in the Superforms `onSubmit` event:
+The `onSubmit` event is the first one triggered, being essentially the same as SvelteKit's own `use:enhance` function. It gives you a chance to cancel the submission altogether. See the SvelteKit docs for most of the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature. 
+
+There are also three extra properties in the Superforms `onSubmit` event, for more advanced scenarios:
 
 #### jsonData
 
