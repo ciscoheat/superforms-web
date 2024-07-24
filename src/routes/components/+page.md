@@ -231,6 +231,8 @@ The solution is to use a `formFieldProxy`, which is a helper function for produc
 
 But we didn't want to pass all those proxies, so let's imagine a component that will handle even the above proxy creation for us.
 
+## A typesafe, generic component
+
 ```svelte
 <TextField {superform} field="name" />
 ```
