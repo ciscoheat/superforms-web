@@ -257,6 +257,10 @@ export const actions = {
 
 If the file field isn't a part of the schema, but you still want errors for it, you can add an optional field to the schema with the same name, and use [setError](/concepts/error-handling#seterror) to set and display an error message.
 
+## Progress bar for uploads
+
+If you'd like a progress bar for large file uploads, check out the [customRequest](/concepts/events#customrequest) option for the `onSubmit` event.
+
 ## Preventing file uploads
 
 To prevent file uploads, set the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, so you don't have to use `withFiles`. 
