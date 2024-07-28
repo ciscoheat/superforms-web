@@ -1,7 +1,6 @@
 <script lang="ts">
   import { Avatar } from '@skeletonlabs/skeleton';
   import nicholas from './img/nicholas.png';
-  import torwent from './img/torwent.jpg';
   import matus from './img/matus.png';
   import bradenw from './img/braden-w.jpg';
   import saturnonearth from './img/saturnonearth.jpg';
@@ -13,10 +12,10 @@
   import tylergaw from './img/tylergaw.jpg';
   import knd775 from './img/knd775.jpg';
   import chbert from './img/chbert.jpg';
+  import jdgamble555 from './img/jdgamble555.jpg';
 
   const sponsors = [
     [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
-    [torwent, 'Torwent', 'https://github.com/Torwent'],
     [matus, 'Vicente Matus', 'https://github.com/vicentematus'],
     [bradenw, 'Braden Wong', 'https://github.com/braden-w'],
     [saturnonearth, 'Cory Tyburski', 'https://github.com/saturnonearth'],
@@ -27,7 +26,8 @@
     [risk21, '21RISK', 'https://21risk.com'],
     [tylergaw, 'Tyler Gaw', 'https://github.com/tylergaw'],
     [knd775, 'Ben Ayles', 'https://github.com/knd775'],
-    [chbert, 'chbert', 'https://github.com/chbert']
+    [chbert, 'chbert', 'https://github.com/chbert'],
+    [jdgamble555, 'Jonathan Gamble', 'https://github.com/jdgamble555']
   ];
 </script>
 
