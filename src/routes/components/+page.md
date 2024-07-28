@@ -329,7 +329,11 @@ But to show off some super proxy power, let's recreate the tags example above wi
 </form>
 ```
 
-We can now produce a type-safe text field for any object inside our data, which will update the `$form` store.
+We can now produce a type-safe text field for any object inside our data, which will update the `$form` store, and to add new tags, just append a tag object to the tags array:
+
+```ts
+$form.tags = [...$form.tags, { id: undefined, name: '' }];
+```
 
 In general, nested data requires the `dataType` option to be set to `'json'`, but this example works without it, and even without `use:enhance`, since arrays of primitive values are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
 
