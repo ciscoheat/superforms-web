@@ -78,7 +78,7 @@ The built-in browser validation can be a bit constrained; for example, you can't
 ```ts
 const { form, enhance, constraints, validate, validateForm } = superForm(data.form, {
   validators: ClientValidationAdapter<S> | 'clear' | false,
-  validationMethod: 'auto' | 'oninput' | 'onblur' | 'submit-only' = 'auto',
+  validationMethod: 'auto' | 'oninput' | 'onblur' | 'onsubmit' = 'auto',
   customValidity: boolean = false
 })
 ```
