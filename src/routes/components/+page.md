@@ -335,6 +335,6 @@ We can now produce a type-safe text field for any object inside our data, which 
 $form.tags = [...$form.tags, { id: undefined, name: '' }];
 ```
 
-In general, nested data requires the `dataType` option to be set to `'json'`, but this example works without it, and even without `use:enhance`, since arrays of primitive values are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
+In general, nested data requires the `dataType` option to be set to `'json'`, except arrays of primitive values, which are [coerced automatically](/concepts/nested-data#an-exception-arrays-with-primitive-values).
 
 I hope you now feel under your fingers the superpowers that Superforms bring! 💥

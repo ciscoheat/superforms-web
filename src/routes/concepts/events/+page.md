@@ -198,7 +198,7 @@ onUpdated: ({ form }) => void
 
 If you just want to ensure that the form is validated and do something extra afterwards, like showing a toast notification, `onUpdated` is the easiest way.
 
-The `form` parameter contains the validation result, and should be considered read-only here, since the stores have updated at this point.
+The `form` parameter contains the validation result, and should be considered read-only here, since the stores have updated at this point. Unlike the previous events, `$form`, `$errors` and the other stores now contain updated data.
 
 **Example**
 
