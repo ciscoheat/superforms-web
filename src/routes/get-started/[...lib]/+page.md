@@ -90,7 +90,11 @@ export const schema = {
   additionalProperties: false,
   $schema: 'http://json-schema.org/draft-07/schema#'
 } as const satisfies JSONSchema; // Define as const to get type inference
+
 ```
+
+> Currently, definitions and references ($ref properties in the JSON Schema) aren't supported. You need to resolve the references yourself before using the adapter.
+
 {:else if $settings.lib == 'superstruct'}
 ```ts
 import { object, string, defaulted, define } from 'superstruct';
