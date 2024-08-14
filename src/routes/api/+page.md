@@ -442,9 +442,9 @@ SuperForm<T, M = any, In = T> = {
 
   reset: (options?: {
     keepMessage?: boolean;
+    id?: string;
     data?: Partial<T>;
     newState?: Partial<T>;
-    id?: string;
   }) => void;
 
   isTainted: (path?: FormPath<T> | TaintedFields<T> | boolean) => boolean;
@@ -468,6 +468,23 @@ SuperForm<T, M = any, In = T> = {
   }) => Promise<string[] | undefined>;
 };
 ```
+
+### reset
+
+Calling the reset method without any arguments will reset the form to its initial values, but you can also reset to a different set of data, which is useful if the form data should change depending on external events.
+
+**Options:**
+
+```ts
+{ 
+  keepMessage?: boolean;
+  id?: string;
+  data?: Partial<T>;
+  newState?: Partial<T>;
+}
+```
+
+You have the option to keep the [status message](/concepts/messages) and change the [form id](/concepts/multiple-forms), and reset to new data with the `data` option. The `newState` option also updates the initial reset data, so when you call `reset` in the future, it will reset to that state. So if you want the new data to be the base for future resets, set both `data` and `newState`.
 
 ### defaults
 
