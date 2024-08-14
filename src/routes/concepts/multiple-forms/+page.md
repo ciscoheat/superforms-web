@@ -171,6 +171,10 @@ Multiple forms also work without `use:enhance`, though in this case you must add
 
 This is also required if you're changing schemas in a form action, as can happen in [multi-step forms](/examples#multi-step-forms).
 
+## Returning multiple forms
+
+If you have a use case where the data in one form should update another, you can return both forms in the form action: `return { loginForm, registerForm }`, but be aware that you may need `resetForm: false` on the second form, as it will reset and clear the updated changes, if it's valid and a successful response is returned.
+
 ## Configuration and troubleshooting
 
 Due to the many different use cases, it's hard to set sensible default options for multiple forms. A common issue is that when one form is submitted, the other forms' data are lost. This is due to the page being invalidated by default on a successful response.
