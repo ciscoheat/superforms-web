@@ -13,6 +13,7 @@
   import knd775 from './img/knd775.jpg';
   import chbert from './img/chbert.jpg';
   import jdgamble555 from './img/jdgamble555.jpg';
+  import shortbook from './img/shortbook.png';
 
   const sponsors = [
     [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
@@ -27,7 +28,8 @@
     [tylergaw, 'Tyler Gaw', 'https://github.com/tylergaw'],
     [knd775, 'Ben Ayles', 'https://github.com/knd775'],
     [chbert, 'chbert', 'https://github.com/chbert'],
-    [jdgamble555, 'Jonathan Gamble', 'https://github.com/jdgamble555']
+    [jdgamble555, 'Jonathan Gamble', 'https://github.com/jdgamble555'],
+    [shortbook, 'ShortBook', 'https://shortbook.life/']
   ];
 </script>
 
