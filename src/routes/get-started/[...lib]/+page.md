@@ -425,7 +425,7 @@ The `superValidate` function returns the data required to instantiate a form on 
 
 The `superForm` function is used to create a form on the client, and `bind:value` is used to create a two-way binding between the form data and the input fields.
 
-> Two notes: There should be only one `superForm` instance per form - its methods cannot be used in multiple forms. And don't forget the `name` attribute on the input fields! Unless you are using [nested data](/concepts/nested-data), they are required.
+> There should be only one `superForm` instance per form - its methods cannot be used in multiple forms.
 
 This is what the form should look like now:
 
