@@ -394,9 +394,7 @@ As long as the data partially matches the schema, you can pass it directly to `s
 
 > Errors will be automatically displayed when the form is populated like this, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
 
-### Important note about return values
-
-Unless you call the SvelteKit `redirect` or `error` functions, you should **always** return the form object to the client, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned like this in all code paths that returns, both in load functions and form actions.
+> Unless you call the SvelteKit `redirect` or `error` functions, you should **always** return the form object to the client, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned like this in all code paths that returns, both in load functions and form actions.
 
 ### Displaying the form
 
