@@ -613,6 +613,8 @@ Now we know that validation has failed and there are errors being sent to the cl
 </style>
 ```
 
+> It's recommended to create a [reusable component](https://superforms.rocks/components) to reduce boilerplate code.
+
 By including the `errors` store, we can display errors where appropriate, and through `constraints` we'll get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field. And finally, we added a [status message](/concepts/messages) above the form to show if it was posted successfully.
 
 We now have a fully working form, with convenient handling of data and validation both on the client and server!
