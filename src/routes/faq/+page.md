@@ -233,10 +233,12 @@ export type Message = {
 };
 
 // If no strongly type message is needed, leave out the M type parameter
-export function mySuperForm<T extends Record<string, unknown>, M = Message>(
-  ...params: Parameters<typeof superForm<T, M>>
-) {
-  return superForm<T, M>(params[0], {
+export function mySuperForm<
+  T extends Record<string, unknown>,
+  M = Message,
+  In extends Record<string, unknown> = T
+>(...params: Parameters<typeof superForm<T, M, In>>) {
+  return superForm<T, M, In>(params[0], {
     // Your defaults here
     errorSelector: '.has-error',
     delayMs: 300,
