@@ -1,5 +1,6 @@
 <script lang="ts">
   import arktype from '$lib/assets/libs/arktype_small.png';
+  import classvalidator from '$lib/assets/libs/classvalidator_small.png';
   import joi from '$lib/assets/libs/joi_small.png';
   import typebox from '$lib/assets/libs/typebox_small.png';
   import valibot from '$lib/assets/libs/valibot_small.png';
@@ -16,6 +17,7 @@
 
   const links = [
     ['arktype', 'Arktype', arktype],
+    ['class-validator', 'class-validator', classvalidator],
     ['joi', 'Joi', joi],
     ['json-schema', 'JSON Schema', jsonSchema],
     ['superstruct', 'Superstruct', superstruct],
