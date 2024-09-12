@@ -24,6 +24,7 @@
     <option value="">Choose:</option>
     <option value="ajv">Ajv</option>
     <option value="arktype">Arktype</option>
+    <option value="class-validator">class-validator</option>
     <option value="joi">Joi</option>
     <option value="json-schema">JSON Schema</option>
     <option value="superstruct">Superstruct</option>

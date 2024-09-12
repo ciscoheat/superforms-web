@@ -13,7 +13,7 @@
   if(data.lib) {
     $settings.lib = data.lib;
   }
-  
+
   let formComponent
   $: form = formComponent && formComponent.formData()
 </script>
@@ -26,7 +26,7 @@
 
 Select your environment above and run the install command in your project folder.
 
-If you're starting from scratch, create a new SvelteKit project: 
+If you're starting from scratch, create a new SvelteKit project:
 
 {#if $settings.pm == 'npm i -D'}
 ```npm
@@ -66,6 +66,22 @@ const schema = type({
   name: 'string',
   email: 'email'
 });
+```
+{:else if $settings.lib == 'class-validator'}
+```ts
+import { IsEmail, IsString, MinLength } from 'class-validator';
+
+class ClassValidatorSchema {
+	@IsString()
+	@MinLength(2)
+	name: string = '';
+
+	@IsString()
+	@IsEmail()
+	email: string = '';
+}
+
+export const schema = ClassValidatorSchema;
 ```
 {:else if $settings.lib == 'joi'}
 ```ts
@@ -185,6 +201,36 @@ const defaults = { name: 'Hello world!', email: '' }
 export const load = (async () => {
   // Arktype requires explicit default values for now
   const form = await superValidate(arktype(schema, { defaults }));
+
+  // Always return { form } in load functions
+  return { form };
+});
+```
+{:else if $settings.lib == 'class-validator'}
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { classvalidator } from 'sveltekit-superforms/adapters';
+import { IsEmail, IsString, MinLength } from 'class-validator';
+
+// Define outside the load function so the adapter can be cached
+class ClassValidatorSchema {
+	@IsString()
+	@MinLength(2)
+	name: string = '';
+
+	@IsString()
+	@IsEmail()
+	email: string = '';
+}
+
+const schema = ClassValidatorSchema;
+
+// Defaults should also be defined outside the load function
+const defaults = new schema();
+
+export const load = (async () => {
+  // class-validator requires explicit default values for now
+  const form = await superValidate(classvalidator(schema, { defaults }));
 
   // Always return { form } in load functions
   return { form };
@@ -490,7 +536,7 @@ export const actions = {
   }
 };
 ```
-{:else if $settings.lib == 'superstruct' || $settings.lib == 'arktype' || $settings.lib == '@vinejs/vine'}
+{:else if $settings.lib == 'class-validator' || $settings.lib == 'superstruct' || $settings.lib == 'arktype' || $settings.lib == '@vinejs/vine'}
 ```ts
 import { message } from 'sveltekit-superforms';
 import { fail } from '@sveltejs/kit';
@@ -589,7 +635,7 @@ Now we know that validation has failed and there are errors being sent to the cl
     name="name"
     aria-invalid={$errors.name ? 'true' : undefined}
     bind:value={$form.name}
-    {...$constraints.name} 
+    {...$constraints.name}
   />
   {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
 
@@ -599,7 +645,7 @@ Now we know that validation has failed and there are errors being sent to the cl
     name="email"
     aria-invalid={$errors.email ? 'true' : undefined}
     bind:value={$form.email}
-    {...$constraints.email} 
+    {...$constraints.email}
   />
   {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
 
