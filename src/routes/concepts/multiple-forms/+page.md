@@ -35,6 +35,7 @@ import { z } from 'zod';
 import { fail } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import type { Actions, PageServerLoad } from './$types';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -43,11 +44,11 @@ const loginSchema = z.object({
 
 const registerSchema = z.object({
   email: z.string().email(),
-  password: z.string.min(8),
-  confirmPassword: z.string.min(8)
+  password: z.string().min(8),
+  confirmPassword: z.string().min(8)
 });
 
-export const load = async () => {
+export const load: PageServerLoad = async () => {
   // Different schemas, no id required.
   const loginForm = await superValidate(zod(loginSchema));
   const registerForm = await superValidate(zod(registerSchema));
@@ -74,7 +75,7 @@ export const actions = {
     // TODO: Register user
     return message(registerForm, 'Register form submitted');
   }
-};
+} satisfies Actions;
 ```
 
 The code above uses [named form actions](https://kit.svelte.dev/docs/form-actions#named-actions) to determine which form was posted. On the client, you'll post to these different form actions for the respective form:
