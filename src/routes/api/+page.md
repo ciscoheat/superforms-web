@@ -309,7 +309,7 @@ type FormOptions<T, M, In> = Partial<{
   taintedMessage: boolean | string | (() => Promise<boolean>);
   dataType: 'form' | 'json';
   multipleSubmits: 'prevent' | 'allow' | 'abort';
-  SPA: true | { failStatus?: number } | string;
+  SPA: true;
 
   // Error handling
   scrollToError: 'auto' | 'smooth' | 'off' | boolean | ScrollIntoViewOptions;

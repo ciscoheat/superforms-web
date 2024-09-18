@@ -18,7 +18,7 @@ It's possible to use the whole Superforms library on the client, for example in 
 
 ```ts
 const { form, enhance } = superForm(data, {
-  SPA: true | { failStatus: number }
+  SPA: true
   validators: false | ClientValidationAdapter<S>
 })
 ```
@@ -165,66 +165,5 @@ const { form, errors, enhance, validateForm } = superForm(
 
 validateForm({ update: true });
 ```
-
-## SPA action form
-
-Sometimes you want a fetch function for a form field or a list of items, for example checking if a username is valid while entering it, or deleting rows in a list of data. Instead of doing this manually with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/fetch), which cannot take advantage of Superforms' loading timers, events and other functionality, you can create a "SPA action form", a hidden form that does most of the work, with the convenience you get from `superForm`:
-
-```ts
-const { submitting, submit } = superForm(
-  { username: '' },
-  {
-    SPA: '?/check',
-    onSubmit({ cancel, formData }) {
-      if (!$form.username) cancel();
-      formData.set('username', $form.username);
-    },
-    onUpdated({ form }) {
-      $errors.username = form.errors.username;
-    }
-  }
-);
-
-const checkUsername = debounce(300, submit);
-```
-
-A SPA action form takes a `SuperValidated` object as usual as the first parameter, or you can specify default values directly as in the example. Then you specify the form action URL in the `SPA` option, and you have a hidden form that you can populate in the `onSubmit` event, or its `enhance` method can be used on any number of forms on the page (one for each row in a list of data).
-
-> As you'd usually want no page updates for this, a SPA action form has [invalidateAll](/concepts/enhance#invalidateall) and [applyAction](/concepts/enhance#applyaction) set to false as default, but it can be changed with the `superForm` options as usual.
-
-Create a form action for it:
-
-```ts
-const usernameSchema = fullSchema.pick({ username: true });
-
-export const actions: Actions = {
-  check: async ({ request }) => {
-    const form = await superValidate(request, zod(usernameSchema));
-
-    if (!form.valid) return fail(400, { form });
-    
-    if(!checkUsername(form.data.username)) {
-      setError(form, 'username', 'Username is already taken.');
-    }
-
-    return { form };
-  }
-};
-```
-
-And finally, an `on:input` event on the input field:
-
-```svelte
-<input
-  name="username"
-  aria-invalid={$errors.username ? 'true' : undefined}
-  bind:value={$form.username}
-  on:input={checkUsername}
-/>
-{#if $submitting}<img src={spinner} alt="Checking availability" />
-{:else if $errors.username}<div class="invalid">{$errors.username}</div>{/if}
-```
-
-A full example of a username check is [available on SvelteLab](https://sveltelab.dev/github.com/ciscoheat/superforms-examples/tree/username-available-zod).
 
 <Next section={concepts} />

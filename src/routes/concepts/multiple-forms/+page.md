@@ -175,6 +175,71 @@ This is also required if you're changing schemas in a form action, as can happen
 
 If you have a use case where the data in one form should update another, you can return both forms in the form action: `return { loginForm, registerForm }`, but be aware that you may need `resetForm: false` on the second form, as it will reset and clear the updated changes, if it's valid and a successful response is returned.
 
+## Hidden forms
+
+Sometimes you want a fetch function for a form field or a list of items, for example checking if a username is valid while entering it, or deleting rows in a list of data. Instead of doing this manually with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/fetch), which cannot take advantage of Superforms' loading timers, events and other functionality, you can create a hidden form that does most of the work, with the convenience you get from `superForm`:
+
+```ts
+// First the visible form
+const { form, errors, ... } = superForm(...);
+
+// The the hidden form
+const { submitting, submit } = superForm(
+  { username: '' },
+  {
+    invalidateAll: false,
+    applyAction: false,
+    multipleSubmits: 'abort',
+    onSubmit({ cancel, formData }) {
+      // Using the visible form data
+      if (!$form.username) cancel();
+      formData.set('username', $form.username);
+    },
+    onUpdated({ form }) {
+      // Update the other form to show the error message
+      $errors.username = form.errors.username;
+    }
+  }
+);
+
+const checkUsername = debounce(300, submit);
+```
+
+Create a form action for it:
+
+```ts
+const usernameSchema = fullSchema.pick({ username: true });
+
+export const actions: Actions = {
+  check: async ({ request }) => {
+    const form = await superValidate(request, zod(usernameSchema));
+
+    if (!form.valid) return fail(400, { form });
+    
+    if(!checkUsername(form.data.username)) {
+      setError(form, 'username', 'Username is already taken.');
+    }
+
+    return { form };
+  }
+};
+```
+
+And finally, an `on:input` event on the input field:
+
+```svelte
+<input
+  name="username"
+  aria-invalid={$errors.username ? 'true' : undefined}
+  bind:value={$form.username}
+  on:input={checkUsername}
+/>
+{#if $submitting}<img src={spinner} alt="Checking availability" />
+{:else if $errors.username}<div class="invalid">{$errors.username}</div>{/if}
+```
+
+A full example of a username check is [available on SvelteLab](https://sveltelab.dev/github.com/ciscoheat/superforms-examples/tree/username-available-zod).
+
 ## Configuration and troubleshooting
 
 Due to the many different use cases, it's hard to set sensible default options for multiple forms. A common issue is that when one form is submitted, the other forms' data are lost. This is due to the page being invalidated by default on a successful response.
