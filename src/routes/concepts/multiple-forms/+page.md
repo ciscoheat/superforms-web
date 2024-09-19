@@ -175,6 +175,62 @@ This is also required if you're changing schemas in a form action, as can happen
 
 If you have a use case where the data in one form should update another, you can return both forms in the form action: `return { loginForm, registerForm }`, but be aware that you may need `resetForm: false` on the second form, as it will reset and clear the updated changes, if it's valid and a successful response is returned.
 
+## Multiple Schemas on the Server
+
+Sometimes you'll have a use case where you want to use a different schemas in multiple named actions for one form on the client (e.g., caching a partial object). When you return form object created from different schemas on server actions you might find that you're losing data on submission. If that's the case, then you'll need to set the same superValidate `id` option on the load function as well as the returned form on the server actions. This will ensure that the data is preserved in the form object between actions.
+
+```ts
+
+const looseUserSchema = z.object({
+	age: z.number().optional(),
+	name: z.string().optional()
+});
+
+const strictUserSchema = z.object({
+	age: z.number(),
+	name: z.string()
+});
+
+export const load: PageServerLoad = async () => {
+	const addUserForm = await superValidate(zod(looseUserSchema), {
+		id: 'add-user'
+	});
+
+	return {
+		addUserForm
+	};
+};
+
+export const actions = {
+	'cache-user': async ({ request }) => {
+		const form = await superValidate(request, zod(looseUserSchema), {
+			id: 'add-user'
+		});
+
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+
+		// Do your DB work
+
+		return { form };
+	},
+	'save-user': async ({ request }) => {
+		const form = await superValidate(request, zod(strictUserSchema), {
+			id: 'add-user'
+		});
+
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+
+		// Do your DB work
+
+		return { form };
+	}
+} satisfies Actions;
+```
+
 ## Hidden forms
 
 Sometimes you want a fetch function for a form field or a list of items, for example checking if a username is valid while entering it, or deleting rows in a list of data. Instead of doing this manually with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/fetch), which cannot take advantage of Superforms' loading timers, events and other functionality, you can create a hidden form that does most of the work, with the convenience you get from `superForm`:
