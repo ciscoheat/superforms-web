@@ -113,7 +113,7 @@ export const schema = z.object({
     type="file"
     name="image"
     accept="image/png, image/jpeg"
-    bind:files={$file}
+    bind:file={$file}
   />
   {#if $errors.image}<span>{$errors.image}</span>{/if}
   <button>Submit</button>
