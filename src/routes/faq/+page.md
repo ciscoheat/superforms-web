@@ -24,7 +24,7 @@ The object returned from `superValidate`, called [SuperValidated](/api#supervali
 
 It contains [constraints](/concepts/client-validation#built-in-browser-validation), [form id](/concepts/multiple-forms) based on the schema, an internal structure for handling errors in [nested data](/concepts/nested-data), eventual [initial errors](/concepts/error-handling#initial-form-errors), and more.
 
-In special cases you _can_ send an object with just the data to `superForm`, but that is only for:
+In special cases you can send an object with just the form data to `superForm`, but that is only for:
 
 - Simple forms with no nested data
 - No constraints used
