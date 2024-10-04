@@ -6,7 +6,7 @@
 
 # Forms and fields in components
 
-By looking at the rather simple [get started tutorial](/get-started), it's obvious that quite a bit of boilerplate code adds up for a Superform:
+Looking at the rather simple [get started tutorial](/get-started), it's obvious that quite a bit of boilerplate code adds up for a Superform:
 
 ```svelte
 <!-- For each form field -->
@@ -84,7 +84,9 @@ Now you can import and use this type in a separate component:
 </form>
 ```
 
-Use it by passing the form data from `+page.svelte` to the component, making it much less cluttered:
+[SuperValidated](https://superforms.rocks/api#supervalidate-return-type) is the return type from [superValidate](https://superforms.rocks/api#supervalidateadapter--data-adapter--options-options), which we called in the load function.
+
+This component can now be passed the `SuperValidated` form data (from the `PageData` we returned from `+page.server.ts`), making the page much less cluttered:
 
 **+page.svelte**
 

@@ -18,6 +18,23 @@ Use the `resetForm: false` option for `superForm`, as described on the [use:enha
 
 ---
 
+### Why do I need to call superValidate in the load function?
+
+The object returned from `superValidate`, called [SuperValidated](/api#supervalidate-return-type), is used to instantiate a `superForm`, just like a required argument in a constructor. 
+
+It contains [constraints](/concepts/client-validation#built-in-browser-validation), [form id](/concepts/multiple-forms) based on the schema, an internal structure for handling errors in [nested data](/concepts/nested-data), eventual [initial errors](/concepts/error-handling#initial-form-errors), and more.
+
+In special cases you _can_ send an object with just the data to `superForm`, but that is only for:
+
+- Simple forms with no nested data
+- No constraints used
+- No initial errors
+- Only one form on the page (the [form id](/concepts/multiple-forms) has to be set manually otherwise).
+
+Another reason is that when using a server load function (`+page.server.ts`) to populate the form, the page will work with [SSR](https://kit.svelte.dev/docs/page-options).
+
+---
+
 ### How to handle file uploads?
 
 From version 2, file uploads are handled by Superforms. Read all about it on the [file uploads](/concepts/files) page.
