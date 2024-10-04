@@ -80,6 +80,8 @@ This will remove the file objects from the form data, so SvelteKit can serialize
 
 The recommended way to bind the file input to the form data is through a `fileProxy` or `filesProxy`, but you can also do it with an `on:input` handler. Here are examples for both, which also shows how to add client-side validation for files, which can save plenty of bandwidth!
 
+> Remember that you need to add `enctype="multipart/form-data"` on the form element for file uploads to work.
+
 ### Single file input
 
 ```ts
