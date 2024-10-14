@@ -98,9 +98,13 @@ export const schema = ClassValidatorSchema;
 ```ts
 import { Schema } from '@effect/schema';
 
+// effect deliberately does not provide email parsing out of the box
+// https://github.com/Effect-TS/schema/issues/294
+// here is a simple email regex that does the job
+const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
 const schema = Schema.Struct({
   name: Schema.String.annotations({ default: 'Hello world!' }),
-  email: Schema.String
+  email: Schema.String.pipe(Schema.filter((s) => emailRegex.test(s) || 'must be a valid email'))
 });
 ```
 
@@ -284,7 +288,7 @@ import { Schema } from '@effect/schema';
 
 const schema = Schema.Struct({
   name: Schema.String.annotations({ default: 'Hello world!' }),
-  email: Schema.String
+  email: Schema.String.pipe(Schema.filter((s) => emailRegex.test(s) || 'must be a valid email'))
 });
 
 export const load = async () => {
