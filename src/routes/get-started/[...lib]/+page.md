@@ -102,6 +102,7 @@ import { Schema } from '@effect/schema';
 // https://github.com/Effect-TS/schema/issues/294
 // here is a simple email regex that does the job
 const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
+
 const schema = Schema.Struct({
   name: Schema.String.annotations({ default: 'Hello world!' }),
   email: Schema.String.pipe(Schema.filter((s) => emailRegex.test(s) || 'must be a valid email'))
@@ -285,6 +286,8 @@ export const load = async () => {
 import { superValidate } from 'sveltekit-superforms';
 import { effect } from 'sveltekit-superforms/adapters';
 import { Schema } from '@effect/schema';
+
+const emailRegex = /^[^@]+@[^@]+.[^@]+$/;
 
 const schema = Schema.Struct({
   name: Schema.String.annotations({ default: 'Hello world!' }),

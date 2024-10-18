@@ -57,7 +57,9 @@
   <pre class="installer language-bash copy-visible"><code class="language-bash"
       >{$settings.pm} sveltekit-superforms {$settings.lib == 'json-schema'
         ? '@exodus/schemasafe'
-        : $settings.lib}</code></pre>
+        : $settings.lib == '@effect/schema'
+          ? 'effect @effect/schema'
+          : $settings.lib}</code></pre>
 {/if}
 
 <style lang="scss">
