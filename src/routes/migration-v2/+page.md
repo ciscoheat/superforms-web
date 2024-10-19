@@ -85,7 +85,7 @@ export const load = async () => {
 
 #### Schema caching
 
-In the example above, both the schema and the defaults are defined outside the load function, on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be kept in memory. Therefore, define the schema, options and eventual default values for the adapter on the top level of a module, so they always refer to the same object.
+In the example above, both the schema and the defaults are defined outside the load function, on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be kept in memory. Therefore, define the schema, options and potential default values for the adapter on the top level of a module, so they always refer to the same object.
 
 #### Optimized client-side validation
 
@@ -162,7 +162,7 @@ The quite popular `superValidateSync` function has changed, since it's not possi
 
 Since this is a bit of a security issue, `superValidateSync` has been renamed to `defaults`.
 
-Fortunately though, a [quick Github search](https://github.com/search?q=superValidateSync%28&type=code) reveals that most of its usages are with the schema only, which requires no validation and no `+page.ts`. In that case, just call `defaults` with your adapter and eventual initial data, and you're good to go:
+Fortunately though, a [quick Github search](https://github.com/search?q=superValidateSync%28&type=code) reveals that most of its usages are with the schema only, which requires no validation and no `+page.ts`. In that case, just call `defaults` with your adapter and potential initial data, and you're good to go:
 
 ```ts
 import { defaults } from 'sveltekit-superforms'

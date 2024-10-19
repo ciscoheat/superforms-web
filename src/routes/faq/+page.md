@@ -22,7 +22,7 @@ Use the `resetForm: false` option for `superForm`, as described on the [use:enha
 
 The object returned from `superValidate`, called [SuperValidated](/api#supervalidate-return-type), is used to instantiate a `superForm`, just like a required argument in a constructor. 
 
-It contains [constraints](/concepts/client-validation#built-in-browser-validation), [form id](/concepts/multiple-forms) based on the schema, an internal structure for handling errors in [nested data](/concepts/nested-data), eventual [initial errors](/concepts/error-handling#initial-form-errors), and more.
+It contains [constraints](/concepts/client-validation#built-in-browser-validation), [form id](/concepts/multiple-forms) based on the schema, an internal structure for handling errors in [nested data](/concepts/nested-data), potential [initial errors](/concepts/error-handling#initial-form-errors), and more.
 
 In special cases you can send an object with just the form data to `superForm`, but that is only for:
 
