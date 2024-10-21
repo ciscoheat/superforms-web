@@ -215,7 +215,7 @@ const schema = z.object({
 
 #### Schema caching
 
-The schema should be defined outside the load function, in this case on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be kept in memory. Therefore, define the schema, its options and eventual defaults on the top level of a module, so they always refer to the same object.
+The schema should be defined outside the load function, in this case on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be kept in memory. Therefore, define the schema, its options and potential defaults on the top level of a module, so they always refer to the same object.
 
 ### Initializing the form in the load function
 
