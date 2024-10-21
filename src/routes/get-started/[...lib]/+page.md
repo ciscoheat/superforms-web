@@ -105,7 +105,11 @@ const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
 
 const schema = Schema.Struct({
   name: Schema.String.annotations({ default: 'Hello world!' }),
-  email: Schema.String.pipe(Schema.filter((s) => emailRegex.test(s) || 'must be a valid email'))
+  email: Schema.String.pipe(
+    Schema.filter((s) => emailRegex.test(s) || 'must be a valid email', {
+      jsonSchema: { format: 'email' }
+    })
+  )
 });
 ```
 
@@ -291,7 +295,11 @@ const emailRegex = /^[^@]+@[^@]+.[^@]+$/;
 
 const schema = Schema.Struct({
   name: Schema.String.annotations({ default: 'Hello world!' }),
-  email: Schema.String.pipe(Schema.filter((s) => emailRegex.test(s) || 'must be a valid email'))
+  email: Schema.String.pipe(
+    Schema.filter((s) => emailRegex.test(s) || 'must be a valid email', {
+      jsonSchema: { format: 'email' }
+    })
+  )
 });
 
 export const load = async () => {
