@@ -250,8 +250,8 @@ Additionally, the `redirect` version can send a flash message as a third paramet
 
 ```ts
 actionResult('redirect', '/', {
-  message: { type: 'success', text: 'Posted successfully!' },
-  cookieOptions: { sameSite: 'lax' }
+  message: { type: 'success', message: 'Posted successfully!' },
+  cookieOptions: { sameSite: 'Lax' }
 });
 ```
 
