@@ -34,6 +34,12 @@ If you're starting from scratch, create a new SvelteKit project:
 npm create svelte@latest
 ```
 
+{:else if $settings.pm == 'bun i -D'}
+
+```npm
+bun create svelte@latest
+```
+
 {:else if $settings.pm == 'pnpm i -D'}
 
 ```npm
