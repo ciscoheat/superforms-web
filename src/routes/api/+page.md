@@ -260,7 +260,7 @@ actionResult('redirect', '/', {
 **src/routes/login/+server.ts**
 
 ```ts
-import { actionResult, superValidate } from '$lib/server';
+import { actionResult, superValidate, setMessage } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
@@ -273,8 +273,9 @@ export const POST = async ({ request }) => {
   const form = await superValidate(request, zod(loginSchema));
   if (!form.valid) return actionResult('failure', { form });
 
-  // Verify login here //
+  // TODO: Verify login here //
 
+  setMessage(form, 'Login successful!');
   return actionResult('success', { form });
 };
 ```
