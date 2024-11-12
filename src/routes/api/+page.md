@@ -280,6 +280,13 @@ export const POST = async ({ request }) => {
 };
 ```
 
+Then in the form, simply point the form action to the endpoint (and remember `use:enhance`):
+
+```svelte
+<form method="POST" action="/login" use:enhance>
+  <!-- Business as usual -->
+```
+
 ## Client API
 
 ```ts
