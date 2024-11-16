@@ -1,9 +1,7 @@
 <script lang="ts">
   import { Avatar } from '@skeletonlabs/skeleton';
-  import nicholas from './img/nicholas.png';
   import matus from './img/matus.png';
   import bradenw from './img/braden-w.jpg';
-  import saturnonearth from './img/saturnonearth.jpg';
   import huntabyte from './img/huntabyte.jpg';
   import jitpackjoyride from './img/jitpackjoyride.jpg';
   import sillvva from './img/sillvva.jpg';
@@ -14,12 +12,11 @@
   import chbert from './img/chbert.jpg';
   import jdgamble555 from './img/jdgamble555.jpg';
   import shortbook from './img/shortbook.png';
+  import cgalo5758 from './img/cgalo5758.png';
 
   const sponsors = [
-    [nicholas, 'Nicholas Singh', 'https://github.com/adonis2611'],
     [matus, 'Vicente Matus', 'https://github.com/vicentematus'],
     [bradenw, 'Braden Wong', 'https://github.com/braden-w'],
-    [saturnonearth, 'Cory Tyburski', 'https://github.com/saturnonearth'],
     [huntabyte, 'Hunter Johnston', 'https://github.com/huntabyte'],
     [jitpackjoyride, 'Ajit Krishna', 'https://github.com/JitPackJoyride'],
     [sillvva, 'Matt DeKok', 'https://github.com/sillvva'],
@@ -29,7 +26,8 @@
     [knd775, 'Ben Ayles', 'https://github.com/knd775'],
     [chbert, 'chbert', 'https://github.com/chbert'],
     [jdgamble555, 'Jonathan Gamble', 'https://github.com/jdgamble555'],
-    [shortbook, 'ShortBook', 'https://shortbook.life/']
+    [shortbook, 'ShortBook', 'https://shortbook.life/'],
+    [cgalo5758, 'Christian Galo', 'https://cgalo.dev/']
   ];
 </script>
 
