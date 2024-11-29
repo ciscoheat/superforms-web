@@ -23,6 +23,13 @@ export default defineConfig(async ({ mode }) => {
     },
     test: {
       include: ['src/**/*.{test,spec}.{js,ts}']
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler'
+        }
+      }
     }
   };
 });
