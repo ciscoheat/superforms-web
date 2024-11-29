@@ -13,6 +13,7 @@
   import jdgamble555 from './img/jdgamble555.jpg';
   import shortbook from './img/shortbook.png';
   import cgalo5758 from './img/cgalo5758.png';
+  import toucantix from './img/toucantix.png';
 
   const sponsors = [
     [matus, 'Vicente Matus', 'https://github.com/vicentematus'],
@@ -27,7 +28,8 @@
     [chbert, 'chbert', 'https://github.com/chbert'],
     [jdgamble555, 'Jonathan Gamble', 'https://github.com/jdgamble555'],
     [shortbook, 'ShortBook', 'https://shortbook.life/'],
-    [cgalo5758, 'Christian Galo', 'https://cgalo.dev/']
+    [cgalo5758, 'Christian Galo', 'https://cgalo.dev/'],
+    [toucantix, 'Toucantix', 'https://toucantix.com']
   ];
 </script>
 
