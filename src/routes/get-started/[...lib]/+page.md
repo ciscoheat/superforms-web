@@ -530,9 +530,7 @@ As long as the data partially matches the schema, you can pass it directly to `s
 
 > Errors will be automatically displayed when the form is populated like this, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
 
-### Important note about return values
-
-Unless you call the SvelteKit `redirect` or `error` functions, you should **always** return the form object to the client, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned like this in all code paths that returns, both in load functions and form actions.
+> Unless you call the SvelteKit `redirect` or `error` functions, you should **always** return the form object to the client, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned like this in all code paths that returns, both in load functions and form actions.
 
 ### Displaying the form
 
@@ -563,7 +561,7 @@ The `superValidate` function returns the data required to instantiate a form on 
 
 The `superForm` function is used to create a form on the client, and `bind:value` is used to create a two-way binding between the form data and the input fields.
 
-> Two notes: There should be only one `superForm` instance per form - its methods cannot be used in multiple forms. And don't forget the `name` attribute on the input fields! Unless you are using [nested data](/concepts/nested-data), they are required.
+> There should be only one `superForm` instance per form - its methods cannot be used in multiple forms.
 
 This is what the form should look like now:
 
@@ -752,6 +750,8 @@ Now we know that validation has failed and there are errors being sent to the cl
   }
 </style>
 ```
+
+> It's recommended to create a [reusable component](https://superforms.rocks/components) to reduce boilerplate code.
 
 By including the `errors` store, we can display errors where appropriate, and through `constraints` we'll get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field. And finally, we added a [status message](/concepts/messages) above the form to show if it was posted successfully.
 
