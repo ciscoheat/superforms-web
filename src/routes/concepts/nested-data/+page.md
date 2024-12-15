@@ -61,7 +61,7 @@ The requirements for nested data to work are as follows:
 
 When your schema contains arrays or objects, you can access them through `$form` as an ordinary object. But how does it work with errors and constraints?
 
-`$errors` and `$constraints` actually mirror the `$form` data, but with every field or "leaf" in the object replaced with `string[]` and `InputConstraints` respectively.
+`$errors` and `$constraints` mirror the `$form` data, but with every field or "leaf" in the object replaced with `string[]` and `InputConstraints`, respectively.
 
 ### Example
 
@@ -120,11 +120,52 @@ You can build a HTML form for these tags using an `{#each}` loop:
 </form>
 ```
 
+> You can't use the loop variable directly, as the value must be bound directly to `$form`, hence the usage of the loop index `i`.
+
 > Take extra care with the [optional chaining operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) `?.`, it's easy to miss a question mark, which will lead to confusing errors.
 
-Note that we're using the index of the loop, so the value can be bound directly to `$form`. You can't use the each loop variable, hence the underscore. This is what it looks like:
+### The result
 
 <Form {data} />
+
+## Arbitrary types in the form
+
+Using the [transport](https://svelte.dev/docs/kit/hooks#Universal-hooks-transport) feature of SvelteKit, it's possible to use any type of value in the form and send it back and forth between server and client. To do this, you use the `transport` export from `hooks.ts` and its corresponding option for both `superValidate` and `superForm`. Here's an example with the [decimal.js](https://mikemcl.github.io/decimal.js/) library.
+
+**src/hooks.ts**
+
+```ts
+import type { Transport } from '@sveltejs/kit';
+import { Decimal } from 'decimal.js';
+
+export const transport: Transport = {
+	Decimal: {
+		encode: (value) => value instanceof Decimal && value.toString(),
+		decode: (str) => new Decimal(str)
+	}
+};
+```
+
+When calling `superValidate`:
+
+```ts
+import { transport } from '../../hooks.js';
+
+const form = await superValidate(formData, zod(schema), { transport });
+```
+
+When calling `superForm`:
+
+```ts
+import { transport } from '../../hooks.js';
+
+const { form, errors, enhance } = superForm(data.form, {
+  dataType: 'json',
+  transport
+});
+```
+
+> The transport feature requires at least version `2.11` of SvelteKit!
 
 ## Arrays with primitive values
 

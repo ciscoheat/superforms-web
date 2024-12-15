@@ -92,15 +92,16 @@ superValidate<T, M = any, In = T>(
 ### superValidate options
 
 ```ts
-SuperValidateOptions = {
-  errors?: boolean;           // Add or remove errors from output (valid status is always preserved)
-  id?: string;                // Form id, for multiple forms support. Set automatically by default
-  preprocessed?: (keyof T)[]; // Bypass superValidate data coercion for posted fields in this array
-  defaults?: T;               // Override default values from the schema
-  jsonSchema?: JSONSchema;    // Override JSON schema from the adapter
-  strict?: boolean;           // If true, validate exactly the posted data, no defaults added
-  allowFiles?: boolean;       // If false, set all posted File objects to undefined
-}
+SuperValidateOptions = Partial<{
+  errors: boolean;           // Add or remove errors from output (valid status is always preserved)
+  id: string;                // Form id, for multiple forms support. Set automatically by default
+  preprocessed: (keyof T)[]; // Bypass superValidate data coercion for posted fields in this array
+  defaults: T;               // Override default values from the schema
+  jsonSchema: JSONSchema;    // Override JSON schema from the adapter
+  strict: boolean;           // If true, validate exactly the posted data, no defaults added
+  allowFiles: boolean;       // If false, set all posted File objects to undefined
+  transport: Transport;      // Set to a transport object to send any type to the client. See https://svelte.dev/docs/kit/hooks#Universal-hooks-transport
+}>
 ```
 
 See the page about [multiple forms](/concepts/multiple-forms) for information about when to use `id`.
@@ -386,6 +387,7 @@ type FormOptions<T, M, In> = Partial<{
     cookiePath?: string;
     cookieName?: string;
   };
+  transport: Transport;
 
   // Disable warnings
   warnings: {
@@ -419,6 +421,7 @@ type ChangeEvent<T> =
 
 - See [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) for details about the `onSubmit` arguments, and [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) for `onResult`.
 - See [SPA action form](/concepts/spa#spa-action-form) for details about the `string` value for the `SPA` option.
+- See the SvelteKit [transport](https://svelte.dev/docs/kit/hooks#Universal-hooks-transport) feature for how to send any type of form data to the server, using the `transport` option.
 
 ### superForm return type
 
