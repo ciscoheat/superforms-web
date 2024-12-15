@@ -74,7 +74,7 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
   import { _userSchema } from './+page.js';
   import { zod } from 'sveltekit-superforms/adapters';
 
-  export let data;
+  let { data } = $props();
 
   const { form, errors, message, constraints, enhance } = superForm(
     data.form,

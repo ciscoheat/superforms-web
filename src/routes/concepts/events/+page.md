@@ -176,7 +176,7 @@ You can also access the `ActionResult` in `result`, which is narrowed to type `'
 import { superForm, type FormResult } from 'sveltekit-superforms';
 import type { ActionData, PageData } from './$types.js';
 
-export let data: PageData;
+let { data } : { data: PageData } = $props();
 
 const { form, errors, message, enhance } = superForm(data.form, {
   onUpdate({ form, result }) {

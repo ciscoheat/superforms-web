@@ -27,7 +27,7 @@ To use the built-in browser validation, just spread the `$constraints` store for
 
 ```svelte
 <script lang="ts">
-  export let data;
+  let { data } = $props();
   const { form, constraints } = superForm(data.form);
 </script>
 

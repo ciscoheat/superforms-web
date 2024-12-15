@@ -83,9 +83,7 @@ It can then be accessed in `PageData` in `+page.svelte`:
 
 ```svelte
 <script lang="ts">
-  import type { PageData } from './$types.js';
-  export let data: PageData;
-
+  let { data } = $props();
   const { form, errors, enhance } = superForm(data.loginForm);
 </script>
 
@@ -134,11 +132,9 @@ export const actions = {
 
 ```svelte
 <script lang="ts">
-  import type { PageData, ActionData } from './$types.js';
   import { superForm } from 'sveltekit-superforms/client'
 
-  export let data: PageData;
-  export let form: ActionData;
+  let { data, form } = $props();
 
   // Need to rename form here, since it's used by ActionData.
   const { form: formData, errors, enhance } = superForm(data.form);

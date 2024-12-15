@@ -145,11 +145,10 @@ Now that we have loaded the data, let's display it in a page component:
 
 ```svelte
 <script lang="ts">
-  import type { PageData } from './$types.js';
   import { page } from '$app/stores';
   import { superForm } from 'sveltekit-superforms';
 
-  export let data: PageData;
+  let { data } = $props();
 
   const { form, errors, constraints, enhance, delayed, message } = superForm(
     data.form, {

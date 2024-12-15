@@ -116,9 +116,7 @@ declare global {
 
 ```svelte
 <script lang="ts">
-  import type { PageData } from './$types.js';
-  export let data: PageData;
-
+  let { data } = $props();
   const { form, message } = superForm(data.form);
 </script>
 
@@ -137,10 +135,8 @@ Though if you want to keep it simple with a string or the default `any`, you can
 ```svelte
 <script lang="ts">
   import { page } from '$app/stores';
-  import type { PageData } from './$types.js';
-
-  export let data: PageData;
-
+  
+  let { data } = $props();
   const { form, message } = superForm(data.form);
 </script>
 

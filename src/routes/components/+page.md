@@ -29,7 +29,7 @@ And it also gets bad in the script part when you have more than a couple of form
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms'
 
-  export let data;
+  let { data } = $props();
 
   const {
     form: loginForm,
@@ -74,7 +74,7 @@ Now you can import and use this type in a separate component:
   import { superForm } from 'sveltekit-superforms'
   import type { LoginSchema } from '$lib/schemas';
 
-  export let data: SuperValidated<Infer<LoginSchema>>;
+  let { data } : { data : SuperValidated<Infer<LoginSchema>> } = $props();
 
   const { form, errors, enhance } = superForm(data);
 </script>
@@ -92,7 +92,7 @@ This component can now be passed the `SuperValidated` form data (from the `PageD
 
 ```svelte
 <script lang="ts">
-  export let data;
+  let { data } = $props();
 </script>
 
 <LoginForm data={data.loginForm} />
@@ -107,7 +107,9 @@ If your schema input and output types differ, or you have a strongly typed [stat
   import { superForm } from 'sveltekit-superforms'
   import type { LoginSchema } from '$lib/schemas';
 
-  export let data: SuperValidated<Infer<LoginSchema>, { status: number, text: string }, InferIn<LoginSchema>>;
+  let { data } : { 
+    data : SuperValidated<Infer<LoginSchema>, { status: number, text: string }, InferIn<LoginSchema>> 
+  } = $props();
 
   const { form, errors, enhance, message } = superForm(data);
 </script>
@@ -131,10 +133,12 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 <script lang="ts">
   import type { InputConstraint } from 'sveltekit-superforms';
 
-  export let value: string;
-  export let label: string | undefined = undefined;
-  export let errors: string[] | undefined = undefined;
-  export let constraints: InputConstraint | undefined = undefined;
+  let { value, label, errors, constraints } : {
+    value: string;
+    label: string | undefined = undefined;
+    errors: string[] | undefined = undefined;
+    constraints: InputConstraint | undefined = undefined;
+  } = $props();
 </script>
 
 <label>
@@ -193,7 +197,7 @@ You may have seen [proxy objects](/concepts/proxy-objects) being used for conver
 <script lang="ts">
   import { superForm, fieldProxy } from 'sveltekit-superforms/client';
 
-  export let data;
+  let { data } = $props();
 
   const { form } = superForm(data.form);
   const name = fieldProxy(form, 'name');
@@ -223,7 +227,7 @@ The solution is to use a `formFieldProxy`, which is a helper function for produc
   import type { PageData } from './$types.js';
   import { superForm, formFieldProxy } from 'sveltekit-superforms/client';
 
-  export let data: PageData;
+  let { data } : { data: PageData } = $props();
 
   const superform = superForm(data.form);
 
@@ -249,8 +253,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 <script lang="ts" generics="T extends Record<string, unknown>">
   import { formFieldProxy, type SuperForm, type FormPathLeaves  } from 'sveltekit-superforms';
 
-  export let superform: SuperForm<T>;
-  export let field: FormPathLeaves<T>;
+  let { superForm, field } : { superform: SuperForm<T>, field: FormPathLeaves<T> } = $props();
 
   const { value, errors, constraints } = formFieldProxy(superform, field);
 </script>
@@ -289,8 +292,7 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
     type SuperForm, type FormPathLeaves
   } from 'sveltekit-superforms';
 
-  export let superform: SuperForm<T>;
-  export let field: FormPathLeaves<T, boolean>;
+  let { superForm, field } : { superform: SuperForm<T>, field: FormPathLeaves<T, boolean> } = $props();
 
   const { value, errors, constraints } = formFieldProxy(superform, field) satisfies FormFieldProxy<boolean>;
 </script>

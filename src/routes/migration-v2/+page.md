@@ -138,7 +138,7 @@ const form = await superValidate<Infer<typeof schema>, Message>(zod(schema));
 import type { LoginSchema } from '$lib/schemas';
 import type { Infer } from 'sveltekit-superforms'
 
-export let data: SuperValidated<Infer<LoginSchema>>;
+let { data } : { data: SuperValidated<Infer<LoginSchema>> } = $props();
 ```
 
 If your schema uses transformations or pipes, so the input and output types are different, there's an `InferIn` type and a third type parameter that can be used.

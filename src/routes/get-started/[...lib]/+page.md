@@ -26,6 +26,24 @@
 
 Select your environment above and run the install command in your project folder.
 
+{#if $settings.lib == 'json-schema'}
+
+If you're using JSON Schema on the client, you also need to modify **vite.config.ts**:
+
+```ts
+import { sveltekit } from "@sveltejs/kit/vite";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [sveltekit()],
+  optimizeDeps: {
+    include: ["@exodus/schemasafe"], // Add this to make client-side validation work
+  },
+});
+```
+
+{/if}
+
 If you're starting from scratch, create a new SvelteKit project:
 
 {#if $settings.pm == 'npm i -D'}
@@ -544,7 +562,7 @@ The `superValidate` function returns the data required to instantiate a form on 
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms';
 
-  export let data;
+  let { data } = $props();
 
   // Client API:
   const { form } = superForm(data.form);

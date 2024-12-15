@@ -101,7 +101,7 @@ export const schema = z.object({
   import { zodClient } from 'sveltekit-superforms/adapters'
   import { schema } from './schema.js'
 
-  export let data;
+  let { data } = $props();
 
   const { form, enhance, errors } = superForm(data.form, {
     validators: zodClient(schema)
@@ -131,7 +131,7 @@ export const schema = z.object({
   import { zodClient } from 'sveltekit-superforms/adapters'
   import { schema } from './schema.js'
 
-  export let data;
+  let { data } = $props();
 
   const { form, enhance, errors } = superForm(data.form, {
     validators: zodClient(schema)
@@ -177,7 +177,7 @@ const schema = z.object({
   import { zodClient } from 'sveltekit-superforms/adapters'
   import { schema } from './schema.js'
 
-  export let data;
+  let { data } = $props();
 
   const { form, enhance, errors } = superForm(data.form, {
     validators: zodClient(schema)
@@ -208,7 +208,7 @@ const schema = z.object({
   import { zodClient } from 'sveltekit-superforms/adapters'
   import { schema } from './schema.js'
 
-  export let data;
+  let { data } = $props();
 
   const { form, enhance, errors } = superForm(data.form, {
     validators: zodClient(schema)
