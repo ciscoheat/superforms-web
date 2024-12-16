@@ -17,27 +17,49 @@
   while (url.endsWith('/')) url = url.slice(0, -1);
 
   const links = [
-    ['arktype', 'Arktype', arktype],
-    ['class-validator', 'class-validator', classvalidator],
-    ['@effect/schema', 'Effect', effect],
-    ['joi', 'Joi', joi],
-    ['json-schema', 'JSON Schema', jsonSchema],
-    ['superstruct', 'Superstruct', superstruct],
-    ['@sinclair/typebox', 'TypeBox', typebox],
-    ['valibot', 'Valibot', valibot],
-    ['@vinejs/vine', 'VineJS', vine],
-    ['yup', 'Yup'],
-    ['zod', 'Zod', zod]
-  ];
+    { packageName: 'arktype', adapterName: 'arktype', showName: 'Arktype', icon: arktype },
+    { packageName: 'class-validator', showName: 'class-validator', icon: classvalidator },
+    { packageName: 'effect', showName: 'Effect', icon: effect },
+    { packageName: 'joi', adapterName: 'joi', showName: 'Joi', icon: joi },
+    {
+      packageName: 'json-schema',
+      adapterName: 'json-schema',
+      showName: 'JSON Schema',
+      icon: jsonSchema
+    },
+    {
+      packageName: 'superstruct',
+      adapterName: 'superstruct',
+      showName: 'Superstruct',
+      icon: superstruct
+    },
+    {
+      packageName: '@sinclair/typebox',
+      adapterName: 'typebox',
+      showName: 'TypeBox',
+      icon: typebox
+    },
+    { packageName: 'valibot', adapterName: 'valibot', showName: 'Valibot', icon: valibot },
+    { packageName: '@vinejs/vine', adapterName: 'vine', showName: 'VineJS', icon: vine },
+    { packageName: 'yup', adapterName: 'yup', showName: 'Yup' },
+    { packageName: 'zod', adapterName: 'zod', showName: 'Zod', icon: zod }
+  ] satisfies {
+    packageName: string;
+    adapterName?: string;
+    showName: string;
+    icon?: string;
+  }[];
 </script>
 
 <div class="mb-4 flex flex-wrap justify-center gap-2">
   {#each links as link}
-    {@const libName = name == 'package' ? link[0] : link[0].substring(link[0].indexOf('/'))}
-    <a class="variant-ghost btn no-underline" href="{url}/{libName}" {target}
-      >{#if link[2]}<img
-          class="m-0 mr-2 max-h-5 p-0"
-          alt={link[1]}
-          src={link[2]} />{/if}{link[1]}</a>
+    {@const libName = name == 'package' ? link.packageName : link.adapterName}
+    {#if libName}
+      <a class="variant-ghost btn no-underline" href="{url}/{libName}" {target}
+        >{#if link.icon}<img
+            class="m-0 mr-2 max-h-5 p-0"
+            alt={link.showName}
+            src={link.icon} />{/if}{link.showName}</a>
+    {/if}
   {/each}
 </div>

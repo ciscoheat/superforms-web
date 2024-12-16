@@ -24,7 +24,7 @@
     <option value="">Choose:</option>
     <option value="ajv">Ajv</option>
     <option value="arktype">Arktype</option>
-    <option value="@effect/schema">Effect</option>
+    <option value="effect">Effect</option>
     <option value="class-validator">class-validator</option>
     <option value="joi">Joi</option>
     <option value="json-schema">JSON Schema</option>
@@ -57,8 +57,8 @@
   <pre class="installer language-bash copy-visible"><code class="language-bash"
       >{$settings.pm} sveltekit-superforms {$settings.lib == 'json-schema'
         ? '@exodus/schemasafe'
-        : $settings.lib == '@effect/schema'
-          ? 'effect @effect/schema'
+        : $settings.lib == 'effect'
+          ? 'effect'
           : $settings.lib}</code></pre>
 {/if}
 

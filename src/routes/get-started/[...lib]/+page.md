@@ -31,14 +31,14 @@ Select your environment above and run the install command in your project folder
 If you're using JSON Schema on the client, you also need to modify **vite.config.ts**:
 
 ```ts
-import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig } from "vite";
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [sveltekit()],
   optimizeDeps: {
-    include: ["@exodus/schemasafe"], // Add this to make client-side validation work
-  },
+    include: ['@exodus/schemasafe'] // Add this to make client-side validation work
+  }
 });
 ```
 
@@ -111,10 +111,10 @@ class ClassValidatorSchema {
 export const schema = ClassValidatorSchema;
 ```
 
-{:else if $settings.lib == '@effect/schema'}
+{:else if $settings.lib == 'effect'}
 
 ```ts
-import { Schema } from '@effect/schema';
+import { Schema } from 'effect';
 
 // effect deliberately does not provide email parsing out of the box
 // https://github.com/Effect-TS/schema/issues/294
@@ -302,12 +302,12 @@ export const load = async () => {
 };
 ```
 
-{:else if $settings.lib == '@effect/schema'}
+{:else if $settings.lib == 'effect'}
 
 ```ts
 import { superValidate } from 'sveltekit-superforms';
 import { effect } from 'sveltekit-superforms/adapters';
-import { Schema } from '@effect/schema';
+import { Schema } from 'effect';
 
 const emailRegex = /^[^@]+@[^@]+.[^@]+$/;
 
