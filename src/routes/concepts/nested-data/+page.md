@@ -165,7 +165,7 @@ const { form, errors, enhance } = superForm(data.form, {
 });
 ```
 
-> The transport feature requires at least version `2.11` of SvelteKit!
+> The transport feature requires at least version 2.11 of SvelteKit! Also note that classes have to be relatively simple to work. Static methods, getters/setters, etc, may cause problems due to how cloning works within Superforms.
 
 ## Arrays with primitive values
 
