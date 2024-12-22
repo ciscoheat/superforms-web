@@ -58,11 +58,12 @@ return message(form, 'Posted OK!');
 return setError(form, 'image', 'Could not process file.');
 ```
 
-Otherwise, a `withFiles` helper function is required:
+Otherwise a `withFiles` helper function is required, which is not recommended:
 
 ```ts
-// Importing the default fail
+// Importing the default fail:
 import { fail } from '@sveltejs/kit';
+// Prefer to import message, setError and fail from here instead:
 import { withFiles } from 'sveltekit-superforms';
 
 // With the @sveltejs/kit fail:
@@ -70,7 +71,7 @@ if (!form.valid) {
   return fail(400, withFiles({ form }));
 }
 
-// When returning just the form:
+// When returning just the form
 return withFiles({ form })
 ```
 
@@ -240,19 +241,21 @@ const schema = z.object({
 If your validation library cannot validate files, you can obtain `FormData` from the request and extract the files from there, after validation:
 
 ```ts
+import { message, fail } from 'sveltekit-superforms';
+
 export const actions = {
   default: async ({ request }) => {
     const formData = await request.formData();
     const form = await superValidate(formData, zod(schema));
 
-    if (!form.valid) return fail(400, withFiles({ form }));
+    if (!form.valid) return fail(400, { form });
 
     const image = formData.get('image');
     if (image instanceof File) {
       // Validate and process the image.
     }
 
-    return withFiles({ form });
+    return message(form, 'Thank you for uploading an image!');
   }
 };
 ```
