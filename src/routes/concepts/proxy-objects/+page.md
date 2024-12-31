@@ -49,7 +49,7 @@ const idProxy2 = intProxy(superform, 'id', { taint: false });
 
 Now if you bind to `$idProxy` instead of `$form.id`, the value will be converted to and from an integer, and `$form.id` will be updated automatically.
 
-Note that this kind of conversion will usually happen automatically with `bind:value`. `intProxy` and `numberProxy` are rarely needed, as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs). But proxies may still be useful if you want to set the value to `undefined` or `null` when the value is falsy, in which case you can use the `empty` option.
+Note that this kind of conversion will usually happen automatically with `bind:value`. `intProxy` and `numberProxy` are rarely needed, as Svelte [handles this automatically](https://svelte.dev/tutorial/svelte/numeric-inputs). But proxies may still be useful if you want to set the value to `undefined` or `null` when the value is falsy, in which case you can use the `empty` option.
 
 > See [the API](/api#proxy-objects) for more details and options for each kind of proxy.
 
