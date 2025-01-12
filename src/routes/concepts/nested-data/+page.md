@@ -30,7 +30,16 @@ You don't even have to set a name on the form fields anymore, since the actual d
 
 > When `dataType` is set to `'json'`, the `onSubmit` event will contain `FormData`, but it cannot be used to modify the posted data. You need to set or update `$form`, or in special cases, use [jsonData in onSubmit](/concepts/events#jsondata).<br><br>This also means that the `disabled` attribute, which normally prevents input fields from being submitted, will not have that effect. Everything in `$form` will be posted when `dataType` is set to `'json'`.
 
-Modifying the `form` store programmatically is easy, you can assign `$form.field = ...` directly, but note that this will taint the affected fields. If you want to prevent the form from being tainted, you can use `form.update` with an extra option:
+## Requirements
+
+The requirements for nested data to work are as follows:
+
+1. **JavaScript is enabled in the browser.**
+2. **The form has the Superforms [use:enhance](/concepts/enhance) applied.**
+
+## Modifying the form programmatically
+
+To modify the form in code, you can assign `$form.field = ...` directly, but note that this will taint the affected fields. If you want to prevent the form from being tainted, you can use `form.update` with an extra option:
 
 ```ts
 form.update(
@@ -49,13 +58,6 @@ The `taint` options are:
 ```
 
 Which can be used to not only prevent tainting, but also untaint the modified field(s), or the whole form.
-
-## Requirements
-
-The requirements for nested data to work are as follows:
-
-1. **JavaScript is enabled in the browser.**
-2. **The form has the Superforms [use:enhance](/concepts/enhance) applied.**
 
 ## Nested errors and constraints
 
