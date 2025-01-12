@@ -39,7 +39,7 @@ The requirements for nested data to work are as follows:
 
 ## Modifying the form programmatically
 
-To modify the form in code, you can assign `$form.field = ...` directly, but note that this will taint the affected fields. If you want to prevent the form from being tainted, you can use `form.update` with an extra option:
+To modify the form in code, you can assign `$form.field = ...` directly, but note that this will [taint](/concepts/tainted) the affected fields. If you're using the tainted feature and want to prevent it from happening, instead of an assignment you can use `form.update` with an extra option:
 
 ```ts
 form.update(
