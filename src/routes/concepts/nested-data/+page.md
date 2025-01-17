@@ -186,6 +186,7 @@ export const schema = z.object({
 
 <form method="POST">
   <div>Tags</div>
+  <!-- Display array-level errors (in this case array length) -->
   {#if $errors.tags?._errors}
     <div class="invalid">{$errors.tags._errors}</div>
   {/if}
@@ -193,6 +194,7 @@ export const schema = z.object({
   {#each $form.tags as _, i}
     <div>
       <input name="tags" bind:value={$form.tags[i]} />
+      <!-- Display individual tag errors (string length) -->
       {#if $errors.tags?.[i]}
         <span class="invalid">{$errors.tags[i]}</span>
       {/if}
