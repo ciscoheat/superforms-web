@@ -141,7 +141,7 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
     errors, 
     constraints, 
     ...rest 
-	} : {
+  } : {
     name: string;
     value: string;
     type?: string;
