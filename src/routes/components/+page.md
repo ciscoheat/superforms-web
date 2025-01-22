@@ -134,17 +134,17 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
   import type { InputConstraint } from 'sveltekit-superforms';
 
   let { 
-		name, 
-		value = $bindable(), 
-		type = "text", 
-		label, 
-		errors, 
-		constraints, 
-		...rest 
+    name, 
+    value = $bindable(), 
+    type = "text", 
+    label, 
+    errors, 
+    constraints, 
+    ...rest 
 	} : {
-		name: string;
+    name: string;
     value: string;
-		type?: string;
+    type?: string;
     label?: string;
     errors?: string[];
     constraints?: InputConstraint;
@@ -154,7 +154,7 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 <label>
   {#if label}<span>{label}</span><br />{/if}
   <input
-		{name}
+    {name}
     {type}
     bind:value
     aria-invalid={errors ? 'true' : undefined}
