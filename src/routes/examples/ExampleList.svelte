@@ -23,7 +23,7 @@
     replaceState(url, {});
   }
 
-  const bgDark = ['multi-step-skeleton'];
+  const bgDark = ['multi-step-skeleton', 'custom-client'];
 </script>
 
 <div class="mb-2 flex min-h-10 items-center">
@@ -72,7 +72,7 @@
             </a>
             <a
               href="https://github.com/ciscoheat/superforms-examples/tree/{example.slug}-{lib}"
-              target="_blank">{@html github}</a>
+              target="_blank"><!-- eslint-disable svelte/no-at-html-tags -->{@html github}</a>
             {#if i < example.libs.length - 1}<span class="px-1"><br /></span>{/if}
           {/each}
         </p>

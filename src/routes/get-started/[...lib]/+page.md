@@ -49,19 +49,19 @@ If you're starting from scratch, create a new SvelteKit project:
 {#if $settings.pm == 'npm i -D'}
 
 ```npm
-npm create svelte@latest
+npx sv create my-app
 ```
 
 {:else if $settings.pm == 'pnpm i -D'}
 
 ```npm
-pnpm create svelte@latest
+pnpx sv create my-app
 ```
 
 {:else if $settings.pm == 'yarn add --dev'}
 
 ```npm
-yarn create svelte@latest
+npx sv create my-app
 ```
 
 {/if}
@@ -76,11 +76,11 @@ yarn create svelte@latest
 
 ## Creating a Superform
 
-This tutorial will create a Superform containing a name and an email address, ready to be expanded with more form data.
+This tutorial will create a Superform with a name and email address, ready to be expanded with more form data.
 
 ### Creating a validation schema
 
-The main thing required to create a Superform is a validation schema, representing the form data for a single form.
+The main thing required to create a Superform is a validation schema, representing the form data for a single form:
 
 {#if $settings.lib == 'arktype'}
 
@@ -237,11 +237,13 @@ const schema = z.object({
 
 #### Schema caching
 
-The schema should be defined outside the load function, in this case on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be kept in memory. Therefore, define the schema, its options and potential defaults on the top level of a module, so they always refer to the same object.
+Define the schema *outside* the load function, on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) with its arguments, so they must be kept in memory. 
+
+Therefore, define the schema, its options and potential defaults on the top level of a module, so they always refer to the same object.
 
 ### Initializing the form in the load function
 
-To initialize the form, you import an adapter corresponding to your library of choice, together with the schema, and pass it in a load function to the `superValidate` function:
+To initialize the form, you import `superValidate` and an adapter for your validation library of choice in a load function:
 
 **src/routes/+page.server.ts**
 
@@ -516,15 +518,15 @@ export const load = async () => {
 
 {/if}
 
-The Superform server API is called `superValidate`. You can call it in two ways in the load function:
+The Superforms server API is called `superValidate`. You can call it in two ways in the load function:
 
 ### Empty form
 
-If you want the form to be initially empty, just pass the adapter as in the example above, and the form will be filled with default values based on the schema. For example, a `string` field results in an empty string, unless you have set a default.
+If you want the form to be initially empty, just pass the adapter as in the example above, and the form will be filled with default values based on the schema. For example, a `string` field results in an empty string, unless you have specified a default.
 
 ### Populate form from database
 
-If you want to populate the form, you can send data to `superValidate` as the first parameter, adapter second, like this:
+If you want to populate the form, usually from a database, you can send data to `superValidate` as the first parameter, adapter second, like this:
 
 ```ts
 import { error } from '@sveltejs/kit';
@@ -546,15 +548,108 @@ export const load = async ({ params }) => {
 
 As long as the data partially matches the schema, you can pass it directly to `superValidate`. This is useful for backend interfaces, where the form should usually be populated based on a url like `/users/123`.
 
-> Errors will be automatically displayed when the form is populated like this, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
+> Errors will be displayed when the form is populated, but not when empty. You can modify this behavior [with an option](/concepts/error-handling#initial-form-errors).
 
 ### Important note about return values
 
-Unless you call the SvelteKit `redirect` or `error` functions, you should **always** return the form object to the client, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned like this in all code paths that returns, both in load functions and form actions.
+Unless you call the SvelteKit `redirect` or `error` functions, you should **always** return the form object to the client, either directly or through a helper function. The name of the variable doesn't matter; you can call it `{ loginForm }` or anything else, but it needs to be returned like this in all code paths that returns, both in load functions and form actions. If you don't, the form won't be updated with new data (like errors) on the client.
 
-### Displaying the form
+## Posting data
 
-The `superValidate` function returns the data required to instantiate a form on the client, now available in `+page.svelte` as `data.form` (as we did a `return { form }`). There, we'll use the client part of the API:
+In the form actions, also defined in `+page.server.ts`, we'll use `superValidate` again, but now it should handle `FormData`. This can be done in several ways:
+
+- Use the `request` parameter (which contains `FormData`)
+- Use the `event` object (which contains the request)
+- Use `FormData` directly, if you need to access it before calling `superValidate`.
+
+The most common is to use `request`:
+
+**src/routes/+page.server.ts**
+
+{#if $settings.lib == 'json-schema'}
+
+```ts
+import { message } from 'sveltekit-superforms';
+import { fail } from '@sveltejs/kit';
+
+export const actions = {
+  default: async ({ request }) => {
+    // The adapter must be defined before superValidate for JSON Schema.
+    const adapter = schemasafe(schema);
+    const form = await superValidate(request, adapter);
+
+    console.log(form);
+
+    if (!form.valid) {
+      // Return { form } and things will just work.
+      return fail(400, { form });
+    }
+
+    // TODO: Do something with the validated form.data
+
+    // Return the form with a status message
+    return message(form, 'Form posted successfully!');
+  }
+};
+```
+
+{:else if $settings.lib == 'class-validator' || $settings.lib == 'superstruct' || $settings.lib == 'arktype' || $settings.lib == '@vinejs/vine'}
+
+```ts
+import { message } from 'sveltekit-superforms';
+import { fail } from '@sveltejs/kit';
+
+export const actions = {
+  default: async ({ request }) => {
+    const form = await superValidate(request, your_adapter(schema, { defaults }));
+    console.log(form);
+
+    if (!form.valid) {
+      // Return { form } and things will just work.
+      return fail(400, { form });
+    }
+
+    // TODO: Do something with the validated form.data
+
+    // Return the form with a status message
+    return message(form, 'Form posted successfully!');
+  }
+};
+```
+
+{:else}
+
+```ts
+import { message } from 'sveltekit-superforms';
+import { fail } from '@sveltejs/kit';
+
+export const actions = {
+  default: async ({ request }) => {
+    const form = await superValidate(request, your_adapter(schema));
+    console.log(form);
+
+    if (!form.valid) {
+      // Return { form } and things will just work.
+      return fail(400, { form });
+    }
+
+    // TODO: Do something with the validated form.data
+
+    // Return the form with a status message
+    return message(form, 'Form posted successfully!');
+  }
+};
+```
+
+{/if}
+
+## For simple forms
+
+If you have a very simple form and no intentions to use any client-side functionality like events, loading spinners, nested data, etc, then you don't have to include the client part, which the rest of the tutorial is about. There's a short example how to display errors and messages without the client [here](/examples?tag=runes). Enjoy the simplicity!
+
+## Displaying the form
+
+The data from `superValidate` is now available in `+page.svelte` as `data.form`, as we did a `return { form }`. Now we can use the client part of the API:
 
 **src/routes/+page.svelte**
 
@@ -589,7 +684,7 @@ This is what the form should look like now:
 
 ### Debugging
 
-We can see that the form has been populated with the default values. But let's add the debugging component [SuperDebug](/super-debug) to look behind the scenes:
+We can see that the form has been populated with the default values from the schema. But let's add the debugging component [SuperDebug](/super-debug) to look behind the scenes:
 
 **src/routes/+page.svelte**
 
@@ -605,96 +700,11 @@ This should be displayed:
 
 <SuperDebug data={$form} />
 
-When editing the form fields (try in the form above), the data is automatically updated. The component also displays a copy button and the current page status in the right corner. There are many [configuration options](/super-debug) available.
+When editing the form fields (try in the form above), the data is automatically updated. 
 
-### Posting data
+SuperDebug also displays a copy button and the current page status in the right corner. There are many [configuration options](/super-debug) available.
 
-In the form actions, defined in `+page.server.ts`, we'll use the `superValidate` function again, but now it should handle `FormData`. This can be done in several ways:
-
-- Use the `request` parameter (which contains `FormData`)
-- Use the `event` object (which contains the request)
-- Use `FormData` directly, if you need to access it before calling `superValidate`.
-
-The most common is to use `request`:
-
-**src/routes/+page.server.ts**
-
-{#if $settings.lib == 'json-schema'}
-
-```ts
-import { message } from 'sveltekit-superforms';
-import { fail } from '@sveltejs/kit';
-
-export const actions = {
-  default: async ({ request }) => {
-    // The adapter must be defined before superValidate for JSON Schema.
-    const adapter = schemasafe(schema);
-    const form = await superValidate(request, adapter);
-
-    console.log(form);
-
-    if (!form.valid) {
-      // Again, return { form } and things will just work.
-      return fail(400, { form });
-    }
-
-    // TODO: Do something with the validated form.data
-
-    // Display a success status message
-    return message(form, 'Form posted successfully!');
-  }
-};
-```
-
-{:else if $settings.lib == 'class-validator' || $settings.lib == 'superstruct' || $settings.lib == 'arktype' || $settings.lib == '@vinejs/vine'}
-
-```ts
-import { message } from 'sveltekit-superforms';
-import { fail } from '@sveltejs/kit';
-
-export const actions = {
-  default: async ({ request }) => {
-    const form = await superValidate(request, your_adapter(schema, { defaults }));
-    console.log(form);
-
-    if (!form.valid) {
-      // Again, return { form } and things will just work.
-      return fail(400, { form });
-    }
-
-    // TODO: Do something with the validated form.data
-
-    // Display a success status message
-    return message(form, 'Form posted successfully!');
-  }
-};
-```
-
-{:else}
-
-```ts
-import { message } from 'sveltekit-superforms';
-import { fail } from '@sveltejs/kit';
-
-export const actions = {
-  default: async ({ request }) => {
-    const form = await superValidate(request, your_adapter(schema));
-    console.log(form);
-
-    if (!form.valid) {
-      // Again, return { form } and things will just work.
-      return fail(400, { form });
-    }
-
-    // TODO: Do something with the validated form.data
-
-    // Display a success status message
-    return message(form, 'Form posted successfully!');
-  }
-};
-```
-
-{/if}
+## Posting the form
 
 Now we can post the form back to the server. Submit the form, and see what's happening on the server:
 
@@ -771,15 +781,17 @@ Now we know that validation has failed and there are errors being sent to the cl
 </style>
 ```
 
-By including the `errors` store, we can display errors where appropriate, and through `constraints` we'll get browser validation even without JavaScript enabled. The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field. And finally, we added a [status message](/concepts/messages) above the form to show if it was posted successfully.
+By including the `errors` store, we can display errors where appropriate, and through `constraints` we'll get browser validation even without JavaScript enabled. 
+
+The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field. And finally, we included the [status message](/concepts/messages) above the form to show if it was posted successfully.
 
 We now have a fully working form, with convenient handling of data and validation both on the client and server!
 
-There are no hidden DOM manipulations or other secrets; it's just HTML attributes and Svelte stores, so it works with server-side rendering. No JavaScript is required for the basics.
+There are no hidden DOM manipulations or other secrets; it's just HTML attributes and Svelte stores, which means it works perfectly with server-side rendering. No JavaScript is required for the basics.
 
 ### Adding progressive enhancement
 
-As a last step, let's add progressive enhancement, so users with JavaScript enabled will have a nicer experience. It's also required for enabling [client-side validation](/concepts/client-validation) and [events](/concepts/events), and of course to avoid reloading the page when the form is posted.
+As a last step, let's add progressive enhancement, so JavaScript users will have a nicer experience. We also need it for enabling [client-side validation](/concepts/client-validation) and [events](/concepts/events), and of course to avoid reloading the page when the form is posted.
 
 This is simply done with `enhance`, returned from `superForm`:
 

@@ -20,7 +20,8 @@ const exampleData = [
   ['multi-step-skeleton', 'multi-step skeleton', 'Multi-step form with the Skeleton UI framework.', 'valibot'],
   ['url', 'url list database', 'Parsing the URL parameters and filtering a list of items.', 'zod'],
   ['username-available', 'debounce database fetch events', 'How to make a debounced "username available" check.', 'zod'],
-  ['crud', 'backend database crud spinner', 'A fully functional CRUD backend in 150 lines of code.', 'zod']
+  ['crud', 'backend database crud spinner', 'A fully functional CRUD backend in 150 lines of code.', 'zod'],
+  ['custom-client', 'runes', 'Minimal custom client using Runes, for simple forms.', 'zod']
 ]
 
 export const examples : Example[] = exampleData.map(e => ({
