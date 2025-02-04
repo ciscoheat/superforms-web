@@ -32,20 +32,20 @@ Instead of the text version below, here's the video version. It's using version 
 
 <Youtube id="nN72awrXsHE" />
 
-### Stackblitz
+### SvelteLab
 
-The code is available [on Stackblitz](https://stackblitz.com/edit/superforms-2-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts). Just click the link, and you're up and running in the browser in less than 30 seconds!
+The code is available [on SvelteLab](https://sveltelab.dev/github.com/ciscoheat/superforms-examples/tree/crud-zod). Just click the link, and you're up and running in the browser in less than 30 seconds!
 
 ### New SvelteKit project
 
 Start from scratch in a new SvelteKit project by executing one of the following commands in your project directory:
 
 ```
-npm create svelte@latest
+npx sv create sf-crud
 ```
 
 ```
-pnpm create svelte@latest
+pnpx sv create sf-crud
 ```
 
 Select **Skeleton project** and **Typescript syntax** at the prompts, the rest is up to you. Then add this to `<head>` in **src/app.html** for a much nicer visual experience:
@@ -139,13 +139,13 @@ Some simple logic is used to find the user, and then detect if a 404 should be d
 
 (Sometimes, CRUDL is used as an acronym, since listing is also fundamental to data management.)
 
-Now that we have loaded the data, let's display it in a page component:
+Now that we have loaded the data, let's display it:
 
 **src/routes/users/[[id]]/+page.svelte**
 
 ```svelte
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { superForm } from 'sveltekit-superforms';
 
   let { data } = $props();
@@ -158,7 +158,7 @@ Now that we have loaded the data, let's display it in a page component:
 </script>
 
 {#if $message}
-  <h3 class:invalid={$page.status >= 400}>{$message}</h3>
+  <h3 class:invalid={page.status >= 400}>{$message}</h3>
 {/if}
 
 <h2>{!$form.id ? 'Create' : 'Update'} user</h2>
@@ -166,7 +166,7 @@ Now that we have loaded the data, let's display it in a page component:
 
 There are plenty of variables extracted from `superForm`; refer to the [API reference](/api#superform-return-type) for a complete list. We've also setting the `resetForm` to `false`, since the data should be kept after editing.
 
-We've also prepared a status message, using `$page.status` to test for success or failure, and we're using `$form.id` to display a "Create user" or "Update user" title. Now let's add the form itself:
+We've also prepared a status message, using `page.status` to test for success or failure, and we're using `$form.id` to display a "Create user" or "Update user" title. Now let's add the form itself:
 
 **src/routes/users/[[id]]/+page.svelte** (continued)
 
@@ -374,6 +374,6 @@ And some styling for everything at the end:
 </style>
 ```
 
-That's it! Thank you for following along, the code is [available here](https://stackblitz.com/edit/superforms-2-crud?file=src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.svelte,src%2Froutes%2Fusers%2F[[id]]%2F%2Bpage.server.ts) on Stackblitz.
+That's it! Thank you for following along, the code is [available here](https://sveltelab.dev/github.com/ciscoheat/superforms-examples/tree/crud-zod) on SvelteLab.
 
 If you have any questions, see the [help & support](/support) page.
