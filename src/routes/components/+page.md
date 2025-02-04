@@ -133,28 +133,37 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 <script lang="ts">
   import type { InputConstraint } from 'sveltekit-superforms';
 
-  let { value, label, errors, constraints } : {
+  let { 
+    name, 
+    value = $bindable(), 
+    type = "text", 
+    label, 
+    errors, 
+    constraints, 
+    ...rest 
+  } : {
+    name: string;
     value: string;
-    label: string | undefined = undefined;
-    errors: string[] | undefined = undefined;
-    constraints: InputConstraint | undefined = undefined;
+    type?: string;
+    label?: string;
+    errors?: string[];
+    constraints?: InputConstraint;
   } = $props();
 </script>
 
 <label>
   {#if label}<span>{label}</span><br />{/if}
   <input
-    type="text"
+    {name}
+    {type}
     bind:value
     aria-invalid={errors ? 'true' : undefined}
     {...constraints}
-    {...$$restProps} 
+    {...rest} 
   />
 </label>
 {#if errors}<span class="invalid">{errors}</span>{/if}
 ```
-
-> The `type` attribute on input elements must be hard-coded in Svelte 4, [explained here](https://stackoverflow.com/a/66191989/70894). Especially important for `type="number"`.
 
 **+page.svelte**
 
@@ -292,7 +301,7 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
     type SuperForm, type FormPathLeaves
   } from 'sveltekit-superforms';
 
-  let { superForm, field } : { superform: SuperForm<T>, field: FormPathLeaves<T, boolean> } = $props();
+  let { superForm, field, ...rest } : { superform: SuperForm<T>, field: FormPathLeaves<T, boolean> } = $props();
 
   const { value, errors, constraints } = formFieldProxy(superform, field) satisfies FormFieldProxy<boolean>;
 </script>
@@ -303,7 +312,7 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
   class="checkbox"
   bind:checked={$value}
   {...$constraints}
-  {...$$restProps} 
+  {...rest} 
 />
 ```
 
