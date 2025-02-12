@@ -77,7 +77,7 @@ const proxyDate = dateProxy(form, 'date', { format: 'date' });
 />
 ```
 
-We're also taking using the `min` and `max` constraints to limit the date picker selection. The following example limits the date from today and forward, and also uses the [empty option](/api#dateproxyform-fieldname-options) of the proxy, to set an invalid date to `undefined`:
+We're also using the `min` and `max` constraints to limit the date picker selection. The following example limits the date from today and forward, and also uses the [empty option](/api#dateproxyform-fieldname-options) of the proxy, to set an invalid date to `undefined`. [Code](https://github.com/ciscoheat/superforms-web/blob/main/src/routes/concepts/proxy-objects/Form.svelte)
 
 <Form {data} />
 
