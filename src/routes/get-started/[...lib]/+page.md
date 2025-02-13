@@ -52,6 +52,12 @@ If you're starting from scratch, create a new SvelteKit project:
 npx sv create my-app
 ```
 
+{:else if $settings.pm == 'bun i -D'}
+
+```npm
+bunx sv create my-app
+```
+
 {:else if $settings.pm == 'pnpm i -D'}
 
 ```npm
