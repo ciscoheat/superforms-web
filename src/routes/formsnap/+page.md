@@ -21,7 +21,7 @@ This is the style you can expect when using Formsnap, compared to manually putti
     <Control>
       {#snippet children({ props })}
         <Label>Name</Label>
-		    <input type="text" {...props} bind:value={$formData.name} />
+	<input type="text" {...props} bind:value={$formData.name} />
       {/snippet}
     </Control>
     <Description>Be sure to use your real name.</Description>
