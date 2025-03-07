@@ -18,25 +18,31 @@ This is the style you can expect when using Formsnap, compared to manually putti
 ```svelte
 <form method="POST" use:enhance>
   <Field {form} name="name">
-    <Control let:attrs>
-      <Label>Name</Label>
-      <input {...attrs} bind:value={$formData.name} />
+    <Control>
+      {#snippet children({ props })}
+        <Label>Name</Label>
+		    <input type="text" {...props} bind:value={$formData.name} />
+      {/snippet}
     </Control>
     <Description>Be sure to use your real name.</Description>
     <FieldErrors />
   </Field>
   <Field {form} name="email">
-    <Control let:attrs>
-      <Label>Email</Label>
-      <input {...attrs} type="email" bind:value={$formData.email} />
+    <Control>
+      {#snippet children({ props })}
+        <Label>Email</Label>
+        <input type="email" {...props} bind:value={$formData.email} />
+      {/snippet}
     </Control>
     <Description>It's preferred that you use your company email.</Description>
     <FieldErrors />
   </Field>
   <Field {form} name="password">
-    <Control let:attrs>
-      <Label>Password</Label>
-      <input {...attrs} type="password" bind:value={$formData.password} />
+    <Control>
+        {#snippet children({ props })}
+        <Label>Password</Label>
+        <input type="password" {...props} bind:value={$formData.password} />
+      {/snippet}      
     </Control>
     <Description>Ensure the password is at least 10 characters.</Description>
     <FieldErrors />
