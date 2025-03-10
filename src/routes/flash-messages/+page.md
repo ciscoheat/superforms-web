@@ -10,40 +10,36 @@
 
 Since it's common to redirect after a successful post, especially in backend interfaces, the `form.message` property isn't a general solution for displaying status messages.
 
-The sister library to Superforms is called [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message), a useful addon that handles temporary messages sent with redirects. Note that at least version 1.0 is required!
+The sister library to Superforms is called [sveltekit-flash-message](https://github.com/ciscoheat/sveltekit-flash-message), a useful addon that handles temporary messages sent with redirects.
 
 ## Usage
 
 The library works together with Superforms **without any extra configuration**, usually you can replace the Superforms [status messages](/concepts/messages) with the flash message, and that will work very well.
 
-But if you have some special use case where you need to integrate the flash message more closely with a form, you can do that by importing its module when calling `superForm`:
+### Example
+
+After a successful post, it's standard practice to [Redirect After Post](https://www.theserverside.com/news/1365146/Redirect-After-Post). Not so much today with progressive enhancement, but for non-JS users it's still important to redirect with a GET request, to avoid double-posting. (And of course, if you need to redirect to another route, it's unavoidable.)
+
+So at the end of the form action, use the `redirect` function from `sveltekit-flash-message`. But you may also want to stay on the same page, displaying a toast message if something went wrong with the form submission. This is easily done with the `setFlash` function:
 
 ```ts
-import * as flashModule from 'sveltekit-flash-message/client';
+import { redirect, setFlash } from 'sveltekit-flash-message/server';
+import { fail } from '@sveltejs/kit';
 
-const { form, errors, enhance } = superForm(data.form, {
-  flashMessage: {
-    module: flashModule,
-    onError?: ({ result, flashMessage }) => {
-      // Error handling for the flash message:
-      // - result is the ActionResult
-      // - flashMessage is the flash store (not the status message store)
-      const errorMessage = result.error.message
-      flashMessage.set(/* Your flash message type */);
+export const actions = {
+  default: async ({ request, cookies }) => {
+    const form = await superValidate(request, your_adapter(schema));
+
+    if (!form.valid) {
+      // Stay on the same page and set a flash message
+      setFlash({ type: 'error', message: "Please check your form data." }, cookies);
+      return fail(400, { form });
     }
-  },
-  syncFlashMessage: false
-}
+
+    // TODO: Do something with the validated form.data
+
+    // All ok, redirect with a flash message on another page
+    redirect('/posts', { type: 'success', message: "Post created!" }, cookies);
+  }
+};
 ```
-
-Then the following options are available:
-
-### syncFlashMessage
-
-If set to `true`, when `form.message` is updated, the flash message will be synchronized with it, including honoring the [clearOnSubmit](/concepts/submit-behavior#clearonsubmit) option. 
-
-It's important that the flash and form message types are matching, in this case. See [this section](/concepts/messages#strongly-typed-message) on how to make the form message strongly typed.
-
-### flashMessage.onError
-
-If a form error occurs, which happens when `error(...)` is called in a form action (and `use:enhance` is added to the form), the `flashMessage.onError` callback can be used to transform it into your flash message type, so you can display the error at the flash message instead of in `form.message`.

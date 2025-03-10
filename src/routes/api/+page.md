@@ -372,21 +372,7 @@ type FormOptions<T, M, In> = Partial<{
   delayMs: number;
   timeoutMs: number;
 
-  // Special flash message integration (not usually required)
-  syncFlashMessage?: boolean;
-  flashMessage: {
-    module: import * as flashModule from 'sveltekit-flash-message/client';
-    onError?: (event: {
-      result: {
-        type: 'error';
-        status?: number;
-        error: App.Error;
-      };
-      message: Writable<App.PageData['flash']>;
-    }) => MaybePromise<unknown | void>;
-    cookiePath?: string;
-    cookieName?: string;
-  };
+  // For handling arbitrary types in the form. (See nested data)
   transport: Transport;
 
   // Disable warnings
