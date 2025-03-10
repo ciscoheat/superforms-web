@@ -79,7 +79,7 @@ import { superForm } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { customSchema } from './schemas.js';
 
-let step = 1;
+let step = $state(1);
 const lastStep = 5;
 
 const { form, enhance } = superForm(data.form, {
@@ -100,7 +100,7 @@ The `customRequest` option takes a function that should return a `Promise<Respon
 import { superForm } from 'sveltekit-superforms';
 import type { SubmitFunction } from '@sveltejs/kit';
 
-let progress = 0;
+let progress = $state(0);
 
 function fileUploadWithProgress(input: Parameters<SubmitFunction>[0]) {
   return new Promise<XMLHttpRequest>((resolve) => {
@@ -253,7 +253,7 @@ You can also set `onError` to the string value `'apply'`, in which case the defa
 
 ## onChange
 
-The `onChange` event is not triggered when submitting, but every time `$form` is modified, both as a html event (when modified with `bind:value`) and programmatically (direct assignment to `$form`). 
+The `onChange` event is not triggered when submitting, but every time `$form` is modified, both as a html event (when modified with `bind:value`) and programmatically (direct assignment to `$form`).
 
 The event is a discriminated union that you can distinguish between using the `target` property:
 
@@ -275,5 +275,7 @@ const { form, errors, enhance } = superForm(data.form, {
 ```
 
 If you want to handle all change events, you can access `event.paths` without distinguishing.
+
+`onChange` is useful for deep reactivity, as you have the full path to the changes in the event.
 
 <Next section={concepts} />
