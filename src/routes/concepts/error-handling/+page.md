@@ -68,7 +68,7 @@ If you're using [nested data](/concepts/nested-data), a string path is used to s
 setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 ```
 
-> Errors added with `setError` will be removed when a schema is used in [client-side validation](/concepts/client-validation) and the first validation occurs (such as modifying a field).
+> Errors added with `setError` will be removed when [client-side validation](/concepts/client-validation) is used, and the first client validation occurs (such as modifying a field).
 
 ## Server errors
 
@@ -81,7 +81,9 @@ In the case of a server error, Superforms will normalize the different kind of s
 | JSON response          | `return json({ code: 'rate_limited', status: 429 }, { status: 429 })` |
 | Other response         | `<!doctype html><html lang="en"><head><meta charset=...` |
 
-These can be handled with the [onError](/concepts/events#onerror) event, assuming the Superforms [use:enhance](/concepts/enhance) action is applied to the form. If it isn't, the nearest `+error.svelte` page will be rendered.
+These should be handled with the [onError](/concepts/events#onerror) event, assuming the Superforms [use:enhance](/concepts/enhance) action is applied to the form. If it isn't, the nearest `+error.svelte` page will be rendered.
+
+> Without an [onError](/concepts/events#onerror) event, errors will throw an exception in the browser. Read the link for more information (and how to ignore errors).
 
 In general, returning a [status message](/concepts/messages) is recommended instead of calling `error` or throwing exceptions, as this will make even the non-JS users keep their form data.
 
