@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Avatar } from '@skeletonlabs/skeleton';
-  import matus from './img/matus.png';
+  import matus from './img/matus.webp';
   import bradenw from './img/braden-w.jpg';
   import huntabyte from './img/huntabyte.jpg';
   import jitpackjoyride from './img/jitpackjoyride.jpg';
@@ -10,11 +10,13 @@
   import tylergaw from './img/tylergaw.jpg';
   import knd775 from './img/knd775.jpg';
   import chbert from './img/chbert.jpg';
-  import jdgamble555 from './img/jdgamble555.jpg';
   import shortbook from './img/shortbook.png';
   import cgalo5758 from './img/cgalo5758.png';
   import toucantix from './img/toucantix.png';
   import yuzu from './img/yuzu-health.png';
+  import jeffp from './img/jeffp.webp';
+  import exceptionless from './img/exceptionless.png';
+  import hemalr from './img/hemalr.webp';
 
   const sponsors = [
     [matus, 'Vicente Matus', 'https://github.com/vicentematus'],
@@ -27,11 +29,13 @@
     [tylergaw, 'Tyler Gaw', 'https://github.com/tylergaw'],
     [knd775, 'Ben Ayles', 'https://github.com/knd775'],
     [chbert, 'chbert', 'https://github.com/chbert'],
-    [jdgamble555, 'Jonathan Gamble', 'https://github.com/jdgamble555'],
     [shortbook, 'ShortBook', 'https://shortbook.life/'],
+    [jeffp, 'Jeff Pohlmeyer', 'https://github.com/jeffpohlmeyer'],
+    [exceptionless, 'Exceptionless', 'https://exceptionless.com/'],
     [cgalo5758, 'Christian Galo', 'https://cgalo.dev/'],
     [toucantix, 'Toucantix', 'https://toucantix.com'],
-    [yuzu, 'Yuzu Health', 'https://yuzu.health/']
+    [yuzu, 'Yuzu Health', 'https://yuzu.health/'],
+    [hemalr, 'Hemal', 'https://github.com/HemalR']
   ];
 </script>
 
