@@ -180,7 +180,7 @@ let { data } : { data: PageData } = $props();
 
 const { form, errors, message, enhance } = superForm(data.form, {
   onUpdate({ form, result }) {
-    const action = result.data as FormResult<ActionData>;
+    const action: FormResult<ActionData> = result.data;
     // If you've returned from the form action:
     // return { form, extra: 123 }
     if (form.valid && action.extra) {
