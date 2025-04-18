@@ -192,19 +192,19 @@ If for some reason a html page or plain text is returned, for example when a pro
 
 ### Why am I'm getting TypeError: The body has already been consumed?
 
-This happens if you access the form data of the request several times, which could happen when calling `superValidate` multiple times during the same request.
+This happens if you access the form data of the request before calling `superValidate`, for example when debugging or calling it multiple times during the same request.
 
-To fix that problem, extract the formData before calling superValidate, and use that as an argument instead of `request` or `event`:
+To fix the problem, use the form data as an argument instead of `request` or `event`:
 
 ```ts
 export const actions = {
   default: async ({ request }) => {
+    // Get the form data, which will empty the request stream
     const formData = await request.formData();
+    console.log(formData); // Debugging the raw form data
 
+    // Cannot use event or request at this point
     const form = await superValidate(formData, zod(schema));
-    const form2 = await superValidate(formData, zod(anotherSchema));
-
-    // Business as usual
   }
 };
 ```
