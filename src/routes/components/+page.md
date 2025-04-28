@@ -262,7 +262,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 <script lang="ts" generics="T extends Record<string, unknown>">
   import { formFieldProxy, type SuperForm, type FormPathLeaves  } from 'sveltekit-superforms';
 
-  let { superForm, field } : { superform: SuperForm<T>, field: FormPathLeaves<T> } = $props();
+  let { superform, field, ...rest } : { superform: SuperForm<T>, field: FormPathLeaves<T> } = $props();
 
   const { value, errors, constraints } = formFieldProxy(superform, field);
 </script>
@@ -275,7 +275,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
     {...$constraints}
-    {...$$restProps} />
+    {...rest} />
 </label>
 {#if $errors}<span class="invalid">{$errors}</span>{/if}
 ```
