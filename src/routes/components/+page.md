@@ -260,9 +260,15 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 </script>
 
 <script lang="ts" generics="T extends Record<string, unknown>">
+  import type { HTMLInputAttributes } from 'svelte/elements';
   import { formFieldProxy, type SuperForm, type FormPathLeaves  } from 'sveltekit-superforms';
 
-  let { superForm, field } : { superform: SuperForm<T>, field: FormPathLeaves<T> } = $props();
+  type Props = HTMLInputAttributes & {
+		superform: SuperForm<T>;
+		field: FormPathLeaves<T>;
+	};
+
+  let { superform, field, ...rest } : Props = $props();
 
   const { value, errors, constraints } = formFieldProxy(superform, field);
 </script>
@@ -275,7 +281,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
     {...$constraints}
-    {...$$restProps} />
+    {...rest} />
 </label>
 {#if $errors}<span class="invalid">{$errors}</span>{/if}
 ```
