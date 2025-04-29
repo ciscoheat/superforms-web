@@ -41,7 +41,9 @@ const { form, enhance, reset } = superForm(data.form, {
 
 When `applyAction` is `true`, the form will have the default SvelteKit behavior of both updating and reacting on `$page.form` and `$page.status`, and also redirecting automatically.
 
-Turning this behavior off can be useful when you want to isolate the form from other sources updating the page, for example Supabase events, a known source of confusing form behavior. Read more about `applyAction` [in the SvelteKit docs](https://svelte.dev/docs/kit/form-actions#Progressive-enhancement-Customising-use:enhance).
+Turning this behavior off with `false` can be useful when you want to isolate the form from other sources updating the page, for example Supabase events, a known source of confusing form behavior. Read more about `applyAction` [in the SvelteKit docs](https://svelte.dev/docs/kit/form-actions#Progressive-enhancement-Customising-use:enhance).
+
+In rare cases you may want the form to not react on page reloads, for example if you call [invalidateAll](https://svelte.dev/tutorial/kit/invalidate-all) but want to avoid the form to revert to its initial state. Then you can specify `applyAction: 'never'`, and nothing but submitting the form will alter its state.
 
 ### invalidateAll
 
@@ -49,7 +51,7 @@ When `invalidateAll` is `true` (the default) and a successful validation result 
 
 #### Optimistic updates
 
-There can be a conflict between the data returned in the form action and the new data from the load function. The form action data is "optimistic", meaning that what's returned will be displayed, assuming that all data was supposed to be updated. But if you update the form partially, the form data will be out of sync with the load function data, in which case you may want to wait for the load function data. This can be achieved with by setting `invalidateAll: 'force'`. Now the load function data will be prioritized, and the `reset` function will also use the latest load function data when called.
+The data returned in the form action can conflict with the new data from the load function. The form action update is "optimistic", meaning that what's returned there will be displayed, assuming that all data was supposed to be updated. But if you update the form partially, the form data will be out of sync with the load function data, in which case you may want to wait for the load function data. This can be achieved with by setting `invalidateAll: 'pessimistic'`. Now the load function data will be prioritized, and the `reset` function will also use the latest load function data when called.
 
 ### resetForm
 
