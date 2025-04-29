@@ -262,7 +262,12 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 <script lang="ts" generics="T extends Record<string, unknown>">
   import { formFieldProxy, type SuperForm, type FormPathLeaves  } from 'sveltekit-superforms';
 
-  let { superform, field, ...rest } : { superform: SuperForm<T>, field: FormPathLeaves<T> } = $props();
+  type Props = HTMLInputAttributes & {
+		superform: SuperForm<T>;
+		field: FormPathLeaves<T>;
+	};
+
+  let { superform, field, ...rest } : Props = $props();
 
   const { value, errors, constraints } = formFieldProxy(superform, field);
 </script>
