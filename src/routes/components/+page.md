@@ -260,6 +260,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 </script>
 
 <script lang="ts" generics="T extends Record<string, unknown>">
+  import type { HTMLInputAttributes } from 'svelte/elements';
   import { formFieldProxy, type SuperForm, type FormPathLeaves  } from 'sveltekit-superforms';
 
   type Props = HTMLInputAttributes & {
