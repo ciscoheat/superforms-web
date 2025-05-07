@@ -8,6 +8,7 @@
   <span>I'm using</span>
   <select class="select w-24 max-w-24" bind:value={$settings.pm}>
     <option value="npm i -D">npm</option>
+    <option value="bun i -D">bun</option>
     <option value="pnpm i -D">pnpm</option>
     <option value="yarn add --dev">yarn</option>
   </select>
