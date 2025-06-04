@@ -143,8 +143,8 @@ See [this page](/default-values) for a list of default schema values.
  * Properties are mapped from the schema:
  */
 InputConstraints = Partial<{
-  required: boolean; // Not nullable or optional
-  pattern: string; // The *first* string validator with RegExp pattern
+  required: boolean; // true if not nullable or optional
+  pattern: string; // string validator with RegExp pattern
   min: number | string; // number or ISO date string depending on type
   max: number | string; // number or ISO date string depending on type
   step: number | 'any'; // number validator with step constraint

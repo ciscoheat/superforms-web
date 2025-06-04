@@ -42,13 +42,13 @@ The constraints is an object with validation properties mapped from the schema:
 
 ```ts
 {
-  pattern?: string;      // The *first* string validator with a RegExp pattern
+  required?: boolean;    // true if not nullable or optional
+  pattern?: string;      // string validator with a RegExp pattern
   step?: number | 'any'; // number with a step validator
   minlength?: number;    // string with a minimum length
   maxlength?: number;    // string with a maximum length
   min?: number | string; // number if number validator, ISO date string if date validator
   max?: number | string; // number if number validator, ISO date string if date validator
-  required?: true;       // true if not nullable, nullish or optional
 }
 ```
 
