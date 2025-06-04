@@ -47,18 +47,18 @@ export const actions = {
 
 ## Returning files in form actions
 
-**Important:** Because file objects cannot be serialized, you must return the form using `fail`, `message` or `setError` imported from Superforms:
+**Important:** Because file objects cannot be serialized, you must return the form using `fail`, `message` or `setError` imported from *Superforms*, not from SvelteKit:
 
 ```ts
 import { message, setError, fail } from 'sveltekit-superforms';
 
-// message, setError and the custom fail handles this automatically:
+// message, setError and the Superforms fail handles this automatically:
 if (!form.valid) return fail(400, { form });
 return message(form, 'Posted OK!');
 return setError(form, 'image', 'Could not process file.');
 ```
 
-Otherwise a `withFiles` helper function is required, which is not recommended:
+Otherwise a `withFiles` helper function is required:
 
 ```ts
 // Importing the default fail:
