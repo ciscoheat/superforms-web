@@ -34,6 +34,8 @@
     <option value="@vinejs/vine">VineJS</option>
     <option value="yup">Yup</option>
     <option value="zod">Zod</option>
+    <option value="zod4">Zod 4</option>
+    <option value="zodmini">Zod Mini</option>
     <option value="n/a">Not on the list!</option>
   </select>
 </div>
@@ -59,7 +61,9 @@
         ? '@exodus/schemasafe'
         : $settings.lib == 'effect'
           ? 'effect'
-          : $settings.lib}</code></pre>
+          : $settings.lib.startsWith('zod')
+            ? 'zod'
+            : $settings.lib}</code></pre>
 {/if}
 
 <style lang="scss">

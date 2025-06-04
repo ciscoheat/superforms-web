@@ -229,6 +229,28 @@ const schema = z.object({
 });
 ```
 
+{:else if $settings.lib == 'zod4'}
+
+```ts
+import { z } from 'zod/v4';
+
+const schema = z.object({
+  name: z.string().default('Hello world!'),
+  email: z.email()
+});
+```
+
+{:else if $settings.lib == 'zodmini'}
+
+```ts
+import { z } from 'zod/v4-mini';
+
+const schema = z.object({
+  name: z._default(z.string(), 'Hello world!'),
+  email: z.email('Invalid email')
+});
+```
+
 {:else}
 
 > Select a validation library at the top of the page to see the example code.
@@ -512,6 +534,48 @@ export const load = async () => {
 };
 ```
 
+{:else if $settings.lib == 'zod4'}
+
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
+import { z } from 'zod/v4';
+
+// Define outside the load function so the adapter can be cached
+const schema = z.object({
+  name: z.string().default('Hello world!'),
+  email: z.email()
+});
+
+export const load = async () => {
+  const form = await superValidate(zod4(schema));
+
+  // Always return { form } in load functions
+  return { form };
+};
+```
+
+{:else if $settings.lib == 'zodmini'}
+
+```ts
+import { superValidate } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
+import { z } from 'zod/v4-mini';
+
+// Define outside the load function so the adapter can be cached
+const schema = z.object({
+	name: z._default(z.string(), 'Hello world!'),
+	email: z.email('Invalid email')
+});
+
+export const load = async () => {
+  const form = await superValidate(zod4(schema));
+
+  // Always return { form } in load functions
+  return { form };
+};
+```
+
 {:else}
 
 > Select a validation library at the top of the page to see the example code.
@@ -645,7 +709,7 @@ export const actions = {
 
 ## For simple forms
 
-If you have a very simple form and no intentions to use any client-side functionality like events, loading spinners, nested data, etc, then you don't have to include the client part, which the rest of the tutorial is about. There's a short example how to display errors and messages without the client [here](/examples?tag=runes). Enjoy the simplicity!
+If you have a very simple form and no intentions to use any client-side functionality like events, loading spinners, nested data, etc, then you don't have to include the client part, which the rest of the tutorial is about. There's a small example on how to display errors and messages without the client [here](/examples?tag=runes). Enjoy the simplicity! But if you're curious about the numerous client-side features, keep reading:
 
 ## Displaying the form
 
