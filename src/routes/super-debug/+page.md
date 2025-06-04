@@ -48,9 +48,19 @@ It's not limited to the Superforms data, other use cases includes debugging plai
 
 ## Usage
 
+Import one of these:
+
 ```ts
+// Svelte 4 & 5
 import SuperDebug from 'sveltekit-superforms';
 ```
+
+```ts
+// Svelte 5 runes only
+import { SuperDebug } from 'sveltekit-superforms';
+```
+
+And use it like this:
 
 ```svelte
 <SuperDebug data={$form} />
