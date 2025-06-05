@@ -48,17 +48,14 @@ It's not limited to the Superforms data, other use cases includes debugging plai
 
 ## Usage
 
-Import one of these:
+Import it like this:
 
 ```ts
 // Svelte 4 & 5
 import SuperDebug from 'sveltekit-superforms';
 ```
 
-```ts
-// Svelte 5 runes only
-import { SuperDebug } from 'sveltekit-superforms';
-```
+> The rune version introduced in 2.26.0 caused Svelte 4 builds to break, so it has been removed until a solution is found.
 
 And use it like this:
 
