@@ -126,7 +126,7 @@ importers:
         specifier: ^0.9.4
         version: 0.9.4(svelte@4.2.19)
       sveltekit-superforms:
-        specifier: 2.25.0
+        specifier: ^2.19.0
         version: 2.25.0(@sveltejs/kit@2.6.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.8(@types/node@20.16.10)(sass@1.79.4)))(svelte@4.2.19)(vite@5.4.8(@types/node@20.16.10)(sass@1.79.4)))(@types/json-schema@7.0.15)(svelte@4.2.19)(typescript@5.6.2)
       tailwindcss:
         specifier: ^3.4.13
