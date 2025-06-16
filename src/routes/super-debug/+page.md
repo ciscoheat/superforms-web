@@ -55,7 +55,10 @@ Import it like this:
 import SuperDebug from 'sveltekit-superforms';
 ```
 
-> The rune version introduced in 2.26.0 caused Svelte 4 builds to break, so it has been removed until a solution is found.
+```ts
+// Svelte 5, rune version
+import SuperDebug from 'sveltekit-superforms/SuperDebug.svelte';
+```
 
 And use it like this:
 
