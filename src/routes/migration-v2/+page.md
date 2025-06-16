@@ -45,7 +45,7 @@ Instead of a Zod schema, you now use an adapter for your favorite validation lib
 
 | Library  | Adapter                                                   | Requires defaults |
 | -------- | --------------------------------------------------------- | ----------------- |
-| Arktype  | `import { arktype } from 'sveltekit-superforms/adapters'` | Yes |
+| Arktype  | `import { arktype } from 'sveltekit-superforms/adapters'` | No  |
 | Joi      | `import { joi } from 'sveltekit-superforms/adapters'`     | No  |
 | TypeBox  | `import { typebox } from 'sveltekit-superforms/adapters'` | No  |
 | Valibot  | `import { valibot } from 'sveltekit-superforms/adapters'` | No  |
@@ -62,26 +62,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 const form = await superValidate(zod(schema));
 ```
 
-The libraries in the list that requires defaults don't have full introspection capabilities (yet), in which case you need to supply the default values for the form data as an option:
-
-```ts
-import { type } from 'arktype';
-
-// Arktype schema, powerful stuff
-const schema = type({
-  name: 'string',
-  email: 'email',
-  tags: '(string>=2)[]>=3',
-  score: 'integer>=0'
-});
-
-const defaults = { name: '', email: '', tags: [], score: 0 };
-
-export const load = async () => {
-  const form = await superValidate(arktype(schema, { defaults }));
-  return { form };
-};
-```
+The libraries in the list that requires defaults don't have full introspection capabilities (yet), in which case you need to supply a `defaults` option containing the default form values.
 
 #### Schema caching
 
