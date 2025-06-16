@@ -33,7 +33,7 @@
     <option value="valibot">Valibot</option>
     <option value="@vinejs/vine">VineJS</option>
     <option value="yup">Yup</option>
-    <option value="zod">Zod</option>
+    <option value="zod">Zod 3</option>
     <option value="zod4">Zod 4</option>
     <option value="zodmini">Zod Mini</option>
     <option value="n/a">Not on the list!</option>
