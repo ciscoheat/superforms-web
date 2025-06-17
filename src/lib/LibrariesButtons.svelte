@@ -55,7 +55,10 @@
   {#each links as link}
     {@const libName = name == 'package' ? link.packageName : link.adapterName}
     {#if libName}
-      <a class="variant-ghost btn no-underline" href="{url}/{libName}" {target}
+      <a
+        class="variant-ghost btn no-underline"
+        href="{url}/{libName == 'zod' ? 'zod4' : libName}"
+        {target}
         >{#if link.icon}<img
             class="m-0 mr-2 max-h-5 p-0"
             alt={link.showName}
