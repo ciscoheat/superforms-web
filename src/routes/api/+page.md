@@ -406,7 +406,6 @@ type ChangeEvent<T> =
 ```
 
 - See [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) for details about the `onSubmit` arguments, and [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) for `onResult`.
-- See [SPA action form](/concepts/spa#spa-action-form) for details about the `string` value for the `SPA` option.
 - See the SvelteKit [transport](https://svelte.dev/docs/kit/hooks#Universal-hooks-transport) feature for how to send any type of form data to the server, using the `transport` option.
 
 ### superForm return type
