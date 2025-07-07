@@ -24,7 +24,7 @@ const { form, enhance } = superForm(data.form, {
 })
 ```
 
-You can set the option to `true` to have a default message (in english) shown when navigating away from a tainted form, or set your own message with a `string` value. Note that this message will only be displayed when navigating to a page within the same site. When closing the tab or reloading the page, a browser default message will be shown instead.
+You can set the option to `true` to have a default message (browser-dependent) shown when navigating away from a tainted form, or set your own message with a `string` value. Note that this message will only be displayed when navigating to a page within the same site. When closing the tab or reloading the page, a browser default message will be shown instead.
 
 Alternatively, you can set `taintedMessage` to a `() => Promise<boolean>` function that should resolve to `true` if navigating away is ok. This enables you to provide your own dialog:
 
