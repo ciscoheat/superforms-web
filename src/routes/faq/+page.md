@@ -18,6 +18,27 @@ Use the `resetForm: false` option for `superForm`, as described on the [use:enha
 
 ---
 
+### Why am I'm getting TypeError: The body has already been consumed?
+
+This happens if you access the form data of the request before calling `superValidate`, for example when debugging or calling it multiple times during the same request.
+
+To fix the problem, use the form data as an argument instead of `request` or `event`:
+
+```ts
+export const actions = {
+  default: async ({ request }) => {
+    // Get the form data, which will empty the request stream
+    const formData = await request.formData();
+    console.log(formData); // Debugging the raw form data
+
+    // Cannot use event or request at this point
+    const form = await superValidate(formData, zod(schema));
+  }
+};
+```
+
+---
+
 ### Why do I need to call superValidate in the load function?
 
 The object returned from `superValidate`, called [SuperValidated](/api#supervalidate-return-type), is used to instantiate a `superForm`, just like a required argument in a constructor. It contains [constraints](/concepts/client-validation#built-in-browser-validation), [form id](/concepts/multiple-forms) based on the schema, an internal structure for handling errors in [nested data](/concepts/nested-data), potential [initial errors](/concepts/error-handling#initial-form-errors), and more. Therefore you need to call `superValidate` in the load function, so its data can be sent to the client and used when calling `superForm` there.
@@ -30,12 +51,6 @@ In special cases you can send an object with just the form data to `superForm`, 
 - Only one form on the page (the [form id](/concepts/multiple-forms) has to be set manually otherwise).
 
 Another reason is that when using a server load function (`+page.server.ts`) to populate the form, the page will work with [SSR](https://kit.svelte.dev/docs/page-options).
-
----
-
-### How to handle file uploads?
-
-From version 2, file uploads are handled by Superforms. Read all about it on the [file uploads](/concepts/files) page.
 
 ---
 
@@ -60,6 +75,12 @@ Use the `submit` method on the `superForm` object.
 ### Can a form be factored out into a separate component?
 
 Yes - the answer has its own [article page here](/components).
+
+---
+
+### How to handle file uploads?
+
+From version 2, file uploads are handled by Superforms. Read all about it on the [file uploads](/concepts/files) page.
 
 ---
 
@@ -187,27 +208,6 @@ The onSubmit event is also a good place to modify `$form`, in case you're using 
 This is related to the previous question. You must always return an `ActionResult` as a response to a form submission, either through a form action, where it's done automatically, or by constructing one with the [actionResult](/api#actionresulttype-data-options--status) helper. 
 
 If for some reason a html page or plain text is returned, for example when a proxy server fails to handle the request and returns its own error page, the parsing of the result will fail with the slightly cryptic JSON error message.
-
----
-
-### Why am I'm getting TypeError: The body has already been consumed?
-
-This happens if you access the form data of the request before calling `superValidate`, for example when debugging or calling it multiple times during the same request.
-
-To fix the problem, use the form data as an argument instead of `request` or `event`:
-
-```ts
-export const actions = {
-  default: async ({ request }) => {
-    // Get the form data, which will empty the request stream
-    const formData = await request.formData();
-    console.log(formData); // Debugging the raw form data
-
-    // Cannot use event or request at this point
-    const form = await superValidate(formData, zod(schema));
-  }
-};
-```
 
 ---
 
