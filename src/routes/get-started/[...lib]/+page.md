@@ -221,7 +221,7 @@ const schema = object({
 {:else if $settings.lib == 'zod'}
 
 ```ts
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 const schema = z.object({
   name: z.string().default('Hello world!'),
@@ -232,7 +232,7 @@ const schema = z.object({
 {:else if $settings.lib == 'zod4'}
 
 ```ts
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 const schema = z.object({
   name: z.string().default('Hello world!'),
@@ -243,7 +243,7 @@ const schema = z.object({
 {:else if $settings.lib == 'zodmini'}
 
 ```ts
-import { z } from 'zod/v4-mini';
+import { z } from 'zod/mini';
 
 const schema = z.object({
   name: z._default(z.string(), 'Hello world!'),
@@ -514,7 +514,7 @@ export const load = async () => {
 ```ts
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 // Define outside the load function so the adapter can be cached
 const schema = z.object({
@@ -535,7 +535,7 @@ export const load = async () => {
 ```ts
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 // Define outside the load function so the adapter can be cached
 const schema = z.object({
@@ -556,7 +556,7 @@ export const load = async () => {
 ```ts
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
-import { z } from 'zod/v4-mini';
+import { z } from 'zod/mini';
 
 // Define outside the load function so the adapter can be cached
 const schema = z.object({
