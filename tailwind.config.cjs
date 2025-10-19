@@ -1,8 +1,8 @@
 // @ts-check
-import { join } from 'path';
+const { join } = require('path');
 
 // 1. Import the Skeleton plugin
-import { skeleton } from '@skeletonlabs/tw-plugin';
+const { skeleton } = require('@skeletonlabs/tw-plugin');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'sans-serif']
       },
-      typography: (them) => ({
+      typography: () => ({
         DEFAULT: {
           css: {
             p: {
