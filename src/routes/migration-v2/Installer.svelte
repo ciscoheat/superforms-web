@@ -15,7 +15,7 @@
     <option value="">Choose:</option>
     <option value="arktype">Arktype</option>
     <option value="joi">Joi</option>
-    <option value="@sinclair/typebox">TypeBox</option>
+    <option value="typebox">TypeBox</option>
     <option value="valibot">Valibot</option>
     <option value="yup">Yup</option>
     <option value="zod">Zod</option>

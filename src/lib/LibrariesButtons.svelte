@@ -34,7 +34,7 @@
       icon: superstruct
     },
     {
-      packageName: '@sinclair/typebox',
+      packageName: 'typebox',
       adapterName: 'typebox',
       showName: 'TypeBox',
       icon: typebox

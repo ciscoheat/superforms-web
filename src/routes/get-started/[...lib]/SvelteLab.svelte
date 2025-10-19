@@ -1,6 +1,6 @@
 <script lang="ts">
   export let lib: string;
-  $: libName = lib == '@sinclair/typebox' ? 'typebox' : lib == '@vinejs/vine' ? 'vine' : lib;
+  $: libName = lib == '@vinejs/vine' ? 'vine' : lib;
 </script>
 
 <p>

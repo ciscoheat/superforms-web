@@ -174,10 +174,10 @@ export const schema = object({
 });
 ```
 
-{:else if $settings.lib == '@sinclair/typebox'}
+{:else if $settings.lib == 'typebox'}
 
 ```ts
-import { Type } from '@sinclair/typebox';
+import Type from 'typebox';
 
 const schema = Type.Object({
   name: Type.String({ default: 'Hello world!' }),
@@ -422,12 +422,12 @@ export const load = async () => {
 };
 ```
 
-{:else if $settings.lib == '@sinclair/typebox'}
+{:else if $settings.lib == 'typebox'}
 
 ```ts
 import { superValidate } from 'sveltekit-superforms';
 import { typebox } from 'sveltekit-superforms/adapters';
-import { Type } from '@sinclair/typebox';
+import Type from 'typebox';
 
 // Define outside the load function so the adapter can be cached
 const schema = Type.Object({

@@ -29,7 +29,7 @@
     <option value="joi">Joi</option>
     <option value="json-schema">JSON Schema</option>
     <option value="superstruct">Superstruct</option>
-    <option value="@sinclair/typebox">TypeBox</option>
+    <option value="typebox">TypeBox</option>
     <option value="valibot">Valibot</option>
     <option value="@vinejs/vine">VineJS</option>
     <option value="yup">Yup</option>
