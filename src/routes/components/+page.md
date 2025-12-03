@@ -324,7 +324,7 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
 
 This will also narrow the `field` prop, so only `boolean` fields in the schema can be selected when using the component.
 
-Checkboxes, especially grouped ones, can be tricky to handle. Read the Svelte tutorial about [bind:group](https://svelte.dev/tutorial/group-inputs), and see the [Ice cream example](https://stackblitz.com/edit/superforms-2-group-inputs?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) on Stackblitz if you're having trouble with it.
+Checkboxes, especially grouped ones, can be tricky to handle. Read the Svelte tutorial about [bind:group](https://svelte.dev/tutorial/svelte/group-inputs), and see the [Ice cream example](https://stackblitz.com/edit/superforms-2-group-inputs?file=src%2Froutes%2F%2Bpage.server.ts,src%2Froutes%2F%2Bpage.svelte) on Stackblitz if you're having trouble with it.
 
 ## Using the componentized field in awesome ways
 
