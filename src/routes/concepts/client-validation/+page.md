@@ -12,7 +12,7 @@
 
 <Head title="Client-side validation" />
 
-There are two client-side validation options with Superforms: 
+There are two client-side validation options with Superforms:
 
 * The built-in browser validation, which doesn't require JavaScript to be enabled in the browser.
 * Using a validation schema, usually the same one as on the server. Requires JavaScript and [use:enhance](/concepts/enhance).
@@ -63,7 +63,7 @@ For some input types, a certain format is required. For example with `date` fiel
   aria-invalid={$errors.date ? 'true' : undefined}
   bind:value={$proxyDate}
   {...$constraints.date}
-  min={$constraints.date?.min?.toString().slice(0, 10)} 
+  min={$constraints.date?.min?.toString().slice(0, 10)}
 />
 ```
 
