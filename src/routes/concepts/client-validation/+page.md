@@ -12,7 +12,7 @@
 
 <Head title="Client-side validation" />
 
-There are two client-side validation options with Superforms: 
+There are two client-side validation options with Superforms:
 
 * The built-in browser validation, which doesn't require JavaScript to be enabled in the browser.
 * Using a validation schema, usually the same one as on the server. Requires JavaScript and [use:enhance](/concepts/enhance).
@@ -63,7 +63,7 @@ For some input types, a certain format is required. For example with `date` fiel
   aria-invalid={$errors.date ? 'true' : undefined}
   bind:value={$proxyDate}
   {...$constraints.date}
-  min={$constraints.date?.min?.toString().slice(0, 10)} 
+  min={$constraints.date?.min?.toString().slice(0, 10)}
 />
 ```
 
@@ -91,7 +91,7 @@ validators: ClientValidationAdapter<S> | 'clear' | false
 
 Setting the `validators` option to an adapter with the same schema as on the server, is the most convenient and recommended way. Just put the schema in a shared directory, `$lib/schemas` for example, and import it on the client as well as on the server.
 
-Adding a adapter on the client will increase the client bundle size a bit, since the validation library now has to be imported there too. But the client-side adapter is optimized to be as small as possible, so it shouldn't be too much of an issue. To use it, append `Client` to the adapter import, for example:
+Adding an adapter on the client will increase the client bundle size a bit, since the validation library now has to be imported there too. But the client-side adapter is optimized to be as small as possible, so it shouldn't be too much of an issue. To use it, append `Client` to the adapter import, for example:
 
 ```ts
 import { valibotClient } from 'sveltekit-superforms/adapters';
