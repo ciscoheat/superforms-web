@@ -6,14 +6,15 @@
   import Timers from '$lib/Timers.svelte';
   import spinner from '$lib/assets/spinner.svg?raw';
   import dots from '$lib/assets/three-dots-loading.svg?raw';
-  import { tick } from 'svelte';
+  import { tick, untrack } from 'svelte';
 
   export let data: PageData;
 
   let prevented = 0;
 
-  const { form, enhance, message, submitting, delayed, timeout, options } =
-    superForm(data.form, {
+  const { form, enhance, message, submitting, delayed, timeout, options } = superForm(
+    untrack(() => data.form),
+    {
       taintedMessage: null,
       onSubmit() {
         prevented = 0;
@@ -22,7 +23,8 @@
         $message.set(result.error.message);
       },
       timeoutMs: 2000
-    });
+    }
+  );
 </script>
 
 <Timers
@@ -79,15 +81,10 @@
   </label>
 
   <div class="flex items-center gap-x-3">
-    <button
-      type="submit"
-      on:click={() => ++prevented}
-      class="variant-filled btn">Submit</button>
+    <button type="submit" on:click={() => ++prevented} class="variant-filled btn">Submit</button>
     <div class="spinner">
       {#if $message}<div
-          class="rounded p-2 {$page.status == 200
-            ? 'text-green-600'
-            : 'text-red-500'}">
+          class="rounded p-2 {$page.status == 200 ? 'text-green-600' : 'text-red-500'}">
           {$message}
         </div>
       {:else if $timeout}{@html dots}

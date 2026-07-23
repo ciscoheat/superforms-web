@@ -4,6 +4,7 @@
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
   import { getModalStore } from '@skeletonlabs/skeleton';
+  import { untrack } from 'svelte';
 
   const modalStore = getModalStore();
 
@@ -14,7 +15,7 @@
   export let data: PageData;
 
   const { form, errors, enhance, tainted, message, constraints } = superForm(
-    data.form,
+    untrack(() => data.form),
     {
       taintedMessage: () => {
         return new Promise((resolve) => {

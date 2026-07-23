@@ -21,7 +21,7 @@
     "@sveltejs/adapter-vercel": "^5.4.4",
     "@sveltejs/kit": "^2.6.1",
     "@sveltejs/package": "^2.3.5",
-    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "@sveltejs/vite-plugin-svelte": "^4.0.4",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "@types/canvas-confetti": "^1.6.4",
@@ -48,8 +48,8 @@
     "rehype-external-links": "^2.1.0",
     "rehype-slug": "^5.1.0",
     "sass": "^1.79.4",
-    "svelte": "^4.2.19",
-    "svelte-check": "^3.8.6",
+    "svelte": "^5.56.7",
+    "svelte-check": "^4.7.3",
     "svelte-persisted-store": "^0.9.4",
     "sveltekit-superforms": "^2.19.0",
     "tailwindcss": "^3.4.13",
@@ -60,7 +60,7 @@
     "vite": "^5.4.8",
     "vite-plugin-tailwind-purgecss": "^0.2.1",
     "vitest": "^1.6.0",
-    "zod": "^3.23.8"
+    "zod": "^3.25.51"
   },
   "type": "module"
 }

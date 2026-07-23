@@ -3,6 +3,7 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
+  import { untrack } from 'svelte';
 
   export let data: PageData;
   const {
@@ -10,22 +11,28 @@
     errors: errors1,
     enhance: enhance1,
     message: message1
-  } = superForm(data.registerForm, {
-    resetForm: true,
-    invalidateAll: false,
-    taintedMessage: null
-  });
+  } = superForm(
+    untrack(() => data.registerForm),
+    {
+      resetForm: true,
+      invalidateAll: false,
+      taintedMessage: null
+    }
+  );
 
   const {
     form: login,
     errors: errors2,
     enhance: enhance2,
     message: message2
-  } = superForm(data.loginForm, {
-    resetForm: true,
-    invalidateAll: false,
-    taintedMessage: null
-  });
+  } = superForm(
+    untrack(() => data.loginForm),
+    {
+      resetForm: true,
+      invalidateAll: false,
+      taintedMessage: null
+    }
+  );
 </script>
 
 <Debug data={{ $register, $login }} />
@@ -42,23 +49,14 @@
     {/if}
     <label class="label">
       <span>Name</span>
-      <input
-        class="input"
-        type="text"
-        name="name"
-        bind:value={$register.name} />
+      <input class="input" type="text" name="name" bind:value={$register.name} />
       {#if $errors1.name}<span class="text-red-500">{$errors1.name}</span>{/if}
     </label>
 
     <label class="label">
       <span>E-mail</span>
-      <input
-        class="input"
-        type="email"
-        name="email"
-        bind:value={$register.email} />
-      {#if $errors1.email}<span class="text-red-500">{$errors1.email}</span
-        >{/if}
+      <input class="input" type="email" name="email" bind:value={$register.email} />
+      {#if $errors1.email}<span class="text-red-500">{$errors1.email}</span>{/if}
     </label>
 
     <label class="label">
@@ -87,12 +85,7 @@
 
     <label class="label">
       <span>E-mail</span>
-      <input
-        class="input"
-        type="email"
-        name="email"
-        autocomplete="off"
-        bind:value={$login.email} />
+      <input class="input" type="email" name="email" autocomplete="off" bind:value={$login.email} />
       {#if $errors2.email}
         <span class="text-red-500">{$errors2.email}</span>
       {/if}

@@ -3,15 +3,19 @@
   import { dateProxy, superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
+  import { untrack } from 'svelte';
 
   export function formData() {
     return form;
   }
 
   export let data: PageData;
-  const { form, errors, enhance, message, constraints } = superForm(data.form, {
-    taintedMessage: null
-  });
+  const { form, errors, enhance, message, constraints } = superForm(
+    untrack(() => data.form),
+    {
+      taintedMessage: null
+    }
+  );
   const proxyDate = dateProxy(form, 'date', {
     format: 'date',
     empty: 'undefined'

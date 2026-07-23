@@ -2,6 +2,7 @@
   import type { PageData } from './$types';
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
+  import { untrack } from 'svelte';
 
   export function formData() {
     return form;
@@ -9,7 +10,7 @@
 
   export let data: PageData;
   const { form, errors, allErrors, enhance, message, constraints } = superForm(
-    data.form,
+    untrack(() => data.form),
     {
       taintedMessage: null,
       clearOnSubmit: 'none'

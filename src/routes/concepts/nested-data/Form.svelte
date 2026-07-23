@@ -5,15 +5,19 @@
   import Debug from '$lib/Debug.svelte';
   import { zod } from 'sveltekit-superforms/adapters';
   import { schema } from './schema';
+  import { untrack } from 'svelte';
 
   export let data: PageData;
 
-  const { form, errors, message, enhance } = superForm(data.form, {
-    dataType: 'json',
-    errorSelector: '.input-error',
-    validators: zod(schema),
-    taintedMessage: null
-  });
+  const { form, errors, message, enhance } = superForm(
+    untrack(() => data.form),
+    {
+      dataType: 'json',
+      errorSelector: '.input-error',
+      validators: zod(schema),
+      taintedMessage: null
+    }
+  );
 </script>
 
 <Debug data={$form} />

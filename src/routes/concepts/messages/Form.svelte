@@ -3,6 +3,7 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
+  import { untrack } from 'svelte';
 
   export function formData() {
     return form;
@@ -10,7 +11,7 @@
 
   export let data: PageData;
   const { form, errors, enhance, tainted, message, constraints } = superForm(
-    data.form,
+    untrack(() => data.form),
     { taintedMessage: null }
   );
 </script>

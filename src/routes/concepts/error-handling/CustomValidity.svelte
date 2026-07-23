@@ -3,15 +3,18 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
   import { schema } from './schema';
+  import { untrack } from 'svelte';
 
   export let data: PageData;
 
-  const { form, errors, allErrors, enhance, tainted, message, constraints } =
-    superForm(data.customValidity, {
+  const { form, errors, allErrors, enhance, tainted, message, constraints } = superForm(
+    untrack(() => data.customValidity),
+    {
       taintedMessage: null,
       validators: schema,
       customValidity: true
-    });
+    }
+  );
 </script>
 
 <form

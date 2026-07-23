@@ -1,35 +1,32 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import {
-    superForm,
-    message as setMessage,
-    setError,
-    type Infer
-  } from 'sveltekit-superforms';
+  import { superForm, message as setMessage, setError, type Infer } from 'sveltekit-superforms';
   import { _userSchema } from './+page';
   import { zod } from 'sveltekit-superforms/adapters';
+  import { untrack } from 'svelte';
 
   export let data: PageData;
 
-  const { form, errors, message, enhance } = superForm<
-    Infer<typeof _userSchema>
-  >(data.form, {
-    SPA: true,
-    validators: zod(_userSchema),
-    taintedMessage: null,
-    onUpdate({ form }) {
-      console.log('SPA post', form);
-      if (form.data.email.includes('spam')) {
-        setError(form, 'email', 'Suspicious email address.');
-      } else if (form.valid) {
-        setMessage(form, 'Valid data!');
-        // TODO: Do something with the validated data
+  const { form, errors, message, enhance } = superForm<Infer<typeof _userSchema>>(
+    untrack(() => data.form),
+    {
+      SPA: true,
+      validators: zod(_userSchema),
+      taintedMessage: null,
+      onUpdate({ form }) {
+        console.log('SPA post', form);
+        if (form.data.email.includes('spam')) {
+          setError(form, 'email', 'Suspicious email address.');
+        } else if (form.valid) {
+          setMessage(form, 'Valid data!');
+          // TODO: Do something with the validated data
+        }
+      },
+      onError({ result }) {
+        $message.set(result.error.message);
       }
-    },
-    onError({ result }) {
-      $message.set(result.error.message);
     }
-  });
+  );
 </script>
 
 <form

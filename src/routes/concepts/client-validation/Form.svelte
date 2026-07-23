@@ -3,7 +3,7 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
   import Debug from '$lib/Debug.svelte';
-  import { tick } from 'svelte';
+  import { tick, untrack } from 'svelte';
   import { superformClient } from 'sveltekit-superforms/adapters';
 
   export function formData() {
@@ -15,7 +15,7 @@
 
   export let data: PageData;
 
-  const { form, errors, enhance, message } = superForm(data.form, {
+  const { form, errors, enhance, message } = superForm(untrack(() => data.form), {
     taintedMessage: null,
     validators: superformClient<{ tags: string[] }>({
       tags: (tag?) => (!tag || tag.length < 2 ? 'Tag must be at least 2 characters' : null)
