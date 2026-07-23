@@ -1,4 +1,6 @@
+packages:
+  - "."
 allowBuilds:
-  '@sveltejs/kit': set this to true or false
-  esbuild: set this to true or false
-  svelte-preprocess: set this to true or false
+  '@sveltejs/kit': true
+  esbuild: true
+  svelte-preprocess: true
