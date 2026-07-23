@@ -116,8 +116,10 @@ declare global {
 
 ```svelte
 <script lang="ts">
+  import { untrack } from 'svelte';
+
   let { data } = $props();
-  const { form, message } = superForm(data.form);
+  const { form, message } = superForm(untrack(() => data.form));
 </script>
 
 {#if $message}
@@ -135,9 +137,10 @@ Though if you want to keep it simple with a string or the default `any`, you can
 ```svelte
 <script lang="ts">
   import { page } from '$app/stores';
+  import { untrack } from 'svelte';
   
   let { data } = $props();
-  const { form, message } = superForm(data.form);
+  const { form, message } = superForm(untrack(() => data.form));
 </script>
 
 {#if $message}

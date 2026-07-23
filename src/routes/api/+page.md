@@ -528,9 +528,10 @@ Creates a string store for an **integer** field in the schema. It's rarely neede
 
 ```ts
 import { superForm, intProxy } from 'sveltekit-superforms';
+import { untrack } from 'svelte';
 let { data } = $props();
 
-const { form } = superForm(data.form);
+const { form } = superForm(untrack(() => data.form));
 const proxy = intProxy(form, 'field', { options });
 ```
 
@@ -552,9 +553,10 @@ Creates a string store for a **number** field in the schema. It's rarely needed 
 
 ```ts
 import { superForm, numberProxy } from 'sveltekit-superforms';
+import { untrack } from 'svelte';
 let { data } = $props();
 
-const { form } = superForm(data.form);
+const { form } = superForm(untrack(() => data.form));
 const proxy = numberProxy(form, 'field', { options });
 ```
 
@@ -576,9 +578,10 @@ Creates a string store for a **boolean** schema field. The option can be used to
 
 ```ts
 import { superForm, booleanProxy } from 'sveltekit-superforms';
+import { untrack } from 'svelte';
 let { data } = $props();
 
-const { form } = superForm(data.form);
+const { form } = superForm(untrack(() => data.form));
 const proxy = booleanProxy(form, 'field', { options });
 ```
 
@@ -597,9 +600,10 @@ Creates a string store for a **Date** schema field. The option can be used to ch
 
 ```ts
 import { superForm, dateProxy } from 'sveltekit-superforms';
+import { untrack } from 'svelte';
 let { data } = $props();
 
-const { form } = superForm(data.form);
+const { form } = superForm(untrack(() => data.form));
 const proxy = dateProxy(form, 'field', { options });
 ```
 
@@ -627,9 +631,10 @@ Creates a string store for a **string** schema field. It may look redundant, but
 
 ```ts
 import { superForm, stringProxy } from 'sveltekit-superforms';
+import { untrack } from 'svelte';
 let { data } = $props();
 
-const { form } = superForm(data.form);
+const { form } = superForm(untrack(() => data.form));
 const proxy = stringProxy(form, 'field', { options });
 ```
 
@@ -651,10 +656,11 @@ Proxies a form field, returning stores similar to `superForm` but for a single f
 ```svelte
 <script lang="ts">
   import { superForm, formFieldProxy } from 'sveltekit-superforms';
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const superform = superForm(data.form); // The whole superForm object is required
+  const superform = superForm(untrack(() => data.form)); // The whole superForm object is required
   const { form } = superform; // Deconstruct as usual here
 
   const { path, value, errors, constraints, tainted } = formFieldProxy(superform, 'name');
@@ -682,10 +688,11 @@ Proxies an array in a form, returning stores similar to `superForm` but for the 
 ```svelte
 <script lang="ts">
   import { superForm, arrayProxy } from 'sveltekit-superforms';
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const superform = superForm(data.form); // The whole superForm object is required
+  const superform = superForm(untrack(() => data.form)); // The whole superForm object is required
   const { form } = superform; // Deconstruct as usual here
 
   const { path, values, errors, valueErrors } = arrayProxy(superform, 'tags');
@@ -714,9 +721,10 @@ Proxies field access in any object, usually in `$form`, but in that case `formFi
 ```svelte
 <script lang="ts">
   import { superForm, fieldProxy } from 'sveltekit-superforms';
+  import { untrack } from 'svelte';
   let { data } = $props();
 
-  const { form } = superForm(data.form);
+  const { form } = superForm(untrack(() => data.form));
 
   // Proxy any field in an object
   const nameProxy = fieldProxy(form, 'name');
@@ -747,10 +755,11 @@ A proxy for a [HTML date field](https://developer.mozilla.org/en-US/docs/Web/HTM
 <script lang="ts">
   import { superForm, dateProxy } from 'sveltekit-superforms';
   import type { PageData } from './$types.js';
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, enhance } = superForm(data.form);
+  const { form, enhance } = superForm(untrack(() => data.form));
   const date = dateProxy(form, 'date', { format: 'date', empty: 'undefined' });
 </script>
 

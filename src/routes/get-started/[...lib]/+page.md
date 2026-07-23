@@ -716,11 +716,12 @@ The data from `superValidate` is now available in `+page.svelte` as `data.form`,
 ```svelte
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms';
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
   // Client API:
-  const { form } = superForm(data.form);
+  const { form } = superForm(untrack(() => data.form));
 </script>
 
 <form method="POST">
@@ -733,6 +734,9 @@ The data from `superValidate` is now available in `+page.svelte` as `data.form`,
   <div><button>Submit</button></div>
 </form>
 ```
+
+When using Svelte 5 runes, wrap the initial form value in `untrack` as shown above. `superForm` owns the form state after initialization, so it should not reactively reinitialize when the page-data prop changes.
+
 
 The `superForm` function is used to create a form on the client, and `bind:value` is used to create a two-way binding between the form data and the input fields.
 

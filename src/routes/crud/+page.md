@@ -147,11 +147,12 @@ Now that we have loaded the data, let's display it:
 <script lang="ts">
   import { page } from '$app/state';
   import { superForm } from 'sveltekit-superforms';
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
   const { form, errors, constraints, enhance, delayed, message } = superForm(
-    data.form, {
+    untrack(() => data.form), {
       resetForm: false
     }
   );

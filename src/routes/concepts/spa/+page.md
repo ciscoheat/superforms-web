@@ -73,11 +73,12 @@ We display the form in `+page.svelte` like before, but with the `SPA` option add
   import { superForm, setMessage, setError } from 'sveltekit-superforms';
   import { _userSchema } from './+page.js';
   import { zod } from 'sveltekit-superforms/adapters';
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
   const { form, errors, message, constraints, enhance } = superForm(
-    data.form,
+    untrack(() => data.form),
     {
       SPA: true,
       validators: zod(_userSchema),

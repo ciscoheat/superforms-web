@@ -85,10 +85,11 @@ The code above uses [named form actions](https://kit.svelte.dev/docs/form-action
 ```svelte
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, errors, enhance, message } = superForm(data.loginForm, {
+  const { form, errors, enhance, message } = superForm(untrack(() => data.loginForm), {
     resetForm: true
   });
 
@@ -97,7 +98,7 @@ The code above uses [named form actions](https://kit.svelte.dev/docs/form-action
     errors: registerErrors,
     enhance: registerEnhance,
     message: registerMessage
-  } = superForm(data.registerForm, {
+  } = superForm(untrack(() => data.registerForm), {
     resetForm: true
   });
 </script>
@@ -157,10 +158,11 @@ Multiple forms also work without `use:enhance`, though in this case you must add
 ```svelte
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
+  import { untrack } from 'svelte';
   
   let { data } = $props();
 
-  const { form, errors, formId } = superForm(data.form);
+  const { form, errors, formId } = superForm(untrack(() => data.form));
 </script>
 
 <form method="POST" action="?/login">

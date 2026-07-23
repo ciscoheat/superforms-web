@@ -175,10 +175,11 @@ You can also access the `ActionResult` in `result`, which is narrowed to type `'
 ```ts
 import { superForm, type FormResult } from 'sveltekit-superforms';
 import type { ActionData, PageData } from './$types.js';
+import { untrack } from 'svelte';
 
 let { data } : { data: PageData } = $props();
 
-const { form, errors, message, enhance } = superForm(data.form, {
+const { form, errors, message, enhance } = superForm(untrack(() => data.form), {
   onUpdate({ form, result }) {
     const action = result.data as FormResult<ActionData>;
     // If you've returned from the form action:

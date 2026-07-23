@@ -104,8 +104,10 @@ It can then be accessed in `PageData` in `+page.svelte`:
 
 ```svelte
 <script lang="ts">
+  import { untrack } from 'svelte';
+
   let { data } = $props();
-  const { form, errors, enhance } = superForm(data.loginForm);
+  const { form, errors, enhance } = superForm(untrack(() => data.loginForm));
 </script>
 
 <p>Currently logged in as {data.userName}</p>
@@ -154,11 +156,12 @@ export const actions = {
 ```svelte
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client'
+  import { untrack } from 'svelte';
 
   let { data, form } = $props();
 
   // Need to rename form here, since it's used by ActionData.
-  const { form: formData, errors, enhance } = superForm(data.form);
+  const { form: formData, errors, enhance } = superForm(untrack(() => data.form));
 </script>
 
 {#if form?.userName}

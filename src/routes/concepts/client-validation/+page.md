@@ -27,8 +27,10 @@ To use the built-in browser validation, just spread the `$constraints` store for
 
 ```svelte
 <script lang="ts">
+  import { untrack } from 'svelte';
+
   let { data } = $props();
-  const { form, constraints } = superForm(data.form);
+  const { form, constraints } = superForm(untrack(() => data.form));
 </script>
 
 <input

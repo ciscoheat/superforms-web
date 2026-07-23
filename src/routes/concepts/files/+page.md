@@ -101,10 +101,11 @@ export const schema = z.object({
   import { superForm, fileProxy } from 'sveltekit-superforms'
   import { zodClient } from 'sveltekit-superforms/adapters'
   import { schema } from './schema.js'
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, enhance, errors } = superForm(data.form, {
+  const { form, enhance, errors } = superForm(untrack(() => data.form), {
     validators: zodClient(schema)
   })
 
@@ -131,10 +132,11 @@ export const schema = z.object({
   import { superForm } from 'sveltekit-superforms'
   import { zodClient } from 'sveltekit-superforms/adapters'
   import { schema } from './schema.js'
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, enhance, errors } = superForm(data.form, {
+  const { form, enhance, errors } = superForm(untrack(() => data.form), {
     validators: zodClient(schema)
   })
 </script>
@@ -177,10 +179,11 @@ const schema = z.object({
   import { superForm, filesProxy } from 'sveltekit-superforms'
   import { zodClient } from 'sveltekit-superforms/adapters'
   import { schema } from './schema.js'
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, enhance, errors } = superForm(data.form, {
+  const { form, enhance, errors } = superForm(untrack(() => data.form), {
     validators: zodClient(schema)
   })
 
@@ -208,10 +211,11 @@ const schema = z.object({
   import { superForm } from 'sveltekit-superforms'
   import { zodClient } from 'sveltekit-superforms/adapters'
   import { schema } from './schema.js'
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, enhance, errors } = superForm(data.form, {
+  const { form, enhance, errors } = superForm(untrack(() => data.form), {
     validators: zodClient(schema)
   })
 </script>

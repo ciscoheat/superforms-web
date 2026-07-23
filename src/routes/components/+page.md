@@ -28,6 +28,7 @@ And it also gets bad in the script part when you have more than a couple of form
 ```svelte
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms'
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
@@ -36,14 +37,14 @@ And it also gets bad in the script part when you have more than a couple of form
     errors: loginErrors,
     enhance: loginEnhance,
     //...
-  } = superForm(data.loginForm);
+  } = superForm(untrack(() => data.loginForm));
 
   const {
     form: registerForm,
     errors: registerErrors,
     enhance: registerEnhance,
     // ...
-  } = superForm(data.registerForm);
+  } = superForm(untrack(() => data.registerForm));
 </script>
 ```
 
@@ -73,10 +74,11 @@ Now you can import and use this type in a separate component:
   import type { SuperValidated, Infer } from 'sveltekit-superforms';
   import { superForm } from 'sveltekit-superforms'
   import type { LoginSchema } from '$lib/schemas';
+  import { untrack } from 'svelte';
 
   let { data } : { data : SuperValidated<Infer<LoginSchema>> } = $props();
 
-  const { form, errors, enhance } = superForm(data);
+  const { form, errors, enhance } = superForm(untrack(() => data));
 </script>
 
 <form method="POST" use:enhance>
@@ -106,12 +108,13 @@ If your schema input and output types differ, or you have a strongly typed [stat
   import type { SuperValidated, Infer, InferIn } from 'sveltekit-superforms';
   import { superForm } from 'sveltekit-superforms'
   import type { LoginSchema } from '$lib/schemas';
+  import { untrack } from 'svelte';
 
   let { data } : { 
     data : SuperValidated<Infer<LoginSchema>, { status: number, text: string }, InferIn<LoginSchema>> 
   } = $props();
 
-  const { form, errors, enhance, message } = superForm(data);
+  const { form, errors, enhance, message } = superForm(untrack(() => data));
 </script>
 
 {#if $message.text}
@@ -205,10 +208,11 @@ You may have seen [proxy objects](/concepts/proxy-objects) being used for conver
 ```svelte
 <script lang="ts">
   import { superForm, fieldProxy } from 'sveltekit-superforms/client';
+  import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form } = superForm(data.form);
+  const { form } = superForm(untrack(() => data.form));
   const name = fieldProxy(form, 'name');
 </script>
 
@@ -235,10 +239,11 @@ The solution is to use a `formFieldProxy`, which is a helper function for produc
 <script lang="ts">
   import type { PageData } from './$types.js';
   import { superForm, formFieldProxy } from 'sveltekit-superforms/client';
+  import { untrack } from 'svelte';
 
   let { data } : { data: PageData } = $props();
 
-  const superform = superForm(data.form);
+  const superform = superForm(untrack(() => data.form));
 
   const { path, value, errors, constraints } = formFieldProxy(superform, 'name');
 </script>
