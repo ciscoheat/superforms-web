@@ -105,4 +105,51 @@ Which can be used to not only prevent tainting, but also untaint the modified fi
 
 > For login and registration forms, password managers could automatically taint the form when inserting saved usernames and passwords.
 
+## Why tainted message doesn't show up
+
+The tainted message only shows _right_ before the link changes.
+
+A tab-like component switches the content without link changes and thus won't trigger
+the tainted message dialog.
+
+```svelte
+<script lang="ts>
+    let pageId = $state(0);
+    let content = $derived(pages[pageId].content);
+</script>
+
+<div>
+  {#each pages as page}
+    <button onclick={() => {pageId = page.id}}>
+  {/each}
+</div>
+<Page {content}>
+```
+
+For cases like this, you will need to modify the `onclick` implementation and add the `isTainted` check before changing the `pageId`.
+
+Also, the tainted message dialog happens _after_ the `onclick` event.
+For instance,
+
+```svelte
+<script lang="ts>
+    let pageId = $state(0);
+    let content = $derived(pages[pageId].content);
+</script>
+
+<div>
+  {#each pages as page}
+    <button onclick={() => {pageId = page.id}}> 
+      <a href=`/pages/${page.id}` />
+    </button>
+  {/each}
+</div>
+
+<!-- bug: pageId will always be changed even if you cancel the link change. -->
+<Page {content}>
+```
+
+For cases like this, you can move the `onclick` logic to [`afterNavigate`](https://svelte.dev/docs/kit/$app-navigation#afterNavigate),
+i.e., only update the `pageId` after navigation happens.
+
 <Next section={concepts} />
