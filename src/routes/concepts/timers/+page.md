@@ -19,8 +19,8 @@ It's important that users understand that things are happening when they submit 
 
 ```ts
 const { form, enhance, submitting, delayed, timeout } = superForm(data.form, {
-  delayMs?: 500
-  timeoutMs?: 8000
+  delayMs?: 500,
+  timeoutMs?: 8000,
 })
 ```
 
