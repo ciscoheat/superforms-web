@@ -32,7 +32,7 @@ The default `use:enhance` behavior can be modified, there are three options avai
 ```ts
 const { form, enhance, reset } = superForm(data.form, {
   applyAction: true,
-  invalidateAll: true | 'force',
+  invalidateAll: true | 'pessimistic',
   resetForm: true
 });
 ```
@@ -51,7 +51,7 @@ When `invalidateAll` is `true` (the default) and a successful validation result 
 
 #### Optimistic updates
 
-The data returned in the form action can conflict with the new data from the load function. The form action update is "optimistic", meaning that what's returned there will be displayed, assuming that all data was supposed to be updated. But if you update the form partially, the form data will be out of sync with the load function data, in which case you may want to wait for the load function data. This can be achieved with by setting `invalidateAll: 'pessimistic'`. Now the load function data will be prioritized, and the `reset` function will also use the latest load function data when called.
+The data returned in the form action can conflict with the new data from the load function. The form action update is "optimistic", meaning that what's returned there will be displayed, assuming that all data was supposed to be updated. But if you update the form partially, the form data will be out of sync with the load function data, in which case you may want to wait for the load function data. This can be achieved with by setting `invalidateAll: 'pessimistic'` (previously called `force`). Now the load function data will be prioritized, and the `reset` function will also use the latest load function data when called.
 
 ### resetForm
 
