@@ -12,10 +12,10 @@
 
 <Head title="Client-side validation" />
 
-There are two client-side validation options with Superforms: 
+There are two client-side validation options with Superforms:
 
-* The built-in browser validation, which doesn't require JavaScript to be enabled in the browser.
-* Using a validation schema, usually the same one as on the server. Requires JavaScript and [use:enhance](/concepts/enhance).
+- The built-in browser validation, which doesn't require JavaScript to be enabled in the browser.
+- Using a validation schema, usually the same one as on the server. Requires JavaScript and [use:enhance](/concepts/enhance).
 
 ## Built-in browser validation
 
@@ -33,11 +33,7 @@ To use the built-in browser validation, just spread the `$constraints` store for
   const { form, constraints } = superForm(untrack(() => data.form));
 </script>
 
-<input
-  name="email"
-  type="email"
-  bind:value={$form.email}
-  {...$constraints.email} />
+<input name="email" type="email" bind:value={$form.email} {...$constraints.email} />
 ```
 
 The constraints is an object with validation properties mapped from the schema:
@@ -65,8 +61,7 @@ For some input types, a certain format is required. For example with `date` fiel
   aria-invalid={$errors.date ? 'true' : undefined}
   bind:value={$proxyDate}
   {...$constraints.date}
-  min={$constraints.date?.min?.toString().slice(0, 10)} 
-/>
+  min={$constraints.date?.min?.toString().slice(0, 10)} />
 ```
 
 Check the validation attributes and their valid values at [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation#validation-related_attributes).
@@ -88,7 +83,7 @@ const { form, enhance, constraints, validate, validateForm } = superForm(data.fo
 ### validators
 
 ```ts
-validators: ClientValidationAdapter<S> | 'clear' | false
+validators: ClientValidationAdapter<S> | 'clear' | false;
 ```
 
 Setting the `validators` option to an adapter with the same schema as on the server, is the most convenient and recommended way. Just put the schema in a shared directory, `$lib/schemas` for example, and import it on the client as well as on the server.
@@ -122,7 +117,7 @@ const { form, errors, enhance, options } = superForm(data.form, {
 });
 
 // When moving to the last step of the form
-options.validators = valibot(schema)
+options.validators = valibot(schema);
 ```
 
 As mentioned, you need the full adapter to switch schemas dynamically. An exception will be thrown if a client adapter is detected different from the initial `validators` option.

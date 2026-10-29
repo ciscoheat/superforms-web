@@ -74,7 +74,7 @@ You can prevent this by setting the following option. Use with care, since the p
 ```ts
 const { form, enhance } = superForm(data.form, {
   // On ActionResult error, render the nearest +error.svelte page
-  onError: 'apply',
+  onError: 'apply'
 });
 ```
 

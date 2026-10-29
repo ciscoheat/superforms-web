@@ -11,7 +11,7 @@ export default defineConfig(async ({ mode }) => {
       purgeCss(),
       {
         name: 'index-site',
-        async handleHotUpdate(ctx : HmrContext) {
+        async handleHotUpdate(ctx: HmrContext) {
           if (ctx.file.endsWith('+page.md')) {
             await indexSite();
           }

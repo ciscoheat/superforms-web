@@ -38,10 +38,7 @@ let _search = await siteSchema();
 export async function searchEngine(load?: typeof fetch) {
   if (load) {
     const data = await load(file);
-    _search = (await restore(
-      'json',
-      await data.text()
-    )) as unknown as typeof _search;
+    _search = (await restore('json', await data.text())) as unknown as typeof _search;
   }
   return _search;
 }
@@ -75,19 +72,14 @@ async function index(file: string) {
 
   let fileContent = await fs.readFile(file, { encoding: 'utf-8' });
 
-  const parsedTitle = fileContent.match(
-    /<Head.*title="([^"]+)"/
-  );
+  const parsedTitle = fileContent.match(/<Head.*title="([^"]+)"/);
 
   if (!parsedTitle) {
     throw new Error(
-      file +
-        ' does not have a title. Add with <svelte:head><title></title></svelte:head>'
+      file + ' does not have a title. Add with <svelte:head><title></title></svelte:head>'
     );
   } else {
-    fileContent = fileContent
-      .replace(parsedTitle[0], '\n')
-      .replace(/<script.*?<\/script>/, '');
+    fileContent = fileContent.replace(parsedTitle[0], '\n').replace(/<script.*?<\/script>/, '');
 
     currentUrl = path.dirname(file.replace(/^src\/routes\//, '/'));
 
@@ -126,10 +118,7 @@ marked.use({
       insertCurrentSection();
       newSection(token.text.trim());
       skip = 1;
-    } else if (
-      currentSection &&
-      ['text', 'space', 'codespan'].includes(token.type)
-    ) {
+    } else if (currentSection && ['text', 'space', 'codespan'].includes(token.type)) {
       currentSection.content += token.raw.replaceAll(/```\w*[\r\n]/g, '');
     } else if (currentSection && token.type == 'code') {
       currentSection.code += token.text + '\n';

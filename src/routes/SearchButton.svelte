@@ -32,8 +32,7 @@
     class="variant-soft-primary variant-soft btn space-x-4 p-2 px-4 {width} {buttonStyle}"
     on:click={triggerSearch}>
     <span class="w-6">{@html magnify}</span>
-    <span class="variant-soft badge inline-block"
-      >{isOsMac ? '⌘' : 'Ctrl'}+K</span>
+    <span class="variant-soft badge inline-block">{isOsMac ? '⌘' : 'Ctrl'}+K</span>
   </button>
 </div>
 

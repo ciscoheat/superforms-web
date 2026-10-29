@@ -32,14 +32,14 @@ export const actions = {
 
     if (!form.valid) {
       // Stay on the same page and set a flash message
-      setFlash({ type: 'error', message: "Please check your form data." }, cookies);
+      setFlash({ type: 'error', message: 'Please check your form data.' }, cookies);
       return fail(400, { form });
     }
 
     // TODO: Do something with the validated form.data
 
     // All ok, redirect with a flash message on another page
-    redirect('/posts', { type: 'success', message: "Post created!" }, cookies);
+    redirect('/posts', { type: 'success', message: 'Post created!' }, cookies);
   }
 };
 ```

@@ -89,18 +89,24 @@ The code above uses [named form actions](https://kit.svelte.dev/docs/form-action
 
   let { data } = $props();
 
-  const { form, errors, enhance, message } = superForm(untrack(() => data.loginForm), {
-    resetForm: true
-  });
+  const { form, errors, enhance, message } = superForm(
+    untrack(() => data.loginForm),
+    {
+      resetForm: true
+    }
+  );
 
   const {
     form: registerForm,
     errors: registerErrors,
     enhance: registerEnhance,
     message: registerMessage
-  } = superForm(untrack(() => data.registerForm), {
-    resetForm: true
-  });
+  } = superForm(
+    untrack(() => data.registerForm),
+    {
+      resetForm: true
+    }
+  );
 </script>
 
 {#if $message}<h3>{$message}</h3>{/if}
@@ -121,10 +127,7 @@ The code above uses [named form actions](https://kit.svelte.dev/docs/form-action
   Password:
   <input name="password" type="password" bind:value={$registerForm.password} />
   Confirm password:
-  <input
-    name="confirmPassword"
-    type="password"
-    bind:value={$registerForm.confirmPassword} />
+  <input name="confirmPassword" type="password" bind:value={$registerForm.confirmPassword} />
   <button>Submit</button>
 </form>
 ```
@@ -159,7 +162,7 @@ Multiple forms also work without `use:enhance`, though in this case you must add
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
   import { untrack } from 'svelte';
-  
+
   let { data } = $props();
 
   const { form, errors, formId } = superForm(untrack(() => data.form));
@@ -216,8 +219,8 @@ export const actions: Actions = {
     const form = await superValidate(request, zod(usernameSchema));
 
     if (!form.valid) return fail(400, { form });
-    
-    if(!checkUsername(form.data.username)) {
+
+    if (!checkUsername(form.data.username)) {
       setError(form, 'username', 'Username is already taken.');
     }
 
@@ -233,8 +236,7 @@ And finally, an `on:input` event on the input field:
   name="username"
   aria-invalid={$errors.username ? 'true' : undefined}
   bind:value={$form.username}
-  on:input={checkUsername}
-/>
+  on:input={checkUsername} />
 {#if $submitting}<img src={spinner} alt="Checking availability" />
 {:else if $errors.username}<div class="invalid">{$errors.username}</div>{/if}
 ```

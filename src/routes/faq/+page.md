@@ -91,13 +91,12 @@ You're not limited to just `return { form }` in load functions and form actions;
 #### From a load function
 
 ```ts
-export const load = (async ({ locals }) => {
+export const load = async ({ locals }) => {
   const loginForm = await superValidate(zod(loginSchema));
   const userName = locals.currentUser.name;
-  
-  return { loginForm, userName };
-})
 
+  return { loginForm, userName };
+};
 ```
 
 It can then be accessed in `PageData` in `+page.svelte`:
@@ -155,7 +154,7 @@ export const actions = {
 
 ```svelte
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms/client'
+  import { superForm } from 'sveltekit-superforms/client';
   import { untrack } from 'svelte';
 
   let { data, form } = $props();
@@ -197,9 +196,9 @@ You can also add form data programmatically in the [onSubmit](/concepts/events#o
 ```ts
 const { form, errors, enhance } = superForm(data.loginForm, {
   onSubmit({ formData }) {
-    formData.set('extra', 'value')
+    formData.set('extra', 'value');
   }
-})
+});
 ```
 
 The onSubmit event is also a good place to modify `$form`, in case you're using [nested data](/concepts/nested-data) with `dataType: 'json'`.
@@ -208,7 +207,7 @@ The onSubmit event is also a good place to modify `$form`, in case you're using 
 
 ### I'm getting JSON.parse errors as response when submitting a form, why?
 
-This is related to the previous question. You must always return an `ActionResult` as a response to a form submission, either through a form action, where it's done automatically, or by constructing one with the [actionResult](/api#actionresulttype-data-options--status) helper. 
+This is related to the previous question. You must always return an `ActionResult` as a response to a form submission, either through a form action, where it's done automatically, or by constructing one with the [actionResult](/api#actionresulttype-data-options--status) helper.
 
 If for some reason a html page or plain text is returned, for example when a proxy server fails to handle the request and returns its own error page, the parsing of the result will fail with the slightly cryptic JSON error message.
 

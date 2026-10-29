@@ -21,15 +21,10 @@
     <div class="variant-ghost btn">Donate on Buymeacoffee</div>
   </a>
 
-  <form
-    class="mt-0"
-    action="https://www.paypal.com/donate"
-    method="POST"
-    target="_top">
+  <form class="mt-0" action="https://www.paypal.com/donate" method="POST" target="_top">
     <input type="hidden" name="hosted_button_id" value="NY7F5ALHHSVQS" />
     <button type="submit" class="w-9 text-primary-500">{@html paypal}</button>
-    <button type="submit" class="variant-ghost btn text-primary-500"
-      >Donate with Paypal</button>
+    <button type="submit" class="variant-ghost btn text-primary-500">Donate with Paypal</button>
   </form>
 </div>
 

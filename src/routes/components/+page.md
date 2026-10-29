@@ -16,8 +16,7 @@ Looking at the rather simple [get started tutorial](/get-started), it's obvious 
   name="name"
   aria-invalid={$errors.name ? 'true' : undefined}
   bind:value={$form.name}
-  {...$constraints.name} 
-/>
+  {...$constraints.name} />
 {#if $errors.name}
   <span class="invalid">{$errors.name}</span>
 {/if}
@@ -27,7 +26,7 @@ And it also gets bad in the script part when you have more than a couple of form
 
 ```svelte
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms'
+  import { superForm } from 'sveltekit-superforms';
   import { untrack } from 'svelte';
 
   let { data } = $props();
@@ -35,14 +34,14 @@ And it also gets bad in the script part when you have more than a couple of form
   const {
     form: loginForm,
     errors: loginErrors,
-    enhance: loginEnhance,
+    enhance: loginEnhance
     //...
   } = superForm(untrack(() => data.loginForm));
 
   const {
     form: registerForm,
     errors: registerErrors,
-    enhance: registerEnhance,
+    enhance: registerEnhance
     // ...
   } = superForm(untrack(() => data.registerForm));
 </script>
@@ -72,11 +71,11 @@ Now you can import and use this type in a separate component:
 ```svelte
 <script lang="ts">
   import type { SuperValidated, Infer } from 'sveltekit-superforms';
-  import { superForm } from 'sveltekit-superforms'
+  import { superForm } from 'sveltekit-superforms';
   import type { LoginSchema } from '$lib/schemas';
   import { untrack } from 'svelte';
 
-  let { data } : { data : SuperValidated<Infer<LoginSchema>> } = $props();
+  let { data }: { data: SuperValidated<Infer<LoginSchema>> } = $props();
 
   const { form, errors, enhance } = superForm(untrack(() => data));
 </script>
@@ -106,12 +105,18 @@ If your schema input and output types differ, or you have a strongly typed [stat
 ```svelte
 <script lang="ts">
   import type { SuperValidated, Infer, InferIn } from 'sveltekit-superforms';
-  import { superForm } from 'sveltekit-superforms'
+  import { superForm } from 'sveltekit-superforms';
   import type { LoginSchema } from '$lib/schemas';
   import { untrack } from 'svelte';
 
-  let { data } : { 
-    data : SuperValidated<Infer<LoginSchema>, { status: number, text: string }, InferIn<LoginSchema>> 
+  let {
+    data
+  }: {
+    data: SuperValidated<
+      Infer<LoginSchema>,
+      { status: number; text: string },
+      InferIn<LoginSchema>
+    >;
   } = $props();
 
   const { form, errors, enhance, message } = superForm(untrack(() => data));
@@ -136,15 +141,15 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 <script lang="ts">
   import type { InputConstraint } from 'sveltekit-superforms';
 
-  let { 
-    name, 
-    value = $bindable(), 
-    type = "text", 
-    label, 
-    errors, 
-    constraints, 
-    ...rest 
-  } : {
+  let {
+    name,
+    value = $bindable(),
+    type = 'text',
+    label,
+    errors,
+    constraints,
+    ...rest
+  }: {
     name: string;
     value: string;
     type?: string;
@@ -162,8 +167,7 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
     bind:value
     aria-invalid={errors ? 'true' : undefined}
     {...constraints}
-    {...rest} 
-  />
+    {...rest} />
 </label>
 {#if errors}<span class="invalid">{errors}</span>{/if}
 ```
@@ -177,8 +181,7 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
     label="name"
     bind:value={$form.name}
     errors={$errors.name}
-    constraints={$constraints.name} 
-  />
+    constraints={$constraints.name} />
 
   <h4>Tags</h4>
 
@@ -188,8 +191,7 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
       label="Name"
       bind:value={$form.tags[i].name}
       errors={$errors.tags?.[i]?.name}
-      constraints={$constraints.tags?.name} 
-    />
+      constraints={$constraints.tags?.name} />
   {/each}
 </form>
 ```
@@ -199,7 +201,6 @@ Since `bind` is available on Svelte components, we can make a `TextInput` compon
 This is a bit better and will certainly help when the components require some styling, but there are still plenty of attributes. Can we do even better?
 
 > Things will get a bit advanced from here, so an alternative is to use the [Formsnap](/formsnap) library, which simplifies componentization a lot.
-
 
 ### Using a fieldProxy
 
@@ -241,7 +242,7 @@ The solution is to use a `formFieldProxy`, which is a helper function for produc
   import { superForm, formFieldProxy } from 'sveltekit-superforms/client';
   import { untrack } from 'svelte';
 
-  let { data } : { data: PageData } = $props();
+  let { data }: { data: PageData } = $props();
 
   const superform = superForm(untrack(() => data.form));
 
@@ -266,14 +267,14 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 
 <script lang="ts" generics="T extends Record<string, unknown>">
   import type { HTMLInputAttributes } from 'svelte/elements';
-  import { formFieldProxy, type SuperForm, type FormPathLeaves  } from 'sveltekit-superforms';
+  import { formFieldProxy, type SuperForm, type FormPathLeaves } from 'sveltekit-superforms';
 
   type Props = HTMLInputAttributes & {
-		superform: SuperForm<T>;
-		field: FormPathLeaves<T>;
-	};
+    superform: SuperForm<T>;
+    field: FormPathLeaves<T>;
+  };
 
-  let { superform, field, ...rest } : Props = $props();
+  let { superform, field, ...rest }: Props = $props();
 
   const { value, errors, constraints } = formFieldProxy(superform, field);
 </script>
@@ -307,14 +308,23 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
 </script>
 
 <script lang="ts" generics="T extends Record<string, unknown>">
-  import { 
-    formFieldProxy, type FormFieldProxy,
-    type SuperForm, type FormPathLeaves
+  import {
+    formFieldProxy,
+    type FormFieldProxy,
+    type SuperForm,
+    type FormPathLeaves
   } from 'sveltekit-superforms';
 
-  let { superForm, field, ...rest } : { superform: SuperForm<T>, field: FormPathLeaves<T, boolean> } = $props();
+  let {
+    superForm,
+    field,
+    ...rest
+  }: { superform: SuperForm<T>; field: FormPathLeaves<T, boolean> } = $props();
 
-  const { value, errors, constraints } = formFieldProxy(superform, field) satisfies FormFieldProxy<boolean>;
+  const { value, errors, constraints } = formFieldProxy(
+    superform,
+    field
+  ) satisfies FormFieldProxy<boolean>;
 </script>
 
 <input
@@ -323,8 +333,7 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
   class="checkbox"
   bind:checked={$value}
   {...$constraints}
-  {...rest} 
-/>
+  {...rest} />
 ```
 
 This will also narrow the `field` prop, so only `boolean` fields in the schema can be selected when using the component.

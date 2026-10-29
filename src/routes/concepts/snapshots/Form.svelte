@@ -39,8 +39,6 @@
   </label>
 
   <button type="submit" class="variant-filled btn">Submit</button>
-  <button
-    type="button"
-    on:click={() => reset()}
-    class="variant-soft-warning btn ml-3">Reset</button>
+  <button type="button" on:click={() => reset()} class="variant-soft-warning btn ml-3"
+    >Reset</button>
 </form>

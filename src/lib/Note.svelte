@@ -1,4 +1,4 @@
-<aside class="alert variant-filled-surface pb-0 pt-5 mb-5 font-medium">
+<aside class="alert variant-filled-surface mb-5 pb-0 pt-5 font-medium">
   <slot />
 </aside>
 

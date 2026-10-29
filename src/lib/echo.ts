@@ -1,18 +1,14 @@
 import { fail, type RequestEvent } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters'
+import { zod } from 'sveltekit-superforms/adapters';
 import type { ZodEffects, AnyZodObject } from 'zod';
 
-type ZodValidation<T extends AnyZodObject> =
-  | T
-  | ZodEffects<T>
-  | ZodEffects<ZodEffects<T>>;
+type ZodValidation<T extends AnyZodObject> = T | ZodEffects<T> | ZodEffects<ZodEffects<T>>;
 
-export function echo<
-  T extends AnyZodObject,
-  S extends ZodValidation<T>,
-  E extends RequestEvent
->(schema: S, debug = false) {
+export function echo<T extends AnyZodObject, S extends ZodValidation<T>, E extends RequestEvent>(
+  schema: S,
+  debug = false
+) {
   return async (event: E) => {
     const form = await superValidate(event, zod(schema));
 
@@ -26,11 +22,9 @@ export function echo<
   };
 }
 
-export function echoLoad<T extends AnyZodObject, S extends ZodValidation<T>>(
-  schema: S
-) {
+export function echoLoad<T extends AnyZodObject, S extends ZodValidation<T>>(schema: S) {
   return async function load() {
-    const form = await superValidate(zod(schema))
+    const form = await superValidate(zod(schema));
     return { form };
   };
 }
@@ -44,9 +38,7 @@ export function echoActions<T extends AnyZodObject, S extends ZodValidation<T>>(
   };
 }
 
-export function echoPage<T extends AnyZodObject, S extends ZodValidation<T>>(
-  schema: S
-) {
+export function echoPage<T extends AnyZodObject, S extends ZodValidation<T>>(schema: S) {
   return {
     load: echoLoad(schema),
     actions: echoActions(schema)

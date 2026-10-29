@@ -9,10 +9,7 @@ module.exports = {
   darkMode: 'class',
   content: [
     './src/**/*.{html,js,svelte,ts}',
-    join(
-      require.resolve('@skeletonlabs/skeleton'),
-      '../**/*.{html,js,svelte,ts}'
-    )
+    join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')
   ],
   theme: {
     screens: {
@@ -116,9 +113,5 @@ module.exports = {
       })
     }
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    skeleton
-  ]
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography'), skeleton]
 };

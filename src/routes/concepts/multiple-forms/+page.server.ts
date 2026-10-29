@@ -11,7 +11,7 @@ const registerSchema = z.object({
 
 const loginSchema = registerSchema.omit({ name: true });
 
-export const load = (async () => {
+export const load = async () => {
   // Server API:
   const registerForm = await superValidate(zod(registerSchema), {
     id: 'register'
@@ -19,7 +19,7 @@ export const load = (async () => {
   const loginForm = await superValidate(zod(loginSchema), { id: 'login' });
 
   return { registerForm, loginForm };
-})
+};
 
 export const actions = {
   login: async ({ request }) => {
@@ -41,4 +41,4 @@ export const actions = {
 
     return message(form, 'Registration successful!');
   }
-}
+};

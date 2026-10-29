@@ -19,14 +19,14 @@ import { z } from 'zod';
 
 const schema = z.object({
   image: z
-    .instanceof(File, { message: 'Please upload a file.'})
+    .instanceof(File, { message: 'Please upload a file.' })
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
 });
 
 export const load = async () => {
-  return { 
+  return {
     form: await superValidate(zod(schema))
-  }
+  };
 };
 
 export const actions = {
@@ -47,7 +47,7 @@ export const actions = {
 
 ## Returning files in form actions
 
-**Important:** Because file objects cannot be serialized, you must return the form using `fail`, `message` or `setError` imported from *Superforms*, not from SvelteKit:
+**Important:** Because file objects cannot be serialized, you must return the form using `fail`, `message` or `setError` imported from _Superforms_, not from SvelteKit:
 
 ```ts
 import { message, setError, fail } from 'sveltekit-superforms';
@@ -72,7 +72,7 @@ if (!form.valid) {
 }
 
 // When returning just the form
-return withFiles({ form })
+return withFiles({ form });
 ```
 
 This will remove the file objects from the form data, so SvelteKit can serialize it properly.
@@ -88,7 +88,7 @@ The recommended way to bind the file input to the form data is through a `filePr
 ```ts
 export const schema = z.object({
   image: z
-    .instanceof(File, { message: 'Please upload a file.'})
+    .instanceof(File, { message: 'Please upload a file.' })
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
 });
 ```
@@ -98,27 +98,25 @@ export const schema = z.object({
 
 ```svelte
 <script lang="ts">
-  import { superForm, fileProxy } from 'sveltekit-superforms'
-  import { zodClient } from 'sveltekit-superforms/adapters'
-  import { schema } from './schema.js'
+  import { superForm, fileProxy } from 'sveltekit-superforms';
+  import { zodClient } from 'sveltekit-superforms/adapters';
+  import { schema } from './schema.js';
   import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, enhance, errors } = superForm(untrack(() => data.form), {
-    validators: zodClient(schema)
-  })
+  const { form, enhance, errors } = superForm(
+    untrack(() => data.form),
+    {
+      validators: zodClient(schema)
+    }
+  );
 
-  const file = fileProxy(form, 'image')
+  const file = fileProxy(form, 'image');
 </script>
 
 <form method="POST" enctype="multipart/form-data" use:enhance>
-  <input
-    type="file"
-    name="image"
-    accept="image/png, image/jpeg"
-    bind:files={$file}
-  />
+  <input type="file" name="image" accept="image/png, image/jpeg" bind:files={$file} />
   {#if $errors.image}<span>{$errors.image}</span>{/if}
   <button>Submit</button>
 </form>
@@ -129,16 +127,19 @@ export const schema = z.object({
 
 ```svelte
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms'
-  import { zodClient } from 'sveltekit-superforms/adapters'
-  import { schema } from './schema.js'
+  import { superForm } from 'sveltekit-superforms';
+  import { zodClient } from 'sveltekit-superforms/adapters';
+  import { schema } from './schema.js';
   import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, enhance, errors } = superForm(untrack(() => data.form), {
-    validators: zodClient(schema)
-  })
+  const { form, enhance, errors } = superForm(
+    untrack(() => data.form),
+    {
+      validators: zodClient(schema)
+    }
+  );
 </script>
 
 <form method="POST" enctype="multipart/form-data" use:enhance>
@@ -146,8 +147,7 @@ export const schema = z.object({
     type="file"
     name="image"
     accept="image/png, image/jpeg"
-    on:input={(e) => ($form.image = e.currentTarget.files?.item(0) as File)}
-  />
+    on:input={(e) => ($form.image = e.currentTarget.files?.item(0) as File)} />
   {#if $errors.image}<span>{$errors.image}</span>{/if}
   <button>Submit</button>
 </form>
@@ -165,7 +165,7 @@ We need an array to validate multiple files:
 ```ts
 const schema = z.object({
   images: z
-    .instanceof(File, { message: 'Please upload a file.'})
+    .instanceof(File, { message: 'Please upload a file.' })
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
     .array()
 });
@@ -176,28 +176,25 @@ const schema = z.object({
 
 ```svelte
 <script lang="ts">
-  import { superForm, filesProxy } from 'sveltekit-superforms'
-  import { zodClient } from 'sveltekit-superforms/adapters'
-  import { schema } from './schema.js'
+  import { superForm, filesProxy } from 'sveltekit-superforms';
+  import { zodClient } from 'sveltekit-superforms/adapters';
+  import { schema } from './schema.js';
   import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, enhance, errors } = superForm(untrack(() => data.form), {
-    validators: zodClient(schema)
-  })
+  const { form, enhance, errors } = superForm(
+    untrack(() => data.form),
+    {
+      validators: zodClient(schema)
+    }
+  );
 
   const files = filesProxy(form, 'images');
 </script>
 
 <form method="POST" enctype="multipart/form-data" use:enhance>
-  <input
-    type="file"
-    multiple
-    name="images"
-    accept="image/png, image/jpeg"
-    bind:files={$files}
-  />
+  <input type="file" multiple name="images" accept="image/png, image/jpeg" bind:files={$files} />
   {#if $errors.images}<span>{$errors.images}</span>{/if}
   <button>Submit</button>
 </form>
@@ -208,16 +205,19 @@ const schema = z.object({
 
 ```svelte
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms'
-  import { zodClient } from 'sveltekit-superforms/adapters'
-  import { schema } from './schema.js'
+  import { superForm } from 'sveltekit-superforms';
+  import { zodClient } from 'sveltekit-superforms/adapters';
+  import { schema } from './schema.js';
   import { untrack } from 'svelte';
 
   let { data } = $props();
 
-  const { form, enhance, errors } = superForm(untrack(() => data.form), {
-    validators: zodClient(schema)
-  })
+  const { form, enhance, errors } = superForm(
+    untrack(() => data.form),
+    {
+      validators: zodClient(schema)
+    }
+  );
 </script>
 
 <form method="POST" enctype="multipart/form-data" use:enhance>
@@ -226,8 +226,7 @@ const schema = z.object({
     multiple
     name="images"
     accept="image/png, image/jpeg"
-    on:input={(e) => ($form.images = Array.from(e.currentTarget.files ?? []))}
-  />
+    on:input={(e) => ($form.images = Array.from(e.currentTarget.files ?? []))} />
   {#if $errors.images}<span>{$errors.images}</span>{/if}
   <button>Submit</button>
 </form>
@@ -272,7 +271,7 @@ If you'd like a progress bar for large file uploads, check out the [customReques
 
 ## Preventing file uploads
 
-To prevent file uploads, set the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, so you don't have to use `withFiles`. 
+To prevent file uploads, set the `{ allowFiles: false }` option in `superValidate`. This will set all files to `undefined`, so you don't have to use `withFiles`.
 
 This will also happen if you have migrated from version 1 and defined [SUPERFORMS_LEGACY](/migration-v2/#the-biggest-change-important). In that case, set `{ allowFiles: true }` to allow files.
 

@@ -24,7 +24,10 @@ You can, of course, set your own default values in the schema, using the `defaul
 
 ```ts
 const schema = z.object({
-  age: z.number().positive().default('' as unknown as number),
+  age: z
+    .number()
+    .positive()
+    .default('' as unknown as number),
   agree: z.literal(true).default(false as true)
 });
 ```

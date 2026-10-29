@@ -3,7 +3,7 @@
   import debug from '$lib/assets/debug.svg?raw';
 
   export let open = false;
-  $: label = (open ? 'Hide' : 'Display')  + ' variables';
+  $: label = (open ? 'Hide' : 'Display') + ' variables';
 </script>
 
 <div class="card p-2">

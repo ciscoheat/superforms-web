@@ -62,7 +62,7 @@ export const actions = {
 You can return any type with the message, like an object, if you want to send more information than a string:
 
 ```ts
-return message(form, { text: 'User created', id: newId })
+return message(form, { text: 'User created', id: newId });
 ```
 
 See right below for how to make this data strongly typed.
@@ -105,8 +105,9 @@ declare global {
     // interface Platform {}
     namespace Superforms {
       type Message = {
-        type: 'error' | 'success', text: string
-      }
+        type: 'error' | 'success';
+        text: string;
+      };
     }
   }
 }
@@ -123,10 +124,7 @@ declare global {
 </script>
 
 {#if $message}
-  <div 
-    class:success={$message.status == 'success'} 
-    class:error={$message.status == 'error'}
-  >
+  <div class:success={$message.status == 'success'} class:error={$message.status == 'error'}>
     {$message.text}
   </div>
 {/if}
@@ -138,16 +136,13 @@ Though if you want to keep it simple with a string or the default `any`, you can
 <script lang="ts">
   import { page } from '$app/stores';
   import { untrack } from 'svelte';
-  
+
   let { data } = $props();
   const { form, message } = superForm(untrack(() => data.form));
 </script>
 
 {#if $message}
-  <div 
-    class:success={$page.status == 200} 
-    class:error={$page.status >= 400}
-  >
+  <div class:success={$page.status == 200} class:error={$page.status >= 400}>
     {$message}
   </div>
 {/if}

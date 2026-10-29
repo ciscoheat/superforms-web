@@ -48,9 +48,7 @@ export const _userSchema = z.object({
 export const load = async ({ params, fetch }) => {
   const id = parseInt(params.id);
 
-  const request = await fetch(
-    `https://jsonplaceholder.typicode.com/users/${id}`
-  );
+  const request = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
   if (request.status >= 400) throw error(request.status);
 
   const userData = await request.json();
@@ -156,13 +154,11 @@ If you have initial data in the top level of the component, you can pass it as a
 ```ts
 const initialData = { name: 'New user' };
 
-const { form, errors, enhance, validateForm } = superForm(
-  defaults(initialData, zod(loginSchema)), {
-    SPA: true,
-    validators: zod(loginSchema)
-    // ...
-  }
-);
+const { form, errors, enhance, validateForm } = superForm(defaults(initialData, zod(loginSchema)), {
+  SPA: true,
+  validators: zod(loginSchema)
+  // ...
+});
 
 validateForm({ update: true });
 ```

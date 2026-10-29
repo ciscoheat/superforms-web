@@ -259,7 +259,7 @@ const schema = z.object({
 
 #### Schema caching
 
-Define the schema *outside* the load function, on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) based on its arguments, so they must be kept in memory.
+Define the schema _outside_ the load function, on the top level of the module. **This is very important to make caching work.** The adapter is memoized (cached) based on its arguments, so they must be kept in memory.
 
 Therefore, define the schema, its options and potential defaults on the top level of a module, so they always refer to the same object.
 
@@ -560,8 +560,8 @@ import { z } from 'zod/mini';
 
 // Define outside the load function so the adapter can be cached
 const schema = z.object({
-	name: z._default(z.string(), 'Hello world!'),
-	email: z.email('Invalid email')
+  name: z._default(z.string(), 'Hello world!'),
+  email: z.email('Invalid email')
 });
 
 export const load = async () => {
@@ -737,7 +737,6 @@ The data from `superValidate` is now available in `+page.svelte` as `data.form`,
 
 When using Svelte 5 runes, wrap the initial form value in `untrack` as shown above. `superForm` owns the form state after initialization, so it should not reactively reinitialize when the page-data prop changes.
 
-
 The `superForm` function is used to create a form on the client, and `bind:value` is used to create a two-way binding between the form data and the input fields.
 
 > Two notes: There should be only one `superForm` instance per form - its methods cannot be used in multiple forms. And don't forget the `name` attribute on the input fields! Unless you are using [nested data](/concepts/nested-data), they are required.
@@ -764,7 +763,7 @@ This should be displayed:
 
 <SuperDebug data={$form} />
 
-When editing the form fields (try in the form above), the data is automatically updated. 
+When editing the form fields (try in the form above), the data is automatically updated.
 
 SuperDebug also displays a copy button and the current page status in the right corner. There are many [configuration options](/super-debug) available.
 
@@ -845,7 +844,7 @@ Now we know that validation has failed and there are errors being sent to the cl
 </style>
 ```
 
-By including the `errors` store, we can display errors where appropriate, and through `constraints` we'll get browser validation even without JavaScript enabled. 
+By including the `errors` store, we can display errors where appropriate, and through `constraints` we'll get browser validation even without JavaScript enabled.
 
 The `aria-invalid` attribute is used to [automatically focus](/concepts/error-handling#errorselector) on the first error field. And finally, we included the [status message](/concepts/messages) above the form to show if it was posted successfully.
 

@@ -25,7 +25,7 @@ import {
   // The type of the other three depends on the field:
   formFieldProxy,
   arrayProxy,
-  fieldProxy      
+  fieldProxy
 } from 'sveltekit-superforms';
 ```
 
@@ -73,8 +73,7 @@ const proxyDate = dateProxy(form, 'date', { format: 'date' });
   aria-invalid={$errors.date ? 'true' : undefined}
   {...$constraints.date}
   min={$constraints.date?.min?.toString().slice(0, 10)}
-  max={$constraints.date?.max?.toString().slice(0, 10)}
-/>
+  max={$constraints.date?.max?.toString().slice(0, 10)} />
 ```
 
 We're also using the `min` and `max` constraints to limit the date picker selection. The following example limits the date from today and forward, and also uses the [empty option](/api#dateproxyform-fieldname-options) of the proxy, to set an invalid date to `undefined`. [Code](https://github.com/ciscoheat/superforms-web/blob/main/src/routes/concepts/proxy-objects/Form.svelte)

@@ -6,9 +6,9 @@ import { dev } from '$app/environment';
 
 let engine: Orama;
 
-export const GET = (async ({ url }) => {
+export const GET = async ({ url }) => {
   if (!engine) {
-    const dbUrl = new URL('/oramadb.json', url)
+    const dbUrl = new URL('/oramadb.json', url);
     const data = await fetch(dbUrl.toString());
     engine = (await restore('json', await data.text())) as unknown as Orama;
   }
@@ -27,9 +27,7 @@ export const GET = (async ({ url }) => {
   });
 
   if (dev) {
-    console.log(
-      `----- ${term} ---------------------------------------------------`
-    );
+    console.log(`----- ${term} ---------------------------------------------------`);
     console.log(result.hits.map((h) => ({ score: h.score, doc: h.document })));
   }
 
@@ -39,4 +37,4 @@ export const GET = (async ({ url }) => {
       return { title, hash, url };
     })
   );
-})
+};

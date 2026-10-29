@@ -12,11 +12,8 @@
 {/key}
 
 <pre>
-{#each browser.dirs as dir}<a
-      class="dir"
-      href="?dir={browser.path}{browser.sep}{dir}">{dir}</a
-    ><br />{/each}{#each browser.files as file}<span class="file">{file}</span
-    ><br />{/each}
+{#each browser.dirs as dir}<a class="dir" href="?dir={browser.path}{browser.sep}{dir}">{dir}</a
+    ><br />{/each}{#each browser.files as file}<span class="file">{file}</span><br />{/each}
 </pre>
 
 <style lang="scss">

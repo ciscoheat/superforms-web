@@ -152,7 +152,8 @@ Now that we have loaded the data, let's display it:
   let { data } = $props();
 
   const { form, errors, constraints, enhance, delayed, message } = superForm(
-    untrack(() => data.form), {
+    untrack(() => data.form),
+    {
       resetForm: false
     }
   );
@@ -196,7 +197,8 @@ We've also prepared a status message, using `page.status` to test for success or
     {#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
   </label>
 
-  <button>Submit</button> {#if $delayed}Working...{/if}
+  <button>Submit</button>
+  {#if $delayed}Working...{/if}
 </form>
 
 <style>

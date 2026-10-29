@@ -44,7 +44,7 @@ To modify the form in code, you can assign `$form.field = ...` directly, but not
 ```ts
 form.update(
   ($form) => {
-    $form.name = "New name";
+    $form.name = 'New name';
     return $form;
   },
   { taint: false }
@@ -54,7 +54,9 @@ form.update(
 The `taint` options are:
 
 ```ts
-{ taint: boolean | 'untaint' | 'untaint-form' }
+{
+  taint: boolean | 'untaint' | 'untaint-form';
+}
 ```
 
 Which can be used to not only prevent tainting, but also untaint the modified field(s), or the whole form.
@@ -100,14 +102,9 @@ You can build a HTML form for these tags using an `{#each}` loop:
   {#each $form.tags as _, i}
     <div>
       Id
-      <input
-        type="number"
-        data-invalid={$errors.tags?.[i]?.id}
-        bind:value={$form.tags[i].id} />
+      <input type="number" data-invalid={$errors.tags?.[i]?.id} bind:value={$form.tags[i].id} />
       Name
-      <input
-        data-invalid={$errors.tags?.[i]?.name}
-        bind:value={$form.tags[i].name} />
+      <input data-invalid={$errors.tags?.[i]?.name} bind:value={$form.tags[i].name} />
       {#if $errors.tags?.[i]?.id}
         <br />
         <span class="invalid">{$errors.tags[i].id}</span>
@@ -141,10 +138,10 @@ import type { Transport } from '@sveltejs/kit';
 import { Decimal } from 'decimal.js';
 
 export const transport: Transport = {
-	Decimal: {
-		encode: (value) => value instanceof Decimal && value.toString(),
-		decode: (str) => new Decimal(str)
-	}
+  Decimal: {
+    encode: (value) => value instanceof Decimal && value.toString(),
+    decode: (str) => new Decimal(str)
+  }
 };
 ```
 
@@ -217,21 +214,21 @@ Validation libraries like Zod can refine the validation, the classic example is 
 const confirmPassword = z
   .object({
     password: z.string(),
-    confirm: z.string(),
+    confirm: z.string()
   })
   .refine((data) => data.password === data.confirm, {
     message: "Passwords don't match",
-    path: ["confirm"], // path of error
+    path: ['confirm'] // path of error
   });
-  ```
+```
 
-  This works fine for top-level properties, but for nested data you must usually specify that path as an **array**, each segment in its own element, not as a string path as you can do in the `FormPathLeaves` type!
+This works fine for top-level properties, but for nested data you must usually specify that path as an **array**, each segment in its own element, not as a string path as you can do in the `FormPathLeaves` type!
 
-  ```ts
-  // OK:
-  path: ['form', 'tags', 3]
-  // Will not work with Zod refine and superRefine:
-  path ['form.tags[3]']
-  ```
+```ts
+// OK:
+path: ['form', 'tags', 3];
+// Will not work with Zod refine and superRefine:
+path['form.tags[3]'];
+```
 
 <Next section={concepts} />

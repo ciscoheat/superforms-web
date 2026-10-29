@@ -1,4 +1,4 @@
-<ol class="ml-6 md-list list space-y-0">
+<ol class="md-list list ml-6 space-y-0">
   <slot />
 </ol>
 

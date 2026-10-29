@@ -22,11 +22,7 @@ By deconstructing `errors` from `superForm`, you'll get an object with form erro
 
 <form method="POST">
   <label for="name">Name</label>
-  <input
-    name="name"
-    aria-invalid={$errors.name ? 'true' : undefined}
-    bind:value={$form.name}
-  />
+  <input name="name" aria-invalid={$errors.name ? 'true' : undefined} bind:value={$form.name} />
   {#if $errors.name}<span class="invalid">{$errors.name}</span>{/if}
 
   <div><button>Submit</button></div>
@@ -74,12 +70,12 @@ setError(form, `post.tags[${i}].name`, 'Invalid tag name.');
 
 In the case of a server error, Superforms will normalize the different kind of server errors that can occur:
 
-| Error type | Example   |
-| ---------- | --------- |
-| [Expected error](https://kit.svelte.dev/docs/errors#expected-errors) | `error(404, { code: 'user_not_found', message: 'Not found' })` |
-| Exception              | `throw new Error("Database connection error")` |
-| JSON response          | `return json({ code: 'rate_limited', status: 429 }, { status: 429 })` |
-| Other response         | `<!doctype html><html lang="en"><head><meta charset=...` |
+| Error type                                                           | Example                                                               |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [Expected error](https://kit.svelte.dev/docs/errors#expected-errors) | `error(404, { code: 'user_not_found', message: 'Not found' })`        |
+| Exception                                                            | `throw new Error("Database connection error")`                        |
+| JSON response                                                        | `return json({ code: 'rate_limited', status: 429 }, { status: 429 })` |
+| Other response                                                       | `<!doctype html><html lang="en"><head><meta charset=...`              |
 
 These should be handled with the [onError](/concepts/events#onerror) event, assuming the Superforms [use:enhance](/concepts/enhance) action is applied to the form. If it isn't, the nearest `+error.svelte` page will be rendered.
 
@@ -184,6 +180,7 @@ const { form, enhance } = superForm(data.form, {
   validators: schema
 });
 ```
+
 ```svelte
 <input type="text" name="name" bind:value={$form.name} />
 ```
@@ -254,7 +251,7 @@ Most methods in the validation schema has a parameter for a custom error message
 
 ```ts
 const schema = z.object({
-  name: z.string().min(2, "Name is too short."),
+  name: z.string().min(2, 'Name is too short.'),
   email: z.string().email("That's a strange email.")
 });
 ```

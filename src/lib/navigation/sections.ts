@@ -13,5 +13,5 @@ export const concepts = [
   ['/concepts/strict-mode', 'Strict mode'],
   ['/concepts/submit-behavior', 'Submit behavior'],
   ['/concepts/tainted', 'Tainted fields'],
-  ['/concepts/enhance', 'use:enhance'],
+  ['/concepts/enhance', 'use:enhance']
 ];

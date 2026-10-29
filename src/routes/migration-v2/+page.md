@@ -43,15 +43,15 @@ You can do the same on a form-by-form basis by setting the `legacy` option on `s
 
 Instead of a Zod schema, you now use an adapter for your favorite validation library. The following are currently supported:
 
-| Library  | Adapter                                                   | Requires defaults |
-| -------- | --------------------------------------------------------- | ----------------- |
-| Arktype  | `import { arktype } from 'sveltekit-superforms/adapters'` | No  |
-| Joi      | `import { joi } from 'sveltekit-superforms/adapters'`     | No  |
-| TypeBox  | `import { typebox } from 'sveltekit-superforms/adapters'` | No  |
-| Valibot  | `import { valibot } from 'sveltekit-superforms/adapters'` | No  |
-| VineJS   | `import { vine } from 'sveltekit-superforms/adapters'`    | Yes |
-| Yup      | `import { yup } from 'sveltekit-superforms/adapters'`     | No  |
-| Zod      | `import { zod } from 'sveltekit-superforms/adapters'`     | No  |
+| Library | Adapter                                                   | Requires defaults |
+| ------- | --------------------------------------------------------- | ----------------- |
+| Arktype | `import { arktype } from 'sveltekit-superforms/adapters'` | No                |
+| Joi     | `import { joi } from 'sveltekit-superforms/adapters'`     | No                |
+| TypeBox | `import { typebox } from 'sveltekit-superforms/adapters'` | No                |
+| Valibot | `import { valibot } from 'sveltekit-superforms/adapters'` | No                |
+| VineJS  | `import { vine } from 'sveltekit-superforms/adapters'`    | Yes               |
+| Yup     | `import { yup } from 'sveltekit-superforms/adapters'`     | No                |
+| Zod     | `import { zod } from 'sveltekit-superforms/adapters'`     | No                |
 
 With the library installed and the adapter imported, all you need to do is wrap the schema with it:
 
@@ -92,8 +92,8 @@ import { superformClient } from 'sveltekit-superforms/adapters';
 
 const { form, errors, enhance } = superForm(data.form, {
   validators: superformClient<Infer<typeof schema>>({
-    name: (name?) => { 
-      if(!name || name.length < 2) return 'Name must be at least two characters' 
+    name: (name?) => {
+      if (!name || name.length < 2) return 'Name must be at least two characters';
     }
   })
 });
@@ -106,33 +106,33 @@ As said, this adapter requires you to do much of the error-prone type checking m
 If you have used type parameters for a call to `superValidate` before, or have been using the `SuperValidated` type, you now need to wrap the schema parameter with `Infer`:
 
 ```ts
-import type { Infer } from 'sveltekit-superforms'
-import { zod } from 'sveltekit-superforms/adapters'
-import { schema } from './schema.js'
+import type { Infer } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { schema } from './schema.js';
 
-type Message = { status: 'success' | 'failure', text: string }
+type Message = { status: 'success' | 'failure'; text: string };
 
 const form = await superValidate<Infer<typeof schema>, Message>(zod(schema));
 ```
 
 ```ts
 import type { LoginSchema } from '$lib/schemas';
-import type { Infer } from 'sveltekit-superforms'
+import type { Infer } from 'sveltekit-superforms';
 
-let { data } : { data: SuperValidated<Infer<LoginSchema>> } = $props();
+let { data }: { data: SuperValidated<Infer<LoginSchema>> } = $props();
 ```
 
 If your schema uses transformations or pipes, so the input and output types are different, there's an `InferIn` type and a third type parameter that can be used.
 
 ```ts
-import type { Infer, InferIn } from 'sveltekit-superforms'
-import { zod } from 'sveltekit-superforms/adapters'
-import { schema } from './schema.js'
+import type { Infer, InferIn } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { schema } from './schema.js';
 
-type Message = { status: 'success' | 'failure', text: string }
+type Message = { status: 'success' | 'failure'; text: string };
 type Validated = SuperValidated<Infer<typeof schema>, Message, InferIn<typeof schema>>;
 
-const form : Validated = await superValidate(zod(schema));
+const form: Validated = await superValidate(zod(schema));
 ```
 
 Also, `constraints` are now optional in the `SuperValidated` type, since they won't be returned when posting data anymore, only when loading data, to save some bandwidth. This is only relevant if you're changing the constraints before calling `superForm`.
@@ -146,26 +146,26 @@ Since this is a bit of a security issue, `superValidateSync` has been renamed to
 Fortunately though, a [quick Github search](https://github.com/search?q=superValidateSync%28&type=code) reveals that most of its usages are with the schema only, which requires no validation and no `+page.ts`. In that case, just call `defaults` with your adapter and potential initial data, and you're good to go:
 
 ```ts
-import { defaults } from 'sveltekit-superforms'
+import { defaults } from 'sveltekit-superforms';
 
 // Getting the default values from the schema:
 const { form, errors, enhance } = superForm(defaults(zod(schema)), {
   SPA: true,
-  validators: zod(schema),
+  validators: zod(schema)
   // ...
-})
+});
 ```
 
 ```ts
-import { defaults } from 'sveltekit-superforms'
+import { defaults } from 'sveltekit-superforms';
 
 // Supplying initial data (can be partial, won't be validated)
-const initialData = { name: 'New user' }
+const initialData = { name: 'New user' };
 const { form, errors, enhance } = superForm(defaults(initialData, zod(schema)), {
   SPA: true,
-  validators: zod(schema),
+  validators: zod(schema)
   // ...
-})
+});
 ```
 
 Note that `superValidate` can be used anywhere but on the top-level of Svelte components, so it's not completely removed from the client and SPA usage. But client-side validation is more of a convenience than ensuring data integrity. Always let an external API or a server request do a proper validation of the data before it's stored or used somewhere.
@@ -219,7 +219,7 @@ export enum Foo {
 const schema = z.object({
   foo: z.nativeEnum(Foo), // Default is Foo.A, field is required
   zodEnum: z.enum(['a', 'b', 'c']).default('b') // Explicit default 'b', field is optional
-})
+});
 ```
 
 ### Use isTainted to check tainted status
@@ -254,7 +254,7 @@ Then the default values won't be parsed with the schema. In other words, no side
 
 ```ts
 const form = await superValidate(zod(schema), { errors: true });
-form.errors = {}
+form.errors = {};
 ```
 
 #### Fields with default values aren't required anymore
@@ -290,8 +290,7 @@ Generic components were previously using Zod types for type safety. It is simple
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
     {...$constraints}
-    {...$$restProps}
-  />
+    {...$$restProps} />
   {#if $errors}<span class="invalid">{$errors}</span>{/if}
 </label>
 ```
@@ -342,9 +341,9 @@ Previously, there was a `message` parameter in the onError event. It's gone now,
 ```ts
 const { form, message, enhance } = superForm(data.form, {
   onError({ result }) {
-    $message = result.error.message
+    $message = result.error.message;
   }
-})
+});
 ```
 
 ### flashMessage.onError "message" parameter renamed to "flashMessage"

@@ -25,9 +25,7 @@ function dir(directory: string): Dir {
     return {
       path: path.resolve(directory),
       files: files.filter((f) => file(path.join(directory, f), false)),
-      dirs: ['..'].concat(
-        files.filter((f) => file(path.join(directory, f), true))
-      ),
+      dirs: ['..'].concat(files.filter((f) => file(path.join(directory, f), true))),
       sep: path.sep
     };
   } catch (e) {
@@ -35,10 +33,10 @@ function dir(directory: string): Dir {
   }
 }
 
-export const load = (async ({ url, fetch }) => {
+export const load = async ({ url, fetch }) => {
   const data = await fetch('/oramadb.json');
   return {
     db: (await data.text()).length,
     browser: dir(url.searchParams.get('dir') ?? process.cwd())
   };
-})
+};

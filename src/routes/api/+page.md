@@ -10,8 +10,8 @@ Throughout the reference, the type `T` represents the type of the validation sch
 
 ```ts
 type T = {
-  name?: string | undefined,
-  email: string
+  name?: string | undefined;
+  email: string;
 };
 ```
 
@@ -39,7 +39,7 @@ import { z } from 'zod';
 
 const schema = z.object({
   name: z.string().min(3)
-})
+});
 
 // Type is now ValidationAdapter<Infer<typeof schema>, InferIn<typeof schema>>
 // Which is the same as ValidationAdapter<{name: string}, {name: string}>
@@ -93,15 +93,15 @@ superValidate<T, M = any, In = T>(
 
 ```ts
 SuperValidateOptions = Partial<{
-  errors: boolean;           // Add or remove errors from output (valid status is always preserved)
-  id: string;                // Form id, for multiple forms support. Set automatically by default
+  errors: boolean; // Add or remove errors from output (valid status is always preserved)
+  id: string; // Form id, for multiple forms support. Set automatically by default
   preprocessed: (keyof T)[]; // Bypass superValidate data coercion for posted fields in this array
-  defaults: T;               // Override default values from the schema
-  jsonSchema: JSONSchema;    // Override JSON schema from the adapter
-  strict: boolean;           // If true, validate exactly the posted data, no defaults added
-  allowFiles: boolean;       // If false, set all posted File objects to undefined
-  transport: Transport;      // Set to a transport object to send any type to the client. See https://svelte.dev/docs/kit/hooks#Universal-hooks-transport
-}>
+  defaults: T; // Override default values from the schema
+  jsonSchema: JSONSchema; // Override JSON schema from the adapter
+  strict: boolean; // If true, validate exactly the posted data, no defaults added
+  allowFiles: boolean; // If false, set all posted File objects to undefined
+  transport: Transport; // Set to a transport object to send any type to the client. See https://svelte.dev/docs/kit/hooks#Universal-hooks-transport
+}>;
 ```
 
 See the page about [multiple forms](/concepts/multiple-forms) for information about when to use `id`.
@@ -291,10 +291,7 @@ Then in the form, simply point the form action to the endpoint (and remember `us
 ## Client API
 
 ```ts
-import { 
-  superForm, 
-  defaults
-} from 'sveltekit-superforms';
+import { superForm, defaults } from 'sveltekit-superforms';
 ```
 
 ### superForm(form, options?)
@@ -329,10 +326,12 @@ type FormOptions<T, M, In> = Partial<{
 
   // Events
   onSubmit: (
-    submit: Parameters<SubmitFunction>[0] & { 
-      jsonData: (data: Record<string, unknown>) => void,
-      validators: (validators: ValidationAdapter<Partial<T>, Record<string, unknown>> | false) => void,
-      customRequest: (input: Parameters<SubmitFunction>[0]) => Promise<Response | XMLHttpRequest>
+    submit: Parameters<SubmitFunction>[0] & {
+      jsonData: (data: Record<string, unknown>) => void;
+      validators: (
+        validators: ValidationAdapter<Partial<T>, Record<string, unknown>> | false
+      ) => void;
+      customRequest: (input: Parameters<SubmitFunction>[0]) => Promise<Response | XMLHttpRequest>;
     }
   ) => MaybePromise<unknown | void>;
   onResult: (event: {
@@ -346,9 +345,7 @@ type FormOptions<T, M, In> = Partial<{
     cancel: () => void;
     result: Extract<ActionResult, { type: 'success' | 'failure' }>;
   }) => MaybePromise<unknown | void>;
-  onUpdated: (event: {
-    form: Readonly<SuperValidated<T, M, In>>;
-  }) => MaybePromise<unknown | void>;
+  onUpdated: (event: { form: Readonly<SuperValidated<T, M, In>> }) => MaybePromise<unknown | void>;
   onChange: (event: ChangeEvent) => void;
   onError:
     | 'apply'
@@ -382,27 +379,28 @@ type FormOptions<T, M, In> = Partial<{
 }>;
 
 type ChangeEvent<T> =
-{
-  path: FormPath<T>;
-  paths: FormPath<T>[];
-  formElement: HTMLFormElement;
-  target: Element;
-  set: <Path extends FormPath<T>>(
-    path: Path,
-    value: FormPathType<T, Path>,
-    options?: { taint?: boolean | 'untaint' | 'untaint-form' }
-  ) => void;
-  get: <Path extends FormPath<T>>(path: Path) => FormPathType<T, Path>;
-} | {
-  target: undefined;
-  paths: FormPath<T>[];
-  set: <Path extends FormPath<T>>(
-    path: Path,
-    value: FormPathType<T, Path>,
-    options?: { taint?: boolean | 'untaint' | 'untaint-form' }
-  ) => void;
-  get: <Path extends FormPath<T>>(path: Path) => FormPathType<T, Path>;
-};
+  | {
+      path: FormPath<T>;
+      paths: FormPath<T>[];
+      formElement: HTMLFormElement;
+      target: Element;
+      set: <Path extends FormPath<T>>(
+        path: Path,
+        value: FormPathType<T, Path>,
+        options?: { taint?: boolean | 'untaint' | 'untaint-form' }
+      ) => void;
+      get: <Path extends FormPath<T>>(path: Path) => FormPathType<T, Path>;
+    }
+  | {
+      target: undefined;
+      paths: FormPath<T>[];
+      set: <Path extends FormPath<T>>(
+        path: Path,
+        value: FormPathType<T, Path>,
+        options?: { taint?: boolean | 'untaint' | 'untaint-form' }
+      ) => void;
+      get: <Path extends FormPath<T>>(path: Path) => FormPathType<T, Path>;
+    };
 ```
 
 - See [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) for details about the `onSubmit` arguments, and [ActionResult](https://kit.svelte.dev/docs/types#public-types-actionresult) for `onResult`.
@@ -472,7 +470,7 @@ Calling the reset method without any arguments will reset the form to its initia
 **Options:**
 
 ```ts
-{ 
+{
   keepMessage?: boolean;
   id?: string;
   data?: Partial<T>;
@@ -516,7 +514,7 @@ import {
   // The type of the others depends on the field:
   formFieldProxy,
   arrayProxy,
-  fieldProxy      
+  fieldProxy
 } from 'sveltekit-superforms';
 ```
 
@@ -524,7 +522,7 @@ A proxy handles bi-directional updates and data transformation of a correspondin
 
 ### intProxy(form, fieldName, options?)
 
-Creates a string store for an **integer** field in the schema. It's rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
+Creates a string store for an **integer** field in the schema. It's rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`.
 
 ```ts
 import { superForm, intProxy } from 'sveltekit-superforms';
@@ -538,7 +536,7 @@ const proxy = intProxy(form, 'field', { options });
 **Options:**
 
 ```ts
-{ 
+{
   empty?: 'null' | 'undefined' | 'zero';
   initiallyEmptyIfZero?: boolean;
   taint?: boolean | 'untaint' | 'untaint-form';
@@ -549,7 +547,7 @@ Use the `empty` option to set the field to some of the defined values. Use `init
 
 ### numberProxy(form, fieldName, options?)
 
-Creates a string store for a **number** field in the schema. It's rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`. 
+Creates a string store for a **number** field in the schema. It's rarely needed as Svelte [handles this automatically](https://svelte.dev/tutorial/numeric-inputs) with `bind:value`.
 
 ```ts
 import { superForm, numberProxy } from 'sveltekit-superforms';
@@ -563,7 +561,7 @@ const proxy = numberProxy(form, 'field', { options });
 **Options:**
 
 ```ts
-{ 
+{
   empty?: 'null' | 'undefined' | 'zero';
   initiallyEmptyIfZero?: boolean;
   taint?: boolean | 'untaint' | 'untaint-form';
@@ -677,7 +675,7 @@ Proxies a form field, returning stores similar to `superForm` but for a single f
 
 The option can be used to prevent tainting the form when modifying the proxy.
 
-For more details about formFieldProxy, see the [components page](/components#using-a-formfieldproxy). 
+For more details about formFieldProxy, see the [components page](/components#using-a-formfieldproxy).
 
 ### arrayProxy(superForm, fieldName, options)
 
@@ -699,8 +697,8 @@ Proxies an array in a form, returning stores similar to `superForm` but for the 
 </script>
 ```
 
-- `errors` displays errors for the *array itself*, for example if the number of items are too few.
-- `valueErrors` is an array that lists errors for the *content* of the array.
+- `errors` displays errors for the _array itself_, for example if the number of items are too few.
+- `valueErrors` is an array that lists errors for the _content_ of the array.
 
 **Options:**
 
@@ -770,6 +768,6 @@ A proxy for a [HTML date field](https://developer.mozilla.org/en-US/docs/Web/HTM
 
 ### SuperDebug
 
-`SuperDebug` is a must-have debugging component that gives you colorized and nicely formatted output for any data structure, usually `$form`. 
+`SuperDebug` is a must-have debugging component that gives you colorized and nicely formatted output for any data structure, usually `$form`.
 
 More information and usage examples can be found [on the SuperDebug page](/super-debug).

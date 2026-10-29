@@ -73,30 +73,29 @@ And use it like this:
   data={any}
   display={true}
   status={true}
-  label=''
+  label=""
   collapsible={false}
   collapsed={false}
   stringTruncate={120}
   raw={false}
   functions={false}
-  theme='default'
-  ref={HTMLPreElement} 
-/>
+  theme="default"
+  ref={HTMLPreElement} />
 ```
 
-| Prop               | Type           | Default value | Description |
-| ------------------ | -------------- | ------------- | ----------- |
-| **data**           | any            |               | Data to be displayed by SuperDebug. The only required prop. |
-| **display**        | boolean        | `true`        | Whether to show or hide SuperDebug. |
-| **status**         | boolean        | `true`        | Whether to show or hide the HTTP status code of the current page. |
-| **label**          | string         | `""`          | Add a label to SuperDebug, useful when using multiple instances on a page. |
-| **collapsible**    | boolean        | `false`       | Makes the component collapsible on a per-route basis. |
-| **collapsed**      | boolean        | `false`       | If the component is `collapsible`, sets it to initially collapsed. |
-| **stringTruncate** | number         | `120`         | Truncate long string field valuns of the data prop. Set to `0` to disable truncating. |
-| **raw**            | boolean        | `false`       | Skip promise and store detection when `true`. |
-| **functions**      | boolean        | `false`       | Enables the display of fields of the data prop that are functions. |
-| **theme**          | "default", "vscode" | `"default"` | Display theme, which can also be customized with CSS variables. |
-| **ref**            | HTMLPreElement |               | Reference to the pre element that contains the data. |
+| Prop               | Type                | Default value | Description                                                                           |
+| ------------------ | ------------------- | ------------- | ------------------------------------------------------------------------------------- |
+| **data**           | any                 |               | Data to be displayed by SuperDebug. The only required prop.                           |
+| **display**        | boolean             | `true`        | Whether to show or hide SuperDebug.                                                   |
+| **status**         | boolean             | `true`        | Whether to show or hide the HTTP status code of the current page.                     |
+| **label**          | string              | `""`          | Add a label to SuperDebug, useful when using multiple instances on a page.            |
+| **collapsible**    | boolean             | `false`       | Makes the component collapsible on a per-route basis.                                 |
+| **collapsed**      | boolean             | `false`       | If the component is `collapsible`, sets it to initially collapsed.                    |
+| **stringTruncate** | number              | `120`         | Truncate long string field valuns of the data prop. Set to `0` to disable truncating. |
+| **raw**            | boolean             | `false`       | Skip promise and store detection when `true`.                                         |
+| **functions**      | boolean             | `false`       | Enables the display of fields of the data prop that are functions.                    |
+| **theme**          | "default", "vscode" | `"default"`   | Display theme, which can also be customized with CSS variables.                       |
+| **ref**            | HTMLPreElement      |               | Reference to the pre element that contains the data.                                  |
 
 ## Examples
 
@@ -154,12 +153,13 @@ To see this in action, scroll to the product data below and hit refresh.
 
 ```ts
 // +page.ts
-export const load = (async ({ fetch }) => {
-  const promiseProduct = fetch('https://dummyjson.com/products/1')
-    .then(response => response.json())
+export const load = async ({ fetch }) => {
+  const promiseProduct = fetch('https://dummyjson.com/products/1').then((response) =>
+    response.json()
+  );
 
-  return { promiseProduct }
-})
+  return { promiseProduct };
+};
 ```
 
 ```svelte
@@ -189,7 +189,7 @@ export const load = (async ({ fetch }) => {
 If you want to debug multiple stores/objects in the same instance.
 
 ```svelte
-<SuperDebug data={{$form, $errors}} />
+<SuperDebug data={{ $form, $errors }} />
 ```
 
 <SuperDebug data={{$form, $errors}} />
@@ -217,17 +217,13 @@ You can pass a store directly to SuperDebug:
 ### Custom styling
 
 ```svelte
-<SuperDebug 
-  data={$form} 
-  theme="vscode" 
-  --sd-code-date="lightgreen" 
-/>
+<SuperDebug data={$form} theme="vscode" --sd-code-date="lightgreen" />
 ```
 
-<SuperDebug 
-  data={$form} 
-  theme="vscode" 
-  --sd-code-date="lightgreen"
+<SuperDebug
+data={$form}
+theme="vscode"
+--sd-code-date="lightgreen"
 />
 
 #### CSS variables available for customization

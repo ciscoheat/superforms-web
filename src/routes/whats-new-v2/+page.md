@@ -30,7 +30,7 @@ If a schema field can be more than one type, it's not possible to know what defa
 ```ts
 const schema = z.object({
   undecided: z.union([z.string(), z.number()]).default(0)
-})
+});
 ```
 
 ### Multi-type unions can only be used when dataType is 'json'
@@ -58,13 +58,13 @@ A new `isTainted` method is available on `superForm`, to check whether any part 
   const { form, enhance, tainted, isTainted } = superForm(form.data);
 
   // Check the whole form
-  if(isTainted()) {
-    console.log('The form is tainted')
+  if (isTainted()) {
+    console.log('The form is tainted');
   }
 
   // Check a part of the form
-  if(isTainted('name')) {
-    console.log('The name field is tainted')
+  if (isTainted('name')) {
+    console.log('The name field is tainted');
   }
 </script>
 
@@ -90,9 +90,9 @@ For number fields, a UX problem has been that the default value for numbers, `0`
 ```ts
 const schema = z.object({
   num: z.number()
-})
+});
 
-const proxy = intProxy(form, 'num', { empty: 'zero', initiallyEmptyIfZero: true })
+const proxy = intProxy(form, 'num', { empty: 'zero', initiallyEmptyIfZero: true });
 ```
 
 The `empty` option, if set to `'zero'`, will set the field to 0 if it's empty, and the unfortunately long `initiallyEmptyIfZero` will ensure the field is empty at first.

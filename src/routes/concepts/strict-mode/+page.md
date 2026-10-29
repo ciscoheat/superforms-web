@@ -34,10 +34,11 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
-const schema = z.object({
-  name: z.string().min(1)
-})
-.catchall(z.number().int()); // All unknown fields should be integers
+const schema = z
+  .object({
+    name: z.string().min(1)
+  })
+  .catchall(z.number().int()); // All unknown fields should be integers
 
 export const actions = {
   default: async ({ request }) => {

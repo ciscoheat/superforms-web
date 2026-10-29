@@ -15,12 +15,15 @@
 
   export let data: PageData;
 
-  const { form, errors, enhance, message } = superForm(untrack(() => data.form), {
-    taintedMessage: null,
-    validators: superformClient<{ tags: string[] }>({
-      tags: (tag?) => (!tag || tag.length < 2 ? 'Tag must be at least 2 characters' : null)
-    })
-  });
+  const { form, errors, enhance, message } = superForm(
+    untrack(() => data.form),
+    {
+      taintedMessage: null,
+      validators: superformClient<{ tags: string[] }>({
+        tags: (tag?) => (!tag || tag.length < 2 ? 'Tag must be at least 2 characters' : null)
+      })
+    }
+  );
 
   async function addTag() {
     if (!newTag) return;

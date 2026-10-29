@@ -3,7 +3,7 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 //import addClasses from 'rehype-add-classes';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -21,27 +21,28 @@ const config = {
           rehypeExternalLinks,
           {
             target: (el) => {
-              return el.properties?.href?.startsWith('http')
-                ? '_blank'
-                : undefined;
+              return el.properties?.href?.startsWith('http') ? '_blank' : undefined;
             }
           }
         ],
         [rehypeSlug, {}],
-        [rehypeAutolinkHeadings, {
-          behavior: 'append', 
-          content: {
-            type: 'element',
-            tagName: 'img',
-            properties: {
-              src: '/link.svg',
-              className: ['icon', 'icon-link']
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: 'append',
+            content: {
+              type: 'element',
+              tagName: 'img',
+              properties: {
+                src: '/link.svg',
+                className: ['icon', 'icon-link']
+              }
             }
           }
-        }]
+        ]
       ]
     }),
-    vitePreprocess(),
+    vitePreprocess()
   ],
 
   kit: {

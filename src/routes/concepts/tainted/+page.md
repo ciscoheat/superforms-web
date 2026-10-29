@@ -62,13 +62,13 @@ An `isTainted` method is available on `superForm`, to check whether any part of 
   const { form, enhance, tainted, isTainted } = superForm(form.data);
 
   // Check the whole form
-  if(isTainted()) {
-    console.log('The form is tainted')
+  if (isTainted()) {
+    console.log('The form is tainted');
   }
 
   // Check a part of the form
-  if(isTainted('name')) {
-    console.log('The name field is tainted')
+  if (isTainted('name')) {
+    console.log('The name field is tainted');
   }
 </script>
 
@@ -88,7 +88,7 @@ const { form } = superForm(data.form);
 
 form.update(
   ($form) => {
-    $form.name = "New name";
+    $form.name = 'New name';
     return $form;
   },
   { taint: false }
@@ -98,7 +98,9 @@ form.update(
 The `taint` options are:
 
 ```ts
-{ taint: boolean | 'untaint' | 'untaint-form' }
+{
+  taint: boolean | 'untaint' | 'untaint-form';
+}
 ```
 
 Which can be used to not only prevent tainting, but also untaint the modified field(s), or untainting the whole form.

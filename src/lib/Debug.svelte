@@ -14,9 +14,7 @@
     <AccordionItem {open}>
       <svelte:fragment slot="lead">{@html debug}</svelte:fragment>
       <svelte:fragment slot="summary">{label}</svelte:fragment>
-      <svelte:fragment slot="content"
-        ><SuperDebug {status} {data} /></svelte:fragment
-      >
+      <svelte:fragment slot="content"><SuperDebug {status} {data} /></svelte:fragment>
     </AccordionItem>
   </Accordion>
 </div>

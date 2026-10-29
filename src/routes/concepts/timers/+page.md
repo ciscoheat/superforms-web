@@ -56,7 +56,7 @@ The reason for using `delayed` instead of `submitting` is based on the article [
 
 ## Visualizing the timers
 
-Submit the following form and play around with the different settings. Different loading spinners are set to display when `delayed` and `timeout` are true respectively. 
+Submit the following form and play around with the different settings. Different loading spinners are set to display when `delayed` and `timeout` are true respectively.
 
 The default [multipleSubmits](/concepts/submit-behavior#multiplesubmits) setting prevents the form from being submitted multiple times, until the `timeout` state is reached. Click multiple times to see the effect of that.
 

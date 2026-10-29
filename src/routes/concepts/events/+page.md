@@ -42,7 +42,7 @@ onSubmit: ({
 }) => void;
 ```
 
-The `onSubmit` event is the first one triggered, being essentially the same as SvelteKit's own `use:enhance` function. It gives you a chance to cancel the submission altogether. See the SvelteKit docs for most of the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature. 
+The `onSubmit` event is the first one triggered, being essentially the same as SvelteKit's own `use:enhance` function. It gives you a chance to cancel the submission altogether. See the SvelteKit docs for most of the [SubmitFunction](https://kit.svelte.dev/docs/types#public-types-submitfunction) signature.
 
 There are also three extra properties in the Superforms `onSubmit` event, for more advanced scenarios:
 
@@ -51,7 +51,7 @@ There are also three extra properties in the Superforms `onSubmit` event, for mo
 If you're using [nested data](/concepts/nested-data), the `formData` property cannot be used to modify the posted data, since `$form` is serialized and posted instead. If you want to post something else than `$form`, you can do it with the `jsonData` function:
 
 ```ts
-import { superForm, type FormPath } from 'sveltekit-superforms'
+import { superForm, type FormPath } from 'sveltekit-superforms';
 
 const { form, enhance, isTainted } = superForm(data.form, {
   dataType: 'json',
@@ -59,9 +59,9 @@ const { form, enhance, isTainted } = superForm(data.form, {
     // Only post tainted (top-level) fields
     const taintedData = Object.fromEntries(
       Object.entries($form).filter(([key]) => {
-        return isTainted(key as FormPath<typeof $form>)
+        return isTainted(key as FormPath<typeof $form>);
       })
-    )
+    );
     // Set data to be posted
     jsonData(taintedData);
   }
@@ -84,8 +84,8 @@ const lastStep = 5;
 
 const { form, enhance } = superForm(data.form, {
   onSubmit({ validators }) {
-    if(step == 1) validators(zod(customSchema));
-    else if(step == lastStep) validators(false);
+    if (step == 1) validators(zod(customSchema));
+    else if (step == lastStep) validators(false);
   }
 });
 ```
@@ -94,7 +94,7 @@ const { form, enhance } = superForm(data.form, {
 
 You can make a custom request with [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) or [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) when submitting the form. The main use case is to display a progress bar when uploading large files.
 
-The `customRequest` option takes a function that should return a `Promise<Response | XMLHttpRequest>`. In the case of an `XMLHttpRequest`, the promise must be resolved *after* the request is complete. The response body should contain an `ActionResult`, as any form action does.
+The `customRequest` option takes a function that should return a `Promise<Response | XMLHttpRequest>`. In the case of an `XMLHttpRequest`, the promise must be resolved _after_ the request is complete. The response body should contain an `ActionResult`, as any form action does.
 
 ```ts
 import { superForm } from 'sveltekit-superforms';
@@ -124,7 +124,7 @@ function fileUploadWithProgress(input: Parameters<SubmitFunction>[0]) {
 
 const { form, enhance } = superForm(data.form, {
   onSubmit({ customRequest }) {
-    customRequest(fileUploadWithProgress)
+    customRequest(fileUploadWithProgress);
   }
 });
 ```
@@ -164,7 +164,7 @@ Also, if `applyAction` is `false`, which means that `$page.status` won't update,
 onUpdate: ({ form, formElement, cancel, result }) => void
 ```
 
-The `onUpdate` event is triggered right before the form update is being applied, giving you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formElement`. 
+The `onUpdate` event is triggered right before the form update is being applied, giving you the option to modify the validation result in `form`, or use `cancel()` to negate the update altogether. You also have access to the form's `HTMLFormElement` with `formElement`.
 
 If your app is a single-page application, `onUpdate` is the most convenient to process the form data. See the [SPA](/concepts/spa) page for more details.
 
@@ -177,18 +177,21 @@ import { superForm, type FormResult } from 'sveltekit-superforms';
 import type { ActionData, PageData } from './$types.js';
 import { untrack } from 'svelte';
 
-let { data } : { data: PageData } = $props();
+let { data }: { data: PageData } = $props();
 
-const { form, errors, message, enhance } = superForm(untrack(() => data.form), {
-  onUpdate({ form, result }) {
-    const action = result.data as FormResult<ActionData>;
-    // If you've returned from the form action:
-    // return { form, extra: 123 }
-    if (form.valid && action.extra) {
-      // Do something with the extra data
+const { form, errors, message, enhance } = superForm(
+  untrack(() => data.form),
+  {
+    onUpdate({ form, result }) {
+      const action = result.data as FormResult<ActionData>;
+      // If you've returned from the form action:
+      // return { form, extra: 123 }
+      if (form.valid && action.extra) {
+        // Do something with the extra data
+      }
     }
   }
-});
+);
 ```
 
 ## onUpdated
@@ -221,23 +224,23 @@ const { form, enhance } = superForm(data.form, {
 onError: (({ result }) => void) | 'apply'
 ```
 
-If you use the SvelteKit [error](https://kit.svelte.dev/docs/errors#expected-errors) function on the server, you should use the `onError` event to catch it. 
+If you use the SvelteKit [error](https://kit.svelte.dev/docs/errors#expected-errors) function on the server, you should use the `onError` event to catch it.
 
 Depending on what kind of error occurs, `result.error` will have a different shape:
 
-| Error type | Shape |
-| ---------- | ----- |
-| [Expected error](https://kit.svelte.dev/docs/errors#expected-errors) | `App.Error` |
-| Server exception   | `{ message: string }` |
-| JSON response      | Unexpected JSON responses, such as from a proxy server, should be included in `App.Error` to be type-safe. |
-| Other response     | If a fetch fails, or HTML is returned for example, result.error will be of type `Error` ([MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)), usually with a JSON parse error. It has a `message` property. |
+| Error type                                                           | Shape                                                                                                                                                                                                                                                  |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Expected error](https://kit.svelte.dev/docs/errors#expected-errors) | `App.Error`                                                                                                                                                                                                                                            |
+| Server exception                                                     | `{ message: string }`                                                                                                                                                                                                                                  |
+| JSON response                                                        | Unexpected JSON responses, such as from a proxy server, should be included in `App.Error` to be type-safe.                                                                                                                                             |
+| Other response                                                       | If a fetch fails, or HTML is returned for example, result.error will be of type `Error` ([MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)), usually with a JSON parse error. It has a `message` property. |
 
 In this simple example, the message store is set to the error message or a fallback:
 
 ```ts
 const { form, enhance, message } = superForm(data.form, {
   onError({ result }) {
-    $message = result.error.message || "Unknown error";
+    $message = result.error.message || 'Unknown error';
   }
 });
 ```
@@ -248,7 +251,7 @@ If JSON is returned, the HTTP status code will be taken from its `status` proper
 
 You can also set `onError` to the string value `'apply'`, in which case the default SvelteKit error behavior will be used, which is to render the nearest [+error](https://kit.svelte.dev/docs/routing#error) page, also wiping out the form. To avoid data loss even for non-JavaScript users, returning a [status message](/concepts/messages) instead of throwing an error is recommended.
 
-## Non-submit events 
+## Non-submit events
 
 ## onChange
 
@@ -259,18 +262,15 @@ The event is a discriminated union that you can distinguish between using the `t
 ```ts
 const { form, errors, enhance } = superForm(data.form, {
   onChange(event) {
-    if(event.target) {
+    if (event.target) {
       // Form input event
-      console.log(
-        event.path, 'was changed with', event.target, 
-        'in form', event.formElement
-      );
+      console.log(event.path, 'was changed with', event.target, 'in form', event.formElement);
     } else {
       // Programmatic event
-      console.log('Fields updated:', event.paths)
+      console.log('Fields updated:', event.paths);
     }
   }
-})
+});
 ```
 
 If you want to handle all change events, you can access `event.paths` without distinguishing.

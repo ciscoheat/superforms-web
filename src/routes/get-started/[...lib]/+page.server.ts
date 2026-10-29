@@ -9,16 +9,16 @@ export const _schema = z.object({
   email: z.string().email()
 });
 
-export const load: ServerLoad = (async ({ params }) => {
+export const load: ServerLoad = async ({ params }) => {
   const form = await superValidate(zod(_schema));
 
-  if (params.lib === "@effect/schema") {
+  if (params.lib === '@effect/schema') {
     throw redirect(308, '/get-started/effect');
   }
 
   return { form, lib: params.lib };
-})
+};
 
 export const actions = {
   default: echo(_schema)
-} 
+};
