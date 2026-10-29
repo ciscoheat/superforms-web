@@ -313,7 +313,7 @@ type FormOptions<T, M, In> = Partial<{
   // Basics
   id: string;
   applyAction: boolean;
-  invalidateAll: boolean | 'force';
+  invalidateAll: boolean | 'pessimistic';
   resetForm: boolean | (() => boolean);
   taintedMessage: boolean | string | (() => Promise<boolean>);
   dataType: 'form' | 'json';
