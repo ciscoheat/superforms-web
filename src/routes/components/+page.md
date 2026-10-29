@@ -321,7 +321,7 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
   import { untrack } from 'svelte';
 
   let {
-    superForm,
+    superform,
     field,
     ...rest
   }: { superform: SuperForm<T>; field: FormPathLeaves<T, boolean> } = $props();
