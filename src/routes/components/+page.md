@@ -268,6 +268,7 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 <script lang="ts" generics="T extends Record<string, unknown>">
   import type { HTMLInputAttributes } from 'svelte/elements';
   import { formFieldProxy, type SuperForm, type FormPathLeaves } from 'sveltekit-superforms';
+  import { untrack } from 'svelte';
 
   type Props = HTMLInputAttributes & {
     superform: SuperForm<T>;
@@ -276,7 +277,10 @@ How nice would this be? This can actually be pulled off in a typesafe way with a
 
   let { superform, field, ...rest }: Props = $props();
 
-  const { value, errors, constraints } = formFieldProxy(superform, field);
+  const { value, errors, constraints } = formFieldProxy(
+    untrack(() => superform),
+    untrack(() => field)
+  );
 </script>
 
 <label>
@@ -314,6 +318,7 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
     type SuperForm,
     type FormPathLeaves
   } from 'sveltekit-superforms';
+  import { untrack } from 'svelte';
 
   let {
     superForm,
@@ -322,8 +327,8 @@ Because our component is generic, `value` returned from `formFieldProxy` is unkn
   }: { superform: SuperForm<T>; field: FormPathLeaves<T, boolean> } = $props();
 
   const { value, errors, constraints } = formFieldProxy(
-    superform,
-    field
+    untrack(() => superform),
+    untrack(() => field)
   ) satisfies FormFieldProxy<boolean>;
 </script>
 
